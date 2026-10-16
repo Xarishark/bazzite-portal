@@ -7,14 +7,14 @@ permissions:
   contents: read
 jobs:
   rpm:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     container: fedora:44
     outputs:
       version: ${{ steps.metadata.outputs.version }}
     steps:
       - name: Install build dependencies
         run: dnf install -y rpm-build rpmdevtools python3-devel python3-setuptools python3-wheel pyproject-rpm-macros python3-gobject python3-pyyaml desktop-file-utils appstream gettext systemd-rpm-macros git
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
       - name: Check app version metadata
@@ -52,7 +52,7 @@ jobs:
         run: |
           cd dist
           md5sum *.rpm > MD5SUMS
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: bazzite-portal-fedora44-rpms
           path: |
@@ -63,19 +63,19 @@ jobs:
   release:
     needs: rpm
     if: github.event_name == 'push' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: write
     concurrency:
       group: bazzite-portal-releases
       cancel-in-progress: false
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
           persist-credentials: false
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: bazzite-portal-fedora44-rpms
           path: dist
@@ -84,6 +84,7 @@ jobs:
           cd dist
           md5sum -c MD5SUMS
           test -s bazzite-portal.rpm
+          md5sum bazzite-portal.rpm > MD5SUMS
       - name: Publish a new app version
         uses: actions/github-script@v8
         env:
@@ -135,10 +136,7 @@ jobs:
               const [sha, subject, author] = fields.slice(i, i + 3);
               commits.push(`- ${escape(subject)} ([${sha.slice(0, 7)}](https://github.com/${repo.owner}/${repo.repo}/commit/${sha})) — ${escape(author)}`);
             }
-            const changelog = `${notes.data.body}\n\n## All commits\n\n${commits.join('\n')}\n`;
-            fs.writeFileSync('dist/CHANGELOG.md', changelog);
-            const body = changelog.length <= 100000 ? changelog :
-              `See [the complete changelog](https://github.com/${repo.owner}/${repo.repo}/releases/download/${tag}/CHANGELOG.md).`;
+            const body = `${notes.data.body}\n\n## All commits\n\n${commits.join('\n')}\n`;
             let draft = releases.find(r => r.draft && r.tag_name === tag);
             if (draft && draft.target_commitish !== context.sha) {
               throw new Error(`The existing draft for ${tag} targets another commit`);
@@ -151,8 +149,7 @@ jobs:
             }
             const assets = await github.paginate(github.rest.repos.listReleaseAssets,
               { ...repo, release_id: draft.id, per_page: 100 });
-            const files = fs.readdirSync('dist').filter(name =>
-              name.endsWith('.rpm') || name === 'MD5SUMS' || name === 'CHANGELOG.md');
+            const files = ['bazzite-portal.rpm', 'MD5SUMS'];
             for (const name of files) {
               const existing = assets.find(asset => asset.name === name);
               if (existing) await github.rest.repos.deleteReleaseAsset({ ...repo, asset_id: existing.id });
