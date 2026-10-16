@@ -12,11 +12,11 @@ jobs:
     outputs:
       version: ${{ steps.metadata.outputs.version }}
     steps:
+      - name: Install build dependencies
+        run: dnf install -y rpm-build rpmdevtools python3-devel python3-setuptools python3-wheel pyproject-rpm-macros python3-gobject python3-pyyaml desktop-file-utils appstream gettext systemd-rpm-macros git
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Install build dependencies
-        run: dnf install -y rpm-build rpmdevtools python3-devel python3-setuptools python3-wheel pyproject-rpm-macros python3-gobject python3-pyyaml desktop-file-utils appstream gettext systemd-rpm-macros git
       - name: Check app version metadata
         id: metadata
         run: |
@@ -42,7 +42,7 @@ jobs:
         run: |
           rpmdev-setuptree
           VERSION=$(sed -n 's/^Version:[[:space:]]*//p' packaging/bazzite-portal.spec)
-          git archive --format=tar --prefix="bazzite-portal-${VERSION}/" HEAD | gzip > "$HOME/rpmbuild/SOURCES/bazzite-portal-${VERSION}.tar.gz"
+          git archive --format=tar.gz --prefix="bazzite-portal-${VERSION}/" --output="$HOME/rpmbuild/SOURCES/bazzite-portal-${VERSION}.tar.gz" HEAD
           rpmbuild -ba packaging/bazzite-portal.spec
           mkdir -p dist
           cp "$HOME"/rpmbuild/RPMS/noarch/*.rpm "$HOME"/rpmbuild/SRPMS/*.rpm dist/
