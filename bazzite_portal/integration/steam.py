@@ -1,12 +1,16 @@
-"""Safely reset disposable top-level entries in the current user's Steam folder.
-
-Call :func:`reset_steam` from a worker thread. This module has no GTK or Steam
-launcher dependency and never starts Steam.
-"""
+"""Steam reset and native shortcut/artwork integration, independent of GTK."""
 
 from __future__ import annotations
 
 import os
+import json
+import logging
+import re
+import shlex
+import tempfile
+import threading
+import uuid
+from contextlib import contextmanager
 import signal
 import stat
 import time
@@ -236,19 +240,299 @@ def reset_steam(
 
 HELPER = "/usr/bin/steamos-add-to-steam"
 LAUNCHER = "/usr/bin/bazzite-portal"
+DESKTOP = "/usr/share/applications/io.github.Xarishark.bazzite_portal.desktop"
+STEAM_ARTWORK = Path(__file__).resolve().parents[1] / "assets" / "steam"
+_ARTWORK = {"p": "cover.png", "": "landscape.png", "_hero": "hero.png", "_logo": "logo.png"}
+_ARTWORK_MUTEX = threading.Lock()
+log = logging.getLogger(__name__)
+
+
+def pending_artwork_path():
+    state = Path(os.environ.get("XDG_STATE_HOME", Path.home() / ".local/state"))
+    return state / "bazzite-portal" / "steam-artwork.json"
+
+
+@contextmanager
+def _artwork_locked():
+    base = pending_artwork_path().parent
+    base.mkdir(parents=True, exist_ok=True, mode=0o700)
+    with _ARTWORK_MUTEX:
+        fd = os.open(base / ".steam-artwork.lock", os.O_RDWR | os.O_CREAT | getattr(os, "O_NOFOLLOW", 0), 0o600)
+        try:
+            if os.name == "posix":
+                import fcntl
+                fcntl.flock(fd, fcntl.LOCK_EX)
+            yield
+        finally:
+            os.close(fd)
+
+
+def _bounded_read(path, limit=16 * 1024 * 1024):
+    with path.open("rb") as stream:
+        data = stream.read(limit + 1)
+    if len(data) > limit:
+        raise ValueError("Steam configuration exceeds the supported size")
+    return data
+
+
+def _binary_vdf(data):
+    """Read Steam's binary KeyValues without modifying shortcuts.vdf."""
+    position = 0
+
+    def string():
+        nonlocal position
+        end = data.index(b"\0", position)
+        value = data[position:end].decode("utf-8", errors="replace")
+        position = end + 1
+        return value
+
+    def object_value(depth=0):
+        nonlocal position
+        if depth > 24:
+            raise ValueError("Steam shortcut data is nested too deeply")
+        result = {}
+        while position < len(data):
+            kind = data[position]
+            position += 1
+            if kind == 8:
+                return result
+            key = string()
+            if kind == 0:
+                value = object_value(depth + 1)
+            elif kind == 1:
+                value = string()
+            elif kind in (2, 3, 4, 6, 7, 10):
+                size = 8 if kind in (7, 10) else 4
+                if position + size > len(data):
+                    raise ValueError("Truncated Steam shortcut value")
+                value = int.from_bytes(data[position:position + size], "little")
+                position += size
+            else:
+                raise ValueError("Unsupported Steam shortcut value type")
+            result[key.lower()] = value
+        raise ValueError("Truncated Steam shortcut object")
+
+    result = object_value()
+    if position != len(data):
+        raise ValueError("Trailing Steam shortcut data")
+    return result
+
+
+def _text_vdf(data):
+    tokens = re.findall(r'"(?:\\.|[^"\\])*"|[{}]', data.decode("utf-8-sig"))
+    position = 0
+
+    def object_value(nested=False, depth=0):
+        nonlocal position
+        if depth > 24:
+            raise ValueError("Steam login data is nested too deeply")
+        result = {}
+        while position < len(tokens):
+            key = tokens[position]
+            position += 1
+            if key == "}" and nested:
+                return result
+            if not key.startswith('"') or position == len(tokens):
+                raise ValueError("Malformed Steam login data")
+            value = tokens[position]
+            position += 1
+            key = json.loads(key).lower()
+            result[key] = object_value(True, depth + 1) if value == "{" else json.loads(value)
+        if nested:
+            raise ValueError("Truncated Steam login data")
+        return result
+
+    return object_value()
+
+
+def _steam_root():
+    home = Path.home()
+    candidates = (home / ".local/share/Steam", home / ".steam/steam",
+                  home / ".var/app/com.valvesoftware.Steam/.local/share/Steam")
+    return next((path.resolve() for path in candidates if path.is_dir()), candidates[0])
+
+
+def _steam_account(root):
+    try:
+        users = _text_vdf(_bounded_read(root / "config/loginusers.vdf", 1024 * 1024)).get("users", {})
+        recent = [str(int(key) & 0xffffffff) for key, value in users.items()
+                  if key.isdecimal() and isinstance(value, dict) and value.get("mostrecent") == "1"]
+        if len(recent) == 1:
+            return recent[0]
+    except (OSError, ValueError, TypeError, AttributeError):
+        pass
+    userdata = root / "userdata"
+    profiles = [path.name for path in userdata.iterdir() if path.name.isdecimal() and path.is_dir()] if userdata.is_dir() else []
+    return profiles[0] if len(profiles) == 1 else None
+
+
+def _portal_shortcuts(root, account):
+    if account is None:
+        return ()
+    path = root / "userdata" / account / "config/shortcuts.vdf"
+    try:
+        shortcuts = _binary_vdf(_bounded_read(path)).get("shortcuts", {})
+    except FileNotFoundError:
+        return ()
+    except (OSError, ValueError) as error:
+        log.warning("Could not read Steam shortcuts for artwork: %s", error)
+        return ()
+    if not isinstance(shortcuts, dict):
+        return ()
+    matches = []
+    for entry in shortcuts.values():
+        if not isinstance(entry, dict) or not isinstance(entry.get("exe"), str):
+            continue
+        try:
+            command = shlex.split(entry["exe"])
+        except ValueError:
+            continue
+        appid = entry.get("appid")
+        if (command and command[0] in (LAUNCHER, "bazzite-portal", DESKTOP)
+                and isinstance(appid, int) and 0 < appid <= 0xffffffff):
+            matches.append(appid)
+    return tuple(sorted(set(matches)))
+
+
+def _pending_artwork():
+    try:
+        request = json.loads(_bounded_read(pending_artwork_path(), 4096))
+        account = request.get("account")
+        if (request.get("version") == 1 and isinstance(request.get("id"), str)
+                and isinstance(request.get("created"), (int, float))
+                and (account is None or isinstance(account, str) and account.isdecimal() and len(account) <= 10)):
+            return request
+    except (OSError, ValueError, AttributeError):
+        pass
+    return None
+
+
+def _save_artwork_request(request):
+    path = pending_artwork_path()
+    temporary = None
+    try:
+        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=path.parent,
+                                         prefix=".steam-artwork-", delete=False) as stream:
+            temporary = Path(stream.name)
+            json.dump(request, stream)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary, path)
+    finally:
+        if temporary is not None:
+            temporary.unlink(missing_ok=True)
+
+
+def _copy_steam_artwork(root, account, appids):
+    config = root / "userdata" / account / "config"
+    grid = config / "grid"
+    if any(path.is_symlink() for path in (root / "userdata", config.parent, config, grid)):
+        raise RuntimeError("Steam artwork directory must not be a symbolic link")
+    grid.mkdir(exist_ok=True)
+    for appid in appids:
+        for suffix, source in _ARTWORK.items():
+            stem = str(appid) + suffix
+            if any((grid / (stem + ext)).exists() or (grid / (stem + ext)).is_symlink()
+                   for ext in (".png", ".jpg", ".jpeg", ".webp", ".PNG", ".JPG", ".JPEG", ".WEBP")):
+                continue
+            data = (STEAM_ARTWORK / source).read_bytes()
+            temporary = None
+            try:
+                with tempfile.NamedTemporaryFile(dir=grid, prefix=".bazzite-portal-", delete=False) as stream:
+                    temporary = Path(stream.name)
+                    stream.write(data)
+                    stream.flush()
+                    os.fsync(stream.fileno())
+                    if hasattr(os, "fchmod"):
+                        os.fchmod(stream.fileno(), 0o644)
+                # Publishing by link never overwrites a concurrently added custom image.
+                try:
+                    os.link(temporary, grid / (stem + ".png"))
+                except FileExistsError:
+                    pass
+            finally:
+                if temporary is not None:
+                    temporary.unlink(missing_ok=True)
+
+
+def _apply_artwork(request):
+    root = _steam_root()
+    account = request.get("account") or _steam_account(root)
+    if account is None:
+        return True
+    if request.get("account") is None:
+        request["account"] = account
+        _save_artwork_request(request)
+    appids = _portal_shortcuts(root, account)
+    if not appids:
+        return True
+    _copy_steam_artwork(root, account, appids)
+    pending_artwork_path().unlink(missing_ok=True)
+    log.info("Steam shortcut artwork applied; existing custom artwork preserved")
+    return False
+
+
+def apply_pending_artwork():
+    """Return whether artwork is still pending; never alter Steam shortcuts."""
+    if not pending_artwork_path().is_file():
+        return False
+    with _artwork_locked():
+        request = _pending_artwork()
+        return _apply_artwork(request) if request else False
+
+
+def artwork_watch_paths():
+    if not pending_artwork_path().is_file():
+        return ()
+    root = _steam_root()
+    request = _pending_artwork() or {}
+    account = request.get("account") or _steam_account(root)
+    paths = [root, root / "config", root / "userdata"]
+    if account:
+        paths.append(root / "userdata" / account / "config")
+    existing = set()
+    for path in paths:
+        while not path.is_dir() and path != path.parent:
+            path = path.parent
+        existing.add(path)
+    return tuple(sorted(existing))
 
 
 def add_to_steam():
+    """Request a native Steam shortcut; return True when artwork is ready."""
     if not Path(HELPER).is_file():
         raise RuntimeError("Bazzite’s Add to Steam helper is unavailable.")
-    if not Path(LAUNCHER).is_file():
+    if not Path(LAUNCHER).is_file() or not Path(DESKTOP).is_file():
         raise RuntimeError("Install the Bazzite Portal RPM before adding it to Steam.")
-    process = subprocess.Popen([HELPER, LAUNCHER], stdout=subprocess.DEVNULL,
-                               stderr=subprocess.DEVNULL)
-    try:
-        status = process.wait(timeout=5)
-    except subprocess.TimeoutExpired:
-        # The helper can keep running with Steam. Do not stop the user's client.
-        return
-    if status:
-        raise RuntimeError(f"Add to Steam exited with status {status}.")
+    if not all((STEAM_ARTWORK / name).is_file() for name in _ARTWORK.values()):
+        raise RuntimeError("Bundled Steam artwork is unavailable")
+    with _artwork_locked():
+        request = _pending_artwork()
+        root = _steam_root()
+        account = _steam_account(root)
+        if request and time.time() - request["created"] < 15:
+            return not _apply_artwork(request)
+        request = {"version": 1, "id": uuid.uuid4().hex, "account": account, "created": time.time()}
+        _save_artwork_request(request)
+        if _portal_shortcuts(root, account):
+            return not _apply_artwork(request)
+        try:
+            process = subprocess.Popen([HELPER, DESKTOP], stdout=subprocess.DEVNULL,
+                                       stderr=subprocess.DEVNULL)
+            try:
+                status = process.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                # Steam owns the request. Never stop its client or helper.
+                status = 0
+            if status:
+                raise RuntimeError(f"Add to Steam exited with status {status}.")
+        except Exception:
+            pending_artwork_path().unlink(missing_ok=True)
+            raise
+    # A short worker-only wait handles normal immediate client saves. The session
+    # agent watches for a later save instead of polling throughout the session.
+    for _attempt in range(8):
+        if not apply_pending_artwork():
+            return True
+        time.sleep(0.25)
+    return False
