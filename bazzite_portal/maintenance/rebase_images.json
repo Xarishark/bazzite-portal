@@ -11,6 +11,7 @@
     {"name": "bazzite-gnome-nvidia", "desktop_environment": "gnome"},
     {"name": "bazzite-gnome-nvidia-open", "desktop_environment": "gnome"},
     {"name": "bazzite-deck-gnome", "desktop_environment": "gnome"},
+    {"name": "bazzite-deck-nvidia-gnome", "desktop_environment": "gnome"},
     {"name": "bazzite-dx", "desktop_environment": "kde"},
     {"name": "bazzite-dx-gnome", "desktop_environment": "gnome"},
     {"name": "bazzite-dx-nvidia", "desktop_environment": "kde"},
