@@ -119,10 +119,15 @@ msgstr "Προσθήκη στα αγαπημένα"
 
 #: bazzite_portal/ui/application.py:5330
 #, fuzzy
-#| msgid "Add to Steam requested. Check your Steam library."
-msgid ""
-"Add to Steam requested. Artwork will appear when Steam saves the shortcut."
-msgstr "Η προσθήκη στο Steam ζητήθηκε. Ελέγξτε τη βιβλιοθήκη σας στο Steam."
+#| msgid "Operation requested."
+msgid "Add to Steam requested."
+msgstr "Ζητήθηκε η εκτέλεση της διαδικασίας."
+
+#: bazzite_portal/ui/application.py:5329
+#, fuzzy
+#| msgid "Add Bazzite Portal to Steam"
+msgid "Added to Steam."
+msgstr "Προσθήκη του Bazzite Portal στο Steam"
 
 #: bazzite_portal/ui/application.py:576
 msgid "Administrator authentication"
@@ -303,10 +308,6 @@ msgstr "Bazzite Portal"
 #: packaging/bazzite-portal-agent.desktop:2
 msgid "Bazzite Portal Update Monitor"
 msgstr "Παρακολούθηση ενημερώσεων του Bazzite Portal"
-
-#: bazzite_portal/ui/application.py:5329
-msgid "Bazzite Portal is in your Steam library with artwork."
-msgstr ""
 
 #: bazzite_portal/ui/application.py:4923
 msgid "Bazzite Stable"
@@ -3207,3 +3208,9 @@ msgstr "{percent}% ολοκληρώθηκε"
 #, python-brace-format
 msgid "{title} · controller button"
 msgstr "{title} · κουμπί χειριστηρίου"
+
+#, fuzzy
+#~| msgid "Add to Steam requested. Check your Steam library."
+#~ msgid ""
+#~ "Add to Steam requested. Artwork will appear when Steam saves the shortcut."
+#~ msgstr "Η προσθήκη στο Steam ζητήθηκε. Ελέγξτε τη βιβλιοθήκη σας στο Steam."
