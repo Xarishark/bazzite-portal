@@ -96,10 +96,6 @@ msgstr ""
 msgid "Add to Steam requested. Check your Steam library."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5262
-msgid "Adding to Steam is disabled in preview mode."
-msgstr ""
-
 #: bazzite_portal/ui/application.py:557
 msgid "Administrator authentication"
 msgstr ""
@@ -414,10 +410,6 @@ msgstr ""
 msgid "Cancellation details"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3157 bazzite_portal/ui/application.py:3610
-msgid "Cancellation disabled in preview"
-msgstr ""
-
 #: bazzite_portal/ui/application.py:3591
 msgid "Cancellation request sent"
 msgstr ""
@@ -593,11 +585,6 @@ msgstr ""
 msgid "Collecting system logs"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2075 bazzite_portal/ui/application.py:2129
-#: bazzite_portal/ui/application.py:2799
-msgid "Commands are disabled in preview mode."
-msgstr ""
-
 #: bazzite_portal/ui/application.py:48 bazzite_portal/ui/application.py:52
 #: bazzite_portal/ui/application.py:1026 bazzite_portal/ui/application.py:4931
 #: bazzite_portal/ui/application.py:4966
@@ -730,10 +717,6 @@ msgstr ""
 msgid "Could not verify this action. Refresh system information and try again."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2132
-msgid "Current status is unavailable in preview mode."
-msgstr ""
-
 #: bazzite_portal/ui/application.py:1903 bazzite_portal/ui/application.py:2038
 msgid "Current status is unknown."
 msgstr ""
@@ -807,10 +790,6 @@ msgstr ""
 msgid "Deployment deletion is already running or could not be verified."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4517
-msgid "Deployment deletion is disabled in preview."
-msgstr ""
-
 #: bazzite_portal/ui/application.py:4525
 msgid "Deployment deletion status could not be verified."
 msgstr ""
@@ -821,10 +800,6 @@ msgstr ""
 
 #: bazzite_portal/ui/application.py:4744
 msgid "Deployment information changed. Review it again."
-msgstr ""
-
-#: bazzite_portal/ui/application.py:3147
-msgid "Deployment information not loaded yet"
 msgstr ""
 
 #: bazzite_portal/updates/monitor.py:752
@@ -880,10 +855,6 @@ msgstr ""
 
 #: bazzite_portal/ui/application.py:3833
 msgid "Download cache cleared"
-msgstr ""
-
-#: bazzite_portal/ui/application.py:3829
-msgid "Download cache clearing disabled in preview"
 msgstr ""
 
 #: bazzite_portal/ui/application.py:4841
@@ -1004,18 +975,6 @@ msgstr ""
 msgid "Finished · awaiting update result"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2607
-msgid "Finishing preview"
-msgstr ""
-
-#: bazzite_portal/ui/application.py:2604
-msgid "Flatpak apps · simulated"
-msgstr ""
-
-#: bazzite_portal/ui/application.py:1498 bazzite_portal/ui/application.py:5293
-msgid "Folder opening is disabled in preview mode."
-msgstr ""
-
 #: bazzite_portal/ui/application.py:3068
 msgid "Follow the latest Stable or Testing release of your Bazzite image."
 msgstr ""
@@ -1038,10 +997,6 @@ msgstr ""
 
 #: bazzite_portal/ui/application.py:1398
 msgid "Hardware summary"
-msgstr ""
-
-#: bazzite_portal/ui/application.py:5751
-msgid "Harmless preview"
 msgstr ""
 
 #: bazzite_portal/ui/application.py:5134
@@ -1071,10 +1026,6 @@ msgstr ""
 
 #: bazzite_portal/ui/application.py:3095
 msgid "Image rebase details"
-msgstr ""
-
-#: bazzite_portal/ui/application.py:4666
-msgid "Image rebasing is disabled in preview."
 msgstr ""
 
 #: bazzite_portal/ui/application.py:4680
@@ -1150,12 +1101,6 @@ msgstr ""
 
 #: bazzite_portal/ui/application.py:4375 bazzite_portal/ui/application.py:4481
 msgid "Layered packages"
-msgstr ""
-
-#: bazzite_portal/ui/application.py:1542 bazzite_portal/ui/application.py:1553
-#: bazzite_portal/ui/application.py:5114 bazzite_portal/ui/application.py:5122
-#: bazzite_portal/ui/application.py:5413
-msgid "Links are disabled in preview mode."
 msgstr ""
 
 #: bazzite_portal/ui/image_wizard.py:266
@@ -1442,10 +1387,6 @@ msgstr ""
 msgid "Open this app from your Steam library, including Gaming Mode."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3146
-msgid "Open this page to load system information."
-msgstr ""
-
 #: bazzite_portal/ui/application.py:3283 bazzite_portal/ui/application.py:3294
 #: bazzite_portal/ui/application.py:3580 bazzite_portal/ui/application.py:3582
 #: bazzite_portal/ui/application.py:3591 bazzite_portal/ui/application.py:3639
@@ -1599,10 +1540,6 @@ msgstr ""
 msgid "Preparing operation…"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2602
-msgid "Preparing preview"
-msgstr ""
-
 #: bazzite_portal/ui/application.py:4078
 msgid "Preparing release channel rebase…"
 msgstr ""
@@ -1615,71 +1552,8 @@ msgstr ""
 msgid "Preparing system update"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3158 bazzite_portal/ui/application.py:3162
-#: bazzite_portal/ui/application.py:4816
-msgid "Preview can read system information but cannot change deployments."
-msgstr ""
-
-#: bazzite_portal/ui/application.py:2603
-msgid "Preview demo in progress"
-msgstr ""
-
-#: bazzite_portal/ui/application.py:2605
-#, python-brace-format
-msgid "Preview demo · {step} of 5 apps"
-msgstr ""
-
-#: bazzite_portal/ui/application.py:2348
-#, python-brace-format
-msgid "Preview demo, {percent}% complete"
-msgstr ""
-
-#: bazzite_portal/ui/application.py:1139 bazzite_portal/ui/application.py:1190
-msgid "Preview hardware summary (collection disabled)"
-msgstr ""
-
-#: bazzite_portal/ui/application.py:2588
-msgid "Preview log · simulated only"
-msgstr ""
-
-#: bazzite_portal/ui/application.py:3578
-msgid "Preview mode · cancellation disabled"
-msgstr ""
-
-#: bazzite_portal/ui/application.py:3805
-msgid "Preview mode · clearing the download cache is disabled."
-msgstr ""
-
-#: bazzite_portal/ui/application.py:3537
-msgid "Preview mode · deployment cancellation is disabled."
-msgstr ""
-
-#: bazzite_portal/ui/application.py:3154
-msgid "Preview mode · removal disabled"
-msgstr ""
-
-#: bazzite_portal/ui/application.py:3742
-msgid "Preview mode · removal disabled."
-msgstr ""
-
-#: bazzite_portal/ui/application.py:1142 bazzite_portal/ui/application.py:1191
-msgid "Preview only: no files were collected."
-msgstr ""
-
-#: bazzite_portal/ui/application.py:2596
-msgid "Preview steps · simulated"
-msgstr ""
-
 #: bazzite_portal/ui/image_wizard.py:42
 msgid "Preview upcoming changes; may be less stable"
-msgstr ""
-
-#: bazzite_portal/ui/application.py:1650
-msgid "Preview update demo · simulated"
-msgstr ""
-
-#: bazzite_portal/ui/application.py:461
-msgid "Preview · commands disabled"
 msgstr ""
 
 #: bazzite_portal/ui/application.py:3250
@@ -1701,10 +1575,6 @@ msgstr ""
 
 #: bazzite_portal/ui/application.py:2961
 msgid "Read-only details for the running and next-restart deployments."
-msgstr ""
-
-#: bazzite_portal/ui/application.py:3148
-msgid "Read-only information is available in preview mode."
 msgstr ""
 
 #: bazzite_portal/ui/application.py:2406 bazzite_portal/updates/monitor.py:1445
@@ -1840,14 +1710,6 @@ msgstr ""
 
 #: bazzite_portal/ui/application.py:4828
 msgid "Release channel rebase failed"
-msgstr ""
-
-#: bazzite_portal/ui/application.py:3161 bazzite_portal/ui/application.py:4815
-msgid "Release channel rebasing disabled in preview"
-msgstr ""
-
-#: bazzite_portal/ui/application.py:4777
-msgid "Release channel rebasing is disabled in preview."
 msgstr ""
 
 #: bazzite_portal/ui/application.py:4796
@@ -2079,10 +1941,6 @@ msgstr ""
 msgid "Rollback failed. Open Logs for details."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3246
-msgid "Rollback is disabled in preview mode."
-msgstr ""
-
 #: bazzite_portal/ui/application.py:3315 bazzite_portal/ui/application.py:3504
 #: bazzite_portal/ui/application.py:3516
 msgid "Rollback is unavailable."
@@ -2232,23 +2090,6 @@ msgstr ""
 msgid "Showing last loaded details. {error}"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2605
-msgid "Simulated app updates"
-msgstr ""
-
-#: bazzite_portal/ui/application.py:2608
-msgid "Simulated completion"
-msgstr ""
-
-#: bazzite_portal/ui/application.py:2603
-msgid "Simulated setup"
-msgstr ""
-
-#: bazzite_portal/ui/application.py:1652
-#, python-brace-format
-msgid "Simulated update in progress · step {step} of 6."
-msgstr ""
-
 #: bazzite_portal/ui/application.py:5138
 msgid "Skip confirmation for tools that run without an options dialog."
 msgstr ""
@@ -2286,14 +2127,6 @@ msgstr ""
 msgid "Status unavailable"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:1855
-msgid "Status unavailable in preview"
-msgstr ""
-
-#: bazzite_portal/ui/application.py:1854
-msgid "Status unavailable in preview mode."
-msgstr ""
-
 #: bazzite_portal/ui/application.py:1904
 #, python-brace-format
 msgid "Status {status}"
@@ -2313,10 +2146,6 @@ msgstr ""
 
 #: bazzite_portal/ui/application.py:1335
 msgid "Steam reset is complete."
-msgstr ""
-
-#: bazzite_portal/ui/application.py:1291
-msgid "Steam reset is disabled in preview mode."
 msgstr ""
 
 #: bazzite_portal/ui/application.py:1269
@@ -2347,19 +2176,10 @@ msgstr ""
 msgid "System customizations"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3149
-msgid "System customizations not loaded yet"
-msgstr ""
-
 #: bazzite_portal/ui/application.py:51 bazzite_portal/ui/application.py:942
 #: bazzite_portal/ui/application.py:1023 bazzite_portal/ui/application.py:2948
 #: bazzite_portal/ui/application.py:2951
 msgid "System information"
-msgstr ""
-
-#: bazzite_portal/ui/application.py:3578 bazzite_portal/ui/application.py:3610
-#: bazzite_portal/ui/application.py:3829
-msgid "System information is read-only in preview."
 msgstr ""
 
 #: bazzite_portal/ui/application.py:4437
@@ -2387,10 +2207,6 @@ msgstr ""
 
 #: bazzite_portal/ui/application.py:3937
 msgid "System operation"
-msgstr ""
-
-#: bazzite_portal/ui/application.py:2836
-msgid "System operations are disabled in preview mode."
 msgstr ""
 
 #: bazzite_portal/ui/application.py:2847 bazzite_portal/ui/application.py:3272
@@ -2605,10 +2421,6 @@ msgstr ""
 msgid "Tool"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2025
-msgid "Tool actions are disabled in preview mode."
-msgstr ""
-
 #: bazzite_portal/ui/application.py:48 bazzite_portal/ui/application.py:50
 #: bazzite_portal/ui/application.py:678 bazzite_portal/ui/application.py:687
 #: bazzite_portal/ui/application.py:919 bazzite_portal/ui/application.py:935
@@ -2642,10 +2454,6 @@ msgstr ""
 
 #: bazzite_portal/ui/application.py:1822
 msgid "Try another search."
-msgstr ""
-
-#: bazzite_portal/ui/application.py:1656
-msgid "Try the update preview. System commands are disabled."
 msgstr ""
 
 #: bazzite_portal/updates/model.py:403
@@ -2824,10 +2632,6 @@ msgstr ""
 msgid "Visit Bazzite documentation, community spaces, and source code."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2608
-msgid "Waiting"
-msgstr ""
-
 #: bazzite_portal/ui/application.py:3543
 msgid "Waiting for confirmation that cancellation has started…"
 msgstr ""
@@ -2838,10 +2642,6 @@ msgstr ""
 
 #: bazzite_portal/ui/application.py:2391
 msgid "Waiting to update"
-msgstr ""
-
-#: bazzite_portal/ui/application.py:2603
-msgid "Waiting · simulated"
 msgstr ""
 
 #: bazzite_portal/ui/application.py:1246 bazzite_portal/ui/application.py:1408
