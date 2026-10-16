@@ -40,6 +40,7 @@ jobs:
           python3 packaging/translations.py update
           python3 packaging/translations.py check
       - name: Create or update translation template PR
+        id: template
         uses: peter-evans/create-pull-request@v8
         with:
           branch: automation/translation-template
@@ -57,3 +58,41 @@ jobs:
             po/bazzite-portal.pot
             bazzite_portal/core/message_templates.json
             bazzite_portal/core/user_messages.json
+      - name: Enable auto-merge for the generated template PR
+        if: steps.template.outputs.pull-request-number != '' && steps.template.outputs.pull-request-operation != 'closed'
+        uses: actions/github-script@v8
+        env:
+          TEMPLATE_PR: ${{ steps.template.outputs.pull-request-number }}
+          TEMPLATE_SHA: ${{ steps.template.outputs.pull-request-head-sha }}
+        with:
+          script: |
+            const pull_number = Number(process.env.TEMPLATE_PR);
+            const repo = context.repo;
+            const { data: pr } = await github.rest.pulls.get({ ...repo, pull_number });
+            if (pr.state !== 'open') return;
+            if (pr.user.login !== 'github-actions[bot]' || pr.draft ||
+                pr.head.repo?.full_name !== `${repo.owner}/${repo.repo}` ||
+                pr.head.ref !== 'automation/translation-template' || pr.base.ref !== 'main' ||
+                pr.head.sha !== process.env.TEMPLATE_SHA) {
+              throw new Error('Refusing auto-merge: this is not the generated template PR.');
+            }
+            const allowed = new Set([
+              'po/bazzite-portal.pot',
+              'bazzite_portal/core/message_templates.json',
+              'bazzite_portal/core/user_messages.json',
+            ]);
+            if (pr.changed_files < 1 || pr.changed_files > allowed.size) {
+              throw new Error('Refusing auto-merge: unexpected number of changed files.');
+            }
+            const { data: files } = await github.rest.pulls.listFiles({ ...repo, pull_number, per_page: 100 });
+            if (files.length !== pr.changed_files || files.some(file =>
+                !allowed.has(file.filename) || !['modified', 'added'].includes(file.status))) {
+              throw new Error('Refusing auto-merge: changes extend beyond generated template files.');
+            }
+            if (pr.auto_merge) return;
+            await github.graphql(`mutation($id: ID!, $sha: GitObjectID!) {
+              enablePullRequestAutoMerge(input: {
+                pullRequestId: $id, expectedHeadOid: $sha, mergeMethod: MERGE
+              }) { pullRequest { number } }
+            }`, { id: pr.node_id, sha: pr.head.sha });
+            core.info(`Auto-merge enabled for template PR #${pull_number}; required checks still apply.`);
