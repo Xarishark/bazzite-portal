@@ -93,7 +93,11 @@ msgid "Add favorite"
 msgstr ""
 
 #: bazzite_portal/ui/application.py:5330
-msgid "Add to Steam requested. Artwork will appear when Steam saves the shortcut."
+msgid "Add to Steam requested."
+msgstr ""
+
+#: bazzite_portal/ui/application.py:5329
+msgid "Added to Steam."
 msgstr ""
 
 #: bazzite_portal/ui/application.py:576
@@ -240,10 +244,6 @@ msgstr ""
 
 #: packaging/bazzite-portal-agent.desktop:2
 msgid "Bazzite Portal Update Monitor"
-msgstr ""
-
-#: bazzite_portal/ui/application.py:5329
-msgid "Bazzite Portal is in your Steam library with artwork."
 msgstr ""
 
 #: bazzite_portal/ui/application.py:4923
