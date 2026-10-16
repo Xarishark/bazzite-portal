@@ -3,6 +3,16 @@
 A desktop app for Bazzite updates, tools, system management and troubleshooting.
 Currently under development.
 
+## Screenshots
+
+**KDE Plasma**
+
+<img src=".github/screenshots/home-plasma.png" alt="Bazzite Portal home on KDE Plasma" width="900">
+
+**GNOME**
+
+<img src=".github/screenshots/home-gnome.png" alt="Bazzite Portal home on GNOME" width="900">
+
 ## Preview
 
 From the repository folder, run:
