@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=io.github.Xarishark.bazzite_portal
+Exec=/usr/bin/bazzite-portal

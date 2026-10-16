@@ -1,0 +1,641 @@
+"""User-session monitor; GTK is intentionally never imported here."""
+import json
+import logging
+import sys
+import threading
+from gi.repository import Gio, GLib
+from bazzite_portal import APP_ID
+from bazzite_portal.updates import monitor as system
+from bazzite_portal.core.storage import Store
+from bazzite_portal.core.first_login import FirstLogin
+from bazzite_portal.updates.monitor import (
+    Monitor,
+    start_operation,
+    start_cancel_pending,
+    start_remove_layers,
+    start_remove_selected_layers,
+    start_clear_download_cache,
+    start_channel_switch,
+    start_delete_deployment,
+    start_image_switch,
+    restart,
+)
+from bazzite_portal.services.tray import Tray
+from bazzite_portal.artwork.appearance import artwork_kind
+from bazzite_portal.updates.model import indicator
+from bazzite_portal.core.i18n import N_, format_message
+
+log = logging.getLogger(__name__)
+
+AGENT_ID = APP_ID + ".Agent"
+AGENT_PATH = "/io/github/Xarishark/bazzite_portal/Agent"
+AGENT_XML = '''<node><interface name="io.github.Xarishark.bazzite_portal.Agent">
+<method name="GetSnapshot"><arg type="s" direction="out"/></method>
+<method name="Refresh"/>
+<method name="SessionStarted"/>
+<method name="MaintenanceViewed"><arg type="s" direction="in"/><arg type="s" direction="in"/><arg type="s" direction="in"/><arg type="x" direction="in"/></method>
+<method name="WindowVisible"><arg type="b" direction="in"/></method>
+<method name="UpdatesViewed"><arg type="s" direction="in"/></method>
+<method name="GameOperation"><arg type="s" direction="in"/><arg type="v" direction="in"/></method>
+<method name="StartUpdate"/><method name="StartRollback"/><method name="Restart"/>
+<method name="CancelPending"><arg type="s" direction="in"/></method>
+<method name="DeleteDeployment"><arg type="s" direction="in"/></method>
+<method name="StartImageSwitch"><arg type="s" direction="in"/><arg type="s" direction="in"/><arg type="s" direction="in"/></method>
+<method name="RemoveLayers"><arg type="s" direction="in"/></method>
+<method name="RemoveSelectedLayers"><arg type="s" direction="in"/><arg type="as" direction="in"/></method>
+<method name="ClearDownloadCache"><arg type="s" direction="in"/></method>
+<method name="StartChannelSwitch"><arg type="s" direction="in"/></method>
+<method name="ReloadPreferences"/><method name="ResetPreferences"/>
+<signal name="Changed"><arg type="s"/></signal>
+</interface></node>'''
+
+
+class Agent:
+    def __init__(self, session_start=False):
+        self.session_start = bool(session_start)
+        self.first_login = FirstLogin()
+        self._login_handled = False
+        self._first_login_pending = False
+        self.store = Store()
+        self.loop = GLib.MainLoop()
+        self.connection = Gio.bus_get_sync(Gio.BusType.SESSION, None)
+        self.visible_clients = set()
+        self.notified = set()
+        self._runtime_dismissed = {"run": "", "deployment": "",
+                                   "notified_run": "", "result_viewed_run": ""}
+        self.maintenance_viewed = {}
+        self.busy = False
+        self.tray = None
+        self._tray_generation = 0
+        self._tray_target = None
+        self._tray_prepare_lock = threading.Lock()
+        self._tray_preparing = False
+        self.active_timer = None
+        self.registration = None
+        self.system_connection = None
+        self.system_subscription = None
+        self.monitor = Monitor(self._changed, GLib)
+        self.name = Gio.bus_own_name_on_connection(self.connection, AGENT_ID, Gio.BusNameOwnerFlags.NONE, self._acquired, self._lost)
+
+    def _acquired(self, *_):
+        self.registration = self.connection.register_object(AGENT_PATH, Gio.DBusNodeInfo.new_for_xml(AGENT_XML).interfaces[0], self._method, None, None)
+        self.tray = Tray(self.connection, self.open_updates, self.dismiss)
+        self._watch_systemd()
+        self.connection.signal_subscribe("org.freedesktop.DBus", "org.freedesktop.DBus", "NameOwnerChanged", "/org/freedesktop/DBus", None, Gio.DBusSignalFlags.NONE, self._owner_changed)
+        self.store.base.mkdir(parents=True, exist_ok=True)
+        self.file_monitor = Gio.File.new_for_path(str(self.store.base)).monitor_directory(Gio.FileMonitorFlags.NONE, None)
+        self.file_monitor.connect("changed", lambda *_: self._preferences_changed())
+        # Deployment status can change outside UUPD. This is a low-frequency reconciliation,
+        # not a loop checking for updates or a replacement scheduler.
+        GLib.timeout_add_seconds(300, self._reconcile)
+        self.monitor.refresh()
+        if self.session_start:
+            self._session_started()
+
+    def _session_started(self):
+        if self._login_handled:
+            return
+        self._login_handled = True
+        first_launch = not self.first_login.completed()
+        if not first_launch and not self.store.preferences()["open_at_login"]:
+            return
+        self._first_login_pending = first_launch
+        if self.visible_clients:
+            self._acknowledge_first_login()
+        else:
+            log.info("Opening app at login (%s)", "first launch" if first_launch else "user preference")
+            self.open_updates(home=True)
+
+    def _acknowledge_first_login(self):
+        if self._first_login_pending and self.first_login.acknowledge():
+            self._first_login_pending = False
+            log.info("First login launch completed; startup preference preserved")
+
+    def _lost(self, *_):
+        if self.session_start and self.registration is None:
+            # An on-demand monitor can own the name before desktop autostart runs.
+            # Deliver login intent to it instead of silently losing the window launch.
+            try:
+                self.connection.call_sync(AGENT_ID, AGENT_PATH, AGENT_ID,
+                                          "SessionStarted", None, None,
+                                          Gio.DBusCallFlags.NONE, 3000, None)
+            except GLib.Error as error:
+                log.warning("Could not deliver graphical login to agent: %s", error)
+        self._tray_generation += 1
+        self._tray_target = None
+        if self.tray:
+            self.tray.update("", "")
+            if hasattr(self.tray, "close"):
+                self.tray.close()
+        self.monitor.close()
+        self._unwatch_systemd()
+        self.loop.quit()
+
+    def _watch_systemd(self):
+        # Keep the connection alive: a local-only Gio wrapper drops its signal
+        # subscriptions when collected, leaving only the reconciliation timer.
+        self._systemd_properties = {}
+        self.system_connection = Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
+        self.system_subscription = self.system_connection.signal_subscribe(
+            "org.freedesktop.systemd1", "org.freedesktop.DBus.Properties", "PropertiesChanged",
+            None, None, Gio.DBusSignalFlags.NONE, self._system_changed)
+        self.system_connection.call(
+            "org.freedesktop.systemd1", "/org/freedesktop/systemd1",
+            "org.freedesktop.systemd1.Manager", "Subscribe", None, None,
+            Gio.DBusCallFlags.NONE, 3000, None, self._subscribed)
+
+    def _unwatch_systemd(self):
+        connection = getattr(self, "system_connection", None)
+        subscription = getattr(self, "system_subscription", None)
+        if connection is not None and subscription is not None:
+            connection.signal_unsubscribe(subscription)
+            try:
+                connection.call("org.freedesktop.systemd1", "/org/freedesktop/systemd1",
+                                "org.freedesktop.systemd1.Manager", "Unsubscribe", None, None,
+                                Gio.DBusCallFlags.NONE, 3000, None, None)
+            except GLib.Error:
+                pass
+        self.system_subscription = None
+        self.system_connection = None
+
+    def _subscribed(self, bus, result):
+        try:
+            bus.call_finish(result)
+        except GLib.Error as error:
+            self.monitor.snapshot.error = f"Could not subscribe to systemd: {error}"
+
+    def _system_changed(self, connection, sender, path, interface, signal, parameters):
+        if any(name in path for name in ("uupd", "bazzite_2dportal_2dmaintenance")):
+            changed_interface, properties, invalidated = parameters.unpack()
+            watched = {"LoadState", "ActiveState", "SubState", "InvocationID",
+                       "Result", "ExecMainStatus", "ExecMainCode", "MainPID"}
+            values = {key: value for key, value in properties.items() if key in watched}
+            cache = getattr(self, "_systemd_properties", None)
+            if cache is None:
+                cache = self._systemd_properties = {}
+            key = (path, changed_interface)
+            if key not in cache and len(cache) >= 64:
+                cache.pop(next(iter(cache)))
+            previous = cache.setdefault(key, {})
+            changed = any(key not in previous or previous[key] != value for key, value in values.items())
+            previous.update(values)
+            # Querying an unloaded unit can re-emit its unchanged properties.
+            # Ignore duplicates to avoid a refresh/query/load feedback loop.
+            invalid = [key for key in invalidated if key in watched and key in previous]
+            for key in invalid:
+                previous.pop(key, None)
+            if changed or invalid:
+                self.monitor.refresh()
+
+    def _owner_changed(self, connection, sender, path, interface, signal, parameters):
+        name, old, new = parameters.unpack()
+        if not new and name in self.visible_clients:
+            self.visible_clients.discard(name)
+            self._preferences_changed()
+
+    def _preferences_changed(self):
+        if self.tray:
+            preferences = self.store.preferences()
+            semantic = indicator(self.monitor.snapshot, preferences, self._runtime_dismissed,
+                                 bool(self.visible_clients))
+            theme = preferences.get("notification_icon_theme", "spinning")
+            if not semantic:
+                target = ("", "", False)
+            else:
+                try:
+                    art = artwork_kind(theme, semantic)
+                    target = (art, semantic, False)
+                except ValueError:
+                    # Unknown desktop for the native theme: preserve the saved
+                    # choice and keep a generic status icon available.
+                    target = (semantic, semantic, True)
+            if target == self._tray_target:
+                return False
+            self._tray_target = target
+            self._tray_generation += 1
+            generation = self._tray_generation
+            kind, semantic, fallback_only = target
+            if not kind:
+                self.tray.update("", "")
+                return False
+            if fallback_only:
+                self.tray.update(kind, semantic, fallback_only=True)
+                return False
+
+            self._prepare_tray()
+        return False
+
+    def _prepare_tray(self):
+        # Coalesce rapid preference/state changes into one worker. Obsolete
+        # results never publish and only the latest request is prepared next.
+        if self._tray_preparing or not self.tray or not self._tray_target:
+            return
+        kind, semantic, fallback_only = self._tray_target
+        if not kind or fallback_only:
+            return
+        self._tray_preparing = True
+        generation = self._tray_generation
+        tray = self.tray
+        def prepare():
+            failed = False
+            try:
+                with self._tray_prepare_lock:
+                    tray.prepare_artwork(kind)
+            except Exception:
+                failed = True
+            GLib.idle_add(publish, failed)
+        def publish(failed):
+            self._tray_preparing = False
+            if generation == self._tray_generation and self._tray_target == (kind, semantic, False):
+                tray.update(kind, semantic, fallback_only=failed)
+            elif self._tray_target:
+                self._prepare_tray()
+            return False
+        threading.Thread(target=prepare, daemon=True).start()
+
+    def _reconcile(self):
+        self.monitor.refresh()
+        return True
+
+    def _tick(self):
+        self.monitor.refresh()
+        if (not self.monitor.snapshot.running
+                and not any(getattr(self.monitor.snapshot, kind + "_state") == "running"
+                            for kind in ("cancel", "layer", "cache", "channel", "image", "delete", "rollback"))
+                and not self.busy):
+            self.active_timer = None
+            return False
+        return True
+
+    def _changed(self, snapshot):
+        error = snapshot.error or ""
+        if error and error != getattr(self, "_logged_monitor_error", ""):
+            log.warning("Status monitoring: %s", error[:2048])
+        self._logged_monitor_error = error
+        if snapshot.run and snapshot.result in {"success", "failed", "unknown"}:
+            key = (snapshot.run, snapshot.result)
+            if key != getattr(self, "_logged_update_result", None):
+                log.log(logging.INFO if snapshot.result == "success" else logging.WARNING,
+                        "Update result: %s run=%s", snapshot.result, snapshot.run[:64])
+            self._logged_update_result = key
+        outcomes = getattr(self, "_logged_outcomes", {})
+        for kind in ("cancel", "layer", "cache", "channel", "image", "delete", "rollback"):
+            state = getattr(snapshot, kind + "_state", "idle")
+            identity = (getattr(snapshot, kind + "_unit", ""),
+                        getattr(snapshot, kind + "_invocation", ""),
+                        snapshot.maintenance_generations.get(kind, 0), state)
+            if identity[0] and state in {"success", "failed", "unknown"} and outcomes.get(kind) != identity:
+                log.log(logging.INFO if state == "success" else logging.WARNING,
+                        "Operation result: %s %s %s", kind, state,
+                        getattr(snapshot, kind + "_error", "")[:2048])
+            outcomes[kind] = identity
+        self._logged_outcomes = outcomes
+        if (snapshot.running or any(getattr(snapshot, kind + "_state") == "running"
+                                    for kind in ("cancel", "layer", "cache", "channel", "image", "delete", "rollback"))) and self.active_timer is None:
+            interval = 2 if any(getattr(snapshot, kind + "_state") == "running" for kind in ("cancel", "layer", "cache", "channel", "image", "delete", "rollback")) else 10
+            self.active_timer = GLib.timeout_add_seconds(interval, self._tick)
+        should_notify = bool(snapshot.result == "failed" and snapshot.run
+                             and snapshot.run not in self.notified)
+        if should_notify:
+            self.notified.add(snapshot.run)
+            self._runtime_dismissed["notified_run"] = snapshot.run
+        self._preferences_changed()
+        self._publish_snapshot(snapshot)
+        if should_notify:
+            if snapshot.failures:
+                log.warning("Failed update components: %s", ", ".join(snapshot.failures)[:2048])
+            self.notify(N_("Bazzite update failed") if snapshot.operation == "update" else N_("Bazzite rollback failed"), N_("Open Updates to inspect the operation log."))
+
+    def _snapshot_payload(self, snapshot=None):
+        snapshot = snapshot if snapshot is not None else self.monitor.snapshot
+        return {**snapshot.to_dict(),
+                "result_viewed_run": getattr(self, "_runtime_dismissed", {}).get("result_viewed_run", ""),
+                "dismissed_status": dict(getattr(self, "_runtime_dismissed", {})),
+                "request_busy": bool(getattr(self, "busy", False)),
+                "maintenance_viewed": [[kind, *getattr(self, "maintenance_viewed", {})[kind]]
+                                        for kind in sorted(getattr(self, "maintenance_viewed", {}))]}
+
+    def _acknowledge_maintenance_viewed(self, kind, unit, invocation, generation):
+        """Consume only the exact completed helper result currently in the snapshot."""
+        if kind not in {"cancel", "layer", "cache", "channel", "image", "delete", "rollback"}:
+            return False
+        snapshot = self.monitor.snapshot
+        state = getattr(snapshot, kind + "_state", "unknown")
+        current = (
+            getattr(snapshot, kind + "_unit", ""),
+            getattr(snapshot, kind + "_invocation", ""),
+            getattr(snapshot, "maintenance_generations", {}).get(kind, 0),
+        )
+        if (state in {"running", "idle", "unavailable"}
+                or not isinstance(generation, int) or generation <= 0
+                or current != (unit, invocation, generation)):
+            return False
+        key = (unit, invocation, generation)
+        if self.maintenance_viewed.get(kind) == key:
+            return False
+        self.maintenance_viewed[kind] = key
+        self._publish_snapshot(snapshot)
+        return True
+
+    def _publish_snapshot(self, snapshot=None):
+        payload = json.dumps(self._snapshot_payload(snapshot))
+        self.connection.emit_signal(None, AGENT_PATH, AGENT_ID, "Changed", GLib.Variant("(s)", (payload,)))
+
+    def notify(self, title, body):
+        def notified(connection, result):
+            try:
+                response = connection.call_finish(result)
+                notification_id = response.unpack()[0]
+                self.notification_id = notification_id
+            except GLib.Error:
+                pass
+        if not hasattr(self, "notification_subscription"):
+            self.notification_subscription = self.connection.signal_subscribe("org.freedesktop.Notifications", "org.freedesktop.Notifications", "ActionInvoked", "/org/freedesktop/Notifications", None, Gio.DBusSignalFlags.NONE, self._notification_action)
+        title = format_message(title)
+        body = format_message(body)
+        self.connection.call("org.freedesktop.Notifications", "/org/freedesktop/Notifications", "org.freedesktop.Notifications", "Notify", GLib.Variant("(susssasa{sv}i)", ("Bazzite Portal", 0, APP_ID, title, GLib.markup_escape_text(body), ["default", format_message(N_("Open Updates"))], {"desktop-entry": GLib.Variant("s", APP_ID)}, -1)), GLib.VariantType.new("(u)"), Gio.DBusCallFlags.NONE, 3000, None, notified)
+
+    def _notification_action(self, connection, sender, path, interface, signal, parameters):
+        notification_id, action = parameters.unpack()
+        if notification_id == getattr(self, "notification_id", None):
+            self.open_updates()
+
+    def open_updates(self, home=False):
+        try:
+            Gio.Subprocess.new([sys.executable, "-m", "bazzite_portal"]
+                               + ([] if home else ["--updates"]), Gio.SubprocessFlags.NONE)
+        except GLib.Error as error:
+            self.monitor.snapshot.error = str(error)
+
+    def dismiss(self):
+        snapshot = self.monitor.snapshot
+        self._runtime_dismissed.update(
+            run=snapshot.run if snapshot.running or snapshot.result == "failed" else "",
+            deployment=snapshot.deployment,
+        )
+        self._preferences_changed()
+        self._publish_snapshot(snapshot)
+
+    def _acknowledge_failed_run(self, viewed_run):
+        if self.monitor.snapshot.result == "failed":
+            self._acknowledge_update_run(viewed_run)
+
+    def _acknowledge_update_run(self, viewed_run):
+        snapshot = self.monitor.snapshot
+        if (snapshot.result not in {"success", "failed"} or snapshot.running or not snapshot.run
+                or viewed_run != snapshot.run):
+            return
+        if self._runtime_dismissed.get("result_viewed_run") == snapshot.run:
+            return
+        # Keep the currently displayed result visible, but let later visits
+        # start fresh. Restart reminders have their own deployment identity.
+        self._runtime_dismissed["result_viewed_run"] = snapshot.run
+        if snapshot.result == "failed":
+            self._runtime_dismissed["run"] = snapshot.run
+            self._preferences_changed()
+        self._publish_snapshot(snapshot)
+
+    def _method(self, connection, sender, path, interface, method, parameters, invocation):
+        game_auth_sender = None
+        if method == "GameOperation":
+            try:
+                operation = parameters.get_child_value(0).get_string()
+                operation_parameters = parameters.get_child_value(1).get_variant()
+                expected = {
+                    "StartRollback": "b",
+                    "CancelPending": "(s)",
+                    "RemoveLayers": "(s)",
+                    "RemoveSelectedLayers": "(sas)",
+                    "ClearDownloadCache": "(s)",
+                    "StartChannelSwitch": "(s)",
+                    "DeleteDeployment": "(s)",
+                    "StartImageSwitch": "(sss)",
+                }
+                if operation not in expected or operation_parameters.get_type_string() != expected[operation]:
+                    raise ValueError("Invalid gaming operation request.")
+                if operation == "StartRollback":
+                    if operation_parameters.get_boolean():
+                        raise ValueError("Invalid gaming operation request.")
+                    operation_parameters = None
+            except (TypeError, ValueError, AttributeError):
+                invocation.return_dbus_error(AGENT_ID + ".Error", "Invalid gaming operation request.")
+                return
+            method, parameters = operation, operation_parameters
+            game_auth_sender = sender
+        if method == "GetSnapshot":
+            invocation.return_value(GLib.Variant("(s)", (json.dumps(self._snapshot_payload()),)))
+        elif method == "Refresh":
+            self.monitor.refresh()
+            invocation.return_value(None)
+        elif method == "SessionStarted":
+            self._session_started()
+            invocation.return_value(None)
+        elif method == "WindowVisible":
+            if parameters.unpack()[0]:
+                self.visible_clients.add(sender)
+                self._acknowledge_first_login()
+            else:
+                self.visible_clients.discard(sender)
+            self._preferences_changed()
+            invocation.return_value(None)
+        elif method == "UpdatesViewed":
+            self._acknowledge_update_run(parameters.unpack()[0])
+            invocation.return_value(None)
+        elif method == "MaintenanceViewed":
+            self._acknowledge_maintenance_viewed(*parameters.unpack())
+            invocation.return_value(None)
+        elif method == "ReloadPreferences":
+            self._preferences_changed()
+            invocation.return_value(None)
+        elif method == "ResetPreferences":
+            if self.store.reset():
+                self._runtime_dismissed = {"run": "", "deployment": "",
+                                           "notified_run": "", "result_viewed_run": ""}
+                self.notified.clear()
+                self.maintenance_viewed.clear()
+                self._preferences_changed()
+                self.monitor.refresh()
+                self._publish_snapshot()
+                invocation.return_value(None)
+            else:
+                invocation.return_dbus_error(AGENT_ID + ".Error", self.store.errors[-1])
+        elif method in ("StartUpdate", "StartRollback", "Restart", "CancelPending", "RemoveLayers", "RemoveSelectedLayers", "ClearDownloadCache", "StartChannelSwitch", "DeleteDeployment", "StartImageSwitch"):
+            if self.busy:
+                invocation.return_dbus_error(AGENT_ID + ".Error", N_("Another operation request is pending."))
+                return
+            self.busy = True
+            log.info("Operation requested: %s", method)
+            # Start polling before the worker invokes systemd. PropertiesChanged
+            # is the fast path, while this catches a missed signal and keeps
+            # running state/log snapshots live until the request has a result.
+            if self.active_timer is None:
+                self.active_timer = GLib.timeout_add_seconds(2, self._tick)
+            self.monitor.refresh()
+            game_auth = game_auth_sender if method in ("StartRollback", "CancelPending", "RemoveLayers", "RemoveSelectedLayers", "ClearDownloadCache", "StartChannelSwitch", "DeleteDeployment", "StartImageSwitch") else None
+            def worker():
+                error = None
+                try:
+                    def execute():
+                        if method == "CancelPending":
+                            start_cancel_pending(parameters.unpack()[0])
+                        elif method == "RemoveLayers":
+                            start_remove_layers(parameters.unpack()[0])
+                        elif method == "RemoveSelectedLayers":
+                            token, selected = parameters.unpack()
+                            start_remove_selected_layers(token, selected)
+                        elif method == "ClearDownloadCache":
+                            start_clear_download_cache(parameters.unpack()[0])
+                        elif method == "StartChannelSwitch":
+                            start_channel_switch(parameters.unpack()[0])
+                        elif method == "DeleteDeployment":
+                            start_delete_deployment(parameters.unpack()[0])
+                        elif method == "StartImageSwitch":
+                            start_image_switch(*parameters.unpack())
+                        elif method == "Restart":
+                            restart()
+                        else:
+                            start_operation("update" if method == "StartUpdate" else "rollback")
+                    if game_auth:
+                        with system.command_authorization(self._game_authorization(game_auth)):
+                            execute()
+                    else:
+                        execute()
+                except Exception as exception:
+                    log.exception("Operation request failed: %s", method)
+                    error = str(exception) or N_("Operation request failed.")
+                GLib.idle_add(finish, error)
+            def finish(error):
+                self.busy = False
+                if error:
+                    invocation.return_dbus_error(AGENT_ID + ".Error", error)
+                else:
+                    log.info("Operation request finished: %s", method)
+                    invocation.return_value(None)
+                self.monitor.refresh()
+                return False
+            threading.Thread(target=worker, daemon=True).start()
+
+    def _game_authorization(self, sender):
+        """Ask the initiating GUI to bind a fallback listener to one PID."""
+        def prepare(pid, start_time, argv):
+            def release():
+                try:
+                    self.connection.call_sync(
+                        sender, AGENT_PATH + "/GamingAuth", AGENT_ID + ".GamingAuth", "Release",
+                        GLib.Variant("(t)", (pid,)), None, Gio.DBusCallFlags.NONE, 3000, None)
+                except GLib.Error:
+                    pass
+            try:
+                response = self.connection.call_sync(
+                    sender, AGENT_PATH + "/GamingAuth", AGENT_ID + ".GamingAuth", "Prepare",
+                    GLib.Variant("(ttas)", (pid, start_time, argv)),
+                    GLib.VariantType.new("(b)"), Gio.DBusCallFlags.NONE, 30000, None)
+                if not response.unpack()[0]:
+                    release()
+                    raise RuntimeError("Gaming-mode authorization was not registered.")
+            except Exception:
+                release()
+                raise
+            return release
+        return prepare
+
+    def run(self):
+        self.loop.run()
+
+
+class Client:
+    def __init__(self, changed, error):
+        self.changed, self.error = changed, error
+        self.connection = Gio.bus_get_sync(Gio.BusType.SESSION, None)
+        self.closed = False
+        self.game_auth_enabled = False
+        self.signal_subscription = self.connection.signal_subscribe(
+            AGENT_ID, AGENT_ID, "Changed", AGENT_PATH, None,
+            Gio.DBusSignalFlags.NONE, self._signal)
+        self.watch = Gio.bus_watch_name_on_connection(self.connection, AGENT_ID, Gio.BusNameWatcherFlags.NONE, self._appeared, self._vanished)
+        self.visible = False
+
+    def _appeared(self, *_):
+        if self.closed:
+            return
+        self.call("GetSnapshot", callback=self._snapshot)
+        self.set_visible(self.visible)
+
+    def _vanished(self, *_):
+        if self.closed:
+            return
+        # Start the installed service; activation through the normal CLI supports source runs.
+        try:
+            import sys
+            Gio.Subprocess.new([sys.executable, "-m", "bazzite_portal", "--agent"], Gio.SubprocessFlags.NONE)
+        except GLib.Error as error:
+            if not self.closed:
+                self.error(str(error))
+
+    def _signal(self, connection, sender, path, interface, signal, parameters):
+        if not self.closed:
+            self._snapshot(parameters)
+
+    def _snapshot(self, variant):
+        if self.closed:
+            return
+        try:
+            self.changed(json.loads(variant.unpack()[0]))
+        except (ValueError, TypeError, IndexError):
+            if not self.closed:
+                self.error("The update monitor returned an invalid snapshot.")
+
+    def call(self, method, parameters=None, callback=None, error_callback=None):
+        if self.closed:
+            return
+
+        def finished(connection, result):
+            try:
+                value = connection.call_finish(result)
+                if self.closed:
+                    return
+                if callback:
+                    callback(value)
+            except GLib.Error as error:
+                if not self.closed:
+                    remote_name = Gio.DBusError.get_remote_error(error)
+                    message = error.message
+                    if remote_name:
+                        message = message.removeprefix(f"GDBus.Error:{remote_name}: ")
+                    (error_callback or self.error)(message)
+        # Maintenance requests wait for their systemd unit to finish so the
+        # reply can report its real result. Do not let GDBus expire the client
+        # request while that unit is still running; Changed snapshots continue
+        # to carry live progress independently of this reply.
+        timeout = 2_147_483_647 if method in {
+            "CancelPending", "RemoveLayers", "RemoveSelectedLayers", "ClearDownloadCache", "StartChannelSwitch", "DeleteDeployment", "StartImageSwitch",
+        } else 120000
+        wire_method, wire_parameters = method, parameters
+        if self.game_auth_enabled and method in {
+            "StartRollback", "CancelPending", "RemoveLayers", "RemoveSelectedLayers", "ClearDownloadCache", "StartChannelSwitch", "DeleteDeployment", "StartImageSwitch",
+        }:
+            original_parameters = (GLib.Variant("b", False) if method == "StartRollback"
+                                   else parameters or GLib.Variant("()", ()))
+            wire_method = "GameOperation"
+            wire_parameters = GLib.Variant("(sv)", (method, original_parameters))
+        self.connection.call(AGENT_ID, AGENT_PATH, AGENT_ID, wire_method, wire_parameters, None, Gio.DBusCallFlags.NONE, timeout, None, finished)
+
+    def set_visible(self, visible):
+        if self.closed:
+            return
+        self.visible = visible
+        self.call("WindowVisible", GLib.Variant("(b)", (visible,)))
+
+    def updates_viewed(self, run):
+        """Acknowledge the exact completed run shown in Updates in agent memory."""
+        self.call("UpdatesViewed", GLib.Variant("(s)", (run,)))
+
+    def close(self):
+        if self.closed:
+            return
+        # Queue the visibility transition before closing callbacks. Any reply
+        # arriving after this point is deliberately ignored.
+        self.set_visible(False)
+        self.closed = True
+        Gio.bus_unwatch_name(self.watch)
+        self.connection.signal_unsubscribe(self.signal_subscription)

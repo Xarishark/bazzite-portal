@@ -1,0 +1,100 @@
+#!/usr/bin/python3
+"""Optional UUPD Homebrew adapter preserving the standard Linuxbrew symlink."""
+
+import json
+import os
+import re
+import subprocess
+import sys
+import tempfile
+
+
+BREW = "/home/linuxbrew/.linuxbrew/bin/brew"
+ENV = "/usr/bin/env"
+PLAN_PREFIX = "BAZZITE_PORTAL_BREW_PLAN "
+PLAN_STATUS_PREFIX = "BAZZITE_PORTAL_BREW_PLAN_STATUS "
+MAX_PLAN_ITEMS = 1024
+MAX_QUERY_BYTES = 256 * 1024
+
+
+def child_environment():
+    """Use stable English output for UUPD's progress parser, only in Brew."""
+    env = os.environ.copy()
+    env["LC_ALL"] = "C"
+    return env
+
+
+def upgrade_plan(env, diagnostics=None):
+    """Read the existing formula metadata; never refresh it or upgrade here."""
+    def unavailable(reason):
+        if diagnostics is not None:
+            diagnostics.append(reason)
+        return None
+
+    query_env = {**env, "HOMEBREW_NO_AUTO_UPDATE": "1"}
+    try:
+        # A file bounds the amount read into memory even for unexpected output.
+        with tempfile.TemporaryFile() as output:
+            result = subprocess.run(
+                [ENV, BREW, "outdated", "--formula", "--json=v2"],
+                stdin=subprocess.DEVNULL, stdout=output, stderr=subprocess.DEVNULL,
+                env=query_env, timeout=20, check=False,
+            )
+            if result.returncode:
+                return unavailable("query-failed")
+            if output.tell() > MAX_QUERY_BYTES:
+                return unavailable("query-too-large")
+            output.seek(0)
+            data = json.load(output)
+        if not isinstance(data, dict) or not isinstance(data.get("formulae"), list):
+            return unavailable("invalid-query-output")
+        formulae = data["formulae"]
+        if len(formulae) > MAX_PLAN_ITEMS:
+            return unavailable("too-many-formulae")
+        apps = []
+        for formula in formulae:
+            if not isinstance(formula, dict) or type(formula.get("pinned")) is not bool:
+                return unavailable("invalid-query-output")
+            if formula["pinned"]:
+                continue  # A full upgrade leaves pinned formulae unchanged.
+            name = formula.get("name")
+            if (not isinstance(name, str) or len(name) > 128
+                    or not re.fullmatch(r"[a-zA-Z0-9_][a-zA-Z0-9_+@.-]*(?:/[a-zA-Z0-9_][a-zA-Z0-9_+@.-]*)*", name)
+                    or name in apps):
+                return unavailable("invalid-query-output")
+            apps.append(name)
+        return apps
+    except subprocess.TimeoutExpired:
+        return unavailable("query-timed-out")
+    except OSError:
+        return unavailable("query-unavailable")
+    except (ValueError, RecursionError):
+        return unavailable("invalid-query-output")
+
+
+def full_formula_upgrade(args):
+    """Accept full-upgrade flags which preserve the formula inventory scope."""
+    return bool(args and args[0] == "upgrade"
+                and all(arg in {"-y", "--no-ask", "--formula", "--formulae"} for arg in args[1:]))
+
+
+def main(argv=None):
+    args = sys.argv[1:] if argv is None else argv
+    env = child_environment()
+    # UUPD 1.5 passes -y. Confirmation and formula-only flags preserve scope;
+    # specific formulae and arbitrary flags do not have this query's scope.
+    if full_formula_upgrade(args):
+        diagnostics = []
+        apps = upgrade_plan(env, diagnostics)
+        if apps:
+            print(PLAN_PREFIX + json.dumps({"apps": apps}, separators=(",", ":")), flush=True)
+        else:
+            reason = diagnostics[0] if diagnostics else "no-outdated-formulae"
+            print(PLAN_STATUS_PREFIX + json.dumps({"reason": reason}, separators=(",", ":")), flush=True)
+    elif args and args[0] == "upgrade":
+        print(PLAN_STATUS_PREFIX + '{"reason":"unsupported-upgrade-arguments"}', flush=True)
+    os.execve(ENV, [ENV, BREW, *args], env)
+
+
+if __name__ == "__main__":
+    main()

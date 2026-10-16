@@ -1,0 +1,11 @@
+[Icon Theme]
+Name=Bazzite App
+Comment=Bazzite App symbolic action icons
+Directories=scalable/actions
+
+[scalable/actions]
+Size=24
+Type=Scalable
+MinSize=16
+MaxSize=128
+Context=Actions

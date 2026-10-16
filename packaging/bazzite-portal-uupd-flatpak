@@ -1,0 +1,33 @@
+#!/usr/bin/python3
+"""Optional UUPD Flatpak adapter that enables CLI progress for accepted updates."""
+
+import os
+import sys
+
+
+FLATPAK = "/usr/bin/flatpak"
+
+
+def child_environment():
+    """Use stable English output for UUPD's progress parser, only in Flatpak."""
+    env = os.environ.copy()
+    env["LC_ALL"] = "C"
+    return env
+
+
+def transform_argv(argv):
+    """Drop only --noninteractive from an update that already explicitly says yes."""
+    if not argv or argv[0] != "update":
+        return list(argv)
+    if not any(arg in ("-y", "--assumeyes") for arg in argv[1:]):
+        return list(argv)
+    return [arg for arg in argv if arg != "--noninteractive"]
+
+
+def main(argv=None):
+    args = transform_argv(sys.argv[1:] if argv is None else argv)
+    os.execve(FLATPAK, [FLATPAK, *args], child_environment())
+
+
+if __name__ == "__main__":
+    main()

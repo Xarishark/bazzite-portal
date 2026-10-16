@@ -1,0 +1,9 @@
+[Unit]
+Description=Bazzite Portal update indicator and status monitor
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+ExecStart=/usr/bin/bazzite-portal --agent
+Restart=on-failure
+RestartSec=5

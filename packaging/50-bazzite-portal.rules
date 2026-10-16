@@ -1,0 +1,10 @@
+// Only local administrators may start fixed privileged maintenance instances.
+polkit.addRule(function(action, subject) {
+    var unit = action.lookup("unit");
+    if (action.id === "org.freedesktop.systemd1.manage-units" &&
+        (/^bazzite-portal-maintenance@(rollback|(cancel-pending|reset-layers|clear-download-cache|channel-switch|delete-deployment)-[0-9a-f]{64}|remove-selected-layers-[0-9a-f]{64}-[0-9a-f]{64}|image-switch-[0-9a-f]{64}-(bazzite|bazzite-deck|bazzite-nvidia|bazzite-nvidia-open|bazzite-deck-nvidia|bazzite-gnome|bazzite-gnome-nvidia|bazzite-gnome-nvidia-open|bazzite-deck-gnome|bazzite-dx|bazzite-dx-gnome|bazzite-dx-nvidia|bazzite-dx-nvidia-gnome)-(?=.{1,64}\.service$)(stable|testing|unstable|latest|[0-9]{2,3}(\.[0-9]+){0,3}|(stable|testing|unstable)-[0-9]{2,3}(\.[0-9]+){0,3}))\.service$/.test(unit)) &&
+        action.lookup("verb") === "start" && subject.local && subject.active &&
+        subject.isInGroup("wheel")) {
+        return polkit.Result.AUTH_ADMIN_KEEP;
+    }
+});

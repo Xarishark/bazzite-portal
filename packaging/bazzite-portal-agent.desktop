@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Bazzite Portal Update Monitor
+Exec=bazzite-portal --agent --session-start
+Type=Application
+NoDisplay=true
+X-GNOME-Autostart-enabled=true

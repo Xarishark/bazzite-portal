@@ -1,0 +1,23 @@
+screens:
+  - title: Sample tools
+    actions:
+      - id: sample-action
+        title: Example action
+        description: A simple action with a description and confirmation.
+        script: "printf '%s\n' 'Example action selected'"
+      - id: sample-options
+        title: Example choices
+        description: A status-aware action with two options.
+        status_script: "printf '%s\n' 'enabled'"
+        options:
+          - id: enabled
+            label: Enable example
+            script: "printf '%s\n' 'Enable option selected'"
+          - id: disabled
+            label: Disable example
+            script: "printf '%s\n' 'Disable option selected'"
+  - title: Another category
+    actions:
+      - id: another-action
+        title: Another example
+        script: "printf '%s\n' 'Another example selected'"

@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "namespace": "ghcr.io/ublue-os",
+  "images": [
+    {"name": "bazzite", "desktop_environment": "kde"},
+    {"name": "bazzite-deck", "desktop_environment": "kde"},
+    {"name": "bazzite-nvidia", "desktop_environment": "kde"},
+    {"name": "bazzite-nvidia-open", "desktop_environment": "kde"},
+    {"name": "bazzite-deck-nvidia", "desktop_environment": "kde"},
+    {"name": "bazzite-gnome", "desktop_environment": "gnome"},
+    {"name": "bazzite-gnome-nvidia", "desktop_environment": "gnome"},
+    {"name": "bazzite-gnome-nvidia-open", "desktop_environment": "gnome"},
+    {"name": "bazzite-deck-gnome", "desktop_environment": "gnome"},
+    {"name": "bazzite-dx", "desktop_environment": "kde"},
+    {"name": "bazzite-dx-gnome", "desktop_environment": "gnome"},
+    {"name": "bazzite-dx-nvidia", "desktop_environment": "kde"},
+    {"name": "bazzite-dx-nvidia-gnome", "desktop_environment": "gnome"}
+  ]
+}

@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bazzite-portal"
+version = "0.9.0"
+description = "Bazzite tools and reconnectable system updates"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "GPL-3.0-only"}
+dependencies = ["PyGObject>=3.42", "PyYAML>=6"]
+
+[project.urls]
+Homepage = "https://github.com/Xarishark/bazzite-portal"
+Repository = "https://github.com/Xarishark/bazzite-portal"
+Issues = "https://github.com/Xarishark/bazzite-portal/issues"
+
+[project.scripts]
+bazzite-portal = "bazzite_portal.__main__:main"
+
+[tool.setuptools]
+include-package-data = false
+license-files = ["LICENSE", "NOTICE.md", "LICENSES/*.txt"]
+
+[tool.setuptools.packages.find]
+include = ["bazzite_portal*"]
+namespaces = false
+
+[tool.setuptools.package-data]
+bazzite_portal = [
+    "assets/prompts/*.svg",
+    "assets/prompts/dark/*.svg",
+    "assets/icons/hicolor/index.theme",
+    "assets/icons/hicolor/scalable/actions/*.svg",
+    "assets/indicator/*.svg",
+    "core/message_templates.json",
+    "core/user_messages.json",
+    "maintenance/rebase_images.json",
+]

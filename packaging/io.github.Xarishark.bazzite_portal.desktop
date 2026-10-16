@@ -1,0 +1,17 @@
+[Desktop Entry]
+Name=Bazzite Portal
+Comment=Manage Bazzite tools and system updates
+Exec=bazzite-portal
+Icon=io.github.Xarishark.bazzite_portal
+Terminal=false
+Type=Application
+Categories=System;Settings;
+Keywords=bazzite;setup;configuration;updates;
+StartupNotify=true
+StartupWMClass=io.github.Xarishark.bazzite_portal
+DBusActivatable=true
+Actions=Updates;
+
+[Desktop Action Updates]
+Name=Updates
+Exec=bazzite-portal --updates

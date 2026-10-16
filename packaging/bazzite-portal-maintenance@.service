@@ -1,0 +1,13 @@
+[Unit]
+Description=Bazzite Portal maintenance operation %i
+Before=uupd.service uupd-manual.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 -m bazzite_portal.maintenance.service %i
+TimeoutStartSec=infinity
+WorkingDirectory=/
+Environment=LC_ALL=C
+StandardOutput=journal
+StandardError=journal
+User=root
