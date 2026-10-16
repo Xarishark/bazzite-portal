@@ -24,8 +24,7 @@ jobs:
     runs-on: ubuntu-24.04
     container: fedora:44
     permissions:
-      contents: write
-      pull-requests: write
+      contents: read
     env:
       PYTHONDONTWRITEBYTECODE: '1'
     steps:
@@ -39,15 +38,38 @@ jobs:
         run: |
           python3 packaging/translations.py update
           python3 packaging/translations.py check
+      - name: Create repository-scoped translation App token
+        uses: actions/create-github-app-token@v3
+        id: app-token
+        with:
+          client-id: ${{ vars.TRANSLATION_APP_CLIENT_ID }}
+          private-key: ${{ secrets.TRANSLATION_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: ${{ github.event.repository.name }}
+          permission-contents: write
+          permission-pull-requests: write
+      - name: Resolve translation bot identity
+        uses: actions/github-script@v8
+        id: bot
+        env:
+          APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
+        with:
+          github-token: ${{ steps.app-token.outputs.token }}
+          script: |
+            const login = `${process.env.APP_SLUG}[bot]`;
+            const { data: user } = await github.rest.users.getByUsername({ username: login });
+            core.setOutput('login', login);
+            core.setOutput('author', `${login} <${user.id}+${login}@users.noreply.github.com>`);
       - name: Create or update translation template PR
         id: template
         uses: peter-evans/create-pull-request@v8
         with:
+          token: ${{ steps.app-token.outputs.token }}
           branch: automation/translation-template
           base: main
           delete-branch: true
           sign-commits: true
-          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          author: ${{ steps.bot.outputs.author }}
           commit-message: Update translation template
           title: Update translation template
           body: |
@@ -64,13 +86,15 @@ jobs:
         env:
           TEMPLATE_PR: ${{ steps.template.outputs.pull-request-number }}
           TEMPLATE_SHA: ${{ steps.template.outputs.pull-request-head-sha }}
+          TEMPLATE_BOT: ${{ steps.bot.outputs.login }}
         with:
+          github-token: ${{ steps.app-token.outputs.token }}
           script: |
             const pull_number = Number(process.env.TEMPLATE_PR);
             const repo = context.repo;
             const { data: pr } = await github.rest.pulls.get({ ...repo, pull_number });
             if (pr.state !== 'open') return;
-            if (pr.user.login !== 'github-actions[bot]' || pr.draft ||
+            if (!['github-actions[bot]', process.env.TEMPLATE_BOT].includes(pr.user.login) || pr.draft ||
                 pr.head.repo?.full_name !== `${repo.owner}/${repo.repo}` ||
                 pr.head.ref !== 'automation/translation-template' || pr.base.ref !== 'main' ||
                 pr.head.sha !== process.env.TEMPLATE_SHA) {
