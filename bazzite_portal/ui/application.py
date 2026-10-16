@@ -5326,8 +5326,8 @@ class Window(Adw.ApplicationWindow):
                 return
             try:
                 artwork_ready = result.result()
-                message = (N_("Bazzite Portal is in your Steam library with artwork.") if artwork_ready else
-                           N_("Add to Steam requested. Artwork will appear when Steam saves the shortcut."))
+                message = (N_("Added to Steam.") if artwork_ready else
+                           N_("Add to Steam requested."))
             except Exception as error:
                 log.warning("Add to Steam failed: %s", error)
                 message = public_error(error, N_('Could not add Bazzite Portal to Steam. Open Logs for details.'), context='Add to Steam')
