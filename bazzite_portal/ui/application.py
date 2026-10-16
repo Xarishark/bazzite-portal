@@ -458,7 +458,7 @@ class Window(Adw.ApplicationWindow):
         self.notices.set_child(toolbar)
         header = Adw.HeaderBar()
         self.header = header
-        self.header_title = Adw.WindowTitle(title=_("Bazzite Portal"), subtitle=_("Preview · commands disabled") if preview else "")
+        self.header_title = Adw.WindowTitle(title=_("Bazzite Portal"), subtitle="Preview · commands disabled" if preview else "")
         header.set_title_widget(self.header_title)
         self.back_button = Gtk.Button()
         self.back_button.set_icon_name("go-previous-symbolic")
@@ -1136,10 +1136,10 @@ class Window(Adw.ApplicationWindow):
         if self.preview:
             self._report_collection_finished(generation, SimpleNamespace(
                 directory=Path("/tmp/bazzite-report-preview"),
-                hardware=N_("Preview hardware summary (collection disabled)"),
+                hardware="Preview hardware summary (collection disabled)",
                 files=("bazzite-installation.txt", "current-boot.txt",
                        "previous-boot.txt", "kernel-current-boot.txt", "steam-console.txt"),
-                warnings=(N_("Preview only: no files were collected."),),
+                warnings=("Preview only: no files were collected.",),
             ), "", None, None)
             return
         self._show_report_collecting(generation)
@@ -1187,8 +1187,8 @@ class Window(Adw.ApplicationWindow):
         if self.preview:
             report = SimpleNamespace(
                 directory=Path("/tmp/bazzite-system-logs-preview"),
-                hardware=N_("Preview hardware summary (collection disabled)"),
-                files=(), warnings=(N_("Preview only: no files were collected."),))
+                hardware="Preview hardware summary (collection disabled)",
+                files=(), warnings=("Preview only: no files were collected.",))
             self._system_logs_collection_finished(generation, report, None)
             return
         self._show_report_collecting(generation, N_("Collecting system logs"))
@@ -1288,7 +1288,7 @@ class Window(Adw.ApplicationWindow):
         self._show_report_collecting(generation, N_("Resetting Steam"))
         self._report_collecting_dialog = self.modal
         if self.preview:
-            self._steam_reset_finished(generation, None, N_("Steam reset is disabled in preview mode."))
+            self._steam_reset_finished(generation, None, "Steam reset is disabled in preview mode.")
             return
         future = self.executor.submit(steam_reset.reset_steam)
 
@@ -1495,7 +1495,7 @@ class Window(Adw.ApplicationWindow):
         if self.closing:
             return
         if self.preview:
-            self.toast(N_("Folder opening is disabled in preview mode."))
+            self.toast("Folder opening is disabled in preview mode.")
             return
         folder = Path(directory).resolve()
         self._run_xdg_open(str(folder), _("Could not open logs folder"),
@@ -1539,7 +1539,7 @@ class Window(Adw.ApplicationWindow):
         if self.closing:
             return
         if self.preview:
-            self.toast(N_("Links are disabled in preview mode."))
+            self.toast("Links are disabled in preview mode.")
             return
         if not issue_url:
             self.toast(N_("The GitHub issue form could not be prepared."))
@@ -1550,7 +1550,7 @@ class Window(Adw.ApplicationWindow):
         if self.closing:
             return
         if self.preview:
-            self.toast(N_("Links are disabled in preview mode."))
+            self.toast("Links are disabled in preview mode.")
             return
         self._run_xdg_open(uri, _("Could not open link"))
 
@@ -1647,13 +1647,13 @@ class Window(Adw.ApplicationWindow):
             self.get_mapped() and self.stack.get_visible_child_name() == N_("Home"))
         if running:
             if preview_active:
-                self.home_status.set_title(_("Preview update demo · simulated"))
+                self.home_status.set_title("Preview update demo · simulated")
                 step = max(0, min(self._preview_step, 6))
-                self.home_status.set_subtitle(format_message(_("Simulated update in progress · step {step} of 6.").format(step=step)))
+                self.home_status.set_subtitle(format_message("Simulated update in progress · step {step} of 6.".format(step=step)))
             return
         if self.preview:
             self.home_status.set_title(_("Update Bazzite and Apps"))
-            self.home_status.set_subtitle(_("Try the update preview. System commands are disabled."))
+            self.home_status.set_subtitle("Try the update preview. System commands are disabled.")
             return
 
     def _render_pins(self):
@@ -1851,8 +1851,8 @@ class Window(Adw.ApplicationWindow):
                 status_text.set_single_line_mode(True)
                 status.append(status_icon)
                 status.append(status_text)
-                status.set_tooltip_text(_("Status unavailable in preview mode.") if self.preview else _("Checking current status…"))
-                status.update_property([Gtk.AccessibleProperty.LABEL], [_("Status unavailable in preview") if self.preview else _("Checking status")])
+                status.set_tooltip_text("Status unavailable in preview mode." if self.preview else _("Checking current status…"))
+                status.update_property([Gtk.AccessibleProperty.LABEL], ["Status unavailable in preview" if self.preview else _("Checking status")])
                 row.add_suffix(status)
                 row.status_box = status
                 row.status_icon = status_icon
@@ -2022,7 +2022,7 @@ class Window(Adw.ApplicationWindow):
 
     def _launch_script(self, script, refresh=None):
         if self.preview:
-            self.toast(N_("Tool actions are disabled in preview mode."))
+            self.toast("Tool actions are disabled in preview mode.")
             return
         if not script:
             self.toast(N_("No command is configured for this tool."))
@@ -2072,7 +2072,7 @@ class Window(Adw.ApplicationWindow):
         if confirmation:
             box.append(label(action.get("title", N_("Tool")), "title-3", translate=on_confirm is not None))
             if on_confirm is None:
-                box.append(label(N_("Commands are disabled in preview mode.") if self.preview
+                box.append(label("Commands are disabled in preview mode." if self.preview
                                  else N_("This command opens in your desktop terminal."), "heading"))
             if action.get("description"):
                 box.append(label(action.get("description", ""), translate=on_confirm is not None))
@@ -2126,10 +2126,10 @@ class Window(Adw.ApplicationWindow):
         else:
             box.append(label(action.get("description", ""), translate=on_confirm is not None))
             if self.preview:
-                box.append(label(N_("Commands are disabled in preview mode."), "heading"))
+                box.append(label("Commands are disabled in preview mode.", "heading"))
             if action.get("status_script"):
                 dialog.portal_status_label = label(
-                    N_("Current status is unavailable in preview mode.") if self.preview else N_("Checking current status…"),
+                    "Current status is unavailable in preview mode." if self.preview else N_("Checking current status…"),
                     "heading",
                 )
                 box.append(dialog.portal_status_label)
@@ -2345,7 +2345,7 @@ class Window(Adw.ApplicationWindow):
                 ring.set_content_width(30)
                 ring.set_content_height(30)
                 percent = round(fraction * 100)
-                ring.update_property([Gtk.AccessibleProperty.LABEL], [_('Preview demo, {percent}% complete').format(percent=percent) if self.preview else _('{percent}% complete').format(percent=percent)])
+                ring.update_property([Gtk.AccessibleProperty.LABEL], ['Preview demo, {percent}% complete'.format(percent=percent) if self.preview else _('{percent}% complete').format(percent=percent)])
                 def draw(_area, cr, width, height):
                     cx, cy, radius = width / 2, height / 2, min(width, height) / 2 - 2
                     cr.set_line_width(2.4)
@@ -2585,7 +2585,7 @@ class Window(Adw.ApplicationWindow):
             return
         self._preview_step = 0
         self._preview_log_lines = ["[SIMULATED] Preview only. No system commands are run."]
-        self.log_heading.set_text(_("Preview log · simulated only"))
+        self.log_heading.set_text("Preview log · simulated only")
         self._set_log_text("\n".join(self._preview_log_lines), follow_tail=True)
         self._render_preview_steps()
         self.update_button.set_sensitive(False)
@@ -2593,19 +2593,19 @@ class Window(Adw.ApplicationWindow):
         self._render_home_activity()
 
     def _render_preview_steps(self):
-        self.update_steps_group.set_title(_("Preview steps · simulated"))
+        self.update_steps_group.set_title("Preview steps · simulated")
         step = self._preview_step
         prepare_status = "success" if step > 0 else "running" if step == 0 else "pending"
         flatpak_status = "success" if step >= 5 else "running" if 1 <= step <= 4 else "pending"
         finish_status = "success" if step >= 6 else "running" if step == 5 else "pending"
         rows = [
-            {"name": N_("Preparing preview"), "status": prepare_status,
-             "detail": N_("Simulated setup") if step > 0 else N_("Preview demo in progress") if step == 0 else N_("Waiting · simulated")},
-            {"name": N_("Flatpak apps · simulated"), "status": flatpak_status,
-             "detail": (_('Preview demo · {step} of 5 apps').format(step=step) if 1 <= step <= 4 else N_("Simulated app updates")),
+            {"name": "Preparing preview", "status": prepare_status,
+             "detail": "Simulated setup" if step > 0 else "Preview demo in progress" if step == 0 else "Waiting · simulated"},
+            {"name": "Flatpak apps · simulated", "status": flatpak_status,
+             "detail": ('Preview demo · {step} of 5 apps'.format(step=step) if 1 <= step <= 4 else "Simulated app updates"),
              "fraction": step / 5 if 1 <= step <= 4 else None},
-            {"name": N_("Finishing preview"), "status": finish_status,
-             "detail": N_("Simulated completion") if step >= 6 else N_("Waiting")},
+            {"name": "Finishing preview", "status": finish_status,
+             "detail": "Simulated completion" if step >= 6 else "Waiting"},
         ]
         self._render_update_steps(rows)
 
@@ -2796,7 +2796,7 @@ class Window(Adw.ApplicationWindow):
         if state.running and error_text(state.error, N_('Details are unavailable. Open Logs for more information.'), context='_render_status'):
             detail = (detail + " · " if detail else "") + error_text(state.error, N_('Details are unavailable. Open Logs for more information.'), context='_render_status')
         self.home_status.set_title(format_message(text))
-        self.home_status.set_subtitle(format_message(format_message(detail) if detail else (_("Commands are disabled in preview mode.") if self.preview else _("Update your system and installed apps."))))
+        self.home_status.set_subtitle(format_message(format_message(detail) if detail else ("Commands are disabled in preview mode." if self.preview else _("Update your system and installed apps."))))
         errors = []
         transaction_active = self._deployment_transaction_active()
         self.update_transaction_notice.set_visible(transaction_active and not state.running and not self.preview)
@@ -2833,7 +2833,7 @@ class Window(Adw.ApplicationWindow):
 
     def _operation(self, method):
         if self.preview:
-            self.toast(N_("System operations are disabled in preview mode."))
+            self.toast("System operations are disabled in preview mode.")
         elif method == "StartUpdate":
             def rejected(error):
                 if self.closing:
@@ -3143,23 +3143,23 @@ class Window(Adw.ApplicationWindow):
             self.delete_pinned_deployments_row.set_sensitive(False)
             self.delete_pinned_deployments_row.set_activatable(False)
             for row in self.system_rows.values():
-                row.set_subtitle(_("Open this page to load system information."))
-            self.deployment_status_row.set_title(_("Deployment information not loaded yet"))
-            self.deployment_status_row.set_subtitle(_("Read-only information is available in preview mode."))
-            self.customization_status_row.set_title(_("System customizations not loaded yet"))
+                row.set_subtitle("Open this page to load system information.")
+            self.deployment_status_row.set_title("Deployment information not loaded yet")
+            self.deployment_status_row.set_subtitle("Read-only information is available in preview mode.")
+            self.customization_status_row.set_title("System customizations not loaded yet")
             self.layers_row.set_sensitive(False)
             self.layers_row.set_activatable(False)
             self.reset_layers_row.set_sensitive(False)
             self.reset_layers_row.set_activatable(False)
-            self.layers_status.set_title(_("Preview mode · removal disabled"))
+            self.layers_status.set_title("Preview mode · removal disabled")
             self.cancel_pending_row.set_sensitive(False)
             self.cancel_pending_row.set_activatable(False)
-            self.cancel_pending_row.set_title(_("Cancellation disabled in preview"))
-            self.cancel_pending_row.set_subtitle(_("Preview can read system information but cannot change deployments."))
+            self.cancel_pending_row.set_title("Cancellation disabled in preview")
+            self.cancel_pending_row.set_subtitle("Preview can read system information but cannot change deployments.")
             self.channel_switch_row.set_sensitive(False)
             self.channel_switch_row.set_activatable(False)
-            self.channel_switch_row.set_title(_('Release channel rebasing disabled in preview'))
-            self.channel_switch_row.set_subtitle(_("Preview can read system information but cannot change deployments."))
+            self.channel_switch_row.set_title('Release channel rebasing disabled in preview')
+            self.channel_switch_row.set_subtitle("Preview can read system information but cannot change deployments.")
 
     @staticmethod
     def _short_deployment_text(value, limit):
@@ -3243,7 +3243,7 @@ class Window(Adw.ApplicationWindow):
         next_restart = next((entry for entry in entries if isinstance(entry, dict)
                              and entry.get("role") == N_("Next restart")), None)
         if self.preview:
-            return saved, N_("Rollback is disabled in preview mode.")
+            return saved, "Rollback is disabled in preview mode."
         if self.system_loading or not self.deployment_summary_fresh:
             return saved, N_("Checking previous deployment… Refresh system information to check rollback availability.")
         if not summary.get("known"):
@@ -3534,7 +3534,7 @@ class Window(Adw.ApplicationWindow):
         target = self.cancel_target if isinstance(self.cancel_target, dict) else None
         state = self.snapshot
         if self.preview:
-            return target, N_("Preview mode · deployment cancellation is disabled.")
+            return target, "Preview mode · deployment cancellation is disabled."
         if not self.status_received:
             return target, N_("Checking system status…")
         if self.client is None or getattr(self.client, "closed", False):
@@ -3575,7 +3575,7 @@ class Window(Adw.ApplicationWindow):
         self.cancel_pending_row.set_activatable(actionable)
         self.cancel_pending_row.set_subtitle(_(reason))
         if self.preview:
-            title, detail = N_("Preview mode · cancellation disabled"), N_("System information is read-only in preview.")
+            title, detail = "Preview mode · cancellation disabled", "System information is read-only in preview."
         elif self.cancel_request_active:
             title, detail = N_("Cancelling pending deployment…"), N_("Open to view operation progress and logs.")
         elif state.cancel_state == "running":
@@ -3607,7 +3607,7 @@ class Window(Adw.ApplicationWindow):
                          isinstance(target, dict) and target.get("available") is False and
                          N_("There is no pending deployment") in str(target.get("reason", "")))
         if self.preview:
-            action_title, action_detail = N_("Cancellation disabled in preview"), N_("System information is read-only in preview.")
+            action_title, action_detail = "Cancellation disabled in preview", "System information is read-only in preview."
         elif self.cancel_request_active:
             action_title, action_detail = title, detail
         elif state.cancel_state == "running":
@@ -3739,7 +3739,7 @@ class Window(Adw.ApplicationWindow):
 
     def _layers_reason(self):
         if self.preview:
-            return N_("Preview mode · removal disabled.")
+            return "Preview mode · removal disabled."
         if self.client is None or getattr(self.client, "closed", False) or not self.status_received:
             return N_("Checking system status…")
         if self.system_loading or not self.cancel_target_fresh:
@@ -3802,7 +3802,7 @@ class Window(Adw.ApplicationWindow):
         if state.management and state.management.get("known") is not True:
             return N_("System status is unavailable. Refresh system information before continuing.")
         if self.preview:
-            return N_("Preview mode · clearing the download cache is disabled.")
+            return "Preview mode · clearing the download cache is disabled."
         if self.client is None or getattr(self.client, "closed", False) or not self.status_received:
             return N_("Checking system status…")
         blocker = self._management_blocker_reason("cache")
@@ -3826,7 +3826,7 @@ class Window(Adw.ApplicationWindow):
         enabled = not reason
         state = self.snapshot
         if self.preview:
-            title, detail = N_("Download cache clearing disabled in preview"), N_("System information is read-only in preview.")
+            title, detail = "Download cache clearing disabled in preview", "System information is read-only in preview."
         elif self.cache_request_active or state.cache_state == "running":
             title, detail = N_("Clearing download cache…"), N_("Open to view operation progress and logs.")
         elif state.cache_state == "success" and self._maintenance_row_should_open("cache"):
@@ -4514,7 +4514,7 @@ class Window(Adw.ApplicationWindow):
     def _delete_deployment_reason(self):
         status = self.delete_status if isinstance(self.delete_status, dict) else {}
         if self.preview:
-            return N_("Deployment deletion is disabled in preview.")
+            return "Deployment deletion is disabled in preview."
         if self.closing or not self.status_received or self.client is None or getattr(self.client, "closed", False):
             return N_("System status is unavailable. Open Logs for details.")
         if self.system_loading or not self.delete_status_fresh:
@@ -4663,7 +4663,7 @@ class Window(Adw.ApplicationWindow):
 
     def _image_switch_reason(self):
         if self.preview:
-            return N_('Image rebasing is disabled in preview.')
+            return 'Image rebasing is disabled in preview.'
         if self.closing or not self.status_received or self.client is None or getattr(self.client, "closed", False):
             return N_("System status is unavailable. Open Logs for details.")
         blocker = self._management_blocker_reason("image")
@@ -4774,7 +4774,7 @@ class Window(Adw.ApplicationWindow):
     def _channel_switch_reason(self):
         status = self._effective_channel_status()
         if self.preview:
-            return N_('Release channel rebasing is disabled in preview.')
+            return 'Release channel rebasing is disabled in preview.'
         if self.closing:
             return N_("The application is closing.")
         if not self.status_received or self.client is None or getattr(self.client, "closed", False):
@@ -4812,8 +4812,8 @@ class Window(Adw.ApplicationWindow):
         state = status.get("state", "unknown")
         reason = self._channel_switch_reason()
         if self.preview:
-            title = N_('Release channel rebasing disabled in preview')
-            detail = N_("Preview can read system information but cannot change deployments.")
+            title = 'Release channel rebasing disabled in preview'
+            detail = "Preview can read system information but cannot change deployments."
         elif state == "running":
 
             title = _('Rebasing to Bazzite Testing…') if target == "testing" else _('Rebasing to Bazzite Stable…')
@@ -5111,7 +5111,7 @@ class Window(Adw.ApplicationWindow):
         if self.closing:
             return
         if self.preview:
-            self.toast(N_("Links are disabled in preview mode."))
+            self.toast("Links are disabled in preview mode.")
             return
         self._launch_community_uri(url)
 
@@ -5119,7 +5119,7 @@ class Window(Adw.ApplicationWindow):
         if self.closing:
             return
         if self.preview:
-            self.toast(N_("Links are disabled in preview mode."))
+            self.toast("Links are disabled in preview mode.")
             return
         self._run_xdg_open(url, N_("Could not open link"))
 
@@ -5259,7 +5259,7 @@ class Window(Adw.ApplicationWindow):
         if self.closing:
             return
         if self.preview:
-            self.toast(N_("Adding to Steam is disabled in preview mode."))
+            self.toast("Adding to Steam is disabled in preview mode.")
             return
         if not self.add_to_steam_row.get_sensitive():
             return
@@ -5290,7 +5290,7 @@ class Window(Adw.ApplicationWindow):
         if self.closing:
             return
         if self.preview:
-            self.toast(N_("Folder opening is disabled in preview mode."))
+            self.toast("Folder opening is disabled in preview mode.")
             return
         try:
             from bazzite_portal.core.logging import get_log_directory
@@ -5410,7 +5410,7 @@ class Window(Adw.ApplicationWindow):
         if self.closing:
             return True
         if self.preview:
-            self.toast(N_("Links are disabled in preview mode."))
+            self.toast("Links are disabled in preview mode.")
             return True
         self._run_xdg_open(uri, N_("Could not open link"))
         return True
@@ -5748,7 +5748,7 @@ class Application(Adw.Application):
         self.config_path, self.preview, self.initial_updates = config_path, preview, updates
         self.window = None
         self.add_main_option("updates", 0, GLib.OptionFlags.NONE, GLib.OptionArg.NONE, N_("Open Updates"), None)
-        self.add_main_option("preview", 0, GLib.OptionFlags.NONE, GLib.OptionArg.STRING, N_("Harmless preview"), "YAML")
+        self.add_main_option("preview", 0, GLib.OptionFlags.NONE, GLib.OptionArg.STRING, "Harmless preview", "YAML")
         self.add_main_option("action-id", 0, GLib.OptionFlags.NONE, GLib.OptionArg.STRING, N_("Open a Portal tool"), "ID")
         self.preview_base = None
         if preview:
