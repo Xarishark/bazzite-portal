@@ -5,7 +5,7 @@ Currently under development.
 
 > Translation templates (POT) are regenerated automatically by GitHub Actions when
 > source changes reach main. Contributors do not need to regenerate them manually;
-> translations are maintainehttps://hosted.weblate.org/translate/bazzite-portald in [Weblate](https://weblate.org/).
+> translations are maintainehttps://hosted.weblate.org/translate/bazzite-portald in [Weblate](https://hosted.weblate.org/projects/bazzite-portal/).
 
 ## Screenshots
 
@@ -52,7 +52,7 @@ Third-party license texts: [LICENSES](LICENSES/).
 
 ## Translations
 
-This project is translated using [Weblate](https://weblate.org/).
+This project is translated using [Weblate](https://hosted.weblate.org/projects/bazzite-portal/).
 Tool and announcement content, operation logs and command output are not translated.
 
 ## Development
