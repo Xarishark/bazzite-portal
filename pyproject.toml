@@ -29,6 +29,7 @@ namespaces = false
 
 [tool.setuptools.package-data]
 bazzite_portal = [
+    "assets/steam/*.png",
     "assets/prompts/*.svg",
     "assets/prompts/dark/*.svg",
     "assets/prompts/light/*.svg",

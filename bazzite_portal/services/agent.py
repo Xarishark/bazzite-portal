@@ -8,6 +8,7 @@ from bazzite_portal import APP_ID
 from bazzite_portal.updates import monitor as system
 from bazzite_portal.core.storage import Store
 from bazzite_portal.core.first_login import FirstLogin
+from bazzite_portal.integration import steam
 from bazzite_portal.updates.monitor import (
     Monitor,
     start_operation,
@@ -50,6 +51,101 @@ AGENT_XML = '''<node><interface name="io.github.Xarishark.bazzite_portal.Agent">
 </interface></node>'''
 
 
+class SteamArtworkMonitor:
+    """Retry deferred artwork only on relevant filesystem changes."""
+
+    def __init__(self, backend=steam, gio=Gio, glib=GLib,
+                 thread_factory=threading.Thread):
+        self.backend, self.gio, self.glib = backend, gio, glib
+        self.thread_factory = thread_factory
+        self.monitors = {}
+        self.closed = False
+        self.busy = False
+        self.dirty = False
+        self.debounce = None
+        self.pending_path = backend.pending_artwork_path()
+        self._start()
+
+    def _changed(self, _monitor, file, other_file, _event):
+        # Ignore grid image writes and unrelated Steam activity, including our
+        # own artwork copies. Directory creation can reveal a new Steam profile.
+        names = {item.get_basename() for item in (file, other_file) if item}
+        directories = {"Steam", "steam", ".steam", ".local", "share", ".var",
+                       "app", "com.valvesoftware.Steam", "userdata", "config"}
+        relevant = bool(names & {self.pending_path.name, "shortcuts.vdf", "loginusers.vdf"})
+        if not relevant:
+            relevant = any(name in directories or name.isdecimal() for name in names)
+        if not self.closed and relevant:
+            self._schedule()
+
+    def _schedule(self):
+        if self.closed:
+            return
+        if self.busy:
+            self.dirty = True
+        elif self.debounce is None:
+            self.debounce = self.glib.timeout_add(200, self._start)
+
+    def _start(self):
+        self.debounce = None
+        if self.closed or self.busy:
+            return False
+        self.busy = True
+        self.dirty = False
+
+        def work():
+            paths = ()
+            try:
+                self.pending_path.parent.mkdir(parents=True, exist_ok=True)
+                # Resolve all filesystem state off the GLib main thread.
+                paths = (self.pending_path.parent,)
+                if self.backend.apply_pending_artwork():
+                    paths += self.backend.artwork_watch_paths()
+            except Exception:
+                log.exception("Could not apply pending Steam artwork")
+                # Keep watching for an external correction after an error.
+                try:
+                    paths += self.backend.artwork_watch_paths()
+                except Exception:
+                    log.exception("Could not discover Steam artwork watch paths")
+            self.glib.idle_add(self._finished, paths)
+
+        self.thread_factory(target=work, daemon=True,
+                            name="steam-artwork").start()
+        return False
+
+    def _finished(self, paths):
+        self.busy = False
+        if self.closed:
+            return False
+        wanted = {str(path) for path in paths}
+        for path in set(self.monitors) - wanted:
+            self.monitors.pop(path).cancel()
+        added = False
+        for path in wanted - set(self.monitors):
+            try:
+                monitor = self.gio.File.new_for_path(path).monitor_directory(
+                    self.gio.FileMonitorFlags.NONE, None)
+                monitor.connect("changed", self._changed)
+                self.monitors[path] = monitor
+                added = True
+            except Exception:
+                log.exception("Could not watch Steam artwork directory %s", path)
+        # Close the read-before-watch race once when a new watch is attached.
+        if self.dirty or added:
+            self._schedule()
+        return False
+
+    def close(self):
+        self.closed = True
+        if self.debounce is not None:
+            self.glib.source_remove(self.debounce)
+            self.debounce = None
+        for monitor in self.monitors.values():
+            monitor.cancel()
+        self.monitors.clear()
+
+
 class Agent:
     def __init__(self, session_start=False):
         self.session_start = bool(session_start)
@@ -66,6 +162,7 @@ class Agent:
         self.maintenance_viewed = {}
         self.busy = False
         self.tray = None
+        self.steam_artwork = None
         self._tray_generation = 0
         self._tray_target = None
         self._tray_prepare_lock = threading.Lock()
@@ -81,6 +178,7 @@ class Agent:
         self.registration = self.connection.register_object(AGENT_PATH, Gio.DBusNodeInfo.new_for_xml(AGENT_XML).interfaces[0], self._method, None, None)
         self.tray = Tray(self.connection, self.open_updates, self.dismiss)
         self._watch_systemd()
+        self.steam_artwork = SteamArtworkMonitor()
         self.connection.signal_subscribe("org.freedesktop.DBus", "org.freedesktop.DBus", "NameOwnerChanged", "/org/freedesktop/DBus", None, Gio.DBusSignalFlags.NONE, self._owner_changed)
         self.store.base.mkdir(parents=True, exist_ok=True)
         self.file_monitor = Gio.File.new_for_path(str(self.store.base)).monitor_directory(Gio.FileMonitorFlags.NONE, None)
@@ -127,6 +225,8 @@ class Agent:
             self.tray.update("", "")
             if hasattr(self.tray, "close"):
                 self.tray.close()
+        if self.steam_artwork is not None:
+            self.steam_artwork.close()
         self.monitor.close()
         self._unwatch_systemd()
         self.loop.quit()
@@ -544,6 +644,8 @@ class Agent:
 
 
 class Client:
+    READY_TIMEOUT_SECONDS = 15
+
     def __init__(self, changed, error):
         self.changed, self.error = changed, error
         self.connection = Gio.bus_get_sync(Gio.BusType.SESSION, None)
@@ -554,16 +656,25 @@ class Client:
             Gio.DBusSignalFlags.NONE, self._signal)
         self.watch = Gio.bus_watch_name_on_connection(self.connection, AGENT_ID, Gio.BusNameWatcherFlags.NONE, self._appeared, self._vanished)
         self.visible = False
+        self.ready = False
+        self.pending_calls = []
 
     def _appeared(self, *_):
         if self.closed:
             return
+        self.ready = True
         self.call("GetSnapshot", callback=self._snapshot)
         self.set_visible(self.visible)
+        pending, self.pending_calls = self.pending_calls, []
+        for method, parameters, callback, error_callback, timeout_id in pending:
+            GLib.source_remove(timeout_id)
+            if not self.closed:
+                self._send_call(method, parameters, callback, error_callback)
 
     def _vanished(self, *_):
         if self.closed:
             return
+        self.ready = False
         # Start the installed service; activation through the normal CLI supports source runs.
         try:
             import sys
@@ -588,6 +699,27 @@ class Client:
     def call(self, method, parameters=None, callback=None, error_callback=None):
         if self.closed:
             return
+
+        if not getattr(self, "ready", True):
+            pending = [method, parameters, callback, error_callback, None]
+            self.pending_calls.append(pending)
+            pending[4] = GLib.timeout_add_seconds(
+                self.READY_TIMEOUT_SECONDS, self._ready_timeout, pending)
+            return
+        self._send_call(method, parameters, callback, error_callback)
+
+    def _ready_timeout(self, pending):
+        if self.closed:
+            return False
+        try:
+            self.pending_calls.remove(pending)
+        except ValueError:
+            return False
+        log.warning("Session agent readiness timed out for %s", pending[0])
+        (pending[3] or self.error)(format_message(N_("Could not read update status. Open Logs for details.")))
+        return False
+
+    def _send_call(self, method, parameters=None, callback=None, error_callback=None):
 
         def finished(connection, result):
             try:
@@ -637,5 +769,9 @@ class Client:
         # arriving after this point is deliberately ignored.
         self.set_visible(False)
         self.closed = True
+        self.ready = False
+        for _method, _parameters, _callback, _error_callback, timeout_id in self.pending_calls:
+            GLib.source_remove(timeout_id)
+        self.pending_calls.clear()
         Gio.bus_unwatch_name(self.watch)
         self.connection.signal_unsubscribe(self.signal_subscription)

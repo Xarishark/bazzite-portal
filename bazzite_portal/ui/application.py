@@ -572,7 +572,11 @@ class Window(Adw.ApplicationWindow):
                 dialog.close()
             return
         if self._gaming_auth_dialog is None:
+            modal_parent = self.modal
             dialog = self._report_modal(_("Administrator authentication"), 480)
+            dialog.modal_parent = modal_parent
+            if modal_parent is not None:
+                dialog.set_transient_for(modal_parent)
             if gaming_mode():
                 dialog.fullscreen()
             box = self._report_modal_box(dialog, top_aligned=gaming_mode())
@@ -1628,7 +1632,14 @@ class Window(Adw.ApplicationWindow):
 
     def _report_modal_closed(self, dialog):
         if self.modal is dialog:
-            self.modal = None
+            parent = getattr(dialog, "modal_parent", None)
+            if (not self.closing and parent is not None
+                    and not getattr(parent, "maintenance_closed", False)
+                    and parent.get_visible()):
+                self.modal = parent
+                self._sync_maintenance_dialog()
+            else:
+                self.modal = None
         self._last_pointer_position.pop(dialog, None)
         self._update_controller_legend()
         if (getattr(dialog, "report_transient", False) and self._report_collecting
@@ -3713,8 +3724,9 @@ class Window(Adw.ApplicationWindow):
             self.cancel_request_active = False
             self.cancel_waiting_snapshot = False
             self.cancel_feedback = None
-            if self.modal is not None and getattr(self.modal, "operation_kind", "") == "cancel":
-                self.modal.request_completed = True
+            dialog = self._current_maintenance_dialog()
+            if dialog is not None and getattr(dialog, "operation_kind", "") == "cancel":
+                dialog.request_completed = True
                 self._sync_maintenance_dialog()
             self._sync_cancel_pending_ui()
             if self.stack.get_visible_child_name() in {N_("System"), N_("Management")}:
@@ -3727,8 +3739,9 @@ class Window(Adw.ApplicationWindow):
             self.cancel_waiting_snapshot = False
             self._clear_maintenance_pending("cancel")
             self.cancel_feedback = None
-            if self.modal is not None and getattr(self.modal, "operation_kind", "") == "cancel":
-                self.modal.request_error = str(error) or N_("The cancellation request failed.")
+            dialog = self._current_maintenance_dialog()
+            if dialog is not None and getattr(dialog, "operation_kind", "") == "cancel":
+                dialog.request_error = str(error) or N_("The cancellation request failed.")
                 self._sync_maintenance_dialog()
             self.cancel_target_fresh = False
             self._sync_cancel_pending_ui()
@@ -3914,8 +3927,9 @@ class Window(Adw.ApplicationWindow):
                 return
             self.cache_request_active = False
             self.cache_feedback = None
-            if self.modal is not None and getattr(self.modal, "operation_kind", "") == "cache":
-                self.modal.request_completed = True
+            dialog = self._current_maintenance_dialog()
+            if dialog is not None and getattr(dialog, "operation_kind", "") == "cache":
+                dialog.request_completed = True
                 self._sync_maintenance_dialog()
             self._sync_clear_cache_ui()
 
@@ -3925,8 +3939,9 @@ class Window(Adw.ApplicationWindow):
             self.cache_request_active = False
             self._clear_maintenance_pending("cache")
             self.cache_feedback = None
-            if self.modal is not None and getattr(self.modal, "operation_kind", "") == "cache":
-                self.modal.request_error = str(error) or N_("The cache cleanup request failed.")
+            dialog = self._current_maintenance_dialog()
+            if dialog is not None and getattr(dialog, "operation_kind", "") == "cache":
+                dialog.request_error = str(error) or N_("The cache cleanup request failed.")
                 self._sync_maintenance_dialog()
             self._sync_clear_cache_ui()
 
@@ -4007,6 +4022,7 @@ class Window(Adw.ApplicationWindow):
         self.modal = dialog
         self._install_input_mode_controllers(dialog)
         def closed(*_):
+            dialog.maintenance_closed = True
             self._last_pointer_position.pop(dialog, None)
             if self.modal is dialog:
                 self.modal = None
@@ -4052,8 +4068,19 @@ class Window(Adw.ApplicationWindow):
         dialog.maintenance_spinner.start() if state == "running" else dialog.maintenance_spinner.stop()
         dialog.maintenance_indicator.set_visible_child_name(state)
 
-    def _sync_maintenance_dialog(self):
+    def _current_maintenance_dialog(self):
         dialog = self.modal
+        if dialog is not None and hasattr(dialog, "maintenance_legend"):
+            return dialog
+        auth_dialog = getattr(self, "_gaming_auth_dialog", None)
+        parent = getattr(auth_dialog, "modal_parent", None)
+        if (parent is not None and not getattr(parent, "maintenance_closed", False)
+                and parent.get_visible() and hasattr(parent, "maintenance_legend")):
+            return parent
+        return None
+
+    def _sync_maintenance_dialog(self):
+        dialog = self._current_maintenance_dialog()
         if dialog is None or not hasattr(dialog, "maintenance_legend"):
             return
         labels = getattr(getattr(self.controller, "backend", None), "button_labels", {})
@@ -5298,8 +5325,9 @@ class Window(Adw.ApplicationWindow):
             if result.cancelled():
                 return
             try:
-                result.result()
-                message = N_("Add to Steam requested. Check your Steam library.")
+                artwork_ready = result.result()
+                message = (N_("Bazzite Portal is in your Steam library with artwork.") if artwork_ready else
+                           N_("Add to Steam requested. Artwork will appear when Steam saves the shortcut."))
             except Exception as error:
                 log.warning("Add to Steam failed: %s", error)
                 message = public_error(error, N_('Could not add Bazzite Portal to Steam. Open Logs for details.'), context='Add to Steam')

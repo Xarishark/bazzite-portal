@@ -4,7 +4,7 @@ import sys
 from bazzite_portal.integration.tools import DEFAULT_CONFIG
 
 
-def main():
+def _main():
     parser = argparse.ArgumentParser(description="Bazzite tools and system updates")
     parser.add_argument("config", nargs="?", default=DEFAULT_CONFIG)
     parser.add_argument("--preview", metavar="YAML", help="Harmless preview with all commands disabled")
@@ -36,6 +36,15 @@ def main():
     result = app.run(sys.argv)
     log.info("Application stopped (exit %s)", result)
     return result
+
+
+def main():
+    try:
+        return _main()
+    except KeyboardInterrupt:
+        import logging
+        logging.getLogger("bazzite_portal").info("Application interrupted; exiting")
+        return 130
 
 
 if __name__ == "__main__":
