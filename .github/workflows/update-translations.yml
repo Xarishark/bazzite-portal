@@ -1,0 +1,59 @@
+name: Update translation template
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'bazzite_portal/**/*.py'
+      - 'packaging/translations.py'
+      - 'packaging/*.desktop'
+      - 'packaging/*.xml'
+      - 'pyproject.toml'
+      - '.github/workflows/update-translations.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: update-translation-template
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-24.04
+    container: fedora:44
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Install translation tools
+        run: dnf install -y git python3 gettext appstream
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          persist-credentials: false
+      - name: Regenerate and validate translation files
+        run: |
+          python3 packaging/translations.py update
+          python3 packaging/translations.py check
+      - name: Create or update translation template PR
+        uses: peter-evans/create-pull-request@v8
+        with:
+          branch: automation/translation-template
+          base: main
+          delete-branch: true
+          sign-commits: true
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          commit-message: Update translation template
+          title: Update translation template
+          body: |
+            Updates the English translation template and generated UI message lists from the latest main branch.
+
+            Validated with `python3 packaging/translations.py check`. No translations are authored by this workflow.
+          add-paths: |
+            po/bazzite-portal.pot
+            bazzite_portal/core/message_templates.json
+            bazzite_portal/core/user_messages.json
