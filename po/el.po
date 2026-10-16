@@ -7,93 +7,114 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-10-16 18:09+0000\n"
+"Last-Translator: Zacharias Xenakis <xarishark@outlook.com>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/bazzite-portal/app/"
+"el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #: bazzite_portal/updates/monitor.py:1951
 msgid "A channel rebase is already running."
-msgstr ""
+msgstr "Μια διαδικασία αλλαγής καναλιού μέσω rebase βρίσκεται ήδη σε εξέλιξη."
 
 #: bazzite_portal/ui/application.py:4523
 msgid "A deployment is being deleted."
-msgstr ""
+msgstr "Μια εγκατεστημένη έκδοση του συστήματος διαγράφεται."
 
 #: packaging/io.github.Xarishark.bazzite_portal.metainfo.xml:9
 msgid "A desktop utility for Bazzite setup tools, pinned actions, system updates, rollback, and system information."
 msgstr ""
+"Μια εφαρμογή για το περιβάλλον εργασίας του Bazzite, που παρέχει εργαλεία "
+"αρχικής ρύθμισης, καρφιτσωμένες ενέργειες, ενημερώσεις συστήματος, επαναφορά "
+"σε προηγούμενη έκδοση και πληροφορίες συστήματος."
 
 #: bazzite_portal/maintenance/reset_layers.py:46
 #: bazzite_portal/ui/application.py:3755
 msgid "A different deployment is selected for next boot."
 msgstr ""
+"Έχει επιλεγεί διαφορετική έκδοση του συστήματος για την επόμενη εκκίνηση."
 
 #: bazzite_portal/ui/application.py:4102
 msgid "A newer operation is available. Reopen this action to view it."
 msgstr ""
+"Υπάρχει νεότερη διαδικασία. Ανοίξτε ξανά αυτή την ενέργεια για να τη δείτε."
 
 #: bazzite_portal/updates/monitor.py:1864
 #: bazzite_portal/updates/monitor.py:1893
 msgid "A package-layer or pending-deployment operation is already running."
 msgstr ""
+"Μια διαδικασία διαχείρισης πακέτων σε επίπεδα (layering) ή εκκρεμούς έκδοσης "
+"του συστήματος βρίσκεται ήδη σε εξέλιξη."
 
 #: bazzite_portal/ui/application.py:3270
 msgid "A prepared deployment is waiting for restart. Cancel it before rolling back."
 msgstr ""
+"Μια προετοιμασμένη έκδοση του συστήματος αναμένει επανεκκίνηση. Ακυρώστε την "
+"πριν προχωρήσετε σε επαναφορά προηγούμενης έκδοσης."
 
 #: bazzite_portal/ui/application.py:4789
 msgid "A release channel rebase is already running."
 msgstr ""
+"Μια διαδικασία αλλαγής καναλιού κυκλοφορίας μέσω rebase βρίσκεται ήδη σε "
+"εξέλιξη."
 
 #: bazzite_portal/ui/application.py:4787
 msgid "A release channel rebase request is already in progress."
 msgstr ""
+"Ένα αίτημα αλλαγής καναλιού κυκλοφορίας μέσω rebase βρίσκεται ήδη σε εξέλιξη."
 
 #: bazzite_portal/ui/application.py:3302
 msgid "A rollback is already prepared"
-msgstr ""
+msgstr "Έχει ήδη προετοιμαστεί επαναφορά σε προηγούμενη έκδοση"
 
 #: bazzite_portal/ui/application.py:3264
 msgid "A rollback is already prepared for the next restart."
 msgstr ""
+"Έχει ήδη προετοιμαστεί επαναφορά σε προηγούμενη έκδοση για την επόμενη "
+"επανεκκίνηση."
 
 #: bazzite_portal/ui/application.py:2806
 msgid "A system change is pending, but Bazzite Portal could not verify it. Restart is unavailable until its status can be checked."
 msgstr ""
+"Εκκρεμεί μια αλλαγή στο σύστημα, αλλά το Bazzite Portal δεν μπόρεσε να την "
+"επαληθεύσει. Η επανεκκίνηση δεν είναι διαθέσιμη μέχρι να ελεγχθεί η "
+"κατάστασή της."
 
 #: bazzite_portal/ui/application.py:2450 bazzite_portal/ui/application.py:2483
 msgid "A system operation is running. Wait for it to finish."
 msgstr ""
+"Μια διαδικασία συστήματος βρίσκεται σε εξέλιξη. Περιμένετε μέχρι να "
+"ολοκληρωθεί."
 
 #: bazzite_portal/ui/application.py:5247
 msgid "About"
-msgstr ""
+msgstr "Σχετικά"
 
 #: bazzite_portal/ui/application.py:5248
 msgid "About Bazzite Portal"
-msgstr ""
+msgstr "Σχετικά με το Bazzite Portal"
 
 #: bazzite_portal/ui/application.py:1667 bazzite_portal/ui/application.py:1832
 msgid "Action"
-msgstr ""
+msgstr "Ενέργεια"
 
 #: bazzite_portal/ui/application.py:5227
 msgid "Add Bazzite Portal to Steam"
-msgstr ""
+msgstr "Προσθήκη του Bazzite Portal στο Steam"
 
 #: bazzite_portal/ui/application.py:1923 bazzite_portal/ui/application.py:1924
 #: bazzite_portal/ui/application.py:1961 bazzite_portal/ui/application.py:1962
 msgid "Add favorite"
-msgstr ""
+msgstr "Προσθήκη στα αγαπημένα"
 
 #: bazzite_portal/ui/application.py:5274
 msgid "Add to Steam requested. Check your Steam library."
-msgstr ""
+msgstr "Η προσθήκη στο Steam ζητήθηκε. Ελέγξτε τη βιβλιοθήκη σας στο Steam."
 
 #: bazzite_portal/ui/application.py:5262
 msgid "Adding to Steam is disabled in preview mode."
