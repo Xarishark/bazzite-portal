@@ -3,6 +3,10 @@
 A desktop app for Bazzite updates, tools, system management and troubleshooting.
 Currently under development.
 
+> Translation templates (POT) are regenerated automatically by GitHub Actions when
+> source changes reach main. Contributors do not need to regenerate them manually;
+> translations are maintainehttps://hosted.weblate.org/translate/bazzite-portald in [Weblate](https://weblate.org/).
+
 ## Screenshots
 
 **KDE Plasma**
