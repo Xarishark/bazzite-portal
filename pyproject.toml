@@ -31,6 +31,7 @@ namespaces = false
 bazzite_portal = [
     "assets/prompts/*.svg",
     "assets/prompts/dark/*.svg",
+    "assets/prompts/light/*.svg",
     "assets/icons/hicolor/index.theme",
     "assets/icons/hicolor/scalable/actions/*.svg",
     "assets/indicator/*.svg",

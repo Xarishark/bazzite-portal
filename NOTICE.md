@@ -5,7 +5,7 @@ credits and licenses below; full license texts are included in [LICENSES/](LICEN
 
 ## Controller prompts
 
-Light and dark controller prompts: [Mr. Breakfast's Free Prompts](https://github.com/mr-breakfast/mrbreakfasts_free_prompts),
+Colored, light and dark controller prompts: [Mr. Breakfast's Free Prompts](https://github.com/mr-breakfast/mrbreakfasts_free_prompts),
 [CC0-1.0](LICENSES/CC0-1.0.txt). Bundled unchanged.
 
 ## Symbolic icons

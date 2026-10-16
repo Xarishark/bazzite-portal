@@ -286,6 +286,11 @@ def controller_focus_targets(root):
             return
         if getattr(widget, "controller_exclude_focus", False):
             return
+        if isinstance(widget, Adw.NavigationView):
+            page = widget.get_visible_page()
+            if page is not None:
+                visit(page)
+            return
         if isinstance(widget, Gtk.Stack):
             current = widget.get_visible_child()
             child = widget.get_first_child()
@@ -1457,6 +1462,10 @@ class Window(Adw.ApplicationWindow):
     def _refresh_fixed_modal_prompts(self, labels):
         if self.modal is None:
             return
+        about_legend = getattr(self.modal, "about_legend", None)
+        if about_legend is not None:
+            about_legend.set_controller_content(_("D-pad Move"), [("confirm", _("Select"), labels), ("back", _("Back"), labels)], self._prompt_style())
+            set_prompt_visible(about_legend, self._prompts_visible())
         picker_legend = getattr(self.modal, "picker_legend", None)
         if picker_legend is not None:
             picker_legend.set_controller_content(_("D-pad Move"), [], self._prompt_style())
@@ -5396,7 +5405,11 @@ class Window(Adw.ApplicationWindow):
             self.toast(public_error(self.store.errors[-1], N_("Could not save app preferences. Open Logs for details."), context='App preferences'))
 
     def about(self):
-        dialog = Adw.AboutWindow(transient_for=self, application_name=_("Bazzite Portal"), application_icon=APP_ID, version=VERSION, developer_name="Bazzite contributors", license_type=Gtk.License.GPL_3_0_ONLY, comments=_("Manage Bazzite updates, tools, and system settings."))
+        if self.modal is not None:
+            self.modal.present()
+            return
+        restore_target = self.controller_focus_widget or self.get_focus()
+        dialog = Adw.AboutWindow(transient_for=self, application_name=_("Bazzite Portal"), application_icon=APP_ID, version=VERSION, developer_name="Xarishark • Zacharias Xenakis", license_type=Gtk.License.GPL_3_0_ONLY, comments=_("Manage Bazzite updates, tools, and system settings."))
         translator_credits = _("translator-credits")
         if translator_credits != "translator-credits":
             dialog.set_translator_credits(translator_credits)
@@ -5404,7 +5417,141 @@ class Window(Adw.ApplicationWindow):
         dialog.set_website("https://github.com/Xarishark/bazzite-portal")
         dialog.set_issue_url("https://github.com/Xarishark/bazzite-portal/issues")
         dialog.connect("activate-link", self._about_activate_link)
+        dialog.set_modal(True)
+        dialog.set_application(self.get_application())
+        self._configure_about_controller(dialog)
+        self.modal = dialog
+        self._refresh_fixed_modal_prompts(getattr(getattr(self.controller, "backend", None), "button_labels", {}))
+        self._install_input_mode_controllers(dialog)
+        dialog.connect("close-request", lambda *_: self._about_closed(dialog, restore_target))
         dialog.present()
+        self._update_controller_legend()
+
+    def _configure_about_controller(self, dialog):
+        dialog.controller_about = True
+        native_content = dialog.get_content()
+        dialog.set_content(None)
+        dialog.about_native_content = native_content
+        toolbar = Adw.ToolbarView()
+        toolbar.set_content(native_content)
+        dialog.about_legend = ControllerLegend()
+        dialog.about_legend.set_halign(Gtk.Align.CENTER)
+        for side in ("start", "end", "top", "bottom"):
+            getattr(dialog.about_legend, "set_margin_" + side)(12)
+        toolbar.add_bottom_bar(dialog.about_legend)
+        dialog.set_content(toolbar)
+
+    def _about_closed(self, dialog, restore_target):
+        if self.modal is dialog:
+            self._clear_controller_focus_visuals()
+            self.modal = None
+        self._last_pointer_position.pop(dialog, None)
+
+        def restore_focus():
+            if (not self.closing and self.modal is None and restore_target is not None
+                    and restore_target.get_mapped()):
+                if self.controller_navigation:
+                    self._set_controller_focus(restore_target)
+                else:
+                    restore_target.grab_focus()
+            return GLib.SOURCE_REMOVE
+
+        GLib.idle_add(restore_focus)
+        self._update_controller_legend()
+        return False
+
+    def _about_focus_targets(self):
+        def prepare(widget):
+            if not widget.get_visible() or not widget.get_mapped():
+                return
+            if isinstance(widget, Adw.HeaderBar) or widget.has_css_class("app-version"):
+                widget.controller_exclude_focus = True
+                return
+            if isinstance(widget, Adw.ActionRow) and widget.get_activatable():
+                widget.controller_focus_row = True
+            elif isinstance(widget, Gtk.Label) and widget.get_use_markup() and "<a " in widget.get_label():
+                widget.controller_focus_row = True
+            child = widget.get_first_child()
+            while child is not None:
+                prepare(child)
+                child = child.get_next_sibling()
+
+        content = self.modal.about_native_content
+        prepare(content)
+        return controller_focus_targets(content)
+
+    def _about_back(self):
+        dialog = self.modal
+        if dialog is None or not getattr(dialog, "controller_about", False):
+            return
+
+        def pop_page(widget):
+            if not widget.get_visible() or not widget.get_mapped():
+                return False
+            if isinstance(widget, Adw.NavigationView):
+                page = widget.get_visible_page()
+                if page is not None and pop_page(page):
+                    return True
+                if widget.pop():
+                    return True
+                return False
+            child = widget.get_first_child()
+            while child is not None:
+                if pop_page(child):
+                    return True
+                child = child.get_next_sibling()
+            return False
+
+        if not pop_page(dialog.about_native_content):
+            dialog.close()
+
+    def _dispatch_about(self, command):
+        dialog = self.modal
+        if command == "back":
+            self._about_back()
+            return
+        targets = self._about_focus_targets()
+        if not targets:
+            return
+        focus = self.controller_focus_widget
+        if focus not in targets:
+            focus = controller_focused_target(dialog)
+        if command in ("up", "down", "left", "right"):
+            step = -1 if command in ("up", "left") else 1
+            if focus in targets:
+                target = targets[(targets.index(focus) + step) % len(targets)]
+            else:
+                target = targets[-1] if step < 0 else targets[0]
+            self._set_controller_focus(target)
+            GLib.timeout_add(16, self._reveal_focus, dialog)
+        elif command == "confirm" and focus in targets:
+            self._set_controller_focus(focus)
+            if isinstance(focus, Adw.ActionRow):
+                action_name = focus.get_action_name()
+                if action_name:
+                    focus.activate_action(action_name, focus.get_action_target_value())
+                else:
+                    focus.activate()
+            elif isinstance(focus, Gtk.Label):
+                self._activate_about_label(focus)
+            elif isinstance(focus, Gtk.Button):
+                focus.emit("clicked")
+            else:
+                focus.activate()
+
+    def _activate_about_label(self, label):
+        uri = label.get_current_uri()
+        if not uri:
+            # Selectable native license labels can focus their text without an
+            # active link. Their Pango markup still contains the destination.
+            from xml.etree import ElementTree
+            try:
+                markup = ElementTree.fromstring("<markup>" + label.get_label() + "</markup>")
+            except ElementTree.ParseError:
+                return
+            uri = next((link.get("href") for link in markup.iter("a") if link.get("href")), None)
+        if uri:
+            self._about_activate_link(self.modal, uri)
 
     def _about_activate_link(self, _dialog, uri):
         if self.closing:
@@ -5452,6 +5599,9 @@ class Window(Adw.ApplicationWindow):
         self._refresh_modal_selection_prompts(labels)
         set_prompt_visible(self.legend, self._prompts_visible())
         window = self.modal or self
+        if getattr(self.modal, "controller_about", False):
+            self._dispatch_about(command)
+            return
         wizard = getattr(self.modal, "image_wizard", None)
         if wizard is not None:
             if wizard.dialog.selection_loading:
