@@ -80,6 +80,19 @@ def button(text, callback, icon=None, *, translate=True):
     return widget
 
 
+
+def choice_label(options, selected):
+    """Reserve the widest rendered option without stretching the selector."""
+    choice = Gtk.Label(label=options[selected], xalign=0.5)
+    sizing = Gtk.Stack(hhomogeneous=True, vhomogeneous=True, hexpand=False,
+                       halign=Gtk.Align.CENTER)
+    sizing.add_named(choice, "current")
+    for index, text in enumerate(options):
+        sizing.add_named(Gtk.Label(label=text, xalign=0.5), str(index))
+    sizing.set_visible_child(choice)
+    return choice, sizing
+
+
 def set_window_content(window, content):
     """Scale the entire Gaming Mode window, including input coordinates."""
     if not gaming_mode():
@@ -5171,9 +5184,7 @@ class Window(Adw.ApplicationWindow):
         self.controller_style_dropdown.set_selected(style_values.index(current_style))
         self.controller_style_dropdown.set_tooltip_text(_("Controller prompt style"))
         self.controller_style_dropdown.connect("notify::selected", self._controller_style_selected)
-        self.controller_style_choice = Gtk.Label(label=style_names[style_values.index(current_style)], xalign=0.5,
-                                                 hexpand=True, width_chars=max(map(len, style_names)),
-                                                 max_width_chars=max(map(len, style_names)))
+        self.controller_style_choice, style_choice = choice_label(style_names, style_values.index(current_style))
         self.controller_style_controls = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=4)
         self.controller_style_controls.add_css_class("controller-style-pill")
         self.controller_style_controls.set_size_request(-1, 36)
@@ -5187,10 +5198,14 @@ class Window(Adw.ApplicationWindow):
         self.controller_style_previous.connect("clicked", lambda *_: self._cycle_controller_style(-1))
         self.controller_style_next.connect("clicked", lambda *_: self._cycle_controller_style(1))
         self.controller_style_controls.append(self.controller_style_previous)
-        self.controller_style_controls.append(self.controller_style_choice)
+        self.controller_style_controls.append(style_choice)
         self.controller_style_controls.append(self.controller_style_next)
         self.controller_style_row.add_suffix(self.controller_style_controls)
         self.controller_style_row.add_suffix(self.controller_style_dropdown)
+        self.controller_style_controls.set_hexpand(False)
+        self.controller_style_controls.set_halign(Gtk.Align.END)
+        self.controller_style_dropdown.set_hexpand(False)
+        self.controller_style_dropdown.set_halign(Gtk.Align.END)
         self.controller_style_size_group = Gtk.SizeGroup(mode=Gtk.SizeGroupMode.HORIZONTAL)
         self.controller_style_size_group.add_widget(self.controller_style_controls)
         self.controller_style_size_group.add_widget(self.controller_style_dropdown)
@@ -5208,7 +5223,7 @@ class Window(Adw.ApplicationWindow):
         self.notification_theme_dropdown.controller_exclude_focus = True
         self.notification_theme_dropdown.set_selected(THEMES.index(self.store.preferences()["notification_icon_theme"]))
         self.notification_theme_dropdown.connect("notify::selected", self._notification_theme_selected)
-        self.notification_theme_choice = Gtk.Label(label=theme_names[self.notification_theme_dropdown.get_selected()])
+        self.notification_theme_choice, theme_choice = choice_label(theme_names, self.notification_theme_dropdown.get_selected())
         self.notification_theme_controls = Gtk.Box(spacing=4, valign=Gtk.Align.CENTER)
         self.notification_theme_controls.add_css_class("controller-style-pill")
         for icon_name, delta in (("pan-start-symbolic", -1), ("pan-end-symbolic", 1)):
@@ -5218,11 +5233,15 @@ class Window(Adw.ApplicationWindow):
             arrow.connect("clicked", lambda _button, step=delta: self._cycle_notification_theme(step))
             self.notification_theme_controls.append(arrow)
             if delta == -1:
-                self.notification_theme_controls.append(self.notification_theme_choice)
+                self.notification_theme_controls.append(theme_choice)
         self.notification_theme_row.add_suffix(self.notification_theme_controls)
         self.notification_theme_row.add_suffix(self.notification_theme_dropdown)
         self.notification_theme_controls.set_size_request(-1, 36)
         self.notification_theme_dropdown.set_size_request(-1, 36)
+        self.notification_theme_controls.set_hexpand(False)
+        self.notification_theme_controls.set_halign(Gtk.Align.END)
+        self.notification_theme_dropdown.set_hexpand(False)
+        self.notification_theme_dropdown.set_halign(Gtk.Align.END)
         self.notification_theme_size_group = Gtk.SizeGroup(mode=Gtk.SizeGroupMode.HORIZONTAL)
         self.notification_theme_size_group.add_widget(self.notification_theme_controls)
         self.notification_theme_size_group.add_widget(self.notification_theme_dropdown)
@@ -5353,7 +5372,7 @@ class Window(Adw.ApplicationWindow):
         selected = dropdown.get_selected()
         if selected < len(THEMES):
             self._preference("notification_icon_theme", THEMES[selected])
-            self.notification_theme_choice.set_text(THEME_NAMES[selected][1])
+            self.notification_theme_choice.set_text(_(THEME_NAMES[selected][1]))
 
     def _cycle_notification_theme(self, delta):
         from bazzite_portal.artwork.appearance import THEMES
