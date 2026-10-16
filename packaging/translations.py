@@ -7,6 +7,7 @@ import re
 import shutil
 from string import Formatter
 import subprocess
+import sys
 import tempfile
 import tomllib
 
@@ -127,6 +128,7 @@ def main():
     for path in catalogs():
         run("msgfmt", "--check", "--check-format", "-o", "/dev/null", str(path))
     if args.command == "build":
+        run(sys.executable, "packaging/metadata.py")
         output = ROOT / "build"
         for path in catalogs():
             target = output / "locale" / path.stem / "LC_MESSAGES" / f"{DOMAIN}.mo"
@@ -144,7 +146,7 @@ def main():
             for name in DESKTOPS:
                 run("msgfmt", "--desktop", "--template", str(ROOT / "packaging" / name),
                     "-d", str(directory), "-o", str(metadata / name))
-            run("msgfmt", "--xml", "--template", str(ROOT / "packaging" / METAINFO),
+            run("msgfmt", "--xml", "--template", str(metadata / (METAINFO + ".in")),
                 "-d", str(directory), "-o", str(metadata / METAINFO))
         # The RPM installs this directory even before the first translation.
         (output / "locale").mkdir(exist_ok=True)

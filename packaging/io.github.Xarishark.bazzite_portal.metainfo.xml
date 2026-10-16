@@ -11,6 +11,6 @@
   <project_license>GPL-3.0-only</project_license>
   <launchable type="desktop-id">io.github.Xarishark.bazzite_portal.desktop</launchable>
   <provides><binary>bazzite-portal</binary></provides>
-  <releases><release version="0.9.0" date="2026-10-15"/></releases>
+  <releases><release version="@VERSION@" date="@DATE@"/></releases>
   <content_rating type="oars-1.1"/>
 </component>

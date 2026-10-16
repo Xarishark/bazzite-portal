@@ -1,8 +1,9 @@
+# Generate with python3 packaging/metadata.py; build build/packaging/bazzite-portal.spec.
 %global appid io.github.Xarishark.bazzite_portal
 %global _empty_manifest_terminate_build 0
 Name:           bazzite-portal
-Version:        0.9.0
-Release:        13%{?dist}
+Version:        @VERSION@
+Release:        1%{?dist}
 Summary:        Bazzite tools and reconnectable system updates
 URL:            https://github.com/Xarishark/bazzite-portal
 License:        GPL-3.0-only AND LGPL-3.0-only AND LGPL-3.0-or-later AND Apache-2.0 AND CC0-1.0 AND ISC AND MIT

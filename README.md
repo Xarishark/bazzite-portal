@@ -41,6 +41,12 @@ Third-party license texts: [LICENSES](LICENSES/).
 This project is translated using [Weblate](https://weblate.org/).
 Tool and announcement content, operation logs and command output are not translated.
 
+## Development
+
+Bump the app version ONLY in pyproject.toml under [project].version. Packaging derives
+the other version fields automatically. Pushing a higher version to main creates
+a GitHub release after a successful RPM build.
+
 ## Temporary trial installation
 
 ```sh
