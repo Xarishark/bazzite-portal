@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: Bazzite Portal / App\n"
 "Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/app/"
 "\n"
-"POT-Creation-Date: 2026-10-17 14:10+0000\n"
+"POT-Creation-Date: 2026-10-17 16:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,14 +45,14 @@ msgstr ""
 msgid "Authorization was not granted. Try again or cancel."
 msgstr ""
 
-#: bazzite_portal/core/errors.py:57 bazzite_portal/ui/application.py:2829
-#: bazzite_portal/ui/application.py:2830 bazzite_portal/ui/application.py:2836
-#: bazzite_portal/ui/application.py:2837 bazzite_portal/ui/application.py:3214
-#: bazzite_portal/ui/application.py:4095 bazzite_portal/ui/application.py:4105
-#: bazzite_portal/ui/application.py:4147 bazzite_portal/ui/application.py:4154
-#: bazzite_portal/ui/application.py:4155 bazzite_portal/ui/application.py:4386
-#: bazzite_portal/ui/application.py:4415 bazzite_portal/ui/application.py:4423
-#: bazzite_portal/ui/application.py:4495 bazzite_portal/ui/application.py:4767
+#: bazzite_portal/core/errors.py:57 bazzite_portal/ui/application.py:2830
+#: bazzite_portal/ui/application.py:2831 bazzite_portal/ui/application.py:2837
+#: bazzite_portal/ui/application.py:2838 bazzite_portal/ui/application.py:3215
+#: bazzite_portal/ui/application.py:4096 bazzite_portal/ui/application.py:4106
+#: bazzite_portal/ui/application.py:4148 bazzite_portal/ui/application.py:4155
+#: bazzite_portal/ui/application.py:4156 bazzite_portal/ui/application.py:4387
+#: bazzite_portal/ui/application.py:4416 bazzite_portal/ui/application.py:4424
+#: bazzite_portal/ui/application.py:4496 bazzite_portal/ui/application.py:4768
 msgid "Details are unavailable. Open Logs for more information."
 msgstr ""
 
@@ -161,9 +161,9 @@ msgstr ""
 #: bazzite_portal/maintenance/delete_deployments.py:99
 #: bazzite_portal/maintenance/deployments.py:12
 #: bazzite_portal/ui/application.py:57 bazzite_portal/ui/application.py:356
-#: bazzite_portal/ui/application.py:2606 bazzite_portal/ui/application.py:2607
-#: bazzite_portal/ui/application.py:4002 bazzite_portal/ui/application.py:4164
-#: bazzite_portal/ui/application.py:4422 bazzite_portal/ui/application.py:4528
+#: bazzite_portal/ui/application.py:2607 bazzite_portal/ui/application.py:2608
+#: bazzite_portal/ui/application.py:4003 bazzite_portal/ui/application.py:4165
+#: bazzite_portal/ui/application.py:4423 bazzite_portal/ui/application.py:4529
 #: bazzite_portal/ui/system_info.py:19 bazzite_portal/ui/system_info.py:33
 #: bazzite_portal/ui/system_info.py:45 bazzite_portal/ui/system_info.py:57
 #: bazzite_portal/ui/system_info.py:64 bazzite_portal/ui/system_info.py:66
@@ -208,12 +208,12 @@ msgid "Some operation output was unavailable or omitted."
 msgstr ""
 
 #: bazzite_portal/maintenance/reset_layers.py:46
-#: bazzite_portal/ui/application.py:3790
+#: bazzite_portal/ui/application.py:3791
 msgid "A different deployment is selected for next boot."
 msgstr ""
 
 #: bazzite_portal/maintenance/reset_layers.py:88
-#: bazzite_portal/ui/application.py:3789
+#: bazzite_portal/ui/application.py:3790
 msgid "No requested package layers are present."
 msgstr ""
 
@@ -234,7 +234,7 @@ msgid "Open Updates to inspect the operation log."
 msgstr ""
 
 #: bazzite_portal/services/agent.py:456 bazzite_portal/ui/application.py:854
-#: bazzite_portal/ui/application.py:1034 bazzite_portal/ui/application.py:5947
+#: bazzite_portal/ui/application.py:1034 bazzite_portal/ui/application.py:5948
 msgid "Open Updates"
 msgstr ""
 
@@ -246,7 +246,7 @@ msgstr ""
 msgid "Operation request failed."
 msgstr ""
 
-#: bazzite_portal/services/agent.py:719 bazzite_portal/ui/application.py:2842
+#: bazzite_portal/services/agent.py:719 bazzite_portal/ui/application.py:2843
 msgid "Could not read update status. Open Logs for details."
 msgstr ""
 
@@ -288,10 +288,10 @@ msgstr ""
 #: bazzite_portal/ui/application.py:951 bazzite_portal/ui/application.py:985
 #: bazzite_portal/ui/application.py:996 bazzite_portal/ui/application.py:1073
 #: bazzite_portal/ui/application.py:1680 bazzite_portal/ui/application.py:1824
-#: bazzite_portal/ui/application.py:5728 bazzite_portal/ui/application.py:5800
-#: bazzite_portal/ui/application.py:5805 bazzite_portal/ui/application.py:5808
-#: bazzite_portal/ui/application.py:5818 bazzite_portal/ui/application.py:5858
-#: bazzite_portal/ui/application.py:5883
+#: bazzite_portal/ui/application.py:5729 bazzite_portal/ui/application.py:5801
+#: bazzite_portal/ui/application.py:5806 bazzite_portal/ui/application.py:5809
+#: bazzite_portal/ui/application.py:5819 bazzite_portal/ui/application.py:5859
+#: bazzite_portal/ui/application.py:5884
 msgid "Home"
 msgstr ""
 
@@ -302,9 +302,9 @@ msgstr ""
 #: bazzite_portal/ui/application.py:1800 bazzite_portal/ui/application.py:1821
 #: bazzite_portal/ui/application.py:1827 bazzite_portal/ui/application.py:2021
 #: bazzite_portal/ui/application.py:2090 bazzite_portal/ui/application.py:2239
-#: bazzite_portal/ui/application.py:5614 bazzite_portal/ui/application.py:5752
-#: bazzite_portal/ui/application.py:5802 bazzite_portal/ui/application.py:5811
-#: bazzite_portal/ui/application.py:5822 bazzite_portal/ui/application.py:5838
+#: bazzite_portal/ui/application.py:5615 bazzite_portal/ui/application.py:5753
+#: bazzite_portal/ui/application.py:5803 bazzite_portal/ui/application.py:5812
+#: bazzite_portal/ui/application.py:5823 bazzite_portal/ui/application.py:5839
 msgid "Tools"
 msgstr ""
 
@@ -313,11 +313,11 @@ msgstr ""
 #: bazzite_portal/ui/application.py:935 bazzite_portal/ui/application.py:937
 #: bazzite_portal/ui/application.py:974 bazzite_portal/ui/application.py:979
 #: bazzite_portal/ui/application.py:1037 bazzite_portal/ui/application.py:2346
-#: bazzite_portal/ui/application.py:2671 bazzite_portal/ui/application.py:2777
-#: bazzite_portal/ui/application.py:5716 bazzite_portal/ui/application.py:5819
-#: bazzite_portal/ui/application.py:5832 bazzite_portal/ui/application.py:5855
-#: bazzite_portal/ui/application.py:5961 bazzite_portal/ui/application.py:5981
-#: bazzite_portal/ui/application.py:5996
+#: bazzite_portal/ui/application.py:2672 bazzite_portal/ui/application.py:2778
+#: bazzite_portal/ui/application.py:5717 bazzite_portal/ui/application.py:5820
+#: bazzite_portal/ui/application.py:5833 bazzite_portal/ui/application.py:5856
+#: bazzite_portal/ui/application.py:5962 bazzite_portal/ui/application.py:5982
+#: bazzite_portal/ui/application.py:5997
 #: packaging/io.github.Xarishark.bazzite_portal.desktop:16
 msgid "Updates"
 msgstr ""
@@ -325,21 +325,21 @@ msgstr ""
 #: bazzite_portal/ui/application.py:48 bazzite_portal/ui/application.py:955
 #: bazzite_portal/ui/application.py:963 bazzite_portal/ui/application.py:964
 #: bazzite_portal/ui/application.py:969 bazzite_portal/ui/application.py:1045
-#: bazzite_portal/ui/application.py:2421 bazzite_portal/ui/application.py:3173
-#: bazzite_portal/ui/application.py:3732 bazzite_portal/ui/application.py:3748
-#: bazzite_portal/ui/application.py:3764 bazzite_portal/ui/application.py:3772
-#: bazzite_portal/ui/application.py:4520 bazzite_portal/ui/application.py:5708
-#: bazzite_portal/ui/application.py:5820 bazzite_portal/ui/application.py:5846
+#: bazzite_portal/ui/application.py:2422 bazzite_portal/ui/application.py:3174
+#: bazzite_portal/ui/application.py:3733 bazzite_portal/ui/application.py:3749
+#: bazzite_portal/ui/application.py:3765 bazzite_portal/ui/application.py:3773
+#: bazzite_portal/ui/application.py:4521 bazzite_portal/ui/application.py:5709
+#: bazzite_portal/ui/application.py:5821 bazzite_portal/ui/application.py:5847
 #: bazzite_portal/updates/model.py:16
 msgid "System"
 msgstr ""
 
 #: bazzite_portal/ui/application.py:48 bazzite_portal/ui/application.py:955
 #: bazzite_portal/ui/application.py:963 bazzite_portal/ui/application.py:969
-#: bazzite_portal/ui/application.py:1046 bazzite_portal/ui/application.py:3174
-#: bazzite_portal/ui/application.py:3732 bazzite_portal/ui/application.py:3748
-#: bazzite_portal/ui/application.py:3764 bazzite_portal/ui/application.py:3772
-#: bazzite_portal/ui/application.py:4520 bazzite_portal/ui/application.py:5820
+#: bazzite_portal/ui/application.py:1046 bazzite_portal/ui/application.py:3175
+#: bazzite_portal/ui/application.py:3733 bazzite_portal/ui/application.py:3749
+#: bazzite_portal/ui/application.py:3765 bazzite_portal/ui/application.py:3773
+#: bazzite_portal/ui/application.py:4521 bazzite_portal/ui/application.py:5821
 msgid "Management"
 msgstr ""
 
@@ -353,40 +353,40 @@ msgid "Troubleshooting"
 msgstr ""
 
 #: bazzite_portal/ui/application.py:48 bazzite_portal/ui/application.py:52
-#: bazzite_portal/ui/application.py:1048 bazzite_portal/ui/application.py:4980
-#: bazzite_portal/ui/application.py:5015
+#: bazzite_portal/ui/application.py:1048 bazzite_portal/ui/application.py:4981
+#: bazzite_portal/ui/application.py:5016
 msgid "Community"
 msgstr ""
 
 #: bazzite_portal/ui/application.py:48 bazzite_portal/ui/application.py:53
-#: bazzite_portal/ui/application.py:1049 bazzite_portal/ui/application.py:5018
-#: bazzite_portal/ui/application.py:5033
+#: bazzite_portal/ui/application.py:1049 bazzite_portal/ui/application.py:5019
+#: bazzite_portal/ui/application.py:5034
 msgid "Announcements"
 msgstr ""
 
 #: bazzite_portal/ui/application.py:48 bazzite_portal/ui/application.py:1008
-#: bazzite_portal/ui/application.py:5176 bazzite_portal/ui/application.py:5311
-#: bazzite_portal/ui/application.py:5732 bazzite_portal/ui/application.py:5738
-#: bazzite_portal/ui/application.py:5810 bazzite_portal/ui/application.py:5961
+#: bazzite_portal/ui/application.py:5177 bazzite_portal/ui/application.py:5312
+#: bazzite_portal/ui/application.py:5733 bazzite_portal/ui/application.py:5739
+#: bazzite_portal/ui/application.py:5811 bazzite_portal/ui/application.py:5962
 msgid "Settings"
 msgstr ""
 
 #: bazzite_portal/ui/application.py:50 bazzite_portal/ui/application.py:442
-#: bazzite_portal/ui/application.py:479 bazzite_portal/ui/application.py:5459
+#: bazzite_portal/ui/application.py:479 bazzite_portal/ui/application.py:5460
 #: packaging/io.github.Xarishark.bazzite_portal.desktop:2
 #: packaging/io.github.Xarishark.bazzite_portal.metainfo.xml:4
 msgid "Bazzite Portal"
 msgstr ""
 
 #: bazzite_portal/ui/application.py:51 bazzite_portal/ui/application.py:964
-#: bazzite_portal/ui/application.py:1045 bazzite_portal/ui/application.py:2981
-#: bazzite_portal/ui/application.py:2984
+#: bazzite_portal/ui/application.py:1045 bazzite_portal/ui/application.py:2982
+#: bazzite_portal/ui/application.py:2985
 msgid "System information"
 msgstr ""
 
 #: bazzite_portal/ui/application.py:51 bazzite_portal/ui/application.py:964
-#: bazzite_portal/ui/application.py:1046 bazzite_portal/ui/application.py:2982
-#: bazzite_portal/ui/application.py:2985
+#: bazzite_portal/ui/application.py:1046 bazzite_portal/ui/application.py:2983
+#: bazzite_portal/ui/application.py:2986
 msgid "System management"
 msgstr ""
 
@@ -409,29 +409,29 @@ msgstr ""
 
 #: bazzite_portal/ui/application.py:57 bazzite_portal/ui/application.py:414
 #: bazzite_portal/ui/application.py:416 bazzite_portal/ui/application.py:418
-#: bazzite_portal/ui/application.py:3201
+#: bazzite_portal/ui/application.py:3202
 msgid "Unavailable"
 msgstr ""
 
 #: bazzite_portal/ui/application.py:173 bazzite_portal/ui/application.py:181
-#: bazzite_portal/ui/application.py:4087 bazzite_portal/ui/application.py:5836
-#: bazzite_portal/ui/application.py:5848
+#: bazzite_portal/ui/application.py:4088 bazzite_portal/ui/application.py:5837
+#: bazzite_portal/ui/application.py:5849
 msgid "Scroll"
 msgstr ""
 
 #: bazzite_portal/ui/application.py:173 bazzite_portal/ui/application.py:181
-#: bazzite_portal/ui/application.py:5831
+#: bazzite_portal/ui/application.py:5832
 msgid "Move"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:180 bazzite_portal/ui/application.py:5856
-#: bazzite_portal/ui/application.py:5860
+#: bazzite_portal/ui/application.py:180 bazzite_portal/ui/application.py:5857
+#: bazzite_portal/ui/application.py:5861
 msgid "D-pad Scroll"
 msgstr ""
 
 #: bazzite_portal/ui/application.py:180 bazzite_portal/ui/application.py:219
 #: bazzite_portal/ui/application.py:1484 bazzite_portal/ui/application.py:1488
-#: bazzite_portal/ui/application.py:4267 bazzite_portal/ui/application.py:5868
+#: bazzite_portal/ui/application.py:4268 bazzite_portal/ui/application.py:5869
 msgid "D-pad Move"
 msgstr ""
 
@@ -466,10 +466,10 @@ msgstr ""
 
 #: bazzite_portal/ui/application.py:483 bazzite_portal/ui/application.py:487
 #: bazzite_portal/ui/application.py:488 bazzite_portal/ui/application.py:1484
-#: bazzite_portal/ui/application.py:1492 bazzite_portal/ui/application.py:4087
-#: bazzite_portal/ui/application.py:4267 bazzite_portal/ui/application.py:5851
-#: bazzite_portal/ui/application.py:5862 bazzite_portal/ui/application.py:5870
-#: bazzite_portal/ui/application.py:5873 bazzite_portal/ui/image_wizard.py:152
+#: bazzite_portal/ui/application.py:1492 bazzite_portal/ui/application.py:4088
+#: bazzite_portal/ui/application.py:4268 bazzite_portal/ui/application.py:5852
+#: bazzite_portal/ui/application.py:5863 bazzite_portal/ui/application.py:5871
+#: bazzite_portal/ui/application.py:5874 bazzite_portal/ui/image_wizard.py:152
 #: bazzite_portal/ui/image_wizard.py:153 bazzite_portal/ui/image_wizard.py:157
 msgid "Back"
 msgstr ""
@@ -485,7 +485,7 @@ msgstr ""
 
 #: bazzite_portal/ui/application.py:551 bazzite_portal/ui/application.py:1728
 #: bazzite_portal/ui/application.py:1738 bazzite_portal/ui/application.py:2014
-#: bazzite_portal/ui/application.py:5366 bazzite_portal/ui/application.py:5452
+#: bazzite_portal/ui/application.py:5367 bazzite_portal/ui/application.py:5453
 msgid "Could not save app preferences. Open Logs for details."
 msgstr ""
 
@@ -502,9 +502,9 @@ msgid "Enter your administrator password to continue."
 msgstr ""
 
 #: bazzite_portal/ui/application.py:594 bazzite_portal/ui/application.py:1293
-#: bazzite_portal/ui/application.py:2908 bazzite_portal/ui/application.py:2911
-#: bazzite_portal/ui/application.py:2918 bazzite_portal/ui/application.py:4642
-#: bazzite_portal/ui/application.py:4661 bazzite_portal/ui/image_wizard.py:161
+#: bazzite_portal/ui/application.py:2909 bazzite_portal/ui/application.py:2912
+#: bazzite_portal/ui/application.py:2919 bazzite_portal/ui/application.py:4643
+#: bazzite_portal/ui/application.py:4662 bazzite_portal/ui/image_wizard.py:161
 msgid "Cancel"
 msgstr ""
 
@@ -523,19 +523,19 @@ msgstr ""
 #: bazzite_portal/ui/application.py:796 bazzite_portal/ui/application.py:1128
 #: bazzite_portal/ui/application.py:2130 bazzite_portal/ui/application.py:2133
 #: bazzite_portal/ui/application.py:2144 bazzite_portal/ui/application.py:2153
-#: bazzite_portal/ui/application.py:2943
+#: bazzite_portal/ui/application.py:2944
 msgid "Yes"
 msgstr ""
 
 #: bazzite_portal/ui/application.py:796 bazzite_portal/ui/application.py:1127
 #: bazzite_portal/ui/application.py:2130 bazzite_portal/ui/application.py:2133
-#: bazzite_portal/ui/application.py:2144 bazzite_portal/ui/application.py:2943
+#: bazzite_portal/ui/application.py:2144 bazzite_portal/ui/application.py:2944
 msgid "No"
 msgstr ""
 
 #: bazzite_portal/ui/application.py:825 bazzite_portal/ui/application.py:1484
-#: bazzite_portal/ui/application.py:2186 bazzite_portal/ui/application.py:4246
-#: bazzite_portal/ui/application.py:5850 bazzite_portal/ui/application.py:5870
+#: bazzite_portal/ui/application.py:2186 bazzite_portal/ui/application.py:4247
+#: bazzite_portal/ui/application.py:5851 bazzite_portal/ui/application.py:5871
 #: bazzite_portal/ui/image_wizard.py:205
 msgid "Select"
 msgstr ""
@@ -549,7 +549,7 @@ msgid "Open Options"
 msgstr ""
 
 #: bazzite_portal/ui/application.py:855 bazzite_portal/ui/application.py:856
-#: bazzite_portal/ui/application.py:2952 bazzite_portal/ui/application.py:2956
+#: bazzite_portal/ui/application.py:2953 bazzite_portal/ui/application.py:2957
 msgid "Refresh system information"
 msgstr ""
 
@@ -558,7 +558,7 @@ msgstr ""
 msgid "Search for a tool"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:908 bazzite_portal/ui/application.py:4704
+#: bazzite_portal/ui/application.py:908 bazzite_portal/ui/application.py:4705
 msgid "The request failed. Open Logs for details."
 msgstr ""
 
@@ -571,11 +571,11 @@ msgid "System updates and the tools you use most, in one place."
 msgstr ""
 
 #: bazzite_portal/ui/application.py:1019 bazzite_portal/ui/application.py:1688
-#: bazzite_portal/ui/application.py:2814
+#: bazzite_portal/ui/application.py:2815
 msgid "Update Bazzite and Apps"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:1019 bazzite_portal/ui/application.py:2832
+#: bazzite_portal/ui/application.py:1019 bazzite_portal/ui/application.py:2833
 msgid "Update your system and installed apps."
 msgstr ""
 
@@ -604,15 +604,15 @@ msgstr ""
 msgid "Bazzite documentation, website, and community links."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:1049 bazzite_portal/ui/application.py:5060
+#: bazzite_portal/ui/application.py:1049 bazzite_portal/ui/application.py:5061
 msgid "View Bazzite release and project announcements."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:1060 bazzite_portal/ui/application.py:5061
+#: bazzite_portal/ui/application.py:1060 bazzite_portal/ui/application.py:5062
 msgid "The configuration file for this category is missing or invalid."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:1064 bazzite_portal/ui/application.py:2989
+#: bazzite_portal/ui/application.py:1064 bazzite_portal/ui/application.py:2990
 msgid "Loading…"
 msgstr ""
 
@@ -803,8 +803,8 @@ msgstr ""
 msgid "The GitHub issue form could not be prepared."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:1581 bazzite_portal/ui/application.py:2904
-#: bazzite_portal/ui/application.py:5173 bazzite_portal/ui/application.py:5609
+#: bazzite_portal/ui/application.py:1581 bazzite_portal/ui/application.py:2905
+#: bazzite_portal/ui/application.py:5174 bazzite_portal/ui/application.py:5610
 msgid "Could not open link"
 msgstr ""
 
@@ -932,7 +932,7 @@ msgid "Run"
 msgstr ""
 
 #: bazzite_portal/ui/application.py:2281 bazzite_portal/ui/application.py:2283
-#: bazzite_portal/ui/application.py:2846
+#: bazzite_portal/ui/application.py:2847
 msgid "Update"
 msgstr ""
 
@@ -944,7 +944,7 @@ msgstr ""
 msgid "No log output available yet."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2324 bazzite_portal/ui/application.py:2810
+#: bazzite_portal/ui/application.py:2324 bazzite_portal/ui/application.py:2811
 msgid "Update log"
 msgstr ""
 
@@ -966,630 +966,630 @@ msgstr ""
 msgid "Waiting to start"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2373 bazzite_portal/ui/application.py:2424
+#: bazzite_portal/ui/application.py:2373 bazzite_portal/ui/application.py:2425
 msgid "Skipped"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2381
-#, python-format, python-brace-format
+#: bazzite_portal/ui/application.py:2382
+#, no-python-format, python-brace-format
 msgid "{percent}% complete"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2395
+#: bazzite_portal/ui/application.py:2396
 msgid "In progress"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2399 bazzite_portal/ui/application.py:2424
+#: bazzite_portal/ui/application.py:2400 bazzite_portal/ui/application.py:2425
 msgid "Status unavailable"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2419 bazzite_portal/ui/application.py:2825
+#: bazzite_portal/ui/application.py:2420 bazzite_portal/ui/application.py:2826
 msgid "Update step"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2422
+#: bazzite_portal/ui/application.py:2423
 msgid "Bazzite System"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2424
+#: bazzite_portal/ui/application.py:2425
 msgid "Waiting to update"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2427
+#: bazzite_portal/ui/application.py:2428
 msgid "Update failed. Open the update log for details."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2428 bazzite_portal/updates/model.py:416
+#: bazzite_portal/ui/application.py:2429 bazzite_portal/updates/model.py:416
 msgid "No system update is available."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2432
+#: bazzite_portal/ui/application.py:2433
 msgid "Finished · awaiting update result"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2434
+#: bazzite_portal/ui/application.py:2435
 msgid "Updated"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2436
+#: bazzite_portal/ui/application.py:2437
 msgid "New version ready on next restart"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2439 bazzite_portal/updates/monitor.py:1445
+#: bazzite_portal/ui/application.py:2440 bazzite_portal/updates/monitor.py:1445
 msgid "Reading update progress…"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2461
+#: bazzite_portal/ui/application.py:2462
 msgid "Logs unavailable"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2463
+#: bazzite_portal/ui/application.py:2464
 msgid "No module log output"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2483 bazzite_portal/ui/application.py:2516
+#: bazzite_portal/ui/application.py:2484 bazzite_portal/ui/application.py:2517
 msgid "A system operation is running. Wait for it to finish."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2535
+#: bazzite_portal/ui/application.py:2536
 msgid "Reboot Bazzite?"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2535
+#: bazzite_portal/ui/application.py:2536
 msgid ""
 "All update steps have finished. Reboot now to start the prepared Bazzite "
 "version. Save your work before continuing."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2535 bazzite_portal/ui/application.py:2846
+#: bazzite_portal/ui/application.py:2536 bazzite_portal/ui/application.py:2847
 msgid "Reboot"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2535
+#: bazzite_portal/ui/application.py:2536
 msgid "Restart"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2592
+#: bazzite_portal/ui/application.py:2593
 msgid "This release has no written notes."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2596
+#: bazzite_portal/ui/application.py:2597
 msgid "Could not load the changelog. Try again later."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2596
+#: bazzite_portal/ui/application.py:2597
 msgid "No matching release notes were found."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2601 bazzite_portal/ui/application.py:2609
-#: bazzite_portal/ui/application.py:2995 bazzite_portal/ui/application.py:3217
-#: bazzite_portal/ui/application.py:3231 bazzite_portal/ui/application.py:3233
-#: bazzite_portal/ui/application.py:3266 bazzite_portal/ui/application.py:3277
-#: bazzite_portal/ui/application.py:3332 bazzite_portal/ui/application.py:3543
-#: bazzite_portal/ui/application.py:4455 bazzite_portal/ui/application.py:4510
+#: bazzite_portal/ui/application.py:2602 bazzite_portal/ui/application.py:2610
+#: bazzite_portal/ui/application.py:2996 bazzite_portal/ui/application.py:3218
+#: bazzite_portal/ui/application.py:3232 bazzite_portal/ui/application.py:3234
+#: bazzite_portal/ui/application.py:3267 bazzite_portal/ui/application.py:3278
+#: bazzite_portal/ui/application.py:3333 bazzite_portal/ui/application.py:3544
+#: bazzite_portal/ui/application.py:4456 bazzite_portal/ui/application.py:4511
 msgid "Next restart"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2602 bazzite_portal/ui/application.py:3290
+#: bazzite_portal/ui/application.py:2603 bazzite_portal/ui/application.py:3291
 msgid "Running now"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2609
+#: bazzite_portal/ui/application.py:2610
 msgid "Pending update"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2609
+#: bazzite_portal/ui/application.py:2610
 msgid "Installed version"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2614
+#: bazzite_portal/ui/application.py:2615
 msgid "No verified release version and channel are available."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2812 bazzite_portal/ui/application.py:3319
+#: bazzite_portal/ui/application.py:2813 bazzite_portal/ui/application.py:3320
 msgid "Rolling back…"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2812
+#: bazzite_portal/ui/application.py:2813
 msgid "Bazzite is updating…"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2839
+#: bazzite_portal/ui/application.py:2840
 msgid ""
 "A system change is pending, but Bazzite Portal could not verify it. Restart "
 "is unavailable until its status can be checked."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2841
+#: bazzite_portal/ui/application.py:2842
 msgid "Bazzite updates are unavailable. Open Logs for details."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2846
+#: bazzite_portal/ui/application.py:2847
 msgid "Updating…"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2877
+#: bazzite_portal/ui/application.py:2878
 msgid "The update request could not be sent. Open Logs for details."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2880 bazzite_portal/ui/application.py:3305
-#: bazzite_portal/ui/application.py:3507 bazzite_portal/ui/application.py:3574
-#: bazzite_portal/ui/application.py:4568 bazzite_portal/ui/application.py:4717
-#: bazzite_portal/ui/application.py:4830
+#: bazzite_portal/ui/application.py:2881 bazzite_portal/ui/application.py:3306
+#: bazzite_portal/ui/application.py:3508 bazzite_portal/ui/application.py:3575
+#: bazzite_portal/ui/application.py:4569 bazzite_portal/ui/application.py:4718
+#: bazzite_portal/ui/application.py:4831
 msgid "System status is unavailable. Open Logs for details."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2902
+#: bazzite_portal/ui/application.py:2903
 msgid "Read the rebase documentation"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2954 bazzite_portal/ui/application.py:4445
+#: bazzite_portal/ui/application.py:2955 bazzite_portal/ui/application.py:4446
 msgid "Refresh"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2986
+#: bazzite_portal/ui/application.py:2987
 msgid "Bazzite Image Version"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2986
+#: bazzite_portal/ui/application.py:2987
 msgid "The image and update track used by your running system."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2988
+#: bazzite_portal/ui/application.py:2989
 msgid "Image"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2988 bazzite_portal/ui/application.py:3101
+#: bazzite_portal/ui/application.py:2989 bazzite_portal/ui/application.py:3102
 msgid "Release channel"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2994
+#: bazzite_portal/ui/application.py:2995
 msgid "Deployment overview"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2994
+#: bazzite_portal/ui/application.py:2995
 msgid "Read-only details for the running and next-restart deployments."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:2995
+#: bazzite_portal/ui/application.py:2996
 msgid "Loading next-restart information…"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3003
+#: bazzite_portal/ui/application.py:3004
 msgid "System customizations"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3003
+#: bazzite_portal/ui/application.py:3004
 msgid "Packages layered onto the system you are running now."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3007
+#: bazzite_portal/ui/application.py:3008
 msgid "Customization details not loaded"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3044
+#: bazzite_portal/ui/application.py:3045
 msgid "Recovery"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3044
+#: bazzite_portal/ui/application.py:3045
 msgid ""
 "Rollback selects the previous system deployment for your next boot. Personal "
 "files are preserved."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3047 bazzite_portal/ui/application.py:3337
+#: bazzite_portal/ui/application.py:3048 bazzite_portal/ui/application.py:3338
 msgid "Checking previous deployment…"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3048
+#: bazzite_portal/ui/application.py:3049
 msgid "Refresh system information to check rollback availability."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3056
+#: bazzite_portal/ui/application.py:3057
 msgid "Manage Deployments"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3056
+#: bazzite_portal/ui/application.py:3057
 msgid "Manage prepared updates and saved system versions."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3057 bazzite_portal/ui/application.py:3658
+#: bazzite_portal/ui/application.py:3058 bazzite_portal/ui/application.py:3659
 msgid "Checking pending deployment…"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3063 bazzite_portal/ui/application.py:3881
-#: bazzite_portal/ui/application.py:3972
+#: bazzite_portal/ui/application.py:3064 bazzite_portal/ui/application.py:3882
+#: bazzite_portal/ui/application.py:3973
 msgid "Clear download cache"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3064 bazzite_portal/ui/application.py:3881
+#: bazzite_portal/ui/application.py:3065 bazzite_portal/ui/application.py:3882
 msgid "Remove cached update data. Future updates may download it again."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3071
+#: bazzite_portal/ui/application.py:3072
 msgid "Cache clearing details"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3071 bazzite_portal/ui/application.py:3081
-#: bazzite_portal/ui/application.py:3156
+#: bazzite_portal/ui/application.py:3072 bazzite_portal/ui/application.py:3082
+#: bazzite_portal/ui/application.py:3157
 msgid "Read the operation log without opening a terminal."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3077
+#: bazzite_portal/ui/application.py:3078
 msgid "Cancellation status unavailable"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3081
+#: bazzite_portal/ui/application.py:3082
 msgid "Cancellation details"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3089 bazzite_portal/ui/application.py:4598
-#: bazzite_portal/ui/application.py:4612
+#: bazzite_portal/ui/application.py:3090 bazzite_portal/ui/application.py:4599
+#: bazzite_portal/ui/application.py:4613
 msgid "Delete pinned deployments"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3090 bazzite_portal/ui/application.py:4599
+#: bazzite_portal/ui/application.py:3091 bazzite_portal/ui/application.py:4600
 msgid "Choose a saved, pinned system version to delete."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3101
+#: bazzite_portal/ui/application.py:3102
 msgid "Follow the latest Stable or Testing release of your Bazzite image."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3103
+#: bazzite_portal/ui/application.py:3104
 msgid "Checking release channel…"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3103
+#: bazzite_portal/ui/application.py:3104
 msgid "Refresh system information to check availability."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3109 bazzite_portal/ui/application.py:3110
-#: bazzite_portal/ui/application.py:3123 bazzite_portal/ui/application.py:3169
-#: bazzite_portal/ui/application.py:3170
+#: bazzite_portal/ui/application.py:3110 bazzite_portal/ui/application.py:3111
+#: bazzite_portal/ui/application.py:3124 bazzite_portal/ui/application.py:3170
+#: bazzite_portal/ui/application.py:3171
 msgid "Requires administrator authorization"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3113
+#: bazzite_portal/ui/application.py:3114
 msgid "Release channel rebase details"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3113 bazzite_portal/ui/application.py:3128
+#: bazzite_portal/ui/application.py:3114 bazzite_portal/ui/application.py:3129
 msgid "View progress and the operation log."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3120
+#: bazzite_portal/ui/application.py:3121
 msgid "Rebase to specific image"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3120 bazzite_portal/ui/application.py:4739
+#: bazzite_portal/ui/application.py:3121 bazzite_portal/ui/application.py:4740
 msgid "Choose a Bazzite image, release channel and version."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3128
+#: bazzite_portal/ui/application.py:3129
 msgid "Image rebase details"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3136 bazzite_portal/ui/application.py:3972
+#: bazzite_portal/ui/application.py:3137 bazzite_portal/ui/application.py:3973
 msgid "Remove layered apps"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3136
+#: bazzite_portal/ui/application.py:3137
 msgid "Remove system layers while keeping your personal files and other apps."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3138
+#: bazzite_portal/ui/application.py:3139
 msgid "Checking layered apps…"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3143 bazzite_portal/ui/application.py:4219
+#: bazzite_portal/ui/application.py:3144 bazzite_portal/ui/application.py:4220
 msgid "Choose layered packages to remove"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3143 bazzite_portal/ui/application.py:3828
+#: bazzite_portal/ui/application.py:3144 bazzite_portal/ui/application.py:3829
 msgid ""
 "Choose which layered packages to remove. A restart is needed to apply the "
 "change."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3149
+#: bazzite_portal/ui/application.py:3150
 msgid "Remove all layered apps"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3150 bazzite_portal/ui/application.py:3829
+#: bazzite_portal/ui/application.py:3151 bazzite_portal/ui/application.py:3830
 msgid ""
 "Remove all system layers. Your files, Bazzite app store apps, Homebrew apps "
 "and AppImages stay."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3156
+#: bazzite_portal/ui/application.py:3157
 msgid "Layer removal details"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3220
+#: bazzite_portal/ui/application.py:3221
 msgid "The system did not report a recognizable deployment state."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3237 bazzite_portal/ui/application.py:3256
+#: bazzite_portal/ui/application.py:3238 bazzite_portal/ui/application.py:3257
 #, python-brace-format
 msgid "Version {version}"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3240
+#: bazzite_portal/ui/application.py:3241
 msgid "Pinned"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3242
+#: bazzite_portal/ui/application.py:3243
 msgid "Prepared"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3254
+#: bazzite_portal/ui/application.py:3255
 msgid "Your current system will start again. No system change is pending."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3257
+#: bazzite_portal/ui/application.py:3258
 msgid "Next restart version is unavailable."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3259
+#: bazzite_portal/ui/application.py:3260
 msgid "Next restart target is unknown."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3265
+#: bazzite_portal/ui/application.py:3266
 #, python-brace-format
 msgid "Transaction: {transaction}"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3275
+#: bazzite_portal/ui/application.py:3276
 msgid "Saved deployment"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3281
+#: bazzite_portal/ui/application.py:3282
 msgid ""
 "Checking previous deployment… Refresh system information to check rollback "
 "availability."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3283
+#: bazzite_portal/ui/application.py:3284
 msgid ""
 "Previous deployment availability is unknown. Refresh system information."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3297
+#: bazzite_portal/ui/application.py:3298
 msgid "A rollback is already prepared for the next restart."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3298 bazzite_portal/ui/application.py:3336
-#: bazzite_portal/ui/application.py:3345
+#: bazzite_portal/ui/application.py:3299 bazzite_portal/ui/application.py:3337
+#: bazzite_portal/ui/application.py:3346
 msgid "No previous deployment is available."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3301 bazzite_portal/ui/application.py:3591
-#: bazzite_portal/ui/application.py:3594 bazzite_portal/ui/application.py:3597
-#: bazzite_portal/ui/application.py:3854 bazzite_portal/ui/application.py:4852
+#: bazzite_portal/ui/application.py:3302 bazzite_portal/ui/application.py:3592
+#: bazzite_portal/ui/application.py:3595 bazzite_portal/ui/application.py:3598
+#: bazzite_portal/ui/application.py:3855 bazzite_portal/ui/application.py:4853
 msgid "Could not verify this action. Refresh system information and try again."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3303
+#: bazzite_portal/ui/application.py:3304
 msgid ""
 "A prepared deployment is waiting for restart. Cancel it before rolling back."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3316
+#: bazzite_portal/ui/application.py:3317
 msgid "Could not check rollback status. Open Logs for details."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3316 bazzite_portal/ui/application.py:3327
-#: bazzite_portal/ui/application.py:3613 bazzite_portal/ui/application.py:3615
-#: bazzite_portal/ui/application.py:3624 bazzite_portal/ui/application.py:3672
-#: bazzite_portal/ui/application.py:3817 bazzite_portal/ui/application.py:3866
-#: bazzite_portal/ui/application.py:4589
+#: bazzite_portal/ui/application.py:3317 bazzite_portal/ui/application.py:3328
+#: bazzite_portal/ui/application.py:3614 bazzite_portal/ui/application.py:3616
+#: bazzite_portal/ui/application.py:3625 bazzite_portal/ui/application.py:3673
+#: bazzite_portal/ui/application.py:3818 bazzite_portal/ui/application.py:3867
+#: bazzite_portal/ui/application.py:4590
 msgid "Open to view operation progress and logs."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3321
+#: bazzite_portal/ui/application.py:3322
 msgid "Rollback succeeded"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3323
+#: bazzite_portal/ui/application.py:3324
 msgid "Rollback failed"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3325
+#: bazzite_portal/ui/application.py:3326
 msgid "Rollback status unknown"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3333
+#: bazzite_portal/ui/application.py:3334
 msgid "Cancel pending rollback"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3334 bazzite_portal/ui/application.py:3339
+#: bazzite_portal/ui/application.py:3335 bazzite_portal/ui/application.py:3340
 msgid "Roll back to previous deployment"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3335
+#: bazzite_portal/ui/application.py:3336
 msgid "Rollback already prepared"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3335
+#: bazzite_portal/ui/application.py:3336
 msgid "A rollback is already prepared"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3336
+#: bazzite_portal/ui/application.py:3337
 msgid "No previous deployment available"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3342
+#: bazzite_portal/ui/application.py:3343
 msgid ""
 "Keep your current system for the next restart. The saved version remains "
 "available."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3344
+#: bazzite_portal/ui/application.py:3345
 #, python-brace-format
 msgid ""
 "Version {version} · Takes effect after restart. Personal files are preserved."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3346
+#: bazzite_portal/ui/application.py:3347
 msgid ""
 "Restore the previous system version on the next boot. Personal files are "
 "preserved."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3348 bazzite_portal/ui/application.py:3537
-#: bazzite_portal/ui/application.py:3549
+#: bazzite_portal/ui/application.py:3349 bazzite_portal/ui/application.py:3538
+#: bazzite_portal/ui/application.py:3550
 msgid "Rollback is unavailable."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3435
+#: bazzite_portal/ui/application.py:3436
 msgid "View operation result"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3525
+#: bazzite_portal/ui/application.py:3526
 msgid "Rollback failed. Open Logs for details."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3555
+#: bazzite_portal/ui/application.py:3556
 msgid "Cancel pending rollback?"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3556
+#: bazzite_portal/ui/application.py:3557
 #, python-brace-format
 msgid ""
 "Keep your current system for the next restart. The saved deployment, version "
 "{version}, will remain available."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3557
+#: bazzite_portal/ui/application.py:3558
 msgid "Cancel rollback"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3561
+#: bazzite_portal/ui/application.py:3562
 msgid "Roll back Bazzite?"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3562
+#: bazzite_portal/ui/application.py:3563
 #, python-brace-format
 msgid ""
 "Select the saved deployment, version {version}, for your next boot. A "
 "restart is required to use it. Your personal files are preserved."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3563 bazzite_portal/ui/application.py:3971
+#: bazzite_portal/ui/application.py:3564 bazzite_portal/ui/application.py:3972
 msgid "Rollback"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3572 bazzite_portal/ui/application.py:3779
-#: bazzite_portal/ui/application.py:3842
+#: bazzite_portal/ui/application.py:3573 bazzite_portal/ui/application.py:3780
+#: bazzite_portal/ui/application.py:3843
 msgid "Checking system status…"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3576
+#: bazzite_portal/ui/application.py:3577
 msgid "Waiting for confirmation that cancellation has started…"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3581 bazzite_portal/ui/application.py:3583
-#: bazzite_portal/ui/application.py:3588 bazzite_portal/ui/application.py:3615
-#: bazzite_portal/ui/application.py:3620 bazzite_portal/ui/application.py:3622
-#: bazzite_portal/ui/application.py:3628 bazzite_portal/ui/application.py:3660
-#: bazzite_portal/ui/application.py:3668
+#: bazzite_portal/ui/application.py:3582 bazzite_portal/ui/application.py:3584
+#: bazzite_portal/ui/application.py:3589 bazzite_portal/ui/application.py:3616
+#: bazzite_portal/ui/application.py:3621 bazzite_portal/ui/application.py:3623
+#: bazzite_portal/ui/application.py:3629 bazzite_portal/ui/application.py:3661
+#: bazzite_portal/ui/application.py:3669
 msgid "Could not check the pending system change. Open Logs for details."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3581
+#: bazzite_portal/ui/application.py:3582
 msgid ""
 "Cancellation status is unknown. Refresh update status before continuing."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3584
+#: bazzite_portal/ui/application.py:3585
 msgid ""
 "Cancelling the pending system change is unavailable. Open Logs for details."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3586
+#: bazzite_portal/ui/application.py:3587
 msgid "Refresh the deployment overview before cancelling."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3588
+#: bazzite_portal/ui/application.py:3589
 msgid "No verified prepared deployment is eligible for cancellation."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3613 bazzite_portal/ui/application.py:3615
+#: bazzite_portal/ui/application.py:3614 bazzite_portal/ui/application.py:3616
 msgid "Cancelling pending deployment…"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3618 bazzite_portal/ui/application.py:3634
+#: bazzite_portal/ui/application.py:3619 bazzite_portal/ui/application.py:3635
 msgid "Prepared deployment can be cancelled"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3618 bazzite_portal/ui/application.py:3635
+#: bazzite_portal/ui/application.py:3619 bazzite_portal/ui/application.py:3636
 msgid "Only the verified prepared next-restart deployment will be removed."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3620
+#: bazzite_portal/ui/application.py:3621
 msgid "Pending deployment cancelled"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3620
+#: bazzite_portal/ui/application.py:3621
 msgid "The running and saved deployments were left unchanged."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3622
+#: bazzite_portal/ui/application.py:3623
 msgid "Deployment cancellation failed"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3622 bazzite_portal/ui/application.py:4878
+#: bazzite_portal/ui/application.py:3623 bazzite_portal/ui/application.py:4879
 msgid ""
 "The operation failed. Refresh system information to check the current state."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3624
+#: bazzite_portal/ui/application.py:3625
 msgid "Cancellation request sent"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3628
+#: bazzite_portal/ui/application.py:3629
 msgid "Cancellation status unknown"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3630 bazzite_portal/ui/application.py:3632
+#: bazzite_portal/ui/application.py:3631 bazzite_portal/ui/application.py:3633
 msgid "Cancellation unavailable"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3641
+#: bazzite_portal/ui/application.py:3642
 msgid "There is no pending deployment"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3649
+#: bazzite_portal/ui/application.py:3650
 msgid "Retry pending deployment cancellation"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3650
+#: bazzite_portal/ui/application.py:3651
 msgid ""
 "The previous attempt failed. Your pending deployment can still be cancelled."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3658
+#: bazzite_portal/ui/application.py:3659
 msgid "Refresh deployment information to check cancellation."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3660 bazzite_portal/ui/application.py:3667
+#: bazzite_portal/ui/application.py:3661 bazzite_portal/ui/application.py:3668
 msgid "No pending deployment to cancel"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3662 bazzite_portal/ui/application.py:3971
+#: bazzite_portal/ui/application.py:3663 bazzite_portal/ui/application.py:3972
 msgid "Cancel pending deployment"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3662
+#: bazzite_portal/ui/application.py:3663
 msgid "Cancel only the verified prepared deployment before it is activated."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3686 bazzite_portal/ui/application.py:3703
+#: bazzite_portal/ui/application.py:3687 bazzite_portal/ui/application.py:3704
 msgid "Deployment cancellation is unavailable."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3692
+#: bazzite_portal/ui/application.py:3693
 #, python-brace-format
 msgid ""
 "Cancel the prepared Bazzite deployment {version} ({image})? This removes "
@@ -1598,125 +1598,125 @@ msgid ""
 "the computer."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3695
+#: bazzite_portal/ui/application.py:3696
 msgid "Cancel pending deployment?"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3695
+#: bazzite_portal/ui/application.py:3696
 msgid "Cancel deployment"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3707
+#: bazzite_portal/ui/application.py:3708
 msgid ""
 "The pending deployment changed. Review the updated details and confirm again."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3744
+#: bazzite_portal/ui/application.py:3745
 msgid "The cancellation request failed."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3781
+#: bazzite_portal/ui/application.py:3782
 msgid "Refresh system information before continuing."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3786
+#: bazzite_portal/ui/application.py:3787
 msgid "Layer removal is unavailable. Open Logs for details."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3788
+#: bazzite_portal/ui/application.py:3789
 msgid "Package details are unavailable."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3788 bazzite_portal/ui/application.py:3800
+#: bazzite_portal/ui/application.py:3789 bazzite_portal/ui/application.py:3801
 msgid "Could not check layered apps. Open Logs for details."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3789
+#: bazzite_portal/ui/application.py:3790
 msgid "No package layers are present."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3791
+#: bazzite_portal/ui/application.py:3792
 msgid "Apply or cancel the pending system change before removing layered apps."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3802
+#: bazzite_portal/ui/application.py:3803
 msgid "Removing layered apps…"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3804 bazzite_portal/ui/application.py:3806
-#: bazzite_portal/ui/application.py:3818
+#: bazzite_portal/ui/application.py:3805 bazzite_portal/ui/application.py:3807
+#: bazzite_portal/ui/application.py:3819
 msgid "Layer removal failed. Open the operation log for details."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3808
+#: bazzite_portal/ui/application.py:3809
 msgid "Layer removal completed."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3812
+#: bazzite_portal/ui/application.py:3813
 #, python-brace-format
 msgid "{count} package request to review."
 msgid_plural "{count} package requests to review."
 msgstr[0] ""
 msgstr[1] ""
 
-#: bazzite_portal/ui/application.py:3819
+#: bazzite_portal/ui/application.py:3820
 msgid ""
 "Layer removal succeeded. Restart your system manually to apply the change."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3838
+#: bazzite_portal/ui/application.py:3839
 msgid ""
 "System status is unavailable. Refresh system information before continuing."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3847 bazzite_portal/ui/application.py:3850
-#: bazzite_portal/ui/application.py:3868 bazzite_portal/ui/application.py:3871
+#: bazzite_portal/ui/application.py:3848 bazzite_portal/ui/application.py:3851
+#: bazzite_portal/ui/application.py:3869 bazzite_portal/ui/application.py:3872
 msgid "Could not check download-cache status. Open Logs for details."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3848
+#: bazzite_portal/ui/application.py:3849
 msgid "Download-cache cleanup is unavailable. Open Logs for details."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3850
+#: bazzite_portal/ui/application.py:3851
 msgid ""
 "Could not check download-cache status. Refresh system information and try "
 "again."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3866
+#: bazzite_portal/ui/application.py:3867
 msgid "Clearing download cache…"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3868
+#: bazzite_portal/ui/application.py:3869
 msgid "Download cache cleared"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3868
+#: bazzite_portal/ui/application.py:3869
 msgid "The cached data was removed. It can be downloaded again when needed."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3870 bazzite_portal/ui/application.py:3875
+#: bazzite_portal/ui/application.py:3871 bazzite_portal/ui/application.py:3876
 msgid "Retry clearing download cache"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3870 bazzite_portal/ui/application.py:3874
+#: bazzite_portal/ui/application.py:3871 bazzite_portal/ui/application.py:3875
 msgid "Could not clear download cache"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3871
+#: bazzite_portal/ui/application.py:3872
 msgid "Download-cache cleanup failed. Open the operation log for details."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3879
+#: bazzite_portal/ui/application.py:3880
 msgid "Download-cache clearing unavailable"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3898
+#: bazzite_portal/ui/application.py:3899
 msgid "Clear download cache?"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3899
+#: bazzite_portal/ui/application.py:3900
 msgid ""
 "This removes cached update data, which may need to be downloaded again "
 "later. If a deployment is pending, cancel it first with Cancel pending "
@@ -1724,256 +1724,256 @@ msgid ""
 "needed."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3900
+#: bazzite_portal/ui/application.py:3901
 msgid "Clear cache"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3916
+#: bazzite_portal/ui/application.py:3917
 msgid ""
 "The download cache changed. Review the updated details and confirm again."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3944
+#: bazzite_portal/ui/application.py:3945
 msgid "The cache cleanup request failed."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3973
+#: bazzite_portal/ui/application.py:3974
 msgid "Rebase release channel"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3973
+#: bazzite_portal/ui/application.py:3974
 msgid "Rebase Bazzite image"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3974
+#: bazzite_portal/ui/application.py:3975
 msgid "Delete pinned deployment"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:3974
+#: bazzite_portal/ui/application.py:3975
 msgid "System operation"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4105
+#: bazzite_portal/ui/application.py:4106
 #, python-brace-format
 msgid "Failed · {error}"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4125
+#: bazzite_portal/ui/application.py:4126
 msgid "Preparing cache cleanup…"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4126
+#: bazzite_portal/ui/application.py:4127
 msgid "Preparing deployment cancellation…"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4127
+#: bazzite_portal/ui/application.py:4128
 msgid "Preparing release channel rebase…"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4128
+#: bazzite_portal/ui/application.py:4129
 msgid "Preparing image rebase…"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4129
+#: bazzite_portal/ui/application.py:4130
 msgid "Preparing rollback…"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4130
+#: bazzite_portal/ui/application.py:4131
 msgid "Preparing layer removal…"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4131
+#: bazzite_portal/ui/application.py:4132
 msgid "Preparing deployment deletion…"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4132
+#: bazzite_portal/ui/application.py:4133
 msgid "Preparing operation…"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4151
+#: bazzite_portal/ui/application.py:4152
 msgid "A newer operation is available. Reopen this action to view it."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4207
+#: bazzite_portal/ui/application.py:4208
 msgid "Remove all layered apps?"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4209
+#: bazzite_portal/ui/application.py:4210
 msgid "Remove all layers"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4216 bazzite_portal/ui/application.py:4304
-#: bazzite_portal/ui/application.py:4311 bazzite_portal/ui/application.py:4345
+#: bazzite_portal/ui/application.py:4217 bazzite_portal/ui/application.py:4305
+#: bazzite_portal/ui/application.py:4312 bazzite_portal/ui/application.py:4346
 msgid "The package list changed. Review it again before confirming."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4230
+#: bazzite_portal/ui/application.py:4231
 msgid ""
 "Select the packages to remove. Apps included with Bazzite stay installed."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4284 bazzite_portal/ui/application.py:4285
+#: bazzite_portal/ui/application.py:4285 bazzite_portal/ui/application.py:4286
 msgid "Remove"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4288
+#: bazzite_portal/ui/application.py:4289
 msgid "Review the selected packages before removal"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4299
+#: bazzite_portal/ui/application.py:4300
 msgid "Select at least one layered app to remove."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4315
+#: bazzite_portal/ui/application.py:4316
 msgid "Remove selected layered packages?"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4316
+#: bazzite_portal/ui/application.py:4317
 msgid "The following packages will be removed:\n"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4317
+#: bazzite_portal/ui/application.py:4318
 msgid "Remove selected packages"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4321
+#: bazzite_portal/ui/application.py:4322
 msgid "Remove · controller button"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4386
+#: bazzite_portal/ui/application.py:4387
 msgid "Customization details loaded"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4423 bazzite_portal/ui/application.py:4529
+#: bazzite_portal/ui/application.py:4424 bazzite_portal/ui/application.py:4530
 msgid "Layered package information is unavailable."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4424 bazzite_portal/ui/application.py:4530
+#: bazzite_portal/ui/application.py:4425 bazzite_portal/ui/application.py:4531
 msgid "Layered packages"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4443
+#: bazzite_portal/ui/application.py:4444
 msgid "Could not refresh system information. Open Logs for details."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4456
+#: bazzite_portal/ui/application.py:4457
 msgid "Refreshing next-restart information…"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4473 bazzite_portal/ui/application.py:4834
+#: bazzite_portal/ui/application.py:4474 bazzite_portal/ui/application.py:4835
 msgid "Release channel status is unavailable."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4486
+#: bazzite_portal/ui/application.py:4487
 msgid "System information refresh failed."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4495
+#: bazzite_portal/ui/application.py:4496
 msgid "Could not load system information. Open Logs for details."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4504
+#: bazzite_portal/ui/application.py:4505
 msgid "Refresh failed · showing last loaded customizations"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4505
+#: bazzite_portal/ui/application.py:4506
 msgid "Customization details could not be refreshed"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4507
+#: bazzite_portal/ui/application.py:4508
 #, python-brace-format
 msgid "Showing last loaded details. {error}"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4570
+#: bazzite_portal/ui/application.py:4571
 msgid "Refresh system information before deleting deployments."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4572
+#: bazzite_portal/ui/application.py:4573
 msgid "A deployment is being deleted."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4574 bazzite_portal/ui/application.py:4579
-#: bazzite_portal/ui/application.py:4591 bazzite_portal/ui/application.py:4593
-#: bazzite_portal/ui/application.py:4596
+#: bazzite_portal/ui/application.py:4575 bazzite_portal/ui/application.py:4580
+#: bazzite_portal/ui/application.py:4592 bazzite_portal/ui/application.py:4594
+#: bazzite_portal/ui/application.py:4597
 msgid "Could not check saved Bazzite versions. Open Logs for details."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4574
+#: bazzite_portal/ui/application.py:4575
 msgid "Deployment deletion status could not be verified."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4579
+#: bazzite_portal/ui/application.py:4580
 msgid "No saved, pinned deployments can be deleted."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4588
+#: bazzite_portal/ui/application.py:4589
 msgid "Deleting pinned deployment…"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4591
+#: bazzite_portal/ui/application.py:4592
 msgid "Pinned deployment deleted"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4593
+#: bazzite_portal/ui/application.py:4594
 msgid "Deployment deletion failed"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4595
+#: bazzite_portal/ui/application.py:4596
 msgid "Deployment deletion status unknown"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4620
+#: bazzite_portal/ui/application.py:4621
 msgid ""
 "Choose a pinned system version to delete. Your running system and next "
 "restart are protected. Personal files stay."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4643 bazzite_portal/ui/application.py:4661
+#: bazzite_portal/ui/application.py:4644 bazzite_portal/ui/application.py:4662
 msgid "Delete"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4656 bazzite_portal/ui/application.py:4686
+#: bazzite_portal/ui/application.py:4657 bazzite_portal/ui/application.py:4687
 msgid "The deployment list changed. Review it again."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4724
+#: bazzite_portal/ui/application.py:4725
 msgid "Apply or cancel the pending deployment before changing images."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4727 bazzite_portal/ui/application.py:4729
-#: bazzite_portal/ui/application.py:4793
+#: bazzite_portal/ui/application.py:4728 bazzite_portal/ui/application.py:4730
+#: bazzite_portal/ui/application.py:4794
 msgid "Could not check Bazzite images. Open Logs for details."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4727
+#: bazzite_portal/ui/application.py:4728
 msgid "Changing Bazzite images is unavailable. Open Logs for details."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4729
+#: bazzite_portal/ui/application.py:4730
 msgid "Image-rebase status could not be verified."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4772 bazzite_portal/ui/image_wizard.py:47
+#: bazzite_portal/ui/application.py:4773 bazzite_portal/ui/image_wizard.py:47
 #: bazzite_portal/ui/system_info.py:51
 msgid "Stable"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4772 bazzite_portal/ui/image_wizard.py:47
+#: bazzite_portal/ui/application.py:4773 bazzite_portal/ui/image_wizard.py:47
 #: bazzite_portal/ui/system_info.py:54
 msgid "Testing"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4772 bazzite_portal/ui/image_wizard.py:47
+#: bazzite_portal/ui/application.py:4773 bazzite_portal/ui/image_wizard.py:47
 msgid "Unstable"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4773 bazzite_portal/ui/image_wizard.py:317
+#: bazzite_portal/ui/application.py:4774 bazzite_portal/ui/image_wizard.py:317
 #, python-brace-format
 msgid "Latest {track}"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4774
+#: bazzite_portal/ui/application.py:4775
 #, python-brace-format
 msgid ""
 "Prepare {image}, {version}, for your next restart? Your personal files stay. "
@@ -1981,140 +1981,140 @@ msgid ""
 "automatically."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4775
+#: bazzite_portal/ui/application.py:4776
 msgid "Rebase Bazzite image?"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4778 bazzite_portal/ui/application.py:4790
+#: bazzite_portal/ui/application.py:4779 bazzite_portal/ui/application.py:4791
 msgid ""
 "Enable unsupported rebase targets in Settings to choose this image or "
 "channel."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4780 bazzite_portal/ui/application.py:4933
+#: bazzite_portal/ui/application.py:4781 bazzite_portal/ui/application.py:4934
 msgid "Rebase"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4793
+#: bazzite_portal/ui/application.py:4794
 msgid "Deployment information changed. Review it again."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4828
+#: bazzite_portal/ui/application.py:4829
 msgid "The application is closing."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4832
+#: bazzite_portal/ui/application.py:4833
 msgid "Refresh system information before rebasing release channels."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4836
+#: bazzite_portal/ui/application.py:4837
 msgid "A release channel rebase request is already in progress."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4838
+#: bazzite_portal/ui/application.py:4839
 msgid "A release channel rebase is already running."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4840 bazzite_portal/ui/application.py:4845
-#: bazzite_portal/ui/application.py:4869 bazzite_portal/ui/application.py:4878
+#: bazzite_portal/ui/application.py:4841 bazzite_portal/ui/application.py:4846
+#: bazzite_portal/ui/application.py:4870 bazzite_portal/ui/application.py:4879
 msgid "Could not check the release channel. Open Logs for details."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4840
+#: bazzite_portal/ui/application.py:4841
 msgid "Release channel status could not be verified. Refresh to check again."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4845
+#: bazzite_portal/ui/application.py:4846
 msgid "Release channel rebasing is unavailable."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4847
+#: bazzite_portal/ui/application.py:4848
 msgid "The current release channel is not verified."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4849
+#: bazzite_portal/ui/application.py:4850
 msgid "The target release channel is not verified."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4868
+#: bazzite_portal/ui/application.py:4869
 msgid "Rebasing to Bazzite Testing…"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4868
+#: bazzite_portal/ui/application.py:4869
 msgid "Rebasing to Bazzite Stable…"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4869
+#: bazzite_portal/ui/application.py:4870
 msgid "The image is being prepared. You can keep using the computer."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4871
+#: bazzite_portal/ui/application.py:4872
 msgid "Rebasing release channel…"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4874
+#: bazzite_portal/ui/application.py:4875
 msgid "Bazzite Testing is ready"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4874
+#: bazzite_portal/ui/application.py:4875
 msgid "Bazzite Stable is ready"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4875
+#: bazzite_portal/ui/application.py:4876
 msgid "Restart manually to start the new release channel."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4877
+#: bazzite_portal/ui/application.py:4878
 msgid "Release channel rebase failed"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4881 bazzite_portal/ui/application.py:4889
+#: bazzite_portal/ui/application.py:4882 bazzite_portal/ui/application.py:4890
 msgid "Rebase to Bazzite Testing"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4881 bazzite_portal/ui/application.py:4889
+#: bazzite_portal/ui/application.py:4882 bazzite_portal/ui/application.py:4890
 msgid "Rebase to Bazzite Stable"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4882
+#: bazzite_portal/ui/application.py:4883
 msgid "Release channel rebasing unavailable"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4887
+#: bazzite_portal/ui/application.py:4888
 msgid "Return to the latest Testing release"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4887
+#: bazzite_portal/ui/application.py:4888
 msgid "Return to the latest Stable release"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4890
+#: bazzite_portal/ui/application.py:4891
 msgid "Download newer changes to try after restarting."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4891
+#: bazzite_portal/ui/application.py:4892
 msgid "Return to the stable release after restarting."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4923
+#: bazzite_portal/ui/application.py:4924
 msgid "Bazzite Testing"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4923
+#: bazzite_portal/ui/application.py:4924
 msgid "Bazzite Stable"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4926
+#: bazzite_portal/ui/application.py:4927
 #, python-brace-format
 msgid "Return this installation to the latest {target_name} release? "
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4928
+#: bazzite_portal/ui/application.py:4929
 #, python-brace-format
 msgid "Rebase this Bazzite installation from {value1} to {target_name}? "
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4930
+#: bazzite_portal/ui/application.py:4931
 #, python-brace-format
 msgid ""
 "The running image is {version} ({image}). This downloads and prepares the "
@@ -2122,201 +2122,201 @@ msgid ""
 "will not restart automatically; restart manually after the rebase completes."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4932
+#: bazzite_portal/ui/application.py:4933
 #, python-brace-format
 msgid "Return to the latest {target_name} release?"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4932
+#: bazzite_portal/ui/application.py:4933
 #, python-brace-format
 msgid "Rebase to {target_name}?"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4941
+#: bazzite_portal/ui/application.py:4942
 msgid "The release channel status changed. Refresh and confirm again."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4968
+#: bazzite_portal/ui/application.py:4969
 msgid "The release channel request failed."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4980
+#: bazzite_portal/ui/application.py:4981
 msgid "Visit Bazzite documentation, community spaces, and source code."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:4981
+#: bazzite_portal/ui/application.py:4982
 msgid "Resources"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5018
+#: bazzite_portal/ui/application.py:5019
 msgid "Bazzite release and project announcements."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5020 bazzite_portal/ui/application.py:5067
+#: bazzite_portal/ui/application.py:5021 bazzite_portal/ui/application.py:5068
 msgid "No announcements available"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5158
+#: bazzite_portal/ui/application.py:5159
 msgid "This community link is not a valid HTTPS address."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5178
+#: bazzite_portal/ui/application.py:5179
 msgid "Preferences"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5182
+#: bazzite_portal/ui/application.py:5183
 msgid "Open app at login"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5182
+#: bazzite_portal/ui/application.py:5183
 msgid "Open the window at login. Background monitoring starts independently."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5183
+#: bazzite_portal/ui/application.py:5184
 msgid "Hide notification area icon"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5183
+#: bazzite_portal/ui/application.py:5184
 msgid "Hide the update icon in the notification area."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5184
+#: bazzite_portal/ui/application.py:5185
 msgid "Show console during update"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5184
+#: bazzite_portal/ui/application.py:5185
 msgid "Show the console on the Updates screen. Intended for advanced users."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5185
+#: bazzite_portal/ui/application.py:5186
 msgid "Show disabled UUPD steps"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5185
+#: bazzite_portal/ui/application.py:5186
 msgid "Display steps disabled in UUPD. This does not enable them."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5186
+#: bazzite_portal/ui/application.py:5187
 msgid "Show unsupported rebase targets"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5186
+#: bazzite_portal/ui/application.py:5187
 msgid ""
 "Include other desktops and the Unstable channel. Intended for advanced "
 "testing; these targets may cause problems."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5187
+#: bazzite_portal/ui/application.py:5188
 msgid "Don’t ask before running tools"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5187
+#: bazzite_portal/ui/application.py:5188
 msgid "Skip confirmation for tools that run without an options dialog."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5188
+#: bazzite_portal/ui/application.py:5189
 msgid "Always show controller prompts"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5188
+#: bazzite_portal/ui/application.py:5189
 msgid "Keep button prompts visible when no controller is connected."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5204 bazzite_portal/ui/application.py:5390
-#: bazzite_portal/ui/application.py:5438
+#: bazzite_portal/ui/application.py:5205 bazzite_portal/ui/application.py:5391
+#: bazzite_portal/ui/application.py:5439
 msgid "Automatic"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5205 bazzite_portal/ui/application.py:5212
+#: bazzite_portal/ui/application.py:5206 bazzite_portal/ui/application.py:5213
 msgid "Controller prompt style"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5205
+#: bazzite_portal/ui/application.py:5206
 msgid ""
 "Choose how controller buttons are drawn; controls keep the same actions."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5246
+#: bazzite_portal/ui/application.py:5247
 msgid "Notification icon theme"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5282
+#: bazzite_portal/ui/application.py:5283
 msgid "Add Bazzite Portal to Steam"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5283
+#: bazzite_portal/ui/application.py:5284
 msgid "Open this app from your Steam library, including Gaming Mode."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5289
+#: bazzite_portal/ui/application.py:5290
 msgid "Local app data"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5290
+#: bazzite_portal/ui/application.py:5291
 msgid "Open app logs"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5290
+#: bazzite_portal/ui/application.py:5291
 msgid "Open the folder containing this app’s private logs."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5296
+#: bazzite_portal/ui/application.py:5297
 msgid "Clear local app data"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5296
+#: bazzite_portal/ui/application.py:5297
 msgid ""
 "Remove pins, preferences, and dismissed reminders. Running jobs are "
 "unaffected."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5299
+#: bazzite_portal/ui/application.py:5300
 msgid "Clear local app data?"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5299
+#: bazzite_portal/ui/application.py:5300
 msgid ""
 "Your pins, preferences, and dismissed reminders will be removed. System "
 "updates and their logs will not be changed."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5299
+#: bazzite_portal/ui/application.py:5300
 msgid "Clear data"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5302
+#: bazzite_portal/ui/application.py:5303
 msgid "About"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5303
+#: bazzite_portal/ui/application.py:5304
 msgid "About Bazzite Portal"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5309 bazzite_portal/ui/application.py:5445
+#: bazzite_portal/ui/application.py:5310 bazzite_portal/ui/application.py:5446
 msgid "Could not save or load app preferences. Open Logs for details."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5329
+#: bazzite_portal/ui/application.py:5330
 msgid "Added to Steam."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5330
+#: bazzite_portal/ui/application.py:5331
 msgid "Add to Steam requested."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5333
+#: bazzite_portal/ui/application.py:5334
 msgid "Could not add Bazzite Portal to Steam. Open Logs for details."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5355
+#: bazzite_portal/ui/application.py:5356
 msgid "Could not open the app logs folder."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5378
+#: bazzite_portal/ui/application.py:5379
 msgid "Unsupported rebase targets"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5379
+#: bazzite_portal/ui/application.py:5380
 msgid ""
 "Rebasing to unsupported targets, including other desktops and the Unstable "
 "channel, can and will break your system. The Bazzite team reserves the right "
@@ -2324,39 +2324,39 @@ msgid ""
 "for further information."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5380
+#: bazzite_portal/ui/application.py:5381
 msgid "OK"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5446
+#: bazzite_portal/ui/application.py:5447
 msgid "Local app data cleared."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5459
+#: bazzite_portal/ui/application.py:5460
 msgid "Manage Bazzite updates, tools, and system settings."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5460
+#: bazzite_portal/ui/application.py:5461
 msgid "translator-credits"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5618
+#: bazzite_portal/ui/application.py:5619
 msgid "The requested action is missing or ambiguous."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5842 bazzite_portal/ui/application.py:5853
+#: bazzite_portal/ui/application.py:5843 bazzite_portal/ui/application.py:5854
 msgid "Unfavorite"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5842 bazzite_portal/ui/application.py:5853
+#: bazzite_portal/ui/application.py:5843 bazzite_portal/ui/application.py:5854
 msgid "Favorite"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5871
+#: bazzite_portal/ui/application.py:5872
 msgid "Review selected"
 msgstr ""
 
-#: bazzite_portal/ui/application.py:5949
+#: bazzite_portal/ui/application.py:5950
 msgid "Open a Portal tool"
 msgstr ""
 
