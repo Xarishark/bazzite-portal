@@ -5,3 +5,5 @@ __pycache__/
 build/
 *.egg-info/
 *.mo
+/bazzite_portal/core/message_templates.json
+/bazzite_portal/core/user_messages.json

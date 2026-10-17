@@ -2378,6 +2378,7 @@ class Window(Adw.ApplicationWindow):
                 ring.set_content_width(30)
                 ring.set_content_height(30)
                 percent = round(fraction * 100)
+                # xgettext: no-python-format
                 ring.update_property([Gtk.AccessibleProperty.LABEL], ['Preview demo, {percent}% complete'.format(percent=percent) if self.preview else _('{percent}% complete').format(percent=percent)])
                 def draw(_area, cr, width, height):
                     cx, cy, radius = width / 2, height / 2, min(width, height) / 2 - 2

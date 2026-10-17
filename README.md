@@ -3,9 +3,8 @@
 A desktop app for Bazzite updates, tools, system management and troubleshooting.
 Currently under development.
 
-> Translation templates (POT) are regenerated automatically by GitHub Actions when
-> source changes reach main. Contributors do not need to regenerate them manually;
-> translations are maintained in [Weblate](https://hosted.weblate.org/projects/bazzite-portal/).
+Weblate automatically generates the POT template and manages translations:
+[Bazzite Portal on Weblate](https://hosted.weblate.org/projects/bazzite-portal/).
 
 ## Screenshots
 
@@ -16,16 +15,6 @@ Currently under development.
 **GNOME**
 
 <img src=".github/screenshots/home-gnome.png" alt="Bazzite Portal home on GNOME" width="900">
-
-## Preview
-
-From the repository folder, run:
-
-```sh
-python3 -m bazzite_portal --preview templates/tools.yml
-```
-
-Preview mode does not run tool commands or change the system.
 
 ## YAML configuration
 
@@ -52,7 +41,6 @@ Third-party license texts: [LICENSES](LICENSES/).
 
 ## Translations
 
-This project is translated using [Weblate](https://hosted.weblate.org/projects/bazzite-portal/).
 Tool and announcement content, operation logs and command output are not translated.
 
 ## Development

@@ -31,7 +31,6 @@ updates, rollback and system information.
 %pyproject_buildrequires
 
 %build
-python3 packaging/translations.py update
 python3 packaging/translations.py build
 %pyproject_wheel
 
