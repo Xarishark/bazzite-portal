@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-10-16 21:08+0000\n"
+"PO-Revision-Date: 2026-10-17 13:13+0000\n"
 "Last-Translator: Zacharias Xenakis <xarishark@outlook.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/bazzite-portal/app/"
 "el/>\n"
@@ -118,16 +118,12 @@ msgid "Add favorite"
 msgstr "Προσθήκη στα αγαπημένα"
 
 #: bazzite_portal/ui/application.py:5330
-#, fuzzy
-#| msgid "Operation requested."
 msgid "Add to Steam requested."
-msgstr "Ζητήθηκε η εκτέλεση της διαδικασίας."
+msgstr "Ζητήθηκε η προσθήκη στο Steam."
 
 #: bazzite_portal/ui/application.py:5329
-#, fuzzy
-#| msgid "Add Bazzite Portal to Steam"
 msgid "Added to Steam."
-msgstr "Προσθήκη του Bazzite Portal στο Steam"
+msgstr "Προστέθηκε στο Steam."
 
 #: bazzite_portal/ui/application.py:576
 msgid "Administrator authentication"
