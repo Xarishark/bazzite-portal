@@ -1,4 +1,4 @@
-"""Maintain gettext sources and compile the catalogs/desktop metadata for RPMs."""
+"""Generate runtime message resources and compile translations for RPMs."""
 import argparse
 import ast
 import json
@@ -9,7 +9,6 @@ from string import Formatter
 import subprocess
 import sys
 import tempfile
-import tomllib
 
 ROOT = Path(__file__).resolve().parents[1]
 DOMAIN = "bazzite-portal"
@@ -52,34 +51,6 @@ def message_templates(sources):
     return sorted(templates, key=lambda text: (-len(re.sub(r"\{[^}]+\}", "", text)), text))
 
 
-def extract(destination):
-    sources = sorted((ROOT / "bazzite_portal").rglob("*.py"))
-    run("xgettext", "--language=Python", "--from-code=UTF-8", "--no-wrap", "--sort-output",
-        "--keyword=_", "--keyword=gettext", "--keyword=N_", "--keyword=C_",
-        "--keyword=ngettext:1,2", "--keyword=pgettext:1c,2",
-
-        "--flag=C_:1:python-brace-format", "--add-comments=Translators:",
-        "--package-name=Bazzite Portal",
-        "--package-version=" + tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))["project"]["version"],
-        "--msgid-bugs-address=https://github.com/Xarishark/bazzite-portal/issues",
-        "--copyright-holder=Bazzite Portal contributors", "-o", str(destination),
-        *(str(path.relative_to(ROOT)) for path in sources))
-    run("xgettext", "--language=Desktop", "--from-code=UTF-8", "--no-wrap", "--sort-output",
-        "--join-existing", "-o", str(destination),
-        *(f"packaging/{name}" for name in DESKTOPS))
-    its = Path("/usr/share/gettext/its/metainfo.its")
-    if not its.is_file():
-        raise RuntimeError("Install appstream: its gettext metadata extraction rules are required")
-    run("xgettext", f"--its={its}", "--from-code=UTF-8", "--no-wrap", "--sort-output",
-        "--join-existing", "-o", str(destination), f"packaging/{METAINFO}")
-    text = destination.read_text(encoding="utf-8")
-    # Omit extraction timestamps so check is reproducible across machines/runs.
-    text = re.sub(r'^"POT-Creation-Date:.*\n', "", text, flags=re.MULTILINE)
-    text = text.replace("charset=CHARSET", "charset=UTF-8")
-    destination.write_text(text, encoding="utf-8", newline="\n")
-    return message_templates(sources)
-
-
 def catalogs():
     for path in sorted((ROOT / "po").glob("*.po")):
         if not re.fullmatch(r"[a-z]{2,3}(?:_[A-Za-z0-9]+)*(?:@[a-zA-Z0-9]+)?", path.stem):
@@ -104,30 +75,21 @@ def user_messages():
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=("update", "check", "build"))
+    parser.add_argument("command", choices=("check", "build"))
     args = parser.parse_args()
-    po = ROOT / "po"
-    po.mkdir(exist_ok=True)
-    template = po / f"{DOMAIN}.pot"
-    patterns = ROOT / "bazzite_portal/core/message_templates.json"
-    public_messages = ROOT / "bazzite_portal/core/user_messages.json"
-    if args.command in {"update", "check"}:
-        with tempfile.TemporaryDirectory() as directory:
-            generated = Path(directory) / template.name
-            messages = extract(generated)
-            pattern_text = json.dumps(messages, ensure_ascii=False, indent=2) + "\n"
-            public_text = user_messages()
-            if args.command == "update":
-                shutil.copyfile(generated, template)
-                patterns.write_text(pattern_text, encoding="utf-8", newline="\n")
-                public_messages.write_text(public_text, encoding="utf-8", newline="\n")
-            elif (not template.is_file() or generated.read_bytes() != template.read_bytes()
-                  or not patterns.is_file() or patterns.read_text(encoding="utf-8") != pattern_text
-                  or not public_messages.is_file() or public_messages.read_text(encoding="utf-8") != public_text):
-                raise SystemExit("Translation template is stale: run python3 packaging/translations.py update")
+    sources = sorted((ROOT / "bazzite_portal").rglob("*.py"))
+    templates = message_templates(sources)
     for path in catalogs():
         run("msgfmt", "--check", "--check-format", "-o", "/dev/null", str(path))
     if args.command == "build":
+        # Weblate owns POT/PO updates. These runtime resources are derived only
+        # from source and generated before the wheel is assembled.
+        core = ROOT / "bazzite_portal/core"
+        (core / "message_templates.json").write_text(
+            json.dumps(templates, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8", newline="\n")
+        (core / "user_messages.json").write_text(
+            user_messages(), encoding="utf-8", newline="\n")
         run(sys.executable, "packaging/metadata.py")
         output = ROOT / "build"
         for path in catalogs():
