@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/"
-"app/\n"
+"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/app/"
+"\n"
 "POT-Creation-Date: 2026-10-17 16:35+0200\n"
-"PO-Revision-Date: 2026-10-17 13:13+0000\n"
+"PO-Revision-Date: 2026-10-17 14:40+0000\n"
 "Last-Translator: Zacharias Xenakis <xarishark@outlook.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/bazzite-portal/app/"
 "el/>\n"
@@ -1067,8 +1067,7 @@ msgid "Skipped"
 msgstr "Παραλείφθηκε"
 
 #: bazzite_portal/ui/application.py:2382
-#, fuzzy, no-python-format, python-brace-format
-#| msgid "{percent}% complete"
+#, no-python-format, python-brace-format
 msgid "{percent}% complete"
 msgstr "{percent}% ολοκληρώθηκε"
 
