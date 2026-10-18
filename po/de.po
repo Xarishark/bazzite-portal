@@ -7,9 +7,10 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/app/"
 "\n"
 "POT-Creation-Date: 2026-10-18 16:13+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-10-18 17:55+0000\n"
+"Last-Translator: dani <numero1024@users.noreply.hosted.weblate.org>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/bazzite-portal/"
+"app/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -41,10 +42,13 @@ msgstr ""
 #: bazzite_portal/ui/application.py:2446 bazzite_portal/updates/monitor.py:1872
 msgid "Another system operation is running. Wait for it to finish."
 msgstr ""
+"Ein anderer Systemvorgang läuft bereits. Warte bis dieser abgeschlossen ist."
 
 #: bazzite_portal/core/errors.py:53
 msgid "Authorization was not granted. Try again or cancel."
 msgstr ""
+"Keine Autorisierung wurde gegeben. Versuche es erneut oder brich den Vorgang "
+"ab."
 
 #: bazzite_portal/core/errors.py:57 bazzite_portal/ui/application.py:2706
 #: bazzite_portal/ui/application.py:2707 bazzite_portal/ui/application.py:2713
@@ -56,73 +60,81 @@ msgstr ""
 #: bazzite_portal/ui/application.py:4444
 msgid "Details are unavailable. Open Logs for more information."
 msgstr ""
+"Keine Details verfügbar. Öffne die Protokolle (Logs) für mehr Informationen."
 
 #: bazzite_portal/input/prompts.py:119
 msgid "D-pad"
-msgstr ""
+msgstr "Steuerkreuz"
 
 #: bazzite_portal/integration/community.py:15
 #, python-brace-format
 msgid "{bazzite} website"
-msgstr ""
+msgstr "{bazzite}-Webseite"
 
 #: bazzite_portal/integration/community.py:15
 #, python-brace-format
 msgid "The {bazzite} project website"
-msgstr ""
+msgstr "Die {bazzite}-Projektseite"
 
 #: bazzite_portal/integration/community.py:16
 msgid "Documentations"
-msgstr ""
+msgstr "Dokumentationen"
 
 #: bazzite_portal/integration/community.py:16
 #, python-brace-format
 msgid "{bazzite} documentation"
-msgstr ""
+msgstr "{bazzite}-Dokumentationen"
 
 #: bazzite_portal/integration/community.py:17
 #, python-brace-format
 msgid "{bazzite} community and support"
-msgstr ""
+msgstr "{bazzite}-Community und Hilfe"
 
 #: bazzite_portal/integration/community.py:18
 #, python-brace-format
 msgid "{bazzite} source repository"
-msgstr ""
+msgstr "{bazzite}-Quellcode"
 
 #: bazzite_portal/integration/community.py:19
 #, python-brace-format
 msgid "The {bazzite} subreddit"
-msgstr ""
+msgstr "{bazzite}-Subreddit"
 
 #: bazzite_portal/integration/community.py:20
 msgid "Forums"
-msgstr ""
+msgstr "Foren"
 
 #: bazzite_portal/integration/community.py:20
 #, python-brace-format
 msgid "{universal_blue} community forums"
-msgstr ""
+msgstr "{universal_blue} Communityforen"
 
 #: bazzite_portal/maintenance/cache_clear.py:67
 #, python-brace-format
 msgid "An {rpm_ostree} transaction is active or status is unavailable."
 msgstr ""
+"Eine {rpm_ostree}-Transaktion ist aktiv oder der Status ist nicht verfügbar."
 
 #: bazzite_portal/maintenance/cache_clear.py:74
 #: bazzite_portal/maintenance/cache_clear.py:77
 msgid "Cancel the pending deployment before clearing the download cache."
 msgstr ""
+"Storniere das ausstehende Deployment bevor der Download-Cache bereinigt wird."
 
 #: bazzite_portal/maintenance/cache_clear.py:75
+#, fuzzy
 msgid ""
 "Resolve the selected next-boot deployment before clearing the download cache."
 msgstr ""
+"Löse das für den nächsten Neustart ausgewählte Deployment auf bevor der "
+"Download-Cache bereinigt wird."
 
 #: bazzite_portal/maintenance/cancel_pending.py:81
 #, python-brace-format
 msgid "{bootc} deployments cannot be canceled by this workflow."
 msgstr ""
+"{bootc}-Deployments können nicht durch diesen Arbeitsschritt storniert "
+"werden."
 
 #: bazzite_portal/maintenance/cancel_pending.py:91
 #: bazzite_portal/maintenance/channel_switch.py:51
@@ -131,44 +143,56 @@ msgstr ""
 #: bazzite_portal/maintenance/reset_layers.py:48
 #, python-brace-format
 msgid "An {rpm_ostree} transaction is active."
-msgstr ""
+msgstr "Eine {rpm_ostree}-Transaktion ist aktiv."
 
 #: bazzite_portal/maintenance/cancel_pending.py:104
 msgid "There is no pending deployment."
-msgstr ""
+msgstr "Es gibt kein ausstehendes Deployment."
 
 #: bazzite_portal/maintenance/cancel_pending.py:106
 msgid "The next boot is a scheduled rollback or other non-staged deployment."
 msgstr ""
+"Der nächste Neustart ist ein geplanter Rollback oder ein anderes nicht "
+"ausstehendes Deployment."
 
 #: bazzite_portal/maintenance/cancel_pending.py:108
 msgid "The pending deployment is pinned or its pin state is unknown."
 msgstr ""
+"Das ausstehende Deployment ist angepinnt oder der Pin-Status ist unbekannt."
 
 #: bazzite_portal/maintenance/channel_switch.py:62
 #, python-brace-format
 msgid ""
 "Only official {bazzite} {tracks} track and release references are supported."
 msgstr ""
+"Nur offizielle {bazzite}-{tracks}-Kanäle und -Veröffentlichungsverweise "
+"werden unterstützt."
 
 #: bazzite_portal/maintenance/channel_switch.py:90
 msgid "Resolve the pending deployment before changing update channels."
 msgstr ""
+"Löse das ausstehende Deployment auf bevor der Aktualisierungskanal "
+"gewechselt wird."
 
 #: bazzite_portal/maintenance/channel_switch.py:158
 msgid ""
 "You’re already using this image and channel. Use Update to get the latest "
 "version."
 msgstr ""
+"Dieses Image und dieser Kanal werden bereits verwendet. Verwende Update, um "
+"die neueste Version zu erhalten."
 
 #: bazzite_portal/maintenance/delete_deployments.py:63
+#, fuzzy
 msgid "Resolve the next-boot deployment before deleting saved deployments."
 msgstr ""
+"Löse das für den nächsten Neustart ausgewählte Deployment auf bevor die "
+"gespeicherten Deployments gelöscht werden."
 
 #: bazzite_portal/maintenance/delete_deployments.py:93
 #: bazzite_portal/ui/application.py:4259
 msgid "No saved, pinned deployments can be deleted."
-msgstr ""
+msgstr "Keine gespeicherten, angepinnten Deployments können gelöscht werden."
 
 #: bazzite_portal/maintenance/delete_deployments.py:99
 #: bazzite_portal/maintenance/deployments.py:12
@@ -182,91 +206,96 @@ msgstr ""
 #: bazzite_portal/ui/system_info.py:68 bazzite_portal/ui/system_info.py:71
 #: bazzite_portal/ui/system_info.py:80
 msgid "Unknown"
-msgstr ""
+msgstr "Unbekannt"
 
 #: bazzite_portal/maintenance/image_switch.py:110
 msgid "Resolve the pending deployment before changing images."
-msgstr ""
+msgstr "Löse das ausstehende Deployment auf bevor das Image gewechselt wird."
 
 #: bazzite_portal/maintenance/image_switch.py:117
 #, python-brace-format
 msgid "Only supported official {bazzite} image references can be changed."
 msgstr ""
+"Nur offiziell unterstützte {bazzite}-Imageverweise können geändert werden."
 
 #: bazzite_portal/maintenance/image_switch.py:165
 #, python-brace-format
 msgid "No official {bazzite} images are available."
-msgstr ""
+msgstr "Keine offiziellen {bazzite}-Images sind verfügbar."
 
 #: bazzite_portal/maintenance/image_switch.py:186
 #, python-brace-format
 msgid "No {track} versions are available for {image}."
-msgstr ""
+msgstr "Keine {track}-Versionen sind für {image} verfügbar."
 
 #: bazzite_portal/maintenance/image_switch.py:206
 #, python-brace-format
 msgid "Unsupported {bazzite} image variant."
-msgstr ""
+msgstr "Keine unterstützte {bazzite}-Imagevariante."
 
 #: bazzite_portal/maintenance/image_switch.py:208
 #, python-brace-format
 msgid "Unsupported {bazzite} image version."
-msgstr ""
+msgstr "Keine unterstützte {bazzite}-Imageversion."
 
 #: bazzite_portal/maintenance/image_switch.py:221
 msgid ""
 "This image and version are already running. Use Update to check for a newer "
 "version."
 msgstr ""
+"Dieses Image und diese Version werden bereits verwendet. Verwende Update, um "
+"die neueste Version zu erhalten."
 
 #: bazzite_portal/maintenance/logs.py:147
 msgid "Some operation output was unavailable or omitted."
-msgstr ""
+msgstr "Eine Operationsausgabe war nicht verfügbar oder wurde ausgelassen."
 
 #: bazzite_portal/maintenance/reset_layers.py:46
 #: bazzite_portal/ui/application.py:3612
 msgid "A different deployment is selected for next boot."
-msgstr ""
+msgstr "Ein anderes Deployment ist für den nächsten Neustart ausgewählt."
 
 #: bazzite_portal/maintenance/reset_layers.py:88
 #: bazzite_portal/ui/application.py:3611
 msgid "No requested package layers are present."
-msgstr ""
+msgstr "Keine angeforderten Paket-Layer sind vorhanden."
 
 #: bazzite_portal/services/agent.py:409
 #, python-brace-format
 msgid "{bazzite} update failed"
-msgstr ""
+msgstr "{bazzite}-Aktualisierung fehlgeschlagen"
 
 #: bazzite_portal/services/agent.py:409
 #, python-brace-format
 msgid "{bazzite} rollback failed"
-msgstr ""
+msgstr "{bazzite}-Rollback fehlgeschlagen"
 
 #: bazzite_portal/services/agent.py:409
 msgid "Open Updates to inspect the operation log."
-msgstr ""
+msgstr "Öffne Updates um das Operationsprotokoll zu untersuchen."
 
 #: bazzite_portal/services/agent.py:458 bazzite_portal/ui/application.py:842
 #: bazzite_portal/ui/application.py:1019 bazzite_portal/ui/application.py:5607
 msgid "Open Updates"
-msgstr ""
+msgstr "Öffne Updates"
 
 #: bazzite_portal/services/agent.py:567
 msgid "Another operation request is pending."
-msgstr ""
+msgstr "Eine andere Operationsanforderung ist ausstehend."
 
 #: bazzite_portal/services/agent.py:610
 msgid "Operation request failed."
-msgstr ""
+msgstr "Operationsanforderung fehlgeschlagen."
 
 #: bazzite_portal/services/agent.py:724 bazzite_portal/ui/application.py:2719
 msgid "Could not read update status. Open Logs for details."
 msgstr ""
+"Aktualisierungsstatus konnte nicht gelesen werden. Öffne Protokolle für "
+"Details."
 
 #: bazzite_portal/services/tray.py:295
 msgid "Updating"
-msgstr ""
+msgstr "Aktualisiere"
 
 #: bazzite_portal/services/tray.py:295
 #, python-brace-format
