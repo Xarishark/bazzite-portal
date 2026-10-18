@@ -26,6 +26,7 @@ from bazzite_portal.updates.model import (
 )
 from bazzite_portal.updates import journal as update_journal
 from bazzite_portal.maintenance import cancel_pending as cancel_pending_backend
+from bazzite_portal.maintenance import rollback_cancel as rollback_cancel_backend
 from bazzite_portal.maintenance import reset_layers as reset_layers_backend
 from bazzite_portal.maintenance import cache_clear as cache_clear_backend
 from bazzite_portal.maintenance import channel_switch as channel_switch_backend
@@ -83,11 +84,7 @@ def command_authorization(callback):
 def _gated_systemctl_start(argv):
     if not isinstance(argv, (list, tuple)) or len(argv) != 4 or list(argv[:2]) != ["systemctl", "start"]:
         return False
-    if list(argv[2:]) == ["--no-block", "bazzite-portal-maintenance@rollback.service"]:
-        return True
-    unit = argv[3]
-    return (argv[2] == "--wait" and unit != "bazzite-portal-maintenance@rollback.service"
-            and maintenance_service.valid_unit(unit))
+    return argv[2] == "--wait" and maintenance_service.valid_unit(argv[3])
 
 
 _GATED_CHILD = r'''import os, sys
@@ -481,11 +478,32 @@ def rollback_status():
                     "state": "unavailable", "error": "Rollback service is not installed."}
         if state.get("LoadState") != "loaded" or not state.get("ActiveState"):
             raise RuntimeError("Could not verify rollback service state.")
+        rows = json.loads(command(["systemctl", "list-units", "--all", "--no-pager", "--output=json",
+                                   "bazzite-portal-maintenance@cancel-rollback-*.service"]))
+        if not isinstance(rows, list):
+            raise ValueError("systemd returned malformed rollback-cancellation instance data")
+        units = list(dict.fromkeys(row.get("unit") for row in rows if isinstance(row, dict)
+                                   and isinstance(row.get("unit"), str)
+                                   and re.fullmatch(r"bazzite-portal-maintenance@cancel-rollback-[0-9a-f]{64}\.service",
+                                                    row["unit"])))
+        if len(units) > MAX_CANCEL_INSTANCES:
+            raise ValueError("Too many rollback-cancellation instances to inspect safely")
+        candidates = [(unit, state)]
+        for candidate in units:
+            candidate_state = service_state(candidate)
+            if candidate_state.get("LoadState") == "not-found":
+                continue
+            if candidate_state.get("LoadState") != "loaded" or not candidate_state.get("ActiveState"):
+                raise ValueError("Could not verify rollback-cancellation service state")
+            candidates.append((candidate, candidate_state))
+        active_candidates = [pair for pair in candidates if pair[1].get("ActiveState") in CANCEL_ACTIVE_STATES]
+        unit, state = max(active_candidates or candidates,
+                          key=lambda pair: _unit_timestamp(pair[1], "InactiveExitTimestampMonotonic"))
         active = state.get("ActiveState") in CANCEL_ACTIVE_STATES
         outcome = "running" if active else _cancel_result_state(state)
         error = ""
         if outcome == "failed":
-            error = state.get("Result") or N_("Rollback failed.")
+            error = state.get("Result") or N_('Rollback failed')
             if state.get("ExecMainStatus") not in (None, "", "0"):
                 error += f" (exit {state['ExecMainStatus']})"
         elif outcome == "unknown":
@@ -528,6 +546,44 @@ def _latest_maintenance_invocation(unit, started_at_us):
         if timestamp >= latest[0]:
             latest = (timestamp, invocation.lower())
     return latest[1]
+
+
+def _maintenance_discovery_predates_request(status, record):
+    """Prove a retained inactive invocation is older than the latest request."""
+    unit, invocation = status.get("unit", ""), status.get("invocation", "")
+    requested_at = record.get("requested_at", 0)
+    if (status.get("state") not in {"success", "failed", "unknown"}
+            or not maintenance_logs.read_only_valid_unit(unit)
+            or not isinstance(invocation, str) or not INVOCATION_ID.fullmatch(invocation)
+            or type(requested_at) is not int or requested_at <= 0):
+        return False
+    try:
+        output = command(["journalctl", "-b", "_SYSTEMD_UNIT=" + unit,
+                          "_SYSTEMD_INVOCATION_ID=" + invocation.casefold(),
+                          "--no-pager", "--quiet", "-n", "128", "-o", "json"])
+        older = False
+        for line in output.splitlines():
+            try:
+                entry = json.loads(line)
+                if (not isinstance(entry, dict) or entry.get("_SYSTEMD_UNIT") != unit
+                        or entry.get("_SYSTEMD_INVOCATION_ID", "").casefold() != invocation.casefold()):
+                    continue
+                timestamp = int(entry["__REALTIME_TIMESTAMP"])
+            except (KeyError, TypeError, ValueError, AttributeError):
+                continue
+            if 0 < timestamp < requested_at:
+                older = True
+                break
+        if not older:
+            return False
+        current = service_state(unit)
+        # Inventory and journal reads can race a reused unit. Never hide a live
+        # operation or adopt an invocation different from the one just dated.
+        return (current.get("LoadState") == "loaded"
+                and current.get("ActiveState") in {"inactive", "failed"}
+                and current.get("InvocationID", "").casefold() == invocation.casefold())
+    except (OSError, TypeError, ValueError, RuntimeError, subprocess.TimeoutExpired):
+        return False
 
 
 def _maintenance_request(kind, unit, state="running", invocation="", error="", *, live=False):
@@ -878,7 +934,7 @@ def _channel_service_is_running():
     if _delete_service_is_running():
         raise RuntimeError(N_("Saved-deployment deletion is running. Wait for it to finish."))
     if _image_switch_service_is_running():
-        raise RuntimeError(N_("Bazzite is changing images. Wait for it to finish."))
+        raise RuntimeError(C_('{bazzite} is changing images. Wait for it to finish.', bazzite='Bazzite'))
     return False
 
 
@@ -939,6 +995,30 @@ def latest_journal_invocation(loaded_units):
     if read_succeeded or not loaded_units:
         return "", "", ""
     return "", "", "Could not inspect the UUPD journal. " + "; ".join(errors)
+
+
+def _maintenance_job_is_queued(unit):
+    """Inspect the typed systemd job table, never human-formatted output."""
+    text = command([
+        "busctl", "--system", "--json=short", "call", "org.freedesktop.systemd1",
+        "/org/freedesktop/systemd1", "org.freedesktop.systemd1.Manager", "ListJobs",
+    ])
+    if not isinstance(text, str) or len(text.encode("utf-8")) > 1024 * 1024:
+        raise ValueError("Could not verify systemd manager jobs.")
+    result = json.loads(text)
+    if (not isinstance(result, dict) or result.get("type") != "a(usssoo)"
+            or not isinstance(result.get("data"), list) or len(result["data"]) != 1
+            or not isinstance(result["data"][0], list)):
+        raise ValueError("Could not verify systemd manager jobs.")
+    jobs = result["data"][0]
+    for row in jobs:
+        if (not isinstance(row, list) or len(row) != 6
+                or type(row[0]) is not int or not 0 < row[0] <= 0xffffffff
+                or any(not isinstance(value, str) or not value for value in row[1:])
+                or any(not re.fullmatch(r"/(?:[A-Za-z0-9_]+(?:/[A-Za-z0-9_]+)*)?", value)
+                       for value in row[4:])):
+            raise ValueError("Could not verify systemd manager jobs.")
+    return any(row[1] == unit for row in jobs)
 
 
 class Monitor:
@@ -1015,8 +1095,28 @@ class Monitor:
         if not record:
             return status
         unit = status.get("unit", "")
+        if (unit and unit != record["unit"] and status.get("available") is True
+                and _maintenance_discovery_predates_request(status, record)):
+            # systemd retains failed instances longer than successful ones. An
+            # old failure must not replace a newer request whose unit was GC'd.
+            # Refresh the record after the blocking reads so completion or a
+            # still newer request cannot be replaced with its earlier state.
+            latest_record = _maintenance_request_status(kind)
+            if (latest_record is None
+                    or latest_record.get("requested_at", 0) < record.get("requested_at", 0)):
+                return status
+            record = latest_record
+            # Continue normal reconciliation with only stale discovery removed.
+            status = {**status, "unit": "", "invocation": "", "state": "idle", "error": ""}
+            unit = ""
         if (record.get("state") == "running" and status.get("available") is True
-                and status.get("state") == "idle" and not unit):
+                and status.get("state") == "idle"
+                and (not unit or (kind == "rollback" and unit == "bazzite-portal-maintenance@rollback.service"
+                                  and (record["unit"] == unit or re.fullmatch(
+                                      r"bazzite-portal-maintenance@cancel-rollback-[0-9a-f]{64}\.service",
+                                      record["unit"])) and not status.get("invocation")))):
+            # Fixed rollback units remain discoverable after their invocation
+            # has been collected, unlike the dynamic helper instances.
             # The request thread can be waiting for PolicyKit while systemd has
             # not yet created the unit or queued a job. That is not evidence of
             # unit GC until the in-process start call has returned.
@@ -1026,15 +1126,7 @@ class Monitor:
             # completed service. Check the manager job table before resolving
             # the stale running record; if a start is still queued, keep it running.
             try:
-                jobs_text = command(["systemctl", "list-jobs", "--no-pager", "--output=json"])
-                if not isinstance(jobs_text, str):
-                    return self._maintenance_request_status_snapshot(status, record)
-                jobs = json.loads(jobs_text.strip() or "[]")
-                if not isinstance(jobs, list) or any(
-                        not isinstance(job, dict) or not isinstance(job.get("unit"), str)
-                        for job in jobs):
-                    return self._maintenance_request_status_snapshot(status, record)
-                if any(job["unit"] == record["unit"] for job in jobs):
+                if _maintenance_job_is_queued(record["unit"]):
                     return self._maintenance_request_status_snapshot(status, record)
             except (OSError, TypeError, ValueError, RuntimeError, subprocess.TimeoutExpired):
                 return self._maintenance_request_status_snapshot(status, record)
@@ -1049,7 +1141,26 @@ class Monitor:
             settled = _maintenance_request_status(kind)
             if settled is None:
                 return status
-            return self._maintenance_request_status_snapshot(status, settled)
+            merged = self._maintenance_request_status_snapshot(status, settled)
+            merged["_execution_idle"] = True
+            return merged
+        if (record.get("state") == "unknown" and status.get("available") is True
+                and record.get("error", "").startswith(
+                    "The operation outcome could not be verified after systemd collected the service.")
+                and status.get("state") == "idle"
+                and (not unit or (kind == "rollback" and unit == "bazzite-portal-maintenance@rollback.service"
+                                  and (record["unit"] == unit or re.fullmatch(
+                                      r"bazzite-portal-maintenance@cancel-rollback-[0-9a-f]{64}\.service",
+                                      record["unit"])) and not status.get("invocation")))):
+            merged = self._maintenance_request_status_snapshot(status, record)
+            # Unknown completion is historical, not proof of a live operation.
+            # Recheck execution on every refresh before unblocking other actions.
+            try:
+                merged["_execution_idle"] = (not _maintenance_request_is_live(kind, record)
+                                             and not _maintenance_job_is_queued(record["unit"]))
+            except (OSError, TypeError, ValueError, RuntimeError, subprocess.TimeoutExpired):
+                pass
+            return merged
         if (record.get("state") == "unknown" and status.get("available") is True
             and not record.get("error", "").startswith(
                 "The operation outcome could not be verified after systemd collected the service.")
@@ -1060,15 +1171,7 @@ class Monitor:
             # reports that no operation is running; it makes no claim about
             # whether the previous operation completed.
             try:
-                jobs_text = command(["systemctl", "list-jobs", "--no-pager", "--output=json"])
-                if not isinstance(jobs_text, str):
-                    return self._maintenance_request_status_snapshot(status, record)
-                jobs = json.loads(jobs_text.strip() or "[]")
-                if not isinstance(jobs, list) or any(
-                        not isinstance(job, dict) or not isinstance(job.get("unit"), str)
-                        for job in jobs):
-                    return self._maintenance_request_status_snapshot(status, record)
-                if any(job["unit"] == record["unit"] for job in jobs):
+                if _maintenance_job_is_queued(record["unit"]):
                     return self._maintenance_request_status_snapshot(status, record)
             except (OSError, TypeError, ValueError, RuntimeError, subprocess.TimeoutExpired):
                 return self._maintenance_request_status_snapshot(status, record)
@@ -1319,13 +1422,10 @@ class Monitor:
                 if self._journal_failed:
                     error = (error + "\n" + self._journal_failed).strip()
                 modules = module_steps(plan, self._modules.values(), result if run else "idle")
-                maintenance_busy = (running or cancel["state"] == "running" or layers["state"] == "running"
-                                    or cache["state"] == "running" or cancel["state"] == "unknown"
-                                    or layers["state"] == "unknown" or cache["state"] == "unknown"
-                                    or channel["state"] == "running" or channel["state"] == "unknown"
-                                    or image["state"] == "running" or image["state"] == "unknown"
-                                    or delete["state"] == "running" or delete["state"] == "unknown"
-                                    or rollback["state"] == "running" or rollback["state"] == "unknown")
+                maintenance_busy = running or any(
+                    item["state"] == "running"
+                    or item["state"] == "unknown" and not item.get("_execution_idle")
+                    for item in (cancel, layers, cache, channel, image, delete, rollback))
                 cache_reason = cache_target.get("reason", "") or (cache.get("error", "") if not cache["available"] else "")
                 if maintenance_busy:
                     cache_reason = N_("Another system operation is running or its state could not be verified.")
@@ -1756,7 +1856,7 @@ class Monitor:
 
 def start_operation(operation):
     if _channel_service_is_running():
-        raise RuntimeError(N_("Bazzite is changing update channels. Wait for it to finish."))
+        raise RuntimeError(C_('{bazzite} is changing update channels. Wait for it to finish.', bazzite='Bazzite'))
     if _cancel_service_is_running():
         raise RuntimeError(N_("Pending-deployment cancellation is running. Wait for it to finish."))
     if _layer_service_is_running():
@@ -1768,26 +1868,16 @@ def start_operation(operation):
     active = [unit for unit in SERVICES if service_state(unit).get("ActiveState") in ("active", "activating", "deactivating", "reloading")]
     if active:
         if operation == "update" and any(unit.startswith("uupd") for unit in active):
-            return N_("Attached to the running update.")
+            return "Attached to the running update."
         raise RuntimeError(N_("Another system operation is running. Wait for it to finish."))
     if operation in ("update", "rollback"):
         _require_no_active_rpm_ostree_transaction()
     unit = "uupd-manual.service" if operation == "update" else "bazzite-portal-maintenance@rollback.service"
     if operation == "rollback":
-        started_at_us = time.time_ns() // 1_000
-        record = _maintenance_request("rollback", unit, live=True)
-        try:
-            command(["systemctl", "start", "--no-block", unit])
-        except Exception as error:
-            invocation = _latest_maintenance_invocation(unit, started_at_us)
-            state = "failed" if invocation or _is_proven_prestart_rejection(error, unit) else "unknown"
-            _maintenance_request("rollback", unit, state, invocation, str(error))
-            raise
-        finally:
-            _finish_live_maintenance_request("rollback", record["generation"])
+        _start_maintenance_unit("rollback", unit)
     else:
         command(["systemctl", "start", "--no-block", unit])
-    return N_("Operation requested.")
+    return "Operation requested."
 
 
 def _require_no_active_rpm_ostree_transaction():
@@ -1803,7 +1893,7 @@ def _require_no_active_rpm_ostree_transaction():
             or not deployments_backend.summarize_deployments(data).get("known")):
         raise RuntimeError("Could not verify RPM-OSTree transaction state.")
     if cancel_pending_backend._has_transaction(data["transaction"]):
-        raise RuntimeError(N_("An RPM-OSTree transaction is active. Wait for it to finish."))
+        raise RuntimeError(C_('An {rpm_ostree} transaction is active. Wait for it to finish.', rpm_ostree='RPM-OSTree'))
 
 
 def _cancel_service_is_running():
@@ -1817,6 +1907,25 @@ def _cache_service_is_running():
     return status["state"] == "running"
 
 
+def start_cancel_rollback(token):
+    """Restore the running deployment as default without deleting any version."""
+    if not isinstance(token, str) or not rollback_cancel_backend.TOKEN_PATTERN.fullmatch(token):
+        raise ValueError("Invalid rollback cancellation token.")
+    data = json.loads(command(["rpm-ostree", "status", "--json"]))
+    selected = rollback_cancel_backend.target(data)
+    if not selected["available"] or selected["token"] != token:
+        raise RuntimeError(selected["reason"] or "The scheduled rollback changed after confirmation.")
+    if (_cancel_service_is_running() or _layer_service_is_running()
+            or _cache_service_is_running() or _channel_service_is_running()
+            or _image_switch_service_is_running() or _delete_service_is_running()):
+        raise RuntimeError(N_("Another maintenance operation is running."))
+    active = _managed_operation_active()
+    if active:
+        raise RuntimeError("Another system operation is running: {active}.".format(active=active))
+    _start_maintenance_unit("rollback", f"bazzite-portal-maintenance@cancel-rollback-{token}.service")
+    return "Rollback canceled."
+
+
 def start_cancel_pending(token):
     if not isinstance(token, str) or not cancel_pending_backend.TOKEN_PATTERN.fullmatch(token):
         raise ValueError("Invalid cancellation token.")
@@ -1827,7 +1936,7 @@ def start_cancel_pending(token):
     if not pending["available"] or pending["token"] != token:
         raise RuntimeError(pending["reason"] or N_("The pending deployment changed after confirmation."))
     if _channel_service_is_running():
-        raise RuntimeError(N_("Bazzite is changing update channels. Wait for it to finish."))
+        raise RuntimeError(C_('{bazzite} is changing update channels. Wait for it to finish.', bazzite='Bazzite'))
     if _cancel_service_is_running():
         raise RuntimeError(N_("Pending-deployment cancellation is already running."))
     if _layer_service_is_running():
@@ -1839,7 +1948,7 @@ def start_cancel_pending(token):
         raise RuntimeError("Another system operation is running: {active}.".format(active=active))
     unit = f"bazzite-portal-maintenance@cancel-pending-{token}.service"
     _start_maintenance_unit("cancel", unit)
-    return N_("Pending-deployment cancellation completed.")
+    return "Pending-deployment cancellation completed."
 
 
 def _layer_service_is_running():
@@ -1859,7 +1968,7 @@ def start_remove_layers(token):
     if not selected["available"] or selected["token"] != token:
         raise RuntimeError(selected["reason"] or N_("The requested package list changed after confirmation."))
     if _channel_service_is_running():
-        raise RuntimeError(N_("Bazzite is changing update channels. Wait for it to finish."))
+        raise RuntimeError(C_('{bazzite} is changing update channels. Wait for it to finish.', bazzite='Bazzite'))
     if _layer_service_is_running() or _cancel_service_is_running():
         raise RuntimeError(N_("A package-layer or pending-deployment operation is already running."))
     if _cache_service_is_running():
@@ -1868,7 +1977,6 @@ def start_remove_layers(token):
     if active:
         raise RuntimeError("Another system operation is running: {active}.".format(active=active))
     _start_maintenance_unit("layers", f"bazzite-portal-maintenance@reset-layers-{token}.service")
-    return N_("Requested package-layer removal completed.")
 
 
 def start_remove_selected_layers(token, packages):
@@ -1888,7 +1996,7 @@ def start_remove_selected_layers(token, packages):
     if any(package not in confirmed["packages"] for package in packages):
         raise ValueError("Every selected package must be in the confirmed request list.")
     if _channel_service_is_running():
-        raise RuntimeError(N_("Bazzite is changing update channels. Wait for it to finish."))
+        raise RuntimeError(C_('{bazzite} is changing update channels. Wait for it to finish.', bazzite='Bazzite'))
     if status["state"] == "running" or _cancel_service_is_running():
         raise RuntimeError(N_("A package-layer or pending-deployment operation is already running."))
     if _cache_service_is_running():
@@ -1900,7 +2008,6 @@ def start_remove_selected_layers(token, packages):
     bitmap = sum(1 << indexes[package] for package in packages)
     instance = f"{token}-{bitmap:064x}"
     _start_maintenance_unit("layers", f"bazzite-portal-maintenance@remove-selected-layers-{instance}.service")
-    return N_("Selected requested package layers removed.")
 
 
 def start_clear_download_cache(token):
@@ -1913,14 +2020,14 @@ def start_clear_download_cache(token):
     if not selected["available"] or selected["token"] != token:
         raise RuntimeError(selected["reason"] or N_("The deployments or imported image references changed after confirmation."))
     if _channel_service_is_running():
-        raise RuntimeError(N_("Bazzite is changing update channels. Wait for it to finish."))
+        raise RuntimeError(C_('{bazzite} is changing update channels. Wait for it to finish.', bazzite='Bazzite'))
     if status["state"] == "running" or _cancel_service_is_running() or _layer_service_is_running():
-        raise RuntimeError(N_("Another maintenance operation is already running."))
+        raise RuntimeError(N_('Another maintenance operation is running.'))
     active = _managed_operation_active()
     if active:
         raise RuntimeError("Another system operation is running: {active}.".format(active=active))
     _start_maintenance_unit("cache", f"bazzite-portal-maintenance@clear-download-cache-{token}.service")
-    return N_("Download-cache cleanup completed. OSTree may retain shared objects used by other images.")
+    return "Download-cache cleanup completed. OSTree may retain shared objects used by other images."
 
 
 def download_channel_target():
@@ -1941,24 +2048,24 @@ def start_channel_switch(token):
     if _delete_service_is_running():
         raise RuntimeError(N_("Saved-deployment deletion is running. Wait for it to finish."))
     if _image_switch_service_is_running():
-        raise RuntimeError(N_("Bazzite is changing images. Wait for it to finish."))
+        raise RuntimeError(C_('{bazzite} is changing images. Wait for it to finish.', bazzite='Bazzite'))
     if not isinstance(token, str) or not channel_switch_backend.TOKEN_PATTERN.fullmatch(token):
         raise ValueError("Invalid channel-switch confirmation token.")
     status = channel_status()
     if status.get("state") == "unknown":
         raise RuntimeError(status.get("error") or "The previous channel-switch result could not be verified.")
     if status.get("state") == "running":
-        raise RuntimeError(N_('A channel rebase is already running.'))
+        raise RuntimeError(N_('A release channel rebase is already running.'))
     if not status["available"] or status["token"] != token:
         raise RuntimeError(status["reason"] or N_("The running deployment changed after confirmation."))
     if (_cancel_service_is_running() or _layer_service_is_running() or _cache_service_is_running()):
-        raise RuntimeError(N_("Another maintenance operation is already running."))
+        raise RuntimeError(N_('Another maintenance operation is running.'))
     active = _managed_operation_active()
     if active:
         raise RuntimeError("Another system operation is running: {active}.".format(active=active))
     unit = f"bazzite-portal-maintenance@channel-switch-{token}.service"
     _start_maintenance_unit("channel", unit)
-    return C_('Bazzite is rebasing to the {track} channel. Restart to apply the staged deployment.', track=status["target_track"])
+    return f'Bazzite is rebasing to the {status["target_track"]} channel. Restart to apply the staged deployment.'
 
 
 def start_image_switch(token, image, tag):
@@ -1984,13 +2091,13 @@ def start_image_switch(token, image, tag):
     if _channel_service_is_running():
         raise RuntimeError(N_("Another deployment operation is already running."))
     if _cancel_service_is_running() or _layer_service_is_running() or _cache_service_is_running():
-        raise RuntimeError(N_("Another maintenance operation is already running."))
+        raise RuntimeError(N_('Another maintenance operation is running.'))
     active = _managed_operation_active()
     if active:
         raise RuntimeError("Another system operation is running: {active}.".format(active=active))
     unit = f"bazzite-portal-maintenance@image-switch-{request['instance']}.service"
     _start_maintenance_unit("image", unit)
-    return C_('Bazzite is rebasing to {image}:{tag}. Restart to apply the staged deployment.', image=image, tag=tag)
+    return f'Bazzite is rebasing to {image}:{tag}. Restart to apply the staged deployment.'
 
 
 def start_delete_deployment(token):
@@ -2008,12 +2115,12 @@ def start_delete_deployment(token):
     if active:
         raise RuntimeError("Another system operation is running: {active}.".format(active=active))
     _start_maintenance_unit("delete", f"bazzite-portal-maintenance@delete-deployment-{token}.service")
-    return N_("Pinned deployment deleted.")
+    return N_('Pinned deployment deleted')
 
 
 def restart():
     if _channel_service_is_running():
-        raise RuntimeError(N_("Bazzite is changing update channels. Wait for it to finish."))
+        raise RuntimeError(C_('{bazzite} is changing update channels. Wait for it to finish.', bazzite='Bazzite'))
     if _cancel_service_is_running():
         raise RuntimeError(N_("Pending-deployment cancellation is running. Wait for it to finish."))
     if _layer_service_is_running():

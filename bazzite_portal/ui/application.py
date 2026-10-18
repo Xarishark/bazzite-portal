@@ -6,7 +6,6 @@ import os
 from pathlib import Path
 import subprocess
 import sys
-from types import SimpleNamespace
 import gi
 gi.require_version("Gtk", "4.0")
 gi.require_version("Gdk", "4.0")
@@ -19,16 +18,13 @@ from bazzite_portal.integration import community
 from bazzite_portal.artwork.appearance import gaming_mode
 from bazzite_portal.integration import announcements
 from bazzite_portal.integration import favicons
-from bazzite_portal.maintenance import deployments
 from bazzite_portal.integration import diagnostics
 from bazzite_portal.integration import steam as steam_reset
 from bazzite_portal.integration import steam as steam_shortcut
 from bazzite_portal.ui import system_info as system_presentation
-from bazzite_portal.maintenance import reset_layers
-from bazzite_portal.maintenance import cancel_pending
 from bazzite_portal.artwork.icons import icon as app_icon
 from bazzite_portal.input.prompts import set_prompt_visible
-from bazzite_portal.maintenance import image_switch
+from bazzite_portal.maintenance import image_switch, rollback_cancel
 from bazzite_portal.input.controller import (
     SDLGamepad,
     ControllerDriver,
@@ -36,19 +32,18 @@ from bazzite_portal.input.controller import (
     controller_button_glyph,
 )
 from bazzite_portal.core.storage import Store
-from bazzite_portal.core.i18n import N_, _, ngettext, format_message
+from bazzite_portal.core.i18n import C_, N_, _, channel_name, format_message
 from bazzite_portal.core.errors import error_text, public_error
 from bazzite_portal.updates import monitor as system
-from bazzite_portal.updates.monitor import system_information
 from bazzite_portal.updates.model import Snapshot
 from bazzite_portal.updates.release_notes import fetch_release_notes
 
 NOTIFICATION_THEMES_ENABLED = True
 log = logging.getLogger(__name__)
-PAGES = (N_("Home"), N_("Tools"), N_("Updates"), N_("System"), N_("Management"), N_("Troubleshooting"), N_("Community"), N_("Announcements"), N_("Settings"))
+PAGES = (N_("Home"), N_("Tools"), N_("Updates"), N_("System"), "Management", N_("Troubleshooting"), N_("Community"), N_("Announcements"), "Settings")
 PAGE_LABELS = {
-    "Home": _("Bazzite Portal"), "Tools": _("Tools"), "Updates": _("Updates"),
-    "System": _("System information"), "Management": _("System management"),
+    "Home": 'Bazzite Portal', "Tools": _("Tools"), "Updates": _("Updates"),
+    "System": _("System information"), "Management": _("System Management"),
     "Troubleshooting": _("Troubleshooting"), "Community": _("Community"),
     "Announcements": _("Announcements"), "Settings": _("Options"),
 }
@@ -69,7 +64,7 @@ def label(text="", css=None, selectable=False, *, translate=True):
 
 def button(text, callback, icon=None, *, translate=True):
     if translate:
-        text = _(text)
+        text = format_message(text)
     widget = Gtk.Button(label=text)
     widget.controller_label = text
     if icon:
@@ -171,7 +166,7 @@ class ControllerLegend(Gtk.Box):
     def set_controller_content(self, text, prompts, style="auto", *, scrolling=False):
         # Share individual action labels between the visible and accessible legend.
         parts = [("↑↓ " + (_("Scroll") if scrolling else _("Move")))] if text else []
-        parts.extend(f"{controller_button_glyph(command, labels)} {_(title)}"
+        parts.extend(f"{controller_button_glyph(command, labels)} {format_message(title)}"
                      for command, title, labels in prompts)
         self._text = " · ".join(parts)
         while (child := self.get_first_child()) is not None:
@@ -184,7 +179,7 @@ class ControllerLegend(Gtk.Box):
             if prompts:
                 self.append(Gtk.Label(label="·"))
         for index, (command, title, labels) in enumerate(prompts):
-            title = _(title)
+            title = format_message(title)
             self.append(make_button_prompt(command, labels, _('{title} · controller button').format(title=title), style))
             title_label = Gtk.Label(label=title)
             title_label.add_css_class("dim-label")
@@ -376,13 +371,14 @@ def controller_focused_target(root):
     return None
 
 
-def content_page(title, description=None):
+def content_page(title=None, description=None):
     box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=20)
     box.set_margin_top(28)
     box.set_margin_bottom(28)
     box.set_margin_start(24)
     box.set_margin_end(24)
-    box.append(label(title, "title-1"))
+    if title is not None:
+        box.append(label(title, "title-1"))
     if description is not None:
         box.append(label(description, "dim-label"))
     clamp = Adw.Clamp(maximum_size=760, tightening_threshold=640)
@@ -394,7 +390,7 @@ def content_page(title, description=None):
 
 def group(title, description="", *, translate=True):
     if translate:
-        title, description = _(title), _(description)
+        title, description = format_message(title), format_message(description)
     return Adw.PreferencesGroup(title=title, description=description)
 
 
@@ -438,12 +434,11 @@ def system_summary(info):
 
 
 class Window(Adw.ApplicationWindow):
-    def __init__(self, app, config_path, preview=False):
-        super().__init__(application=app, title=_("Bazzite Portal"), default_width=1080, default_height=740)
-        self.preview = preview
+    def __init__(self, app, config_path):
+        super().__init__(application=app, title='Bazzite Portal', default_width=1080, default_height=740)
         self.config_path = Path(config_path)
         self.status_received = False
-        self.store = Store(base=app.preview_base) if preview else Store()
+        self.store = Store()
         self._update_console_open = bool(self.store.preferences().get("show_logs", False))
         self.executor = concurrent.futures.ThreadPoolExecutor(max_workers=4, thread_name_prefix="bazzite-portal")
         self.portal_status_executor = concurrent.futures.ThreadPoolExecutor(
@@ -462,9 +457,6 @@ class Window(Adw.ApplicationWindow):
         self.controller_focus_style = install_controller_focus_style()
         self.closing = False
         self.log_text = ""
-        self._preview_timer = None
-        self._preview_step = -1
-        self._preview_log_lines = []
         self.client = None
         self._gaming_auth = None
         self._gaming_auth_dialog = None
@@ -476,7 +468,7 @@ class Window(Adw.ApplicationWindow):
         self.notices.set_child(toolbar)
         header = Adw.HeaderBar()
         self.header = header
-        self.header_title = Adw.WindowTitle(title=_("Bazzite Portal"), subtitle="Preview · commands disabled" if preview else "")
+        self.header_title = Adw.WindowTitle(title='Bazzite Portal')
         header.set_title_widget(self.header_title)
         self.back_button = Gtk.Button()
         self.back_button.set_icon_name("go-previous-symbolic")
@@ -520,22 +512,19 @@ class Window(Adw.ApplicationWindow):
         toolbar.add_bottom_bar(self.legend)
         self._install_input_mode_controllers(self)
         self.connect("close-request", self._close)
-        if not preview:
-            from bazzite_portal.services.agent import Client
-            self.client = Client(self._snapshot_changed, self.toast)
-            self.connect("map", lambda *_: self.client.set_visible(True) if not self.closing else None)
-            self.connect("unmap", lambda *_: self.client.set_visible(False) if not self.closing else None)
-            if gaming_mode():
-                try:
-                    from bazzite_portal.services.gaming_auth import GamingAuthServer
-                    self._gaming_auth = GamingAuthServer(
-                        self.client.connection, self._gaming_auth_challenge,
-                        on_ready=self._gaming_auth_ready,
-                        on_error=self.toast)
-                except Exception:
-                    # Keep the ordinary desktop path untouched. Gaming Mode
-                    # reports the missing authentication facility to the user.
-                    self.toast(N_("Gaming-mode authentication is unavailable."))
+        from bazzite_portal.services.agent import Client
+        self.client = Client(self._snapshot_changed, self.toast)
+        self.connect("map", lambda *_: self.client.set_visible(True) if not self.closing else None)
+        self.connect("unmap", lambda *_: self.client.set_visible(False) if not self.closing else None)
+        if gaming_mode():
+            try:
+                from bazzite_portal.services.gaming_auth import GamingAuthServer
+                self._gaming_auth = GamingAuthServer(
+                    self.client.connection, self._gaming_auth_challenge,
+                    on_ready=self._gaming_auth_ready,
+                    on_error=self.toast)
+            except Exception:
+                self.toast(N_("Gaming-mode authentication is unavailable."))
         try:
             backend = SDLGamepad()
             self.controller = ControllerDriver(backend, self._controller_context, self._dispatch,
@@ -626,10 +615,9 @@ class Window(Adw.ApplicationWindow):
         if (not self.closing and dialog is self._gaming_auth_dialog
                 and dialog.get_mapped() and self._gaming_auth_entry is not None):
             self._gaming_auth_entry.grab_focus()
-            if not self.preview:
-                self.work(lambda: subprocess.Popen(
-                    ["steam", "-ifrunning", "steam://open/keyboard"],
-                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL), lambda _: None)
+            self.work(lambda: subprocess.Popen(
+                ["steam", "-ifrunning", "steam://open/keyboard"],
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL), lambda _: None)
         return GLib.SOURCE_REMOVE
 
     def _submit_gaming_auth(self, *_):
@@ -920,7 +908,7 @@ class Window(Adw.ApplicationWindow):
         if name == "Announcements" and not self.announcements_available:
             return
         previous_page = self.stack.get_visible_child_name()
-        if (previous_page == N_("Updates") and name != N_("Updates") and not self.preview
+        if (previous_page == N_("Updates") and name != N_("Updates")
                 and self.snapshot.run and not self.snapshot.running
                 and self.snapshot.result in {"success", "failed"}):
             self._dismissed_result_run = self.snapshot.run
@@ -952,7 +940,7 @@ class Window(Adw.ApplicationWindow):
         for prefix in ("system", "management"):
             controls = getattr(self, prefix + "_refresh_header", None)
             if controls is not None:
-                controls.set_visible(name == (N_("System") if prefix == "system" else N_("Management")))
+                controls.set_visible(name == (N_("System") if prefix == "system" else "Management"))
         if hasattr(self, "tools_titlebar_search"):
             self.tools_titlebar_search.set_visible(name == N_("Tools"))
         self._render_home_activity()
@@ -960,13 +948,13 @@ class Window(Adw.ApplicationWindow):
         self._sync_header_back()
         page_title = PAGE_LABELS.get(name, "")
         self.header_title.set_title(format_message(page_title))
-        if name in {N_("System"), N_("Management")}:
-            self.header_title.set_title(format_message(_("System information") if name == N_("System") else _("System management")))
+        if name in {N_("System"), "Management"}:
+            self.header_title.set_title(format_message(_("System information") if name == N_("System") else _("System Management")))
             if not self.system_has_snapshot:
                 # Reveal the page before scheduling even the loading-state changes.
                 def load_first_visit():
                     if (not self.closing and not self.system_has_snapshot and
-                            self.stack.get_visible_child_name() in {N_("System"), N_("Management")}):
+                            self.stack.get_visible_child_name() in {N_("System"), "Management"}):
                         self._refresh_system()
                     return GLib.SOURCE_REMOVE
                 GLib.idle_add(load_first_visit)
@@ -999,13 +987,10 @@ class Window(Adw.ApplicationWindow):
             GLib.idle_add(focus_page_start)
 
     def _build_home(self):
-        page, box = content_page(N_("Your Bazzite"), N_("System updates and the tools you use most, in one place."))
-        box.remove(box.get_first_child())
-        subtitle = box.get_first_child()
-        box.remove(subtitle)
+        page, box = content_page()
         heading = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
         self.home_options_box = heading
-        self.options_button = button(N_("Options"), lambda: self.show_page(N_("Settings")), "preferences-system-symbolic")
+        self.options_button = button(N_("Options"), lambda: self.show_page("Settings"), "preferences-system-symbolic")
         self.options_button.controller_exclude_focus = True
         self.options_button.set_focusable(True)
         self.options_button.set_tooltip_text(_("Options") + " · Y")
@@ -1016,7 +1001,7 @@ class Window(Adw.ApplicationWindow):
         heading.append(self.options_button)
         self.header.pack_end(heading)
         updates = group("")
-        self.home_status = Adw.ActionRow(title=_("Update Bazzite and Apps"), subtitle=_("Update your system and installed apps."))
+        self.home_status = Adw.ActionRow(title=_('Update {bazzite} and Apps').format(bazzite='Bazzite'), subtitle=_("Update your system and installed apps."))
         self.home_status.set_use_markup(False)
         self.home_status.set_subtitle_lines(2)
         self.home_status.controller_exclude_focus = True
@@ -1042,18 +1027,18 @@ class Window(Adw.ApplicationWindow):
         self.announcements_available = False
         for title, destination, description in (
             (N_("Tools"), N_("Tools"), N_("Browse setup, fixes, and utilities from the system Portal.")),
-            (N_("System information"), N_("System"), N_("View deployments, package layers and RPM-OSTree status.")),
-            (N_("System management"), N_("Management"), N_("Cancel a pending deployment, remove layered apps or recover your system.")),
-            (N_("Troubleshooting"), N_("Troubleshooting"), N_("Report a problem, collect system logs, or reset Steam.")),
-            (N_("Community"), N_("Community"), N_("Bazzite documentation, website, and community links.")),
-            (N_("Announcements"), N_("Announcements"), N_("View Bazzite release and project announcements.")),
+            (N_("System information"), N_("System"), C_('View deployments, package layers and {rpm_ostree} status.', rpm_ostree='RPM-OSTree')),
+            (N_("System Management"), "Management", N_("Cancel a pending deployment, remove layered apps or recover your system.")),
+            (N_("Troubleshooting"), N_("Troubleshooting"), C_('Report a problem, collect system logs, or reset {steam}.', steam='Steam')),
+            (N_("Community"), N_("Community"), C_('{bazzite} documentation, website, and community links.', bazzite='Bazzite')),
+            (N_("Announcements"), N_("Announcements"), C_('View {bazzite} release and project announcements.', bazzite='Bazzite')),
         ):
-            row = Adw.ActionRow(title=_(title), subtitle=_(description))
+            row = Adw.ActionRow(title=format_message(title), subtitle=format_message(description))
             row.controller_focus_row = True
             row.set_activatable(True)
             missing_or_invalid = destination == "Tools" and bool(self.config_error)
             if destination == "Announcements":
-                missing_or_invalid = not announcements.source_path(self.config_path, preview=self.preview).is_file()
+                missing_or_invalid = not announcements.source_path(self.config_path).is_file()
             if missing_or_invalid:
                 row.set_sensitive(False)
                 row.set_activatable(False)
@@ -1074,14 +1059,14 @@ class Window(Adw.ApplicationWindow):
         self._render_home_activity()
 
     def _build_troubleshooting(self):
-        page, box = content_page(N_("Troubleshooting"), N_("Get help, collect diagnostic logs, or repair the Steam client."))
+        page, box = content_page(N_("Troubleshooting"), C_('Get help, collect diagnostic logs, or repair the {steam} client.', steam='Steam'))
         box.remove(box.get_first_child())
         heading = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
         heading.append(label(N_("Troubleshooting"), "title-1"))
         heading.append(Gtk.Box(hexpand=True))
         box.prepend(heading)
         group_box = group("")
-        self.report_problem_button = Adw.ActionRow(title=_("Report a problem"), subtitle=_("Collect relevant logs and open a Bazzite GitHub issue."))
+        self.report_problem_button = Adw.ActionRow(title=_("Report a problem"), subtitle=_('Collect relevant logs and open a {bazzite} {github} issue.').format(bazzite='Bazzite', github='GitHub'))
         self.report_problem_button.set_activatable(True)
         self.report_problem_button.connect("activated", lambda *_: self._begin_report_flow())
         self.report_problem_button.add_css_class("destructive-action")
@@ -1096,7 +1081,7 @@ class Window(Adw.ApplicationWindow):
         group_box.add(self.collect_system_logs_button)
         box.append(group_box)
         group_box = group("")
-        self.reset_steam_button = Adw.ActionRow(title=_("Reset Steam"), subtitle=_("Reset the Steam client without removing your games."))
+        self.reset_steam_button = Adw.ActionRow(title=_('Reset {steam}').format(steam='Steam'), subtitle=_('Reset the {steam} client without removing your games.').format(steam='Steam'))
         self.reset_steam_button.set_activatable(True)
         self.reset_steam_button.connect("activated", lambda *_: self._begin_steam_reset())
         self.reset_steam_button.controller_focus_row = True
@@ -1155,18 +1140,9 @@ class Window(Adw.ApplicationWindow):
         self._report_generation += 1
         generation = self._report_generation
         self._report_collecting_dialog = None
-        if self.preview:
-            self._report_collection_finished(generation, SimpleNamespace(
-                directory=Path("/tmp/bazzite-report-preview"),
-                hardware="Preview hardware summary (collection disabled)",
-                files=("bazzite-installation.txt", "current-boot.txt",
-                       "previous-boot.txt", "kernel-current-boot.txt", "steam-console.txt"),
-                warnings=("Preview only: no files were collected.",),
-            ), "", None, None)
-            return
         self._show_report_collecting(generation)
         desktop = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DESKTOP)
-        desktop = Path(desktop) if desktop else Path.home() / N_("Desktop")
+        desktop = Path(desktop) if desktop else Path.home() / "Desktop"
         self._report_collecting_dialog = self.modal
 
         def collect_and_prepare_issue():
@@ -1206,16 +1182,9 @@ class Window(Adw.ApplicationWindow):
         generation = self._report_generation
         self._set_troubleshooting_busy(True)
         self._report_collecting_dialog = None
-        if self.preview:
-            report = SimpleNamespace(
-                directory=Path("/tmp/bazzite-system-logs-preview"),
-                hardware="Preview hardware summary (collection disabled)",
-                files=(), warnings=("Preview only: no files were collected.",))
-            self._system_logs_collection_finished(generation, report, None)
-            return
         self._show_report_collecting(generation, N_("Collecting system logs"))
         desktop = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DESKTOP)
-        desktop = Path(desktop) if desktop else Path.home() / N_("Desktop")
+        desktop = Path(desktop) if desktop else Path.home() / "Desktop"
         self._report_collecting_dialog = self.modal
         future = self.executor.submit(diagnostics.collect_system_logs, desktop)
 
@@ -1286,12 +1255,12 @@ class Window(Adw.ApplicationWindow):
             return
         self._report_restore_target = controller_focused_target(self)
         self._report_restore_with_controller = self.controller_navigation
-        dialog = self._report_modal(N_("Reset Steam Installation?"), 560)
+        dialog = self._report_modal(C_('Reset {steam} Installation?', steam='Steam'), 560)
         box = self._report_modal_box(dialog)
-        box.append(label(N_("Steam will stop and sign you out. This only cleans the steam installation folder.")))
-        box.append(label(N_("Your games, Saves, Configuration, Music and Proton files will stay untouched.")))
+        box.append(label(C_('{steam} will stop and sign you out. This only cleans the steam installation folder.', steam='Steam')))
+        box.append(label(_('Your games, Saves, Configuration, Music and {proton} files will stay untouched.').format(proton='Proton')))
         cancel_button = button(N_("Cancel"), dialog.close)
-        reset_button = button(N_("Reset Steam"), lambda: self._close_report_modal(dialog, self._start_steam_reset))
+        reset_button = button(C_('Reset {steam}', steam='Steam'), lambda: self._close_report_modal(dialog, self._start_steam_reset))
         reset_button.add_css_class("destructive-action")
         dialog.confirm_yes_button = reset_button
         dialog.confirm_cancel_button = cancel_button
@@ -1307,11 +1276,8 @@ class Window(Adw.ApplicationWindow):
         self._report_generation += 1
         generation = self._report_generation
         self._report_collecting_dialog = None
-        self._show_report_collecting(generation, N_("Resetting Steam"))
+        self._show_report_collecting(generation, C_('Resetting {steam}', steam='Steam'))
         self._report_collecting_dialog = self.modal
-        if self.preview:
-            self._steam_reset_finished(generation, None, "Steam reset is disabled in preview mode.")
-            return
         future = self.executor.submit(steam_reset.reset_steam)
 
         def finished(result):
@@ -1339,23 +1305,23 @@ class Window(Adw.ApplicationWindow):
             dialog.close()
         self._set_troubleshooting_busy(False)
         if error:
-            message = public_error(error, N_("Steam reset did not complete. Open Logs for details."), context="Steam reset")
+            message = public_error(error, C_('{steam} reset did not complete. Open Logs for details.', steam='Steam'), context="Steam reset")
             removed = getattr(error, "removed", ())
             if removed:
                 log.warning("Steam reset partially completed; removed: %s", ", ".join(removed))
-                message += " " + _("Some Steam data has already been removed.")
+                message += " " + _('Some {steam} data has already been removed.').format(steam='Steam')
             self.toast(message)
         elif cancelled or superseded:
-            self.toast(N_("Steam reset finished after its progress window was closed."))
+            self.toast(C_('{steam} reset finished after its progress window was closed.', steam='Steam'))
         else:
             self._show_steam_reset_result(outcome)
         GLib.idle_add(self._restore_report_focus)
 
     def _show_steam_reset_result(self, outcome):
-        dialog = self._report_modal(N_("Steam reset complete"), 520)
+        dialog = self._report_modal(C_('{steam} reset complete', steam='Steam'), 520)
         box = self._report_modal_box(dialog)
-        box.append(label(N_("Steam reset is complete."), "title-3"))
-        box.append(label(N_("You can now open Steam. Its client files need to download again, so the first launch may take a while.")))
+        box.append(label(C_('{steam} reset is complete.', steam='Steam'), "title-3"))
+        box.append(label(C_('You can now open {steam}. Its client files need to download again, so the first launch may take a while.', steam='Steam')))
         close_button = button(N_("Close"), dialog.close)
         close_button.add_css_class("suggested-action")
         box.append(close_button)
@@ -1520,15 +1486,12 @@ class Window(Adw.ApplicationWindow):
     def _open_report_folder(self, directory):
         if self.closing:
             return
-        if self.preview:
-            self.toast("Folder opening is disabled in preview mode.")
-            return
         folder = Path(directory).resolve()
         self._run_xdg_open(str(folder), _("Could not open logs folder"),
                            self._launch_report_folder_worker)
 
     def _run_xdg_open(self, target, error_prefix, worker=None):
-        if self.preview or self.closing:
+        if self.closing:
             return
         future = self.executor.submit(worker or self._launch_xdg_open_worker, target)
 
@@ -1564,24 +1527,18 @@ class Window(Adw.ApplicationWindow):
     def _open_report_issue(self, issue_url):
         if self.closing:
             return
-        if self.preview:
-            self.toast("Links are disabled in preview mode.")
-            return
         if not issue_url:
-            self.toast(N_("The GitHub issue form could not be prepared."))
+            self.toast(C_('The {github} issue form could not be prepared.', github='GitHub'))
             return
         self._launch_report_uri(issue_url)
 
     def _launch_report_uri(self, uri):
         if self.closing:
             return
-        if self.preview:
-            self.toast("Links are disabled in preview mode.")
-            return
         self._run_xdg_open(uri, _("Could not open link"))
 
     def _report_modal(self, title, width, height=-1):
-        dialog = Adw.Window(transient_for=self, modal=True, title=_(title), default_width=width,
+        dialog = Adw.Window(transient_for=self, modal=True, title=format_message(title), default_width=width,
                             default_height=height)
         dialog.set_application(self.get_application())
         self.modal = dialog
@@ -1669,8 +1626,7 @@ class Window(Adw.ApplicationWindow):
     def _render_home_activity(self):
         if not hasattr(self, "home_status"):
             return
-        preview_active = bool(self.preview and self._preview_timer is not None)
-        running = bool(not self.preview and self.snapshot.running) or preview_active
+        running = bool(self.snapshot.running)
         if running:
             self.home_status.add_css_class("bazzite-update-active-row")
         else:
@@ -1679,14 +1635,6 @@ class Window(Adw.ApplicationWindow):
             self.store.preferences()["notification_icon_theme"], running,
             self.get_mapped() and self.stack.get_visible_child_name() == N_("Home"))
         if running:
-            if preview_active:
-                self.home_status.set_title("Preview update demo · simulated")
-                step = max(0, min(self._preview_step, 6))
-                self.home_status.set_subtitle(format_message("Simulated update in progress · step {step} of 6.".format(step=step)))
-            return
-        if self.preview:
-            self.home_status.set_title(_("Update Bazzite and Apps"))
-            self.home_status.set_subtitle("Try the update preview. System commands are disabled.")
             return
 
     def _render_pins(self):
@@ -1873,7 +1821,7 @@ class Window(Adw.ApplicationWindow):
             row.set_activatable(True)
             row.connect("activated", lambda *_args, selected=item: self.open_action(selected))
             if action.get("status_script"):
-                icon, text = portal_status_presentation("unknown" if self.preview else "")
+                icon, text = portal_status_presentation("")
                 status = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
                 status.set_valign(Gtk.Align.CENTER)
                 status_icon = Gtk.Label(label=icon)
@@ -1884,8 +1832,8 @@ class Window(Adw.ApplicationWindow):
                 status_text.set_single_line_mode(True)
                 status.append(status_icon)
                 status.append(status_text)
-                status.set_tooltip_text("Status unavailable in preview mode." if self.preview else _("Checking current status…"))
-                status.update_property([Gtk.AccessibleProperty.LABEL], ["Status unavailable in preview" if self.preview else _("Checking status")])
+                status.set_tooltip_text(_("Checking current status…"))
+                status.update_property([Gtk.AccessibleProperty.LABEL], [_("Checking status")])
                 row.add_suffix(status)
                 row.status_box = status
                 row.status_icon = status_icon
@@ -1899,11 +1847,11 @@ class Window(Adw.ApplicationWindow):
             row.add_controller(keys)
             row.favorite_key_controller = keys
             groups[category].add(row)
-            if action.get("status_script") and not self.preview:
+            if action.get("status_script"):
                 self._request_portal_status(item, row=row, generation=status_generation)
 
     def _request_portal_status(self, item, *, row=None, generation=None, dialog=None):
-        if self.preview or self.closing:
+        if self.closing:
             return
         if row is not None and (getattr(row, "portal_status_pending", False)
                                 or hasattr(row, "portal_status_token")):
@@ -2054,9 +2002,6 @@ class Window(Adw.ApplicationWindow):
             self._action_dialog(action, item, confirmation=True)
 
     def _launch_script(self, script, refresh=None):
-        if self.preview:
-            self.toast("Tool actions are disabled in preview mode.")
-            return
         if not script:
             self.toast(N_("No command is configured for this tool."))
             return
@@ -2077,7 +2022,7 @@ class Window(Adw.ApplicationWindow):
             if normalized not in ("", "unknown") and option_id == normalized and option_id in options:
                 widget.add_css_class("suggested-action")
 
-    def _action_dialog(self, action, item=None, confirmation=False, *, on_confirm=None, packages=None):
+    def _action_dialog(self, action, item=None, confirmation=False, *, on_confirm=None):
         display_action = format_message if on_confirm is not None else lambda text: text
         dialog = Adw.Window(transient_for=self, modal=True,
                             title=display_action((action.get("confirmation_title", _('Run {value1}?').format(value1=action.get('title', 'tool'))) if confirmation else action.get("title", N_("Tool")))),
@@ -2105,19 +2050,9 @@ class Window(Adw.ApplicationWindow):
         if confirmation:
             box.append(label(action.get("title", N_("Tool")), "title-3", translate=on_confirm is not None))
             if on_confirm is None:
-                box.append(label("Commands are disabled in preview mode." if self.preview
-                                 else N_("This command opens in your desktop terminal."), "heading"))
+                box.append(label(N_("This command opens in your desktop terminal."), "heading"))
             if action.get("description"):
                 box.append(label(action.get("description", ""), translate=on_confirm is not None))
-            if packages is not None:
-                box.append(label(ngettext("Package to remove ({count})", "Packages to remove ({count})", len(packages)).format(count=len(packages)), "heading"))
-                package_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-                for package in packages:
-                    package_box.append(label(package, translate=False))
-                dialog.package_scroll = Gtk.ScrolledWindow(min_content_height=160, max_content_height=280,
-                    propagate_natural_height=True, hscrollbar_policy=Gtk.PolicyType.NEVER)
-                dialog.package_scroll.set_child(package_box)
-                box.append(dialog.package_scroll)
             dialog.confirmation_focus_anchor = Gtk.Box()
             dialog.confirmation_focus_anchor.set_focusable(True)
             dialog.confirmation_focus_anchor.controller_exclude_focus = True
@@ -2145,7 +2080,7 @@ class Window(Adw.ApplicationWindow):
                                                (confirm_yes, dialog.close)):
                 choice = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
                 choice.append(prompt)
-                control = button(_(text), callback, translate=False)
+                control = button(format_message(text), callback, translate=False)
                 control.controller_exclude_focus = True
                 control.add_css_class("confirmation-choice")
                 choice.append(control)
@@ -2158,11 +2093,9 @@ class Window(Adw.ApplicationWindow):
             box.append(choices)
         else:
             box.append(label(action.get("description", ""), translate=on_confirm is not None))
-            if self.preview:
-                box.append(label("Commands are disabled in preview mode.", "heading"))
             if action.get("status_script"):
                 dialog.portal_status_label = label(
-                    "Current status is unavailable in preview mode." if self.preview else N_("Checking current status…"),
+                    N_("Checking current status…"),
                     "heading",
                 )
                 box.append(dialog.portal_status_label)
@@ -2195,7 +2128,7 @@ class Window(Adw.ApplicationWindow):
                 box.append(widget)
                 if first_option is None:
                     first_option = widget
-            if item is not None and action.get("status_script") and not self.preview:
+            if item is not None and action.get("status_script"):
                 current_row = next((candidate for candidate in controller_focus_targets(self.tools_view)
                                     if getattr(candidate, "portal_item", None) is item), None)
                 if current_row is not None:
@@ -2304,9 +2237,6 @@ class Window(Adw.ApplicationWindow):
         self.update_steps_group.add(self.update_steps_box)
         self.update_steps_group.set_visible(False)
         box.append(self.update_steps_group)
-        if self.preview:
-            self._render_preview_steps()
-
         self.log_buffer = Gtk.TextBuffer()
         view = Gtk.TextView(buffer=self.log_buffer, editable=False, cursor_visible=False, wrap_mode=Gtk.WrapMode.WORD_CHAR)
         view.add_css_class("bazzite-update-log")
@@ -2339,7 +2269,7 @@ class Window(Adw.ApplicationWindow):
         self.update_error.add_css_class("error")
         self.update_error.set_visible(False)
         box.append(self.update_error)
-        self.update_transaction_notice = label(N_("An RPM-OSTree transaction is active. Wait for it to finish before updating or restarting."), "dim-label")
+        self.update_transaction_notice = label(C_('An {rpm_ostree} transaction is active. Wait for it to finish before updating or restarting.', rpm_ostree='RPM-OSTree'), "dim-label")
         self.update_transaction_notice.set_visible(False)
         box.append(self.update_transaction_notice)
         self.release_identity = None
@@ -2350,7 +2280,7 @@ class Window(Adw.ApplicationWindow):
         if normalized == "finished":
             image = app_icon("circle-check", 30)
             image.add_css_class("dim-label")
-            image.update_property([Gtk.AccessibleProperty.LABEL], [N_("Finished · awaiting UUPD result")])
+            image.update_property([Gtk.AccessibleProperty.LABEL], [_("Finished · awaiting update result")])
             return image
         if normalized == "success":
             image = app_icon("circle-check", 30)
@@ -2379,7 +2309,7 @@ class Window(Adw.ApplicationWindow):
                 ring.set_content_height(30)
                 percent = round(fraction * 100)
                 # xgettext: no-python-format
-                ring.update_property([Gtk.AccessibleProperty.LABEL], ['Preview demo, {percent}% complete'.format(percent=percent) if self.preview else _('{percent}% complete').format(percent=percent)])
+                ring.update_property([Gtk.AccessibleProperty.LABEL], [_('{percent}% complete').format(percent=percent)])
                 def draw(_area, cr, width, height):
                     cx, cy, radius = width / 2, height / 2, min(width, height) / 2 - 2
                     cr.set_line_width(2.4)
@@ -2420,7 +2350,7 @@ class Window(Adw.ApplicationWindow):
             name = str(module.get("name") or N_("Update step"))
             identity = str(module.get("id") or name)
             if identity == "system" or name == N_("System"):
-                name = N_("Bazzite System")
+                name = C_('{bazzite} System', bazzite='Bazzite')
             status = str(module.get("status") or "unknown")
             status_text = {"pending": N_("Waiting to update"), "skipped": N_("Skipped"), "unknown": N_("Status unavailable")}.get(status, status.replace("_", " ").capitalize())
             detail = str(module.get("error") or module.get("detail") or "").strip()
@@ -2436,8 +2366,7 @@ class Window(Adw.ApplicationWindow):
             if status == "success" and identity == "system" and not up_to_date and getattr(self.snapshot, "deployment", ""):
                 detail = N_("New version ready on next restart")
             elif status == "pending":
-                detail = (detail if self.preview and detail else
-                          N_("Reading update progress…") if reading_progress else status_text)
+                detail = N_("Reading update progress…") if reading_progress else status_text
             elif not detail:
                 detail = status_text
             row = rows.get(identity)
@@ -2481,7 +2410,7 @@ class Window(Adw.ApplicationWindow):
         if excluding and self._maintenance_row_should_open(excluding):
             return ""
         if self._deployment_transaction_active():
-            return N_("A system operation is running. Wait for it to finish.")
+            return N_('Another system operation is running. Wait for it to finish.')
         state = self.snapshot
         active = set()
         if state.running:
@@ -2514,13 +2443,10 @@ class Window(Adw.ApplicationWindow):
                       if kind in checks)
         active.discard(excluding)
         if active:
-            return N_("A system operation is running. Wait for it to finish.")
+            return N_('Another system operation is running. Wait for it to finish.')
         return ""
 
     def _primary_update_action(self):
-        if self.preview:
-            self._start_preview_update()
-            return
         if not self.status_received:
             return
         if self._deployment_transaction_active():
@@ -2533,7 +2459,7 @@ class Window(Adw.ApplicationWindow):
         if self.snapshot.deployment:
             if not self.snapshot.deployment_known:
                 return
-            self.confirm(N_("Reboot Bazzite?"), N_("All update steps have finished. Reboot now to start the prepared Bazzite version. Save your work before continuing."), N_("Reboot"), lambda: self._operation(N_("Restart")))
+            self.confirm(C_('Reboot {bazzite}?', bazzite='Bazzite'), C_('All update steps have finished. Reboot now to start the prepared {bazzite} version. Save your work before continuing.', bazzite='Bazzite'), N_("Reboot"), lambda: self._operation(N_("Restart")))
             return
         self._awaiting_update_run = self.snapshot.run
         self._update_request_pending = True
@@ -2614,53 +2540,6 @@ class Window(Adw.ApplicationWindow):
         else:
             self.release_notes_button.set_tooltip_text(_("No verified release version and channel are available."))
 
-    def _start_preview_update(self):
-        if not self.preview or self.closing or self._preview_timer is not None:
-            return
-        self._preview_step = 0
-        self._preview_log_lines = ["[SIMULATED] Preview only. No system commands are run."]
-        self.log_heading.set_text("Preview log · simulated only")
-        self._set_log_text("\n".join(self._preview_log_lines), follow_tail=True)
-        self._render_preview_steps()
-        self.update_button.set_sensitive(False)
-        self._preview_timer = GLib.timeout_add_seconds(1, self._advance_preview_update)
-        self._render_home_activity()
-
-    def _render_preview_steps(self):
-        self.update_steps_group.set_title("Preview steps · simulated")
-        step = self._preview_step
-        prepare_status = "success" if step > 0 else "running" if step == 0 else "pending"
-        flatpak_status = "success" if step >= 5 else "running" if 1 <= step <= 4 else "pending"
-        finish_status = "success" if step >= 6 else "running" if step == 5 else "pending"
-        rows = [
-            {"name": "Preparing preview", "status": prepare_status,
-             "detail": "Simulated setup" if step > 0 else "Preview demo in progress" if step == 0 else "Waiting · simulated"},
-            {"name": "Flatpak apps · simulated", "status": flatpak_status,
-             "detail": ('Preview demo · {step} of 5 apps'.format(step=step) if 1 <= step <= 4 else "Simulated app updates"),
-             "fraction": step / 5 if 1 <= step <= 4 else None},
-            {"name": "Finishing preview", "status": finish_status,
-             "detail": "Simulated completion" if step >= 6 else "Waiting"},
-        ]
-        self._render_update_steps(rows)
-
-    def _advance_preview_update(self):
-        if self.closing:
-            self._preview_timer = None
-            return GLib.SOURCE_REMOVE
-        self._preview_step += 1
-        self._render_preview_steps()
-        step_name = ("Preparing preview", "Checking simulated apps", "Downloading simulated apps",
-                     "Installing simulated apps", "Finishing simulated apps", "Completing preview")[min(self._preview_step - 1, 5)]
-        self._preview_log_lines.append(f"[SIMULATED] {step_name} · step {self._preview_step} of 6")
-        self._set_log_text("\n".join(self._preview_log_lines), follow_tail=True)
-        if self._preview_step >= 6:
-            self._preview_timer = None
-            self.update_button.set_sensitive(True)
-            self._render_home_activity()
-            return GLib.SOURCE_REMOVE
-        self._render_home_activity()
-        return GLib.SOURCE_CONTINUE
-
     def _set_update_console(self, open_console):
         open_console = bool(open_console)
         if hasattr(self, "updates_content_box"):
@@ -2734,7 +2613,7 @@ class Window(Adw.ApplicationWindow):
             self.cancel_target_fresh = False
         self._render_status()
         self._acknowledge_update_result()
-        if (not shared_management and not self.preview and not self.system_loading and
+        if (not shared_management and not self.system_loading and
                 (previous_deployment != self.snapshot.deployment or
                  (previous_running and not self.snapshot.running))):
             # Refresh the known changelog version after staging/completion.
@@ -2774,7 +2653,7 @@ class Window(Adw.ApplicationWindow):
 
     def _acknowledge_update_result(self):
         state = self.snapshot
-        if (not self.preview and self.client is not None and self.get_mapped()
+        if (self.client is not None and self.get_mapped()
                 and self.stack.get_visible_child_name() == N_("Updates")
                 and not state.running and state.result in {"failed", "success"} and state.run):
             if not self.is_active():
@@ -2793,28 +2672,25 @@ class Window(Adw.ApplicationWindow):
                                   or (state.run and state.result_viewed_run == state.run
                                       and state.run != getattr(self, "_visible_result_run", None))))
         awaiting_run = getattr(self, "_awaiting_update_run", None) == state.run
-        if self.preview:
-            self._render_preview_steps()
+        self.update_steps_group.set_title(format_message(""))
+        previous_update = bool(state.module_plan and awaiting_run)
+        modules = state.module_plan if previous_update else state.modules
+        if dismissed_result:
+            modules = state.module_plan or [
+                {"id": row.get("id"), "name": row.get("name"), "status": "pending"}
+                for row in state.modules if isinstance(row, dict)
+            ]
+        if not self.store.preferences()["show_disabled_update_steps"]:
+            disabled = {row["id"] for row in state.module_plan if row.get("status") == "skipped"}
+            modules = [row for row in modules if row.get("id") not in disabled]
+        self._render_update_steps(modules)
+        self.log_heading.set_text(_("Update log"))
+        if state.running:
+            text = N_("Rolling back…") if state.operation == "rollback" else C_('{bazzite} is updating…', bazzite='Bazzite')
         else:
-            self.update_steps_group.set_title(format_message(""))
-            previous_update = bool(state.module_plan and awaiting_run)
-            modules = state.module_plan if previous_update else state.modules
-            if dismissed_result:
-                modules = state.module_plan or [
-                    {"id": row.get("id"), "name": row.get("name"), "status": "pending"}
-                    for row in state.modules if isinstance(row, dict)
-                ]
-            if not self.store.preferences()["show_disabled_update_steps"]:
-                disabled = {row["id"] for row in state.module_plan if row.get("status") == "skipped"}
-                modules = [row for row in modules if row.get("id") not in disabled]
-            self._render_update_steps(modules)
-            self.log_heading.set_text(_("Update log"))
-        if state.running and not self.preview:
-            text = N_("Rolling back…") if state.operation == "rollback" else N_("Bazzite is updating…")
-        else:
-            text = N_("Update Bazzite and Apps")
+            text = C_('Update {bazzite} and Apps', bazzite='Bazzite')
         detail = state.stage if state.running and state.stage else ""
-        if state.running and not self.preview:
+        if state.running:
             active_modules = [module for module in modules
                               if isinstance(module, dict) and module.get("status") == "running"]
             active = next((module for module in active_modules
@@ -2830,45 +2706,37 @@ class Window(Adw.ApplicationWindow):
         if state.running and error_text(state.error, N_('Details are unavailable. Open Logs for more information.'), context='_render_status'):
             detail = (detail + " · " if detail else "") + error_text(state.error, N_('Details are unavailable. Open Logs for more information.'), context='_render_status')
         self.home_status.set_title(format_message(text))
-        self.home_status.set_subtitle(format_message(format_message(detail) if detail else ("Commands are disabled in preview mode." if self.preview else _("Update your system and installed apps."))))
+        self.home_status.set_subtitle(format_message(format_message(detail) if detail else _("Update your system and installed apps.")))
         errors = []
         transaction_active = self._deployment_transaction_active()
-        self.update_transaction_notice.set_visible(transaction_active and not state.running and not self.preview)
+        self.update_transaction_notice.set_visible(transaction_active and not state.running)
         if error_text(state.error, N_('Details are unavailable. Open Logs for more information.'), context='_render_status') and state.result != "failed":
             errors.append(error_text(state.error, N_('Details are unavailable. Open Logs for more information.'), context='_render_status'))
         if state.deployment and not state.deployment_known:
-            errors.append(N_("A system change is pending, but Bazzite Portal could not verify it. Restart is unavailable until its status can be checked."))
-        if not self.preview and self.status_received and not state.available:
-            errors.append(N_("Bazzite updates are unavailable. Open Logs for details."))
+            errors.append(C_('A system change is pending, but {app_name} could not verify it. Restart is unavailable until its status can be checked.', app_name='Bazzite Portal'))
+        if self.status_received and not state.available:
+            errors.append(C_('{bazzite} updates are unavailable. Open Logs for details.', bazzite='Bazzite'))
         self.update_error.set_text("\n".join(public_error(error, N_("Could not read update status. Open Logs for details."), context='Update status') for error in filter(None, errors)))
-        self.update_error.set_visible(bool(errors) and not self.preview)
+        self.update_error.set_visible(bool(errors))
         reboot_ready = bool(state.deployment and state.deployment_known and not state.running)
         request_pending = getattr(self, "_update_request_pending", False)
         self.update_button.set_label(format_message(_("Updating…") if state.running or request_pending else _("Reboot") if reboot_ready else _("Update")))
         self.update_button.set_visible(True)
-        self.update_button.set_sensitive(not self.preview and self.status_received and state.available
+        self.update_button.set_sensitive(self.status_received and state.available
             and not state.running and not request_pending and not transaction_active and (not state.deployment or state.deployment_known)
             and state.cancel_state != "running" and state.layer_state != "running")
-        if self.preview:
-            self.update_button.set_visible(True)
-            self.update_button.set_sensitive(self._preview_timer is None)
         self._sync_rollback_ui()
         self._sync_cancel_pending_ui()
         self._sync_channel_ui()
         self._sync_delete_deployments_ui()
         self._sync_image_ui()
-        if self.preview and self._preview_log_lines:
-            self._set_log_text("\n".join(self._preview_log_lines), follow_tail=True)
-        else:
-            self._set_log_text("" if historical_run or awaiting_run or dismissed_result else "\n".join(state.logs), follow_tail=True)
+        self._set_log_text("" if historical_run or awaiting_run or dismissed_result else "\n".join(state.logs), follow_tail=True)
         self._refresh_update_prompts()
         self._update_controller_legend()
         self._render_home_activity()
 
     def _operation(self, method):
-        if self.preview:
-            self.toast("System operations are disabled in preview mode.")
-        elif method == "StartUpdate":
+        if method == "StartUpdate":
             def rejected(error):
                 if self.closing:
                     return
@@ -2980,14 +2848,14 @@ class Window(Adw.ApplicationWindow):
 
     def _build_system(self):
         page, box = content_page(N_("System information"), "")
-        management_page, management_box = content_page(N_("System management"), "")
+        management_page, management_box = content_page(N_("System Management"), "")
         self.management_box = management_box
         self._add_system_refresh_heading(box, N_("System information"), "system")
-        self._add_system_refresh_heading(management_box, N_("System management"), "management")
-        self.system_group = group(N_("Bazzite Image Version"), N_("The image and update track used by your running system."))
+        self._add_system_refresh_heading(management_box, N_("System Management"), "management")
+        self.system_group = group(C_('{bazzite} Image Version', bazzite='Bazzite'), N_("The image and update track used by your running system."))
         self.system_rows = {}
         for title in (N_("Image"), N_("Release channel")):
-            row = Adw.ActionRow(title=_(title), subtitle=_("Loading…"))
+            row = Adw.ActionRow(title=format_message(title), subtitle=_("Loading…"))
             row.set_subtitle_lines(3)
             self.system_group.add(row)
             self.system_rows[title] = row
@@ -3068,22 +2936,6 @@ class Window(Adw.ApplicationWindow):
         self.clear_cache_row.set_activatable(True)
         self.clear_cache_row.connect("activated", lambda *_: self._confirm_clear_download_cache())
         self.cancel_pending_group.add(self.clear_cache_row)
-        self.cache_details_row = Adw.ActionRow(
-            title=_("Cache clearing details"), subtitle=_("Read the operation log without opening a terminal.")
-        )
-        self.cache_details_row.controller_focus_row = True
-        self.cache_details_row.set_activatable(True)
-        self.cache_details_row.connect("activated", lambda *_: self._show_maintenance_log("cache"))
-        self.cache_details_row.set_visible(False)
-        self.cancel_status_row = Adw.ActionRow(title=_("Cancellation status unavailable"))
-        self.cancel_status_row.set_subtitle_lines(2)
-        self.cancel_status_row.set_visible(False)
-        self.cancel_pending_group.add(self.cancel_status_row)
-        self.cancel_details_row = Adw.ActionRow(title=_("Cancellation details"), subtitle=_("Read the operation log without opening a terminal."))
-        self.cancel_details_row.controller_focus_row = True
-        self.cancel_details_row.set_activatable(True)
-        self.cancel_details_row.connect("activated", lambda *_: self._show_maintenance_log("cancel"))
-        self.cancel_details_row.set_visible(False)
         management_box.append(self.cancel_pending_group)
 
         self.delete_pinned_deployments_row = Adw.ActionRow(
@@ -3099,7 +2951,10 @@ class Window(Adw.ApplicationWindow):
         self.delete_status_fresh = False
         self.delete_request_active = False
 
-        self.channel_group = group(N_("Release channel"), N_("Follow the latest Stable or Testing release of your Bazzite image."))
+        self.channel_group = group(
+            N_("Release channel"),
+            _('Follow the latest {stable} or {testing} release of your {bazzite} image.').format(bazzite='Bazzite',
+                stable=channel_name("stable"), testing=channel_name("testing")))
         self.channel_switch_row = Adw.ActionRow(
             title=_("Checking release channel…"), subtitle=_("Refresh system information to check availability.")
         )
@@ -3111,14 +2966,8 @@ class Window(Adw.ApplicationWindow):
         shield.set_tooltip_text(_("Requires administrator authorization"))
         self.channel_switch_row.add_prefix(shield)
         self.channel_group.add(self.channel_switch_row)
-        self.channel_details_row = Adw.ActionRow(title=_('Release channel rebase details'), subtitle=_("View progress and the operation log."))
-        self.channel_details_row.controller_focus_row = True
-        self.channel_details_row.set_activatable(True)
-        self.channel_details_row.connect("activated", lambda *_: self._show_maintenance_log("channel"))
-        self.channel_details_row.set_visible(False)
-        self.channel_group.add(self.channel_details_row)
         self.channel_specific_row = Adw.ActionRow(
-            title=_('Rebase to specific image'), subtitle=_("Choose a Bazzite image, release channel and version.")
+            title=_('Rebase to specific image'), subtitle=_('Choose a {bazzite} image, release channel and version.').format(bazzite='Bazzite')
         )
         self.channel_specific_row.controller_focus_row = True
         self.channel_specific_row.add_prefix(app_icon("shield", 20, N_("Requires administrator authorization")))
@@ -3126,21 +2975,9 @@ class Window(Adw.ApplicationWindow):
         self.channel_specific_row.set_activatable(True)
         self.channel_specific_row.connect("activated", lambda *_: self._show_image_selection())
         self.channel_group.add(self.channel_specific_row)
-        self.image_details_row = Adw.ActionRow(title=_('Image rebase details'), subtitle=_("View progress and the operation log."))
-        self.image_details_row.controller_focus_row = True
-        self.image_details_row.set_activatable(True)
-        self.image_details_row.connect("activated", lambda *_: self._show_maintenance_log("image"))
-        self.image_details_row.set_visible(False)
-        self.channel_group.add(self.image_details_row)
         management_box.append(self.channel_group)
 
         layers_group = group(N_("Remove layered apps"), N_("Remove system layers while keeping your personal files and other apps."))
-        self.layers_group = layers_group
-        self.layers_status = Adw.ActionRow(title=_("Checking layered apps…"))
-        self.layers_busy_spinner = Gtk.Spinner()
-        self.layers_busy_spinner.set_size_request(18, 18)
-        self.layers_busy_spinner.set_visible(False)
-        self.layers_status.add_suffix(self.layers_busy_spinner)
         self.layers_row = Adw.ActionRow(title=_("Choose layered packages to remove"), subtitle=_("Choose which layered packages to remove. A restart is needed to apply the change."))
         self.layers_row.controller_focus_row = True
         self.layers_row.set_activatable(True)
@@ -3148,23 +2985,15 @@ class Window(Adw.ApplicationWindow):
         layers_group.add(self.layers_row)
         self.reset_layers_row = Adw.ActionRow(
             title=_("Remove all layered apps"),
-            subtitle=_("Remove all system layers. Your files, Bazzite app store apps, Homebrew apps and AppImages stay."),
+            subtitle=_('Remove all system layers. Your files, {bazzite} app store apps, {homebrew} apps and {appimages} stay.').format(bazzite='Bazzite', homebrew='Homebrew', appimages='AppImages'),
         )
         self.reset_layers_row.controller_focus_row = True
         self.reset_layers_row.set_activatable(True)
         self.reset_layers_row.connect("activated", lambda *_: self._confirm_reset_layers())
         layers_group.add(self.reset_layers_row)
-        self.layer_details_row = Adw.ActionRow(title=_("Layer removal details"), subtitle=_("Read the operation log without opening a terminal."))
-        self.layer_details_row.controller_focus_row = True
-        self.layer_details_row.set_activatable(True)
-        self.layer_details_row.connect("activated", lambda *_: self._show_maintenance_log("layer"))
-        self.layer_details_row.set_visible(False)
-        layers_group.add(self.layer_details_row)
         management_box.append(layers_group)
         self.layers_target = None
         self.layers_request_active = False
-        self.layers_feedback = ""
-        self.layers_feedback_is_error = False
         for row in (self.rollback_row, self.cancel_pending_row, self.clear_cache_row, self.delete_pinned_deployments_row,
                     self.layers_row, self.reset_layers_row):
             shield = app_icon("shield", 20, N_("Requires administrator authorization"))
@@ -3172,28 +3001,7 @@ class Window(Adw.ApplicationWindow):
             row.add_prefix(shield)
             row.controller_read_only_focus = True
         self.stack.add_named(page, N_("System"))
-        self.stack.add_named(management_page, N_("Management"))
-        if self.preview:
-            self.delete_pinned_deployments_row.set_sensitive(False)
-            self.delete_pinned_deployments_row.set_activatable(False)
-            for row in self.system_rows.values():
-                row.set_subtitle("Open this page to load system information.")
-            self.deployment_status_row.set_title("Deployment information not loaded yet")
-            self.deployment_status_row.set_subtitle("Read-only information is available in preview mode.")
-            self.customization_status_row.set_title("System customizations not loaded yet")
-            self.layers_row.set_sensitive(False)
-            self.layers_row.set_activatable(False)
-            self.reset_layers_row.set_sensitive(False)
-            self.reset_layers_row.set_activatable(False)
-            self.layers_status.set_title("Preview mode · removal disabled")
-            self.cancel_pending_row.set_sensitive(False)
-            self.cancel_pending_row.set_activatable(False)
-            self.cancel_pending_row.set_title("Cancellation disabled in preview")
-            self.cancel_pending_row.set_subtitle("Preview can read system information but cannot change deployments.")
-            self.channel_switch_row.set_sensitive(False)
-            self.channel_switch_row.set_activatable(False)
-            self.channel_switch_row.set_title('Release channel rebasing disabled in preview')
-            self.channel_switch_row.set_subtitle("Preview can read system information but cannot change deployments.")
+        self.stack.add_named(management_page, "Management")
 
     @staticmethod
     def _short_deployment_text(value, limit):
@@ -3276,22 +3084,14 @@ class Window(Adw.ApplicationWindow):
                       and entry.get("role") == N_("Saved deployment")), None)
         next_restart = next((entry for entry in entries if isinstance(entry, dict)
                              and entry.get("role") == N_("Next restart")), None)
-        if self.preview:
-            return saved, "Rollback is disabled in preview mode."
         if self.system_loading or not self.deployment_summary_fresh:
             return saved, N_("Checking previous deployment… Refresh system information to check rollback availability.")
         if not summary.get("known"):
             return saved, N_("Previous deployment availability is unknown. Refresh system information.")
-        pending_rollback = (
-            summary.get("engine") == "rpm-ostree"
-            and len(entries) == 2
-            and isinstance(next_restart, dict)
-            and next_restart.get("staged") is False
-            and isinstance(entries[1], dict)
-            and entries[1].get("role") == N_("Running now")
-        )
+        cancellation = rollback_cancel.target(self.image_deployment_status)
+        pending_rollback = cancellation.get("available") is True and isinstance(next_restart, dict)
         if pending_rollback:
-            saved = next_restart
+            saved = {**next_restart, "cancel_token": cancellation["token"]}
         if saved is None:
             if (summary.get("engine") == "bootc" and isinstance(next_restart, dict)
                     and next_restart.get("staged") is False):
@@ -3316,12 +3116,15 @@ class Window(Adw.ApplicationWindow):
         logs = getattr(self.snapshot, "rollback_logs", [])
         detail = error_text(getattr(self.snapshot, "rollback_error", ""), N_('Could not check rollback status. Open Logs for details.'), context='_sync_rollback_ui') or N_("Open to view operation progress and logs.")
         if (state == "running" or self._maintenance_row_should_open("rollback")):
+            unit = (getattr(self, "maintenance_pending_units", {}).get("rollback", {}).get("unit")
+                    or getattr(self.snapshot, "rollback_unit", ""))
+            cancelling = unit.startswith("bazzite-portal-maintenance@cancel-rollback-")
             if state == "running":
-                title = N_("Rolling back…")
+                title = N_("Cancelling rollback…") if cancelling else N_("Rolling back…")
             elif state == "success":
-                title = N_("Rollback succeeded")
+                title = N_("Rollback cancelled") if cancelling else N_("Rollback succeeded")
             elif state == "failed":
-                title = N_("Rollback failed")
+                title = N_("Rollback cancellation failed") if cancelling else N_("Rollback failed")
             else:
                 title = N_("Rollback status unknown")
             self.rollback_row.set_title(format_message(title))
@@ -3331,10 +3134,10 @@ class Window(Adw.ApplicationWindow):
         saved, reason = self._rollback_eligibility()
         enabled = saved is not None and not reason
         pending_rollback = bool(enabled and saved.get("role") == N_("Next restart"))
-        title = (N_("Cancel pending rollback") if pending_rollback else
+        title = (N_("Cancel rollback") if pending_rollback else
                  N_("Roll back to previous deployment") if enabled else
-                 N_("Rollback already prepared") if reason.startswith(N_("A rollback is already prepared")) else
-                 N_("No previous deployment available") if reason == N_("No previous deployment is available.") else
+                 N_("Rollback already prepared") if reason.startswith("A rollback is already prepared") else
+                 N_('No previous deployment is available.') if reason == N_("No previous deployment is available.") else
                  N_("Checking previous deployment…") if self.system_loading or not self.deployment_summary_fresh
                  or not (self.deployment_summary or {}).get("known") else
                  N_("Roll back to previous deployment"))
@@ -3347,7 +3150,7 @@ class Window(Adw.ApplicationWindow):
             subtitle = N_("Restore the previous system version on the next boot. Personal files are preserved.")
         else:
             subtitle = reason or N_("Rollback is unavailable.")
-        self.rollback_row.set_title(_(title))
+        self.rollback_row.set_title(format_message(title))
         self.rollback_row.set_subtitle(format_message(subtitle))
         self.rollback_row.set_sensitive(enabled)
         self.rollback_row.set_activatable(enabled)
@@ -3375,6 +3178,16 @@ class Window(Adw.ApplicationWindow):
         # A prior successful cancellation can remain in the agent snapshot
         # after a different deployment has been prepared. Keep the live
         # cancellation action available instead of reopening that old result.
+        if kind == "rollback" and state == "success":
+            if (getattr(self, "deployment_summary_fresh", False)
+                    and not getattr(self, "system_loading", False)):
+                summary = getattr(self, "deployment_summary", None) or {}
+                entries = summary.get("entries", [])
+                if (summary.get("known") is True and
+                        (rollback_cancel.target(getattr(self, "image_deployment_status", None)).get("available") is True
+                         or any(isinstance(entry, dict) and entry.get("role") == N_("Saved deployment")
+                                for entry in entries))):
+                    return False
         if kind == "cancel" and state == "success":
             # Read the shared backend target directly. Eligibility itself uses
             # the row's lifecycle when checking shared blockers; calling it
@@ -3465,9 +3278,6 @@ class Window(Adw.ApplicationWindow):
             if unit == pending["unit"] and (fresh_invocation or new_generation and authoritative_terminal_without_invocation):
                 self.maintenance_pending_units.pop(kind, None)
                 self.maintenance_expected_units.pop(kind, None)
-        details = getattr(self, kind + "_details_row", None)
-        if details is not None:
-            details.set_visible(False)
         if kind == "rollback":
             rows = (getattr(self, "rollback_row", None),)
             request_active = getattr(self, "rollback_request_active", False) or kind in self.maintenance_pending_units
@@ -3501,14 +3311,21 @@ class Window(Adw.ApplicationWindow):
                 row, kind, request_active=request_active if allow_open else False,
                 allow_open=allow_open)
 
-    def _request_rollback(self):
-        if self.preview or self.closing:
+    def _request_rollback(self, cancel_token=None):
+        if self.closing:
             return
         if self.client is None or getattr(self.client, "closed", False):
             self.toast(N_("System status is unavailable. Open Logs for details."))
             return
+        if cancel_token is not None:
+            current, reason = self._rollback_eligibility()
+            if reason or current is None or current.get("cancel_token") != cancel_token:
+                self.toast(reason or N_("Rollback is unavailable."))
+                self._sync_rollback_ui()
+                return
         self.rollback_request_active = True
-        expected_unit = "bazzite-portal-maintenance@rollback.service"
+        expected_unit = (f"bazzite-portal-maintenance@cancel-rollback-{cancel_token}.service"
+                         if cancel_token else "bazzite-portal-maintenance@rollback.service")
         self._sync_maintenance_row("rollback")
         self._show_maintenance_log("rollback", expected_unit)
 
@@ -3521,12 +3338,18 @@ class Window(Adw.ApplicationWindow):
                 dialog.request_completed = not error
                 dialog.request_error = str(error) if error else ""
                 self._sync_maintenance_dialog()
+            self.deployment_summary_fresh = False
             self._sync_rollback_ui()
+            self._refresh_system_after_cancel()
             if error:
                 self.toast(public_error(error, N_("Rollback failed. Open Logs for details."), context='Rollback request'))
 
         try:
-            self.client.call("StartRollback", callback=lambda *_: finished(), error_callback=finished)
+            if cancel_token:
+                self.client.call("CancelRollback", GLib.Variant("(s)", (cancel_token,)),
+                                 callback=lambda *_: finished(), error_callback=finished)
+            else:
+                self.client.call("StartRollback", callback=lambda *_: finished(), error_callback=finished)
         except Exception as error:
             finished(error)
 
@@ -3541,25 +3364,27 @@ class Window(Adw.ApplicationWindow):
         if self.modal is not None:
             return
         version = self._short_deployment_text(saved.get("version"), 48)
-        cancel_pending_rollback = saved.get("role") == N_("Next restart")
+        cancel_token = saved.get("cancel_token")
+        cancel_pending_rollback = bool(cancel_token)
         expected_identity = saved.get("identity")
         def start_rollback():
             current, current_reason = self._rollback_eligibility()
             if (current_reason or current is None or current.get("role") != saved.get("role")
-                    or current.get("identity") != expected_identity):
+                    or current.get("identity") != expected_identity
+                    or current.get("cancel_token") != cancel_token):
                 self.toast(current_reason or N_("Rollback is unavailable."))
                 self._sync_rollback_ui()
                 return
-            self._request_rollback()
+            self._request_rollback(cancel_token)
         if cancel_pending_rollback:
             self.confirm(
-                N_("Cancel pending rollback?"),
+                N_("Cancel rollback?"),
                 _('Keep your current system for the next restart. The saved deployment, version {version}, will remain available.').format(version=version),
                 N_("Cancel rollback"), start_rollback,
             )
         else:
             self.confirm(
-                N_("Roll back Bazzite?"),
+                C_('Roll back {bazzite}?', bazzite='Bazzite'),
                 _('Select the saved deployment, version {version}, for your next boot. A restart is required to use it. Your personal files are preserved.').format(version=version),
                 N_("Rollback"), start_rollback,
             )
@@ -3567,8 +3392,6 @@ class Window(Adw.ApplicationWindow):
     def _cancel_pending_eligibility(self):
         target = self.cancel_target if isinstance(self.cancel_target, dict) else None
         state = self.snapshot
-        if self.preview:
-            return target, "Preview mode · deployment cancellation is disabled."
         if not self.status_received:
             return target, N_("Checking system status…")
         if self.client is None or getattr(self.client, "closed", False):
@@ -3599,8 +3422,6 @@ class Window(Adw.ApplicationWindow):
         return target, ""
 
     def _sync_cancel_pending_ui(self):
-        if not hasattr(self, "cancel_status_row"):
-            return
         state = self.snapshot
         target, reason = self._cancel_pending_eligibility()
         enabled = not reason and target is not None and target.get("available") is True
@@ -3608,9 +3429,7 @@ class Window(Adw.ApplicationWindow):
         self.cancel_pending_row.set_sensitive(actionable)
         self.cancel_pending_row.set_activatable(actionable)
         self.cancel_pending_row.set_subtitle(_(reason))
-        if self.preview:
-            title, detail = "Preview mode · cancellation disabled", "System information is read-only in preview."
-        elif self.cancel_request_active:
+        if self.cancel_request_active:
             title, detail = N_("Cancelling pending deployment…"), N_("Open to view operation progress and logs.")
         elif state.cancel_state == "running":
             title, detail = N_("Cancelling pending deployment…"), error_text(state.cancel_error, N_('Could not check the pending system change. Open Logs for details.'), context='_sync_cancel_pending_ui') or N_("Open to view operation progress and logs.")
@@ -3634,21 +3453,25 @@ class Window(Adw.ApplicationWindow):
         else:
             title = N_("Prepared deployment can be cancelled")
             detail = N_("Only the verified prepared next-restart deployment will be removed.")
-        self.cancel_status_row.set_title(GLib.markup_escape_text(_(title)))
-        self.cancel_status_row.set_subtitle(GLib.markup_escape_text(format_message(str(detail))))
-        self.cancel_status_row.set_visible(False)
-        absent_pending = (not self.preview and self.cancel_target_fresh and
+        absent_pending = (self.cancel_target_fresh and
                          isinstance(target, dict) and target.get("available") is False and
-                         N_("There is no pending deployment") in str(target.get("reason", "")))
-        if self.preview:
-            action_title, action_detail = "Cancellation disabled in preview", "System information is read-only in preview."
-        elif self.cancel_request_active:
+                         "There is no pending deployment" in str(target.get("reason", "")))
+        if self.cancel_request_active:
             action_title, action_detail = title, detail
         elif state.cancel_state == "running":
             action_title, action_detail = title, detail
+        elif absent_pending:
+            # A previous operation result is not a failure to read the current
+            # deployment state. Keep unread logs reachable; once acknowledged,
+            # return to the authoritative no-pending-deployment status.
+            if self._maintenance_row_should_open("cancel"):
+                action_title, action_detail = title, N_("Open to view operation progress and logs.")
+            else:
+                action_title = N_("No pending deployment to cancel")
+                action_detail = N_("Your current system will start again. No system change is pending.")
         elif state.cancel_state == "failed" and enabled:
-            action_title = N_("Retry pending deployment cancellation")
-            action_detail = N_("The previous attempt failed. Your pending deployment can still be cancelled.")
+            action_title = N_("Cancel pending deployment")
+            action_detail = N_("Cancel only the verified prepared deployment before it is activated.")
         elif (self.cancel_waiting_snapshot or self.cancel_feedback
               or state.cancel_state in {"success", "failed", "unknown"}
               and (state.cancel_state != "success" or self._maintenance_row_should_open("cancel"))):
@@ -3690,14 +3513,14 @@ class Window(Adw.ApplicationWindow):
         version = self._short_deployment_text(target.get("version"), 48)
         image = self._short_deployment_text(target.get("image"), 96)
         body = (
-            _('Cancel the prepared Bazzite deployment {version} ({image})? This removes only the deployment prepared for the next restart. The running deployment, saved deployment, and personal files remain unchanged. This will not restart the computer.').format(version=version, image=image)
+            _('Cancel the prepared {bazzite} deployment {version} ({image})? This removes only the deployment prepared for the next restart. The running deployment, saved deployment, and personal files remain unchanged. This will not restart the computer.').format(bazzite='Bazzite', version=version, image=image)
         )
         token = target["token"]
         self.confirm(N_("Cancel pending deployment?"), body, N_("Cancel deployment"),
                      lambda: self._request_cancel_pending(token))
 
     def _request_cancel_pending(self, expected_token):
-        if self.preview or self.closing:
+        if self.closing:
             return
         target, reason = self._cancel_pending_eligibility()
         if reason or target is None:
@@ -3730,7 +3553,7 @@ class Window(Adw.ApplicationWindow):
                 dialog.request_completed = True
                 self._sync_maintenance_dialog()
             self._sync_cancel_pending_ui()
-            if self.stack.get_visible_child_name() in {N_("System"), N_("Management")}:
+            if self.stack.get_visible_child_name() in {N_("System"), "Management"}:
                 self._refresh_system()
 
         def request_failed(error):
@@ -3746,7 +3569,7 @@ class Window(Adw.ApplicationWindow):
                 self._sync_maintenance_dialog()
             self.cancel_target_fresh = False
             self._sync_cancel_pending_ui()
-            if self.stack.get_visible_child_name() in {N_("System"), N_("Management")}:
+            if self.stack.get_visible_child_name() in {N_("System"), "Management"}:
                 self._refresh_system()
 
         try:
@@ -3762,7 +3585,7 @@ class Window(Adw.ApplicationWindow):
             return
         if self.system_loading:
             self.cancel_refresh_after_system_load = True
-        elif self.stack.get_visible_child_name() in {N_("System"), N_("Management")}:
+        elif self.stack.get_visible_child_name() in {N_("System"), "Management"}:
             self.cancel_refresh_after_system_load = False
             self._refresh_system()
 
@@ -3770,12 +3593,10 @@ class Window(Adw.ApplicationWindow):
         if not self.cancel_refresh_after_system_load:
             return
         self.cancel_refresh_after_system_load = False
-        if self.stack.get_visible_child_name() in {N_("System"), N_("Management")} and not self.closing:
+        if self.stack.get_visible_child_name() in {N_("System"), "Management"} and not self.closing:
             GLib.idle_add(lambda: (self._refresh_system(), GLib.SOURCE_REMOVE)[1])
 
     def _layers_reason(self):
-        if self.preview:
-            return "Preview mode · removal disabled."
         if self.client is None or getattr(self.client, "closed", False) or not self.status_received:
             return N_("Checking system status…")
         if self.system_loading or not self.cancel_target_fresh:
@@ -3798,36 +3619,14 @@ class Window(Adw.ApplicationWindow):
         self.layers_row.set_sensitive(not reason)
         self.layers_row.set_activatable(not reason)
         state = getattr(self.snapshot, "layer_state", "unavailable")
-        detail = error_text(getattr(self.snapshot, "layer_error", ""), N_('Could not check layered apps. Open Logs for details.'), context='_sync_layers_ui')
-        if self.layers_request_active or state == "running":
-            text = N_("Removing layered apps…")
-        elif self.layers_feedback_is_error:
-            text = public_error(self.layers_feedback, N_("Layer removal failed. Open the operation log for details."), context='Layer removal')
-        elif state == "failed":
-            text = public_error(detail, N_("Layer removal failed. Open the operation log for details."), context='Layer removal')
-        elif state == "success":
-            text = N_("Layer removal completed.")
-        else:
-            count = len((self.layers_target or {}).get('packages', []))
-            text = self.layers_feedback or reason or ngettext(
-                "{count} package request to review.", "{count} package requests to review.", count).format(count=count)
-        self.layers_status.set_title(GLib.markup_escape_text(format_message(text)))
         busy = state == "running" or self.layers_request_active
-        self.layers_busy_spinner.set_visible(busy)
-        self.layers_busy_spinner.start() if busy else self.layers_busy_spinner.stop()
-        subtitle = (N_("Open to view operation progress and logs.")
-                    if busy else public_error(self.layers_feedback, N_("Layer removal failed. Open the operation log for details."), context="Layer removal") if self.layers_feedback_is_error else
-                    N_("Layer removal succeeded. Restart your system manually to apply the change.")
-                    if state == "success" and self._maintenance_row_should_open("layer")
-                    and self.snapshot.deployment and self.snapshot.deployment_known else "")
-        self.layers_status.set_subtitle(GLib.markup_escape_text(format_message(subtitle)))
         if reason:
-            status_subtitle = subtitle if busy else reason
+            status_subtitle = N_("Open to view operation progress and logs.") if busy else reason
             self.layers_row.set_subtitle(GLib.markup_escape_text(format_message(status_subtitle)))
             self.reset_layers_row.set_subtitle(GLib.markup_escape_text(format_message(status_subtitle)))
         else:
             self.layers_row.set_subtitle(_("Choose which layered packages to remove. A restart is needed to apply the change."))
-            self.reset_layers_row.set_subtitle(_("Remove all system layers. Your files, Bazzite app store apps, Homebrew apps and AppImages stay."))
+            self.reset_layers_row.set_subtitle(_('Remove all system layers. Your files, {bazzite} app store apps, {homebrew} apps and {appimages} stay.').format(bazzite='Bazzite', homebrew='Homebrew', appimages='AppImages'))
         self.reset_layers_row.set_sensitive(not reason)
         self.reset_layers_row.set_activatable(not reason)
         self._sync_rollback_ui()
@@ -3837,8 +3636,6 @@ class Window(Adw.ApplicationWindow):
         state = self.snapshot
         if state.management and state.management.get("known") is not True:
             return N_("System status is unavailable. Refresh system information before continuing.")
-        if self.preview:
-            return "Preview mode · clearing the download cache is disabled."
         if self.client is None or getattr(self.client, "closed", False) or not self.status_received:
             return N_("Checking system status…")
         blocker = self._management_blocker_reason("cache")
@@ -3861,9 +3658,7 @@ class Window(Adw.ApplicationWindow):
         reason = self._cache_clear_reason()
         enabled = not reason
         state = self.snapshot
-        if self.preview:
-            title, detail = "Download cache clearing disabled in preview", "System information is read-only in preview."
-        elif self.cache_request_active or state.cache_state == "running":
+        if self.cache_request_active or state.cache_state == "running":
             title, detail = N_("Clearing download cache…"), N_("Open to view operation progress and logs.")
         elif state.cache_state == "success" and self._maintenance_row_should_open("cache"):
             title, detail = N_("Download cache cleared"), error_text(state.cache_error, N_('Could not check download-cache status. Open Logs for details.'), context='_sync_clear_cache_ui') or N_("The cached data was removed. It can be downloaded again when needed.")
@@ -3902,7 +3697,7 @@ class Window(Adw.ApplicationWindow):
         )
 
     def _request_clear_download_cache(self, expected_token):
-        if self.preview or self.closing:
+        if self.closing:
             return
         if (self.cache_request_active or self.snapshot.cache_state == "running"
                 or "cache" in self.maintenance_pending_units):
@@ -3955,7 +3750,7 @@ class Window(Adw.ApplicationWindow):
             failed(error)
 
     def _show_maintenance_log(self, kind, expected_unit=None):
-        if self.preview or self.closing or self.modal:
+        if self.closing or self.modal:
             return
         unit = expected_unit or getattr(self.snapshot, kind + "_unit", "")
         if not unit:
@@ -3969,9 +3764,9 @@ class Window(Adw.ApplicationWindow):
                 "previous_generation": self._maintenance_key(kind)[2],
             }
         dialog = Adw.Window(transient_for=self, modal=True, default_width=560,
-                            title={"rollback": _("Rollback"), "cancel": _("Cancel pending deployment"),
+                            title={"rollback": (_("Cancel rollback") if unit.startswith("bazzite-portal-maintenance@cancel-rollback-") else _("Rollback")), "cancel": _("Cancel pending deployment"),
                                    "layer": _("Remove layered apps"), "cache": _("Clear download cache"),
-                                   "channel": _('Rebase release channel'), "image": _('Rebase Bazzite image'),
+                                   "channel": _('Rebase release channel'), "image": _('Rebase {bazzite} image').format(bazzite='Bazzite'),
                                    "delete": _("Delete pinned deployment")}.get(kind, _("System operation")))
         dialog.set_application(self.get_application())
         dialog.operation_kind = kind
@@ -4034,7 +3829,7 @@ class Window(Adw.ApplicationWindow):
                 self.maintenance_acknowledged.add((kind, *key))
                 self.maintenance_acknowledgement_pending.add((kind, *key))
                 client = self.client
-                if (not self.preview and client is not None
+                if (client is not None
                         and not getattr(client, "closed", False)):
                     try:
                         client.call("MaintenanceViewed", GLib.Variant("(sssx)", (kind, *key)))
@@ -4127,7 +3922,9 @@ class Window(Adw.ApplicationWindow):
                     "cancel": _("Preparing deployment cancellation…"),
                     "channel": _('Preparing release channel rebase…'),
                     "image": _('Preparing image rebase…'),
-                    "rollback": _("Preparing rollback…"),
+                    "rollback": (_("Preparing rollback cancellation…")
+                                 if dialog.operation_key[0].startswith("bazzite-portal-maintenance@cancel-rollback-")
+                                 else _("Preparing rollback…")),
                     "layer": _("Preparing layer removal…"),
                     "delete": _("Preparing deployment deletion…"),
                 }.get(kind, _("Preparing operation…")))
@@ -4206,8 +4003,9 @@ class Window(Adw.ApplicationWindow):
         target = self.layers_target
         self.confirm(
             N_("Remove all layered apps?"),
-            "This removes all layered apps from the system. It does not remove Bazzite app store (Flatpak apps), Homebrew apps, AppImages, or your personal files. Restart manually when you are ready to apply the change.",
-            N_("Remove all layers"),
+            _('This removes all layered apps from the system. It does not remove {bazzite} app store ({flatpak} apps), {homebrew} apps, {appimages}, or your personal files. Restart manually when you are ready to apply the change.').format(
+                bazzite='Bazzite', flatpak='Flatpak', homebrew='Homebrew', appimages='AppImages'),
+            N_("Remove all layered apps"),
             lambda: self._request_remove_layers(target["token"]),
         )
 
@@ -4228,7 +4026,7 @@ class Window(Adw.ApplicationWindow):
         content.set_margin_top(8)
         content.set_margin_bottom(12)
         toolbar.set_content(content)
-        content.append(label(N_("Select the packages to remove. Apps included with Bazzite stay installed.")))
+        content.append(label(C_('Select the packages to remove. Apps included with {bazzite} stay installed.', bazzite='Bazzite')))
         scroll = Gtk.ScrolledWindow(vexpand=True, min_content_height=180,
                                     hscrollbar_policy=Gtk.PolicyType.NEVER)
         dialog.package_scroll = scroll
@@ -4338,7 +4136,7 @@ class Window(Adw.ApplicationWindow):
         self._update_controller_legend()
 
     def _request_remove_layers(self, token, selected=None):
-        if self.closing or self.preview:
+        if self.closing:
             return
         reason = self._layers_reason()
         if (reason or self.layers_target["token"] != token
@@ -4346,8 +4144,6 @@ class Window(Adw.ApplicationWindow):
             self.toast(reason or N_("The package list changed. Review it again before confirming."))
             return
         self.layers_request_active = True
-        self.layers_feedback = ""
-        self.layers_feedback_is_error = False
         self.deployment_summary_fresh = False
         if selected is None:
             expected_unit = f"bazzite-portal-maintenance@reset-layers-{token}.service"
@@ -4363,8 +4159,6 @@ class Window(Adw.ApplicationWindow):
             self.layers_request_active = False
             if error:
                 self._clear_maintenance_pending("layer")
-            self.layers_feedback = str(error)
-            self.layers_feedback_is_error = bool(error)
             if self.modal is not None and getattr(self.modal, "operation_kind", "") == "layer":
                 self.modal.request_completed = not error
                 self.modal.request_error = str(error) if error else ""
@@ -4384,7 +4178,7 @@ class Window(Adw.ApplicationWindow):
         while child := self.customization_rows_box.get_first_child():
             self.customization_rows_box.remove(child)
         self.customization_status_row.set_visible(not summary["known"])
-        self.customization_status_row.set_title(format_message(error_text(summary["error"], N_('Details are unavailable. Open Logs for more information.'), context='_render_customizations') or N_("Customization details loaded")))
+        self.customization_status_row.set_title(format_message(error_text(summary["error"], N_('Details are unavailable. Open Logs for more information.'), context='_render_customizations')))
         for entry in summary["rows"]:
             row = Adw.ActionRow(title=entry["title"], subtitle=GLib.markup_escape_text(entry["detail"]))
             row.set_subtitle_lines(0)
@@ -4433,138 +4227,23 @@ class Window(Adw.ApplicationWindow):
     def _refresh_system(self):
         if self.closing or self.system_loading:
             return
-        if not self.preview:
-            if self.client is None or getattr(self.client, "closed", False):
-                return
-            self.system_loading = True
-            self._set_system_refresh_busy(True)
-            def failed(error):
-                self.system_loading = False
-                self._set_system_refresh_busy(False)
-                self.toast(public_error(error, N_("Could not refresh system information. Open Logs for details."), context='Refresh system information'))
-            try:
-                self.client.call(N_("Refresh"), error_callback=failed)
-            except Exception as error:
-                failed(error)
+        if self.client is None or getattr(self.client, "closed", False):
             return
         self.system_loading = True
-        self.deployment_summary_fresh = False
-        self.channel_status_fresh = False
-        self._sync_rollback_ui()
-        self._sync_cancel_pending_ui()
         self._set_system_refresh_busy(True)
-        self.deployment_status_row.set_title(format_message(N_("Next restart")))
-        self.deployment_status_row.set_subtitle(format_message(N_("Refreshing next-restart information…")))
-        self.deployment_status_row.set_sensitive(False)
 
-        def fetch():
-            try:
-                info = system_information()
-                if not isinstance(info, dict):
-                    raise ValueError("System information was malformed.")
-                summary = deployments.summarize_deployments(info.get("deployment_status"))
-                target = cancel_pending.target(info.get("deployment_status"))
-                presentation = system_presentation.summarize_system_presentation(info, summary)
-                try:
-                    channel_status = system.channel_status(info.get("deployment_status"))
-                    if not isinstance(channel_status, dict):
-                        channel_status = {"available": False, "reason": "Release channel status was malformed.", "state": "unknown"}
-                except Exception as channel_error:
-                    channel_status = {"available": False,
-                                      "reason": str(channel_error) or N_("Release channel status is unavailable."),
-                                      "state": "unknown"}
-                try:
-                    delete_status = system.delete_deployment_status(info.get("deployment_status"))
-                except Exception as delete_error:
-                    delete_status = {"available": False, "state": "unknown", "reason": str(delete_error), "deployments": []}
-                image_status = system.image_switch_status(info.get("deployment_status"))
-                return {"info": info, "summary": summary, "cancel_target": target,
-                        "presentation": presentation,
-                        "layers_target": reset_layers.target(info.get("deployment_status")),
-                        "channel_status": channel_status, "delete_status": delete_status, "image_status": image_status, "error": None}
-            except Exception as error:
-                return {"info": None, "summary": None,
-                        "error": str(error) or N_("System information refresh failed.")}
-
-        def loaded(result):
-            if self.snapshot.management:
-                # An agent revision supersedes any older preview/read-only query.
-                self._apply_management_snapshot(self.snapshot.management)
-                return
+        def failed(error):
             self.system_loading = False
             self._set_system_refresh_busy(False)
-            error = error_text(result.get("error"), N_('Details are unavailable. Open Logs for more information.'), context='loaded') if isinstance(result, dict) else public_error("System information was malformed.", N_("Could not load system information. Open Logs for details."), context="System information")
-            if error is not None:
-                self.cancel_target_fresh = False
-                self.deployment_summary_fresh = False
-                self.channel_status_fresh = False
-                self.delete_status_fresh = False
-                self._sync_delete_deployments_ui()
-                self.customization_status_row.set_visible(True)
-                self.customization_status_row.set_title(
-                    format_message(N_("Refresh failed · showing last loaded customizations") if self.system_has_snapshot
-                    else N_("Customization details could not be refreshed")))
-                if self.system_has_snapshot:
-                    message = _('Showing last loaded details. {error}').format(error=error)
-                else:
-                    message = str(error)
-                self.deployment_status_row.set_title(format_message(N_("Next restart")))
-                self.deployment_status_row.set_sensitive(False)
-                self.deployment_status_row.set_subtitle(GLib.markup_escape_text(format_message(message)))
-                self._sync_cancel_pending_ui()
-                self._sync_channel_ui()
-                self._sync_layers_ui()
-                self._finish_deferred_cancel_refresh()
-                return
-            info = result["info"]
-            current_page = self.stack.get_visible_child_name()
-            scroll = self.stack.get_visible_child() if current_page in {N_("System"), N_("Management")} else None
-            offset = scroll.get_vadjustment().get_value() if scroll else None
-            presentation = result["presentation"]
-            for title, value in {"Image": presentation["variant"], "Release channel": presentation["track"]}.items():
-                self.system_rows[title].set_subtitle(GLib.markup_escape_text(format_message(value)))
-            self._render_deployment_summary(result["summary"])
-            self.deployment_summary_fresh = True
-            self._set_release_identity(result["summary"])
-            self._render_customizations({"known": presentation["packages"] != N_("Unknown"),
-                "error": N_("Layered package information is unavailable."),
-                "rows": [{"title": N_("Layered packages"), "detail": presentation["packages"]}]})
-            self.system_has_snapshot = True
-            self.cancel_target = result.get("cancel_target")
-            self.cancel_target_fresh = True
-            self.channel_status = result.get("channel_status")
-            self.image_status = result.get("image_status")
-            self.image_deployment_status = info.get("deployment_status")
-            self._sync_image_ui()
-            self.delete_status = result.get("delete_status")
-            self.delete_status_fresh = isinstance(self.delete_status, dict)
-            self._sync_delete_deployments_ui()
-            self.channel_status_fresh = isinstance(self.channel_status, dict)
-            if isinstance(self.channel_status, dict) and self.channel_status.get("state") in {"running", "success", "failed"}:
-                self.channel_waiting_status = False
-            elif self.channel_waiting_status:
-                self.channel_status_polls += 1
-                if self.channel_status_polls >= 5:
-                    self.channel_waiting_status = False
-            self._sync_channel_ui()
-            self.layers_target = result.get("layers_target")
-            self._sync_layers_ui()
-            self._sync_rollback_ui()
-            self._sync_cancel_pending_ui()
-            self._finish_deferred_cancel_refresh()
-            if scroll is not None:
-                def restore_reading_position():
-                    if not self.closing and self.stack.get_visible_child() is scroll:
-                        scroll.get_vadjustment().set_value(offset)
-                    return GLib.SOURCE_REMOVE
-                GLib.timeout_add(16, restore_reading_position)
-            self._schedule_channel_poll()
-        self.work(fetch, loaded)
+            self.toast(public_error(error, N_("Could not refresh system information. Open Logs for details."), context='Refresh system information'))
+
+        try:
+            self.client.call(N_("Refresh"), error_callback=failed)
+        except Exception as error:
+            failed(error)
 
     def _delete_deployment_reason(self):
         status = self.delete_status if isinstance(self.delete_status, dict) else {}
-        if self.preview:
-            return "Deployment deletion is disabled in preview."
         if self.closing or not self.status_received or self.client is None or getattr(self.client, "closed", False):
             return N_("System status is unavailable. Open Logs for details.")
         if self.system_loading or not self.delete_status_fresh:
@@ -4572,12 +4251,12 @@ class Window(Adw.ApplicationWindow):
         if self.delete_request_active or status.get("state") == "running":
             return N_("A deployment is being deleted.")
         if status.get("state") == "unknown":
-            return error_text(status.get("error"), N_('Could not check saved Bazzite versions. Open Logs for details.'), context='_delete_deployment_reason') or N_("Deployment deletion status could not be verified.")
+            return error_text(status.get("error"), C_('Could not check saved {bazzite} versions. Open Logs for details.', bazzite='Bazzite'), context='_delete_deployment_reason') or N_("Deployment deletion status could not be verified.")
         blocker = self._management_blocker_reason("delete")
         if blocker:
             return blocker
         if status.get("available") is not True:
-            return error_text(status.get("reason"), N_('Could not check saved Bazzite versions. Open Logs for details.'), context='_delete_deployment_reason') or N_("No saved, pinned deployments can be deleted.")
+            return error_text(status.get("reason"), C_('Could not check saved {bazzite} versions. Open Logs for details.', bazzite='Bazzite'), context='_delete_deployment_reason') or N_("No saved, pinned deployments can be deleted.")
         return ""
 
     def _sync_delete_deployments_ui(self):
@@ -4589,12 +4268,12 @@ class Window(Adw.ApplicationWindow):
             title = N_("Deleting pinned deployment…")
             subtitle = N_("Open to view operation progress and logs.")
         elif state == "success" and self._maintenance_row_should_open("delete"):
-            title, subtitle = N_("Pinned deployment deleted"), error_text(getattr(self.snapshot, "delete_error", ""), N_('Could not check saved Bazzite versions. Open Logs for details.'), context='_sync_delete_deployments_ui')
+            title, subtitle = N_("Pinned deployment deleted"), error_text(getattr(self.snapshot, "delete_error", ""), C_('Could not check saved {bazzite} versions. Open Logs for details.', bazzite='Bazzite'), context='_sync_delete_deployments_ui')
         elif state == "failed" and self._maintenance_row_should_open("delete"):
-            title, subtitle = N_("Deployment deletion failed"), error_text(getattr(self.snapshot, "delete_error", ""), N_('Could not check saved Bazzite versions. Open Logs for details.'), context='_sync_delete_deployments_ui')
+            title, subtitle = N_("Deployment deletion failed"), error_text(getattr(self.snapshot, "delete_error", ""), C_('Could not check saved {bazzite} versions. Open Logs for details.', bazzite='Bazzite'), context='_sync_delete_deployments_ui')
         elif state == "unknown" and self._maintenance_row_should_open("delete"):
             title = N_("Deployment deletion status unknown")
-            subtitle = error_text(getattr(self.snapshot, "delete_error", ""), N_('Could not check saved Bazzite versions. Open Logs for details.'), context='_sync_delete_deployments_ui') or reason
+            subtitle = error_text(getattr(self.snapshot, "delete_error", ""), C_('Could not check saved {bazzite} versions. Open Logs for details.', bazzite='Bazzite'), context='_sync_delete_deployments_ui') or reason
         else:
             title = N_("Delete pinned deployments")
             subtitle = reason or N_("Choose a saved, pinned system version to delete.")
@@ -4712,8 +4391,6 @@ class Window(Adw.ApplicationWindow):
             finish(error)
 
     def _image_switch_reason(self):
-        if self.preview:
-            return 'Image rebasing is disabled in preview.'
         if self.closing or not self.status_received or self.client is None or getattr(self.client, "closed", False):
             return N_("System status is unavailable. Open Logs for details.")
         blocker = self._management_blocker_reason("image")
@@ -4725,9 +4402,9 @@ class Window(Adw.ApplicationWindow):
             return N_("Apply or cancel the pending deployment before changing images.")
         status = self.image_status if isinstance(self.image_status, dict) else {}
         if not status.get("available"):
-            return error_text(status.get("error"), N_('Could not check Bazzite images. Open Logs for details.'), context='_image_switch_reason') or N_("Changing Bazzite images is unavailable. Open Logs for details.")
+            return error_text(status.get("error"), C_('Could not check {bazzite} images. Open Logs for details.', bazzite='Bazzite'), context='_image_switch_reason') or C_('Changing {bazzite} images is unavailable. Open Logs for details.', bazzite='Bazzite')
         if self.snapshot.image_state == "unknown" or status.get("state") == "unknown":
-            return error_text(self.snapshot.image_error, N_('Could not check Bazzite images. Open Logs for details.'), context='_image_switch_reason') or error_text(status.get("error"), N_('Could not check Bazzite images. Open Logs for details.'), context='_image_switch_reason') or N_('Image-rebase status could not be verified.')
+            return error_text(self.snapshot.image_error, C_('Could not check {bazzite} images. Open Logs for details.', bazzite='Bazzite'), context='_image_switch_reason') or error_text(status.get("error"), C_('Could not check {bazzite} images. Open Logs for details.', bazzite='Bazzite'), context='_image_switch_reason') or N_('Image-rebase status could not be verified.')
         return ""
 
     def _sync_image_ui(self):
@@ -4737,8 +4414,7 @@ class Window(Adw.ApplicationWindow):
         browse = not reason
         self.channel_specific_row.set_sensitive(browse)
         self.channel_specific_row.set_activatable(browse)
-        self.channel_specific_row.set_subtitle(GLib.markup_escape_text(format_message(reason or N_("Choose a Bazzite image, release channel and version."))))
-        self.image_details_row.set_visible(False)
+        self.channel_specific_row.set_subtitle(GLib.markup_escape_text(format_message(reason or C_('Choose a {bazzite} image, release channel and version.', bazzite='Bazzite'))))
         self._sync_maintenance_row("image")
 
     def _show_image_selection(self):
@@ -4770,10 +4446,10 @@ class Window(Adw.ApplicationWindow):
                 self.toast(reason)
                 return
             track = tag.split("-", 1)[0]
-            track_label = {"stable": _("Stable"), "testing": _("Testing"), "unstable": _("Unstable")}[track]
+            track_label = channel_name(track)
             version = _('Latest {track}').format(track=track_label) if tag == track else format_version(tag, track)
             body = (_('Prepare {image}, {version}, for your next restart? Your personal files stay. Administrator authorization is required. Your computer will not restart automatically.').format(image=image, version=version))
-            title = N_('Rebase Bazzite image?')
+            title = C_('Rebase {bazzite} image?', bazzite='Bazzite')
             if target.get("desktop_environment_change") or track == "unstable":
                 if not self.store.preferences()["show_unsupported_rebase_targets"]:
                     self.toast(N_("Enable unsupported rebase targets in Settings to choose this image or channel."))
@@ -4791,7 +4467,7 @@ class Window(Adw.ApplicationWindow):
             self.toast(N_("Enable unsupported rebase targets in Settings to choose this image or channel."))
             return
         if reason or not target.get("available") or target.get("token") != selected["token"]:
-            self.toast(reason or error_text(target.get("reason"), N_('Could not check Bazzite images. Open Logs for details.'), context='_request_image_switch') or N_("Deployment information changed. Review it again."))
+            self.toast(reason or error_text(target.get("reason"), C_('Could not check {bazzite} images. Open Logs for details.', bazzite='Bazzite'), context='_request_image_switch') or N_("Deployment information changed. Review it again."))
             return
         self.image_request_active = True
         instance = f"{selected['token']}-{selected['image']}-{selected['tag']}"
@@ -4823,8 +4499,6 @@ class Window(Adw.ApplicationWindow):
 
     def _channel_switch_reason(self):
         status = self._effective_channel_status()
-        if self.preview:
-            return 'Release channel rebasing is disabled in preview.'
         if self.closing:
             return N_("The application is closing.")
         if not self.status_received or self.client is None or getattr(self.client, "closed", False):
@@ -4861,45 +4535,46 @@ class Window(Adw.ApplicationWindow):
         target = status.get("target_track")
         state = status.get("state", "unknown")
         reason = self._channel_switch_reason()
-        if self.preview:
-            title = 'Release channel rebasing disabled in preview'
-            detail = "Preview can read system information but cannot change deployments."
-        elif state == "running":
+        if state == "running":
 
-            title = _('Rebasing to Bazzite Testing…') if target == "testing" else _('Rebasing to Bazzite Stable…')
+            track = "testing" if target == "testing" else "stable"
+            title = _('Rebasing to {bazzite} {track}…').format(bazzite='Bazzite', track=channel_name(track))
             detail = error_text(status.get("error"), N_('Could not check the release channel. Open Logs for details.'), context='_sync_channel_ui') or N_("The image is being prepared. You can keep using the computer.")
         elif self.channel_request_active:
             title, detail = N_('Rebasing release channel…'), ""
         elif state == "success" and self._maintenance_row_should_open("channel"):
 
-            title = _("Bazzite Testing is ready") if target == "testing" else _("Bazzite Stable is ready")
+            track = "testing" if target == "testing" else "stable"
+            title = _('{bazzite} {track} is ready').format(bazzite='Bazzite', track=channel_name(track))
             detail = N_("Restart manually to start the new release channel.")
         elif state == "failed" and self._maintenance_row_should_open("channel"):
             title = N_('Release channel rebase failed')
             detail = error_text(status.get("error"), N_('Could not check the release channel. Open Logs for details.'), context='_sync_channel_ui') or N_("The operation failed. Refresh system information to check the current state.")
         elif reason:
 
-            title = ((_('Rebase to Bazzite Testing') if current == "stable" else _('Rebase to Bazzite Stable'))
-                     if current in {"stable", "testing"} else N_('Release channel rebasing unavailable'))
+            title = (_('Rebase to {bazzite} {track}').format(bazzite='Bazzite',
+                         track=channel_name("testing" if current == "stable" else "stable"))
+                     if current in {"stable", "testing"} else N_('Release channel rebasing is unavailable.'))
             detail = reason
         else:
             if current == target:
 
-                title = _("Return to the latest Testing release") if target == "testing" else _("Return to the latest Stable release")
+                title = _('Return to the latest {track} release').format(track=channel_name(target))
             else:
-                title = _('Rebase to Bazzite Testing') if target == "testing" else _('Rebase to Bazzite Stable')
+                title = _('Rebase to {bazzite} {track}').format(bazzite='Bazzite', track=channel_name(target))
             detail = (N_("Download newer changes to try after restarting.")
-                      if target == "testing" else N_("Return to the stable release after restarting."))
+                      if target == "testing" else
+                      _('Return to the {track} release after restarting.').format(
+                          track=channel_name(target)))
         self.channel_switch_row.set_title(GLib.markup_escape_text(format_message(title)))
         self.channel_switch_row.set_subtitle(GLib.markup_escape_text(format_message(str(detail))))
         enabled = not reason
         self.channel_switch_row.set_sensitive(enabled)
         self.channel_switch_row.set_activatable(enabled)
-        self.channel_details_row.set_visible(False)
         self._sync_maintenance_row("channel")
 
     def _schedule_channel_poll(self):
-        if self.closing or self.preview:
+        if self.closing:
             return
         running = (self.channel_request_active or self.channel_waiting_status or
                    (isinstance(self.channel_status, dict) and self.channel_status.get("state") == "running"))
@@ -4921,12 +4596,13 @@ class Window(Adw.ApplicationWindow):
             self._sync_channel_ui()
             return
         status = self.channel_status
-        target_name = N_("Bazzite Testing") if status["target_track"] == "testing" else N_("Bazzite Stable")
+        target_name = f'Bazzite {channel_name(status["target_track"])}'
         version = self._short_deployment_text(status.get("version"), 48)
         image = self._short_deployment_text(status.get("image"), 100)
         action = (_('Return this installation to the latest {target_name} release? ').format(target_name=target_name)
                   if status.get("current_track") == status["target_track"] else
-                  _('Rebase this Bazzite installation from {value1} to {target_name}? ').format(value1=status['current_track'], target_name=target_name))
+                _('Rebase this {bazzite} installation from {current_track} to {target_name}? ').format(bazzite='Bazzite',
+                    current_track=channel_name(status['current_track']), target_name=target_name))
         body = (action +
                 _('The running image is {version} ({image}). This downloads and prepares the selected channel. Administrator authorization is required. Your computer will not restart automatically; restart manually after the rebase completes.').format(version=version, image=image))
         token = status["token"]
@@ -4935,7 +4611,7 @@ class Window(Adw.ApplicationWindow):
                      lambda: self._request_channel_switch(token))
 
     def _request_channel_switch(self, expected_token):
-        if self.preview or self.closing:
+        if self.closing:
             return
         reason = self._channel_switch_reason()
         if reason or self.channel_status.get("token") != expected_token:
@@ -4978,16 +4654,14 @@ class Window(Adw.ApplicationWindow):
             failed(error)
 
     def _build_announcements(self):
-        page, box = content_page(N_("Community"), N_("Visit Bazzite documentation, community spaces, and source code."))
+        page, box = content_page(N_("Community"), C_('Visit {bazzite} documentation, community spaces, and source code.', bazzite='Bazzite'))
         resources = group(N_("Resources"))
         self.community_link_rows = {}
         self.community_favicon_images = {}
-        # Preview may read existing local artwork, but live cache reads happen
-        # alongside downloads on the startup worker below.
-        self.community_favicon_paths = favicons.cached_favicons() if self.preview else {}
+        self.community_favicon_paths = {}
         self.community_favicon_fetch_started = False
         for link_id, title, description, url in community.LINKS:
-            row = Adw.ActionRow(title=GLib.markup_escape_text(_(title)), subtitle=GLib.markup_escape_text(_(description)))
+            row = Adw.ActionRow(title=GLib.markup_escape_text(format_message(title)), subtitle=GLib.markup_escape_text(format_message(description)))
             row.controller_focus_row = True
             row.set_activatable(True)
             row.connect("activated", lambda *_args, target=url: self._open_community_link(target))
@@ -5016,7 +4690,7 @@ class Window(Adw.ApplicationWindow):
         self.stack.add_named(page, N_("Community"))
 
         announcements_page, announcements_box = content_page(
-            N_("Announcements"), N_("Bazzite release and project announcements.")
+            N_("Announcements"), C_('{bazzite} release and project announcements.', bazzite='Bazzite')
         )
         announcement_status = Adw.ActionRow(title=_("No announcements available"))
         announcement_status.set_subtitle_lines(2)
@@ -5038,7 +4712,7 @@ class Window(Adw.ApplicationWindow):
 
         def fetch():
             try:
-                path = announcements.source_path(self.config_path, preview=self.preview)
+                path = announcements.source_path(self.config_path)
                 return announcements.load_announcements(path), ""
             except announcements.AnnouncementLoadError as error:
                 log.warning("Announcements configuration could not be loaded", exc_info=True)
@@ -5058,7 +4732,7 @@ class Window(Adw.ApplicationWindow):
         home_row = self.home_category_rows["Announcements"]
         home_row.set_sensitive(self.announcements_available)
         home_row.set_activatable(self.announcements_available)
-        home_row.set_subtitle(_("View Bazzite release and project announcements.") if self.announcements_available
+        home_row.set_subtitle(_('View {bazzite} release and project announcements.').format(bazzite='Bazzite') if self.announcements_available
                               else _("The configuration file for this category is missing or invalid."))
         if error:
             self.announcement_status_group.set_visible(False)
@@ -5136,7 +4810,7 @@ class Window(Adw.ApplicationWindow):
             image.set_from_icon_name(self._community_fallback_icon(link_id))
 
     def _ensure_community_favicons(self):
-        if self.preview or self.community_favicon_fetch_started:
+        if self.community_favicon_fetch_started:
             return
         self.community_favicon_fetch_started = True
         def cached_loaded(paths):
@@ -5156,25 +4830,19 @@ class Window(Adw.ApplicationWindow):
 
     def _open_community_link(self, url):
         if not community.valid_link(url):
-            self.toast(N_("This community link is not a valid HTTPS address."))
+            self.toast(_('This community link is not a valid {https} address.').format(https='HTTPS'))
             return
         if self.closing:
-            return
-        if self.preview:
-            self.toast("Links are disabled in preview mode.")
             return
         self._launch_community_uri(url)
 
     def _launch_community_uri(self, url):
         if self.closing:
             return
-        if self.preview:
-            self.toast("Links are disabled in preview mode.")
-            return
         self._run_xdg_open(url, N_("Could not open link"))
 
     def _build_settings(self):
-        page, box = content_page(N_("Settings"))
+        page, box = content_page("")
         box.remove(box.get_first_child())
         preferences = group(N_("Preferences"))
         self.switches = {}
@@ -5183,8 +4851,10 @@ class Window(Adw.ApplicationWindow):
             ("open_at_login", _("Open app at login"), _("Open the window at login. Background monitoring starts independently.")),
             ("show_indicator", _("Hide notification area icon"), _("Hide the update icon in the notification area.")),
             ("show_logs", _("Show console during update"), _("Show the console on the Updates screen. Intended for advanced users.")),
-            ("show_disabled_update_steps", _("Show disabled UUPD steps"), _("Display steps disabled in UUPD. This does not enable them.")),
-            ("show_unsupported_rebase_targets", _("Show unsupported rebase targets"), _("Include other desktops and the Unstable channel. Intended for advanced testing; these targets may cause problems.")),
+            ("show_disabled_update_steps", _('Show disabled {uupd} steps').format(uupd='UUPD'), _('Display steps disabled in {uupd}. This does not enable them.').format(uupd='UUPD')),
+            ("show_unsupported_rebase_targets", _("Show unsupported rebase targets"),
+             _('Include other desktops and the {track} channel. Intended for advanced testing; these targets may cause problems.').format(
+                 track=channel_name("unstable"))),
             ("skip_one_shot_confirmation", _("Don’t ask before running tools"), _("Skip confirmation for tools that run without an options dialog.")),
             ("always_show_controller_prompts", _("Always show controller prompts"), _("Keep button prompts visible when no controller is connected.")),
         ):
@@ -5246,7 +4916,7 @@ class Window(Adw.ApplicationWindow):
         theme_names = [_(name) for _theme_id, name in THEME_NAMES]
         self.notification_theme_row = Adw.ActionRow(title=_("Notification icon theme"))
         self.notification_theme_row.controller_focus_row = True
-        self.notification_theme_row.set_visible(self.preview or NOTIFICATION_THEMES_ENABLED)
+        self.notification_theme_row.set_visible(NOTIFICATION_THEMES_ENABLED)
         self.notification_theme_dropdown = Gtk.DropDown(model=Gtk.StringList.new(theme_names), valign=Gtk.Align.CENTER)
         self.notification_theme_dropdown.controller_exclude_focus = True
         self.notification_theme_dropdown.set_selected(THEMES.index(self.store.preferences()["notification_icon_theme"]))
@@ -5280,8 +4950,8 @@ class Window(Adw.ApplicationWindow):
         box.append(preferences)
         steam_group = group("Steam")
         self.add_to_steam_row = Adw.ActionRow(
-            title=_("Add Bazzite Portal to Steam"),
-            subtitle=_("Open this app from your Steam library, including Gaming Mode."))
+            title=_('Add {app_name} to {steam}').format(app_name='Bazzite Portal', steam='Steam'),
+            subtitle=_('Open this app from your {steam} library, including Gaming Mode.').format(steam='Steam'))
         self.add_to_steam_row.controller_focus_row = True
         self.add_to_steam_row.set_activatable(True)
         self.add_to_steam_row.connect("activated", lambda *_: self._add_to_steam())
@@ -5301,7 +4971,7 @@ class Window(Adw.ApplicationWindow):
         data.add(row)
         box.append(data)
         about_group = group(N_("About"))
-        about_row = Adw.ActionRow(title=_("About Bazzite Portal"))
+        about_row = Adw.ActionRow(title=_('About {app_name}').format(app_name='Bazzite Portal'))
         about_row.controller_focus_row = True
         about_row.set_activatable(True)
         about_row.connect("activated", lambda *_: self.get_application().activate_action("about", None))
@@ -5309,13 +4979,10 @@ class Window(Adw.ApplicationWindow):
         box.append(about_group)
         self.settings_errors = label("\n".join(public_error(error, N_("Could not save or load app preferences. Open Logs for details."), context='App preferences') for error in self.store.errors), translate=False)
         box.append(self.settings_errors)
-        self.stack.add_named(page, N_("Settings"))
+        self.stack.add_named(page, "Settings")
 
     def _add_to_steam(self):
         if self.closing:
-            return
-        if self.preview:
-            self.toast("Adding to Steam is disabled in preview mode.")
             return
         if not self.add_to_steam_row.get_sensitive():
             return
@@ -5327,11 +4994,11 @@ class Window(Adw.ApplicationWindow):
                 return
             try:
                 artwork_ready = result.result()
-                message = (N_("Added to Steam.") if artwork_ready else
-                           N_("Add to Steam requested."))
+                message = (C_('Added to {steam}.', steam='Steam') if artwork_ready else
+                           C_('Add to {steam} requested.', steam='Steam'))
             except Exception as error:
                 log.warning("Add to Steam failed: %s", error)
-                message = public_error(error, N_('Could not add Bazzite Portal to Steam. Open Logs for details.'), context='Add to Steam')
+                message = public_error(error, C_('Could not add {app_name} to {steam}. Open Logs for details.', app_name='Bazzite Portal', steam='Steam'), context='Add to Steam')
 
             def present():
                 if not self.closing:
@@ -5345,9 +5012,6 @@ class Window(Adw.ApplicationWindow):
 
     def _open_app_logs_folder(self):
         if self.closing:
-            return
-        if self.preview:
-            self.toast("Folder opening is disabled in preview mode.")
             return
         try:
             from bazzite_portal.core.logging import get_log_directory
@@ -5377,7 +5041,8 @@ class Window(Adw.ApplicationWindow):
         self._reload_agent()
         if saved and key == "show_unsupported_rebase_targets" and value:
             self.confirm(N_("Unsupported rebase targets"),
-                         N_("Rebasing to unsupported targets, including other desktops and the Unstable channel, can and will break your system. The Bazzite team reserves the right not to provide support in these situations. Please read our documentation for further information."),
+                         _('Rebasing to unsupported targets, including other desktops and the {track} channel, can and will break your system. The {bazzite} team reserves the right not to provide support in these situations. Please read our documentation for further information.').format(bazzite='Bazzite',
+                             track=channel_name("unstable")),
                          N_("OK"), lambda: None, informational=True,
                          documentation_url="https://docs.bazzite.gg/Installing_and_Managing_Software/Updates_Rollbacks_and_Rebasing/rebase_guide/")
 
@@ -5457,7 +5122,7 @@ class Window(Adw.ApplicationWindow):
             self.modal.present()
             return
         restore_target = self.controller_focus_widget or self.get_focus()
-        dialog = Adw.AboutWindow(transient_for=self, application_name=_("Bazzite Portal"), application_icon=APP_ID, version=VERSION, developer_name="Xarishark • Zacharias Xenakis", license_type=Gtk.License.GPL_3_0_ONLY, comments=_("Manage Bazzite updates, tools, and system settings."))
+        dialog = Adw.AboutWindow(transient_for=self, application_name='Bazzite Portal', application_icon=APP_ID, version=VERSION, developer_name="Xarishark • Zacharias Xenakis", license_type=Gtk.License.GPL_3_0_ONLY, comments=_('Manage {bazzite} updates, tools, and system settings.').format(bazzite='Bazzite'))
         translator_credits = _("translator-credits")
         if translator_credits != "translator-credits":
             dialog.set_translator_credits(translator_credits)
@@ -5604,9 +5269,6 @@ class Window(Adw.ApplicationWindow):
     def _about_activate_link(self, _dialog, uri):
         if self.closing:
             return True
-        if self.preview:
-            self.toast("Links are disabled in preview mode.")
-            return True
         self._run_xdg_open(uri, N_("Could not open link"))
         return True
 
@@ -5730,13 +5392,13 @@ class Window(Adw.ApplicationWindow):
             self._update_controller_legend(labels)
             return
         focus_now = controller_focused_target(self.modal or self)
-        if (not self.modal and self.stack.get_visible_child_name() == N_("Settings")
+        if (not self.modal and self.stack.get_visible_child_name() == "Settings"
                 and focus_now is self.notification_theme_row and command in ("left", "right")):
             self._cycle_notification_theme(-1 if command == "left" else 1)
             self._set_controller_focus(self.notification_theme_row)
             self._update_controller_legend(labels)
             return
-        if (self.stack.get_visible_child_name() == N_("Settings") and focus_now is self.controller_style_row
+        if (self.stack.get_visible_child_name() == "Settings" and focus_now is self.controller_style_row
                 and command in ("left", "right")):
             self._cycle_controller_style(-1 if command == "left" else 1)
             self._set_controller_focus(self.controller_style_row)
@@ -5808,7 +5470,7 @@ class Window(Adw.ApplicationWindow):
             page = self.stack.get_visible_child_name()
             if page == N_("Home"):
                 self.controller_navigation = True
-                self.show_page(N_("Settings"))
+                self.show_page("Settings")
             elif page == N_("Tools"):
                 focus = controller_focused_target(self)
                 item = getattr(focus, "portal_item", None)
@@ -5818,7 +5480,7 @@ class Window(Adw.ApplicationWindow):
             page = self.stack.get_visible_child_name()
             if page == N_("Home"):
                 self.show_page(N_("Updates"))
-            elif page in {N_("System"), N_("Management")}:
+            elif page in {N_("System"), "Management"}:
                 self._refresh_system()
             elif page == N_("Tools"):
                 self.open_tools_search()
@@ -5922,9 +5584,6 @@ class Window(Adw.ApplicationWindow):
             application.window = None
         self.closing = True
         self.home_update_artwork.close()
-        if self._preview_timer is not None:
-            GLib.source_remove(self._preview_timer)
-            self._preview_timer = None
         self._last_pointer_position.clear()
         if self._native_focus_timeout is not None:
             GLib.source_remove(self._native_focus_timeout)
@@ -5941,25 +5600,19 @@ class Window(Adw.ApplicationWindow):
 
 
 class Application(Adw.Application):
-    def __init__(self, config_path=portal.DEFAULT_CONFIG, preview=False, updates=False, action_id=None):
-        super().__init__(application_id=APP_ID + (".Preview" if preview else ""), flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
-        self.config_path, self.preview, self.initial_updates = config_path, preview, updates
+    def __init__(self, config_path=portal.DEFAULT_CONFIG, updates=False, action_id=None):
+        super().__init__(application_id=APP_ID, flags=Gio.ApplicationFlags.HANDLES_COMMAND_LINE)
+        self.config_path, self.initial_updates = config_path, updates
         self.window = None
         self.add_main_option("updates", 0, GLib.OptionFlags.NONE, GLib.OptionArg.NONE, N_("Open Updates"), None)
-        self.add_main_option("preview", 0, GLib.OptionFlags.NONE, GLib.OptionArg.STRING, "Harmless preview", "YAML")
         self.add_main_option("action-id", 0, GLib.OptionFlags.NONE, GLib.OptionArg.STRING, N_("Open a Portal tool"), "ID")
-        self.preview_base = None
-        if preview:
-            import tempfile
-            self.preview_directory = tempfile.TemporaryDirectory(prefix="bazzite-portal-preview-")
-            self.preview_base = self.preview_directory.name
 
     def do_startup(self):
         Adw.Application.do_startup(self)
         Gtk.Window.set_default_icon_name(APP_ID)
         if gaming_mode():
             self.get_style_manager().set_color_scheme(Adw.ColorScheme.FORCE_DARK)
-        for name, callback in (("settings", lambda: self.activate_page(N_("Settings"))), ("updates", lambda: self.activate_page(N_("Updates"))), ("about", lambda: self.window.about())):
+        for name, callback in (("settings", lambda: self.activate_page("Settings")), ("updates", lambda: self.activate_page(N_("Updates"))), ("about", lambda: self.window.about())):
             action = Gio.SimpleAction.new(name, None)
             action.connect("activate", lambda _, __, selected=callback: selected())
             self.add_action(action)
@@ -5967,7 +5620,7 @@ class Application(Adw.Application):
 
     def do_activate(self):
         if not self.window:
-            self.window = Window(self, self.config_path, self.preview)
+            self.window = Window(self, self.config_path)
             if gaming_mode():
                 self.window.fullscreen()
             self.window.connect("destroy", self._window_destroyed)

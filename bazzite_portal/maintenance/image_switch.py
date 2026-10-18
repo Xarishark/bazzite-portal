@@ -105,7 +105,7 @@ def _snapshot(data: Any) -> tuple[dict[str, Any], dict[str, str], str, str] | di
     if sum(item["booted"] for item in deployments) != 1:
         return _unavailable("The running deployment could not be identified safely.")
     if data.get("transaction") not in (None, False, "", [], {}):
-        return _unavailable(N_("An RPM-OSTree transaction is active."))
+        return _unavailable(C_('An {rpm_ostree} transaction is active.', rpm_ostree='RPM-OSTree'))
     if deployments[0].get("booted") is not True or deployments[0].get("staged") is True:
         return _unavailable(N_("Resolve the pending deployment before changing images."))
     running = next(item for item in deployments if item["booted"])
@@ -114,7 +114,7 @@ def _snapshot(data: Any) -> tuple[dict[str, Any], dict[str, str], str, str] | di
         return _unavailable("The running deployment identity is incomplete.")
     match = _REFERENCE_RE.fullmatch(identity["reference"])
     if match is None or not _valid_tag(match.group("tag")):
-        return _unavailable(N_("Only supported official Bazzite image references can be changed."))
+        return _unavailable(C_('Only supported official {bazzite} image references can be changed.', bazzite='Bazzite'))
     return running, identity, match.group("image"), match.group("tag")
 
 
@@ -162,7 +162,7 @@ def images(run_command: Callable[..., str] = cancel_pending._command, *,
     available = [{"image": image, "desktop_environment": _desktop_environment(image)}
                  for image in SUPPORTED_IMAGES
                  if show_unsupported or _desktop_environment(image) == desktop]
-    return {"available": bool(available), "reason": "" if available else N_("No official Bazzite images are available."),
+    return {"available": bool(available), "reason": "" if available else C_('No official {bazzite} images are available.', bazzite='Bazzite'),
             "images": available}
 
 
@@ -203,9 +203,9 @@ def _version_sort_key(tag: str):
 def target(data: Any, image: str, tag: str, *, helper_available: bool = True) -> dict[str, Any]:
     """Describe an exact image/tag choice against the booted identity."""
     if not isinstance(image, str) or not _IMAGE_RE.fullmatch(image):
-        return _unavailable(N_("Unsupported Bazzite image variant."))
+        return _unavailable(C_('Unsupported {bazzite} image variant.', bazzite='Bazzite'))
     if not _valid_tag(tag):
-        return _unavailable(N_("Unsupported Bazzite image version."))
+        return _unavailable(C_('Unsupported {bazzite} image version.', bazzite='Bazzite'))
     snapshot = _snapshot(data)
     if isinstance(snapshot, dict):
         return snapshot

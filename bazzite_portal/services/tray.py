@@ -230,7 +230,7 @@ class Tray:
         return self._pixmap_variants[key]
 
     def prepare_artwork(self, kind):
-        """Precompute raster and D-Bus values in the preview worker."""
+        """Precompute raster and D-Bus values in the rendering worker."""
         # Keep failures local to the worker result. A stale preparation must
         # not mark whichever theme is currently displayed as failed.
         self.artwork.pixmaps(kind)
@@ -292,9 +292,9 @@ class Tray:
 
     def _item_property(self, connection, sender, path, interface, name):
         title, description, fallback_icon = {
-            "updating": (_("Updating"), _("Updates are running. Open Bazzite Portal for progress."), "system-software-update-symbolic"),
-            "restart": (_("Restart pending"), _("Bazzite will boot into the new version on your next restart."), "system-reboot-symbolic"),
-            "failed": (_("Update failed"), _("An update failed. Open Bazzite Portal for details."), "dialog-error-symbolic"),
+            "updating": (_("Updating"), _('Updates are running. Open {app_name} for progress.').format(app_name='Bazzite Portal'), "system-software-update-symbolic"),
+            "restart": (_("Restart pending"), _('{bazzite} will boot into the new version on your next restart.').format(bazzite='Bazzite'), "system-reboot-symbolic"),
+            "failed": (_("Update failed"), _('An update failed. Open {app_name} for details.').format(app_name='Bazzite Portal'), "dialog-error-symbolic"),
         }.get(self.semantic, ("Bazzite", "", "system-software-update-symbolic"))
         pixmaps = self._pixmaps(self.kind) if self.kind in ARTWORK_KINDS else []
         if name in ("IconPixmap", "AttentionIconPixmap"):

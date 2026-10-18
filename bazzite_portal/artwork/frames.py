@@ -339,7 +339,7 @@ def _monochrome(root, foreground=MONO):
 
 
 def _native_kde_frames(source, frame_count=FRAME_COUNT, foreground=MONO):
-    """Recolor the installed KDE busy motif for a monochrome preview."""
+    """Recolor the installed KDE busy motif for a monochrome variant."""
     frames = kde_svg_frames(source, frame_count)
     output = []
     for svg in frames:

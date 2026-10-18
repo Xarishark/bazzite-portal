@@ -1,6 +1,6 @@
 """Bounded, identity-checked removal of requested rpm-ostree layers."""
 from __future__ import annotations
-from bazzite_portal.core.i18n import N_
+from bazzite_portal.core.i18n import C_, N_
 
 import hashlib
 import json
@@ -45,7 +45,7 @@ def target(data: Any) -> dict[str, Any]:
     if deployments[0].get("booted") is not True:
         return _unavailable(N_("A different deployment is selected for next boot."))
     if data.get("transaction") not in (None, False, "", [], {}):
-        return _unavailable(N_("An RPM-OSTree transaction is active."))
+        return _unavailable(C_('An {rpm_ostree} transaction is active.', rpm_ostree='RPM-OSTree'))
     default = deployments[0]
     booted = next(item for item in deployments if item["booted"])
     checksum = booted.get("checksum")
@@ -215,7 +215,7 @@ def execute(token: str, command_runner: Callable[..., str] = _command,
         expected = set(current["packages"]) - set(chosen)
         if set(remaining) != expected or len(remaining) != len(expected):
             raise RuntimeError("The remaining requested package layers do not match the confirmed selection.")
-    return N_("Requested package layers removed.")
+    return "Requested package layers removed."
 
 
 def main(argv=None):

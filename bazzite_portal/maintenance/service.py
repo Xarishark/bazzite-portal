@@ -13,6 +13,7 @@ UNIT_PREFIX = "bazzite-portal-maintenance@"
 UNIT_SUFFIX = ".service"
 _HASH = r"[0-9a-f]{64}"
 _SIMPLE_INSTANCES = {
+    "cancel-rollback": re.compile(r"^" + _HASH + r"$"),
     "cancel-pending": re.compile(r"^" + _HASH + r"$"),
     "reset-layers": re.compile(r"^" + _HASH + r"$"),
     "remove-selected-layers": re.compile(r"^" + _HASH + r"-" + _HASH + r"$"),
@@ -22,6 +23,7 @@ _SIMPLE_INSTANCES = {
 }
 _MODULES = {
     "cancel-pending": ("cancel_pending", "one"),
+    "cancel-rollback": ("rollback_cancel", "one"),
     "reset-layers": ("reset_layers", "one"),
     "remove-selected-layers": ("selected_layers", "one"),
     "clear-download-cache": ("cache_clear", "one"),

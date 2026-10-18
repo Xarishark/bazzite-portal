@@ -6,7 +6,7 @@ from datetime import datetime
 import re
 from typing import Any, Callable
 
-from bazzite_portal.core.i18n import _, N_
+from bazzite_portal.core.i18n import C_, _, N_, channel_name
 from bazzite_portal.core.errors import public_error
 
 
@@ -44,7 +44,7 @@ def track_subtitle(track: str) -> str:
 
 def _track_label(track: str) -> str:
 
-    return {"stable": _("Stable"), "testing": _("Testing"), "unstable": _("Unstable")}[track]
+    return channel_name(track)
 
 
 def format_version(tag: str, track: str) -> str:
@@ -84,6 +84,12 @@ def dated_track_tags(tags: list[str], track: str) -> list[str]:
     return sorted(selected, key=lambda tag: tuple(int(part) for part in re.findall(r"\d+", tag)), reverse=True)
 
 
+def available_tracks(tags: list[str], *, show_unsupported: bool = False) -> list[str]:
+    """Offer only channels with a moving tag or a valid dated release."""
+    tracks = ("stable", "testing", "unstable") if show_unsupported else ("stable", "testing")
+    return [track for track in tracks if track in tags or dated_track_tags(tags, track)]
+
+
 class ImageWizard:
     """A three-stage image picker. Query callbacks run in the owner's worker pool."""
 
@@ -100,6 +106,7 @@ class ImageWizard:
         self._image = ""
         self._track = ""
         self._tags: list[str] = []
+        self._tracks: list[str] = []
         self._version_results: dict[tuple[str, str], dict[str, Any]] = {}
         # Import at construction time to avoid a module import cycle with ui.py.
         from bazzite_portal.ui import application as ui
@@ -267,7 +274,7 @@ class ImageWizard:
         def done(result):
             images = selectable_images(result.get("images", []))
             self._images = images
-            reason = public_error(result.get("reason"), N_("Could not load available Bazzite images. Try again."),
+            reason = public_error(result.get("reason"), C_('Could not load available {bazzite} images. Try again.', bazzite='Bazzite'),
                                   context="Loading Bazzite images") if result.get("reason") else ""
             self._state("images", _("Choose an Image"), reason)
             if not images:
@@ -280,28 +287,56 @@ class ImageWizard:
         self._run(self.query_images, done)
 
     def _choose_image(self, image: str):
+        self._generation += 1
         if image != self._image:
             self._version_results.clear()
         self._image = image
+        self._track = ""
+        self._tracks = []
+        cached = self._version_results.get((image, "all"))
+        if cached is not None:
+            self._channels_loaded(cached)
+            return
+        self._state("tracks", _("Loading versions…"), _("Please wait."), True)
+        self._run(lambda: self.query_versions(image, "all"), self._channels_loaded)
+
+    def _channels_loaded(self, result):
+        if not isinstance(result, dict):
+            result = {"reason": "The registry returned malformed version data."}
+        tags = result.get("versions", [])
+        if not isinstance(tags, list) or any(not isinstance(tag, str) for tag in tags):
+            result = {"reason": "The registry returned a malformed version list."}
+            tags = []
+        reason = public_error(result.get("reason"), C_('Could not load {bazzite} versions. Try again.', bazzite='Bazzite'),
+                              context="Loading Bazzite versions") if result.get("reason") else ""
+        self._tracks = [] if reason else available_tracks(tags, show_unsupported=self.show_unsupported)
+        if not self._tracks:
+            self._state("tracks", _("Choose Channel"), reason or _("No dated releases are available."))
+            return
+        self._version_results[(self._image, "all")] = {"versions": tags}
+        for track in self._tracks:
+            self._version_results[(self._image, track)] = {
+                "versions": ([track] if track in tags else []) + dated_track_tags(tags, track)}
         self._show_tracks()
 
     def _show_tracks(self):
+        if len(self._tracks) == 1:
+            self._choose_track(self._tracks[0])
+            return
         self._state("tracks", _("Choose Channel"))
-        for track in (("stable", "testing", "unstable") if self.show_unsupported else ("stable", "testing")):
+        for track in self._tracks:
             self._row(_track_label(track), lambda selected=track: self._choose_track(selected),
                       subtitle=track_subtitle(track))
         self._focus_choices()
 
     def _choose_track(self, track: str):
+        if track not in self._tracks:
+            return
         self._track = track
         cached = self._version_results.get((self._image, track))
         if cached is not None:
             self._show_versions(cached)
-            return
-        track_label = _track_label(track)
-        self._state("versions", _("Loading versions…"),
-                    _("Checking {track} releases.").format(track=track_label), True)
-        self._run(lambda: self.query_versions(self._image, track), self._show_versions)
+            self._focus_choices()
 
     def _show_versions(self, result):
         track = self._track
@@ -310,7 +345,7 @@ class ImageWizard:
         if self._tags and not result.get("reason"):
             self._version_results[(self._image, track)] = result
         track_label = _track_label(track)
-        reason = public_error(result.get("reason"), N_("Could not load Bazzite versions. Try again."),
+        reason = public_error(result.get("reason"), C_('Could not load {bazzite} versions. Try again.', bazzite='Bazzite'),
                               context="Loading Bazzite versions") if result.get("reason") else ""
         self._state("versions", _("Choose a {track} Version").format(track=track_label), reason)
         for tag in self._tags:
@@ -329,7 +364,10 @@ class ImageWizard:
             return
         self._generation += 1
         if self._stage == "versions":
-            self._show_tracks()
+            if len(self._tracks) == 1:
+                self._load_images()
+            else:
+                self._show_tracks()
         elif self._stage == "tracks":
             self._load_images()
         else:

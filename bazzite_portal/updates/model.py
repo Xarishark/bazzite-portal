@@ -16,7 +16,7 @@ UUPD_MODULES = (
     ("system", N_("System"), N_("Operating system")),
     ("brew", "Brew", N_("CLI Apps")),
     ("flatpak", "Flatpak", N_("System Apps")),
-    ("distrobox", "Distrobox", N_("Rootful Distroboxes")),
+    ("distrobox", "Distrobox", C_("Rootful {distrobox} containers", distrobox="Distrobox")),
 )
 UUPD_MODULE_FIELDS = {
     "system": {"disable", "rpm-ostree-binary", "bootc-binary", "skopeo-binary"},
@@ -199,7 +199,7 @@ def live_module_detail(line, active, packages=None, progress=None):
             done, total = structured.get("steps"), structured.get("stepsTotal")
             if (structured.get("task") == "pulling" and type(done) is int and type(total) is int
                     and 0 <= done <= total and total > 0):
-                detail = C_("Downloading layers · {done} of {total}", done=done, total=total)
+                detail = C_("Downloading layers · {current} of {total}", current=done, total=total)
             return detail
     # RunLog emits unscoped messages; the invocation reader and sequential
     # active module supply their scope. Explicit other-module records are rejected.
@@ -274,7 +274,7 @@ def live_module_detail(line, active, packages=None, progress=None):
                 # A full ring for that earlier list must not remain on screen.
                 progress.clear()
                 progress.update(fraction=None, scope_unknown=True)
-                return N_("Updating Homebrew dependencies")
+                return C_('Updating {homebrew} dependencies', homebrew='Homebrew')
             total = re.fullmatch(r"==> (?:Would upgrade|Upgrading) ([0-9]+) outdated packages?:?", message)
             if total:
                 if progress.get("scope_unknown"):
@@ -321,7 +321,7 @@ def live_module_detail(line, active, packages=None, progress=None):
             if current and progress.get("item"):
                 return f"{progress['item']} - {current}"[:512]
         if re.fullmatch(r"==> Updating Homebrew(?:\.{3}|…)?", message):
-            return N_("Updating Homebrew")
+            return C_('Updating {homebrew}', homebrew='Homebrew')
         match = re.match(r"==> (?:Upgrading|Installing|Pouring|Fetching) (.+)", message)
         return message[4:512] if match else ""
     if active == "flatpak":
@@ -400,7 +400,7 @@ def update_event(line):
         return {
             "kind": "check_failed",
             "id": "system",
-            "error": _event_error(data.get("error")) or N_("UUPD could not check for system updates."),
+            "error": _event_error(data.get("error")) or C_('{uupd} could not check for system updates.', uupd='UUPD'),
         }
     if msg in ("Error occurred starting external command", "Error occurred while waiting for external command"):
         module = data.get("module")
@@ -514,10 +514,10 @@ def planned_modules(config_text=None):
             state_detail = "UUPD configuration does not provide a valid enabled state."
         elif disable:
             status = "skipped"
-            state_detail = N_("Disabled in UUPD configuration.")
+            state_detail = C_('Disabled in {uupd} configuration.', uupd='UUPD')
         else:
             status = "pending"
-            state_detail = N_("Enabled by UUPD configuration; runtime eligibility is not checked.")
+            state_detail = C_('Enabled by {uupd} configuration; runtime eligibility is not checked.', uupd='UUPD')
         rows.append({
             "id": key,
             "name": name,
@@ -540,7 +540,7 @@ def module_steps(plan, observed, result):
             row = dict(planned)
             if result in ("success", "failed", "unknown") and row["status"] == "pending":
                 row["status"] = "unknown"
-                row["detail"] = N_("UUPD has not reported a result for this step.")
+                row["detail"] = C_('{uupd} has not reported a result for this step.', uupd='UUPD')
         rows.append(row)
     rows.extend(remaining.values())
     return rows[:MAX_MODULE_STEPS]
