@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/"
-"app/\n"
+"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/app/"
+"\n"
 "POT-Creation-Date: 2026-10-18 16:13+0000\n"
-"PO-Revision-Date: 2026-10-18 16:13+0000\n"
+"PO-Revision-Date: 2026-10-18 16:17+0000\n"
 "Last-Translator: Zacharias Xenakis <xarishark@outlook.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/bazzite-portal/app/"
 "el/>\n"
@@ -906,16 +906,12 @@ msgid "Unavailable tool"
 msgstr "Μη διαθέσιμο εργαλείο"
 
 #: bazzite_portal/ui/application.py:1649
-#, fuzzy
-#| msgid "Unavailable or ambiguous · select to remove this pin"
 msgid "Unavailable or ambiguous · select to unpin"
-msgstr "Μη διαθέσιμο ή ασαφές · επιλέξτε για να αφαιρέσετε αυτό το καρφίτσωμα"
+msgstr "Μη διαθέσιμο ή ασαφές · επιλέξτε για αφαίρεση καρφιτσώματος"
 
 #: bazzite_portal/ui/application.py:1663
-#, fuzzy
-#| msgid "Unavailable tool"
 msgid "Unpin unavailable tool?"
-msgstr "Μη διαθέσιμο εργαλείο"
+msgstr "Αφαίρεση καρφιτσώματος από μη διαθέσιμο εργαλείο;"
 
 #: bazzite_portal/ui/application.py:1664
 msgid ""
@@ -983,10 +979,8 @@ msgstr "Κατάσταση {status}"
 #: bazzite_portal/ui/application.py:1904 bazzite_portal/ui/application.py:1905
 #: bazzite_portal/ui/application.py:1942 bazzite_portal/ui/application.py:1943
 #: bazzite_portal/ui/application.py:5505 bazzite_portal/ui/application.py:5516
-#, fuzzy
-#| msgid "Pinned"
 msgid "Pin"
-msgstr "Καρφιτσωμένο"
+msgstr "Καρφίτσωμα"
 
 #: bazzite_portal/ui/application.py:1910
 msgid "This tool has a missing or ambiguous ID"
