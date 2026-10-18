@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/"
 "app/\n"
-"POT-Creation-Date: 2026-10-18 15:10+0000\n"
-"PO-Revision-Date: 2026-10-17 14:40+0000\n"
+"POT-Creation-Date: 2026-10-18 16:01+0000\n"
+"PO-Revision-Date: 2026-10-18 16:01+0000\n"
 "Last-Translator: Zacharias Xenakis <xarishark@outlook.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/bazzite-portal/app/"
 "el/>\n"
@@ -69,61 +69,53 @@ msgid "D-pad"
 msgstr "Σταυρός κατευθύνσεων"
 
 #: bazzite_portal/integration/community.py:15
-#, fuzzy, python-brace-format
-#| msgid "Bazzite website"
+#, python-brace-format
 msgid "{bazzite} website"
-msgstr "Ιστότοπος του Bazzite"
+msgstr "Ιστότοπος του {bazzite}"
 
 #: bazzite_portal/integration/community.py:15
-#, fuzzy, python-brace-format
-#| msgid "The Bazzite project website"
+#, python-brace-format
 msgid "The {bazzite} project website"
-msgstr "Ο ιστότοπος του έργου Bazzite"
+msgstr "Ο ιστότοπος του έργου {bazzite}"
 
 #: bazzite_portal/integration/community.py:16
 msgid "Documentations"
 msgstr "Τεκμηρίωση"
 
 #: bazzite_portal/integration/community.py:16
-#, fuzzy, python-brace-format
-#| msgid "Bazzite documentation"
+#, python-brace-format
 msgid "{bazzite} documentation"
-msgstr "Τεκμηρίωση του Bazzite"
+msgstr "Τεκμηρίωση του {bazzite}"
 
 #: bazzite_portal/integration/community.py:17
-#, fuzzy, python-brace-format
-#| msgid "Bazzite community and support"
+#, python-brace-format
 msgid "{bazzite} community and support"
-msgstr "Κοινότητα και υποστήριξη του Bazzite"
+msgstr "Κοινότητα και υποστήριξη του {bazzite}"
 
 #: bazzite_portal/integration/community.py:18
-#, fuzzy, python-brace-format
-#| msgid "Bazzite source repository"
+#, python-brace-format
 msgid "{bazzite} source repository"
-msgstr "Αποθετήριο πηγαίου κώδικα του Bazzite"
+msgstr "Αποθετήριο πηγαίου κώδικα του {bazzite}"
 
 #: bazzite_portal/integration/community.py:19
-#, fuzzy, python-brace-format
-#| msgid "The Bazzite subreddit"
+#, python-brace-format
 msgid "The {bazzite} subreddit"
-msgstr "Η κοινότητα του Bazzite στο Reddit"
+msgstr "Η κοινότητα του {bazzite} στο Reddit"
 
 #: bazzite_portal/integration/community.py:20
 msgid "Forums"
 msgstr "Φόρουμ"
 
 #: bazzite_portal/integration/community.py:20
-#, fuzzy, python-brace-format
-#| msgid "Universal Blue community forums"
+#, python-brace-format
 msgid "{universal_blue} community forums"
-msgstr "Φόρουμ κοινότητας του Universal Blue"
+msgstr "Φόρουμ κοινότητας του {universal_blue}"
 
 #: bazzite_portal/maintenance/cache_clear.py:67
-#, fuzzy, python-brace-format
-#| msgid "An RPM-OSTree transaction is active or status is unavailable."
+#, python-brace-format
 msgid "An {rpm_ostree} transaction is active or status is unavailable."
 msgstr ""
-"Μια διαδικασία RPM-OSTree βρίσκεται σε εξέλιξη ή η κατάστασή της δεν είναι "
+"Μια διαδικασία {rpm_ostree} βρίσκεται σε εξέλιξη ή η κατάστασή της δεν είναι "
 "διαθέσιμη."
 
 #: bazzite_portal/maintenance/cache_clear.py:74
@@ -141,11 +133,10 @@ msgstr ""
 "εκκίνηση πριν εκκαθαρίσετε την προσωρινή μνήμη λήψεων."
 
 #: bazzite_portal/maintenance/cancel_pending.py:81
-#, fuzzy, python-brace-format
-#| msgid "Bootc deployments cannot be canceled by this workflow."
+#, python-brace-format
 msgid "{bootc} deployments cannot be canceled by this workflow."
 msgstr ""
-"Οι εκκρεμείς εκδόσεις του Bootc δεν μπορούν να ακυρωθούν μέσω αυτής της "
+"Οι εκδόσεις συστήματος του {bootc} δεν μπορούν να ακυρωθούν μέσω αυτής της "
 "διαδικασίας."
 
 #: bazzite_portal/maintenance/cancel_pending.py:91
@@ -153,10 +144,9 @@ msgstr ""
 #: bazzite_portal/maintenance/delete_deployments.py:52
 #: bazzite_portal/maintenance/image_switch.py:108
 #: bazzite_portal/maintenance/reset_layers.py:48
-#, fuzzy, python-brace-format
-#| msgid "An RPM-OSTree transaction is active."
+#, python-brace-format
 msgid "An {rpm_ostree} transaction is active."
-msgstr "Μια διαδικασία RPM-OSTree βρίσκεται σε εξέλιξη."
+msgstr "Μια διαδικασία {rpm_ostree} βρίσκεται σε εξέλιξη."
 
 #: bazzite_portal/maintenance/cancel_pending.py:104
 msgid "There is no pending deployment."
@@ -176,15 +166,12 @@ msgstr ""
 "καρφιτσώματός της είναι άγνωστη."
 
 #: bazzite_portal/maintenance/channel_switch.py:62
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Only official Bazzite stable/testing track and release references are "
-#| "supported."
+#, python-brace-format
 msgid ""
 "Only official {bazzite} {tracks} track and release references are supported."
 msgstr ""
-"Υποστηρίζονται μόνο οι επίσημες αναφορές σταθερών και δοκιμαστικών καναλιών "
-"και εκδόσεων του Bazzite."
+"Υποστηρίζονται μόνο οι επίσημες αναφορές καναλιών {tracks} και εκδόσεων του "
+"{bazzite}."
 
 #: bazzite_portal/maintenance/channel_switch.py:90
 msgid "Resolve the pending deployment before changing update channels."
@@ -234,18 +221,16 @@ msgstr ""
 "αλλάξετε εικόνα συστήματος."
 
 #: bazzite_portal/maintenance/image_switch.py:117
-#, fuzzy, python-brace-format
-#| msgid "Only supported official Bazzite image references can be changed."
+#, python-brace-format
 msgid "Only supported official {bazzite} image references can be changed."
 msgstr ""
-"Μπορούν να αλλαχθούν μόνο οι υποστηριζόμενες επίσημες εικόνες συστήματος του "
-"Bazzite."
+"Επιτρέπεται η μετάβαση μόνο σε υποστηριζόμενες επίσημες εικόνες συστήματος "
+"του {bazzite}."
 
 #: bazzite_portal/maintenance/image_switch.py:165
-#, fuzzy, python-brace-format
-#| msgid "No official Bazzite images are available."
+#, python-brace-format
 msgid "No official {bazzite} images are available."
-msgstr "Δεν υπάρχουν διαθέσιμες επίσημες εικόνες συστήματος του Bazzite."
+msgstr "Δεν υπάρχουν διαθέσιμες επίσημες εικόνες συστήματος του {bazzite}."
 
 #: bazzite_portal/maintenance/image_switch.py:186
 #, python-brace-format
@@ -254,16 +239,14 @@ msgstr ""
 "Δεν υπάρχουν διαθέσιμες εκδόσεις {track} για την εικόνα συστήματος {image}."
 
 #: bazzite_portal/maintenance/image_switch.py:206
-#, fuzzy, python-brace-format
-#| msgid "Unsupported Bazzite image variant."
+#, python-brace-format
 msgid "Unsupported {bazzite} image variant."
-msgstr "Μη υποστηριζόμενη παραλλαγή εικόνας συστήματος του Bazzite."
+msgstr "Μη υποστηριζόμενη παραλλαγή εικόνας συστήματος του {bazzite}."
 
 #: bazzite_portal/maintenance/image_switch.py:208
-#, fuzzy, python-brace-format
-#| msgid "Unsupported Bazzite image version."
+#, python-brace-format
 msgid "Unsupported {bazzite} image version."
-msgstr "Μη υποστηριζόμενη έκδοση εικόνας συστήματος του Bazzite."
+msgstr "Μη υποστηριζόμενη έκδοση εικόνας συστήματος του {bazzite}."
 
 #: bazzite_portal/maintenance/image_switch.py:221
 msgid ""
@@ -289,16 +272,14 @@ msgid "No requested package layers are present."
 msgstr "Δεν υπάρχουν πακέτα που έχουν ζητηθεί για εγκατάσταση μέσω layering."
 
 #: bazzite_portal/services/agent.py:409
-#, fuzzy, python-brace-format
-#| msgid "Bazzite update failed"
+#, python-brace-format
 msgid "{bazzite} update failed"
-msgstr "Η ενημέρωση του Bazzite απέτυχε"
+msgstr "Η ενημέρωση του {bazzite} απέτυχε"
 
 #: bazzite_portal/services/agent.py:409
-#, fuzzy, python-brace-format
-#| msgid "Bazzite rollback failed"
+#, python-brace-format
 msgid "{bazzite} rollback failed"
-msgstr "Η επαναφορά του Bazzite σε προηγούμενη έκδοση απέτυχε"
+msgstr "Η επαναφορά του {bazzite} σε προηγούμενη έκδοση απέτυχε"
 
 #: bazzite_portal/services/agent.py:409
 msgid "Open Updates to inspect the operation log."
@@ -329,34 +310,31 @@ msgid "Updating"
 msgstr "Ενημέρωση σε εξέλιξη"
 
 #: bazzite_portal/services/tray.py:295
-#, fuzzy, python-brace-format
-#| msgid "Updates are running. Open Bazzite Portal for progress."
+#, python-brace-format
 msgid "Updates are running. Open {app_name} for progress."
 msgstr ""
-"Οι ενημερώσεις βρίσκονται σε εξέλιξη. Ανοίξτε το Bazzite Portal για να δείτε "
-"την πρόοδο."
+"Οι ενημερώσεις βρίσκονται σε εξέλιξη. Ανοίξτε το {app_name} για να δείτε την "
+"πρόοδο."
 
 #: bazzite_portal/services/tray.py:296
 msgid "Restart pending"
 msgstr "Εκκρεμεί επανεκκίνηση"
 
 #: bazzite_portal/services/tray.py:296
-#, fuzzy, python-brace-format
-#| msgid "Bazzite will boot into the new version on your next restart."
+#, python-brace-format
 msgid "{bazzite} will boot into the new version on your next restart."
-msgstr "Το Bazzite θα εκκινήσει στη νέα έκδοση κατά την επόμενη επανεκκίνηση."
+msgstr ""
+"Το {bazzite} θα εκκινήσει στη νέα έκδοση κατά την επόμενη επανεκκίνηση."
 
 #: bazzite_portal/services/tray.py:297
 msgid "Update failed"
 msgstr "Η ενημέρωση απέτυχε"
 
 #: bazzite_portal/services/tray.py:297
-#, fuzzy, python-brace-format
-#| msgid "An update failed. Open Bazzite Portal for details."
+#, python-brace-format
 msgid "An update failed. Open {app_name} for details."
 msgstr ""
-"Μια ενημέρωση απέτυχε. Ανοίξτε το Bazzite Portal για περισσότερες "
-"λεπτομέρειες."
+"Μια ενημέρωση απέτυχε. Ανοίξτε το {app_name} για περισσότερες λεπτομέρειες."
 
 #: bazzite_portal/services/tray.py:315
 msgid "Open"
@@ -447,8 +425,6 @@ msgstr "Πληροφορίες συστήματος"
 #: bazzite_portal/ui/application.py:46 bazzite_portal/ui/application.py:952
 #: bazzite_portal/ui/application.py:1031 bazzite_portal/ui/application.py:2851
 #: bazzite_portal/ui/application.py:2854
-#, fuzzy
-#| msgid "System management"
 msgid "System Management"
 msgstr "Διαχείριση συστήματος"
 
@@ -631,10 +607,9 @@ msgstr ""
 "λεπτομέρειες."
 
 #: bazzite_portal/ui/application.py:1004 bazzite_portal/ui/application.py:2691
-#, fuzzy, python-brace-format
-#| msgid "Update Bazzite and Apps"
+#, python-brace-format
 msgid "Update {bazzite} and Apps"
-msgstr "Ενημέρωση του Bazzite και των εφαρμογών"
+msgstr "Ενημέρωση του {bazzite} και των εφαρμογών"
 
 #: bazzite_portal/ui/application.py:1004 bazzite_portal/ui/application.py:2709
 msgid "Update your system and installed apps."
@@ -651,12 +626,11 @@ msgstr ""
 "εφαρμογές του συστήματος μέσω του Portal."
 
 #: bazzite_portal/ui/application.py:1030
-#, fuzzy, python-brace-format
-#| msgid "View deployments, package layers and RPM-OSTree status."
+#, python-brace-format
 msgid "View deployments, package layers and {rpm_ostree} status."
 msgstr ""
 "Δείτε τις εκδόσεις του συστήματος, τα πακέτα που έχουν εγκατασταθεί μέσω "
-"layering και την κατάσταση του RPM-OSTree."
+"layering και την κατάσταση του {rpm_ostree}."
 
 #: bazzite_portal/ui/application.py:1031
 msgid ""
@@ -666,24 +640,21 @@ msgstr ""
 "εγκατασταθεί μέσω layering ή επαναφέρετε το σύστημά σας."
 
 #: bazzite_portal/ui/application.py:1032
-#, fuzzy, python-brace-format
-#| msgid "Report a problem, collect system logs, or reset Steam."
+#, python-brace-format
 msgid "Report a problem, collect system logs, or reset {steam}."
 msgstr ""
 "Αναφέρετε ένα πρόβλημα, συλλέξτε αρχεία καταγραφής συστήματος ή επαναφέρετε "
-"το Steam."
+"το {steam}."
 
 #: bazzite_portal/ui/application.py:1033
-#, fuzzy, python-brace-format
-#| msgid "Bazzite documentation, website, and community links."
+#, python-brace-format
 msgid "{bazzite} documentation, website, and community links."
-msgstr "Τεκμηρίωση του Bazzite, ιστότοπος και σύνδεσμοι κοινότητας."
+msgstr "Τεκμηρίωση, ιστότοπος και σύνδεσμοι κοινότητας του {bazzite}."
 
 #: bazzite_portal/ui/application.py:1034 bazzite_portal/ui/application.py:4735
-#, fuzzy, python-brace-format
-#| msgid "View Bazzite release and project announcements."
+#, python-brace-format
 msgid "View {bazzite} release and project announcements."
-msgstr "Δείτε ανακοινώσεις σχετικά με τις εκδόσεις και το έργο Bazzite."
+msgstr "Δείτε ανακοινώσεις σχετικά με τις εκδόσεις και το έργο {bazzite}."
 
 #: bazzite_portal/ui/application.py:1045 bazzite_portal/ui/application.py:4736
 msgid "The configuration file for this category is missing or invalid."
@@ -698,24 +669,22 @@ msgid "Pinned tools"
 msgstr "Καρφιτσωμένα εργαλεία"
 
 #: bazzite_portal/ui/application.py:1062
-#, fuzzy, python-brace-format
-#| msgid "Get help, collect diagnostic logs, or repair the Steam client."
+#, python-brace-format
 msgid "Get help, collect diagnostic logs, or repair the {steam} client."
 msgstr ""
 "Λάβετε βοήθεια, συλλέξτε αρχεία καταγραφής διαγνωστικού ελέγχου ή "
-"επιδιορθώστε τον πελάτη Steam."
+"επιδιορθώστε τον πελάτη {steam}."
 
 #: bazzite_portal/ui/application.py:1069
 msgid "Report a problem"
 msgstr "Αναφορά προβλήματος"
 
 #: bazzite_portal/ui/application.py:1069
-#, fuzzy, python-brace-format
-#| msgid "Collect relevant logs and open a Bazzite GitHub issue."
+#, python-brace-format
 msgid "Collect relevant logs and open a {bazzite} {github} issue."
 msgstr ""
 "Συλλέξτε τα σχετικά αρχεία καταγραφής και δημιουργήστε μια αναφορά "
-"προβλήματος στο GitHub του Bazzite."
+"προβλήματος στο {github} του {bazzite}."
 
 #: bazzite_portal/ui/application.py:1077
 msgid "Collect system logs"
@@ -728,16 +697,14 @@ msgstr ""
 "εργασίας σας για την αντιμετώπιση προβλημάτων."
 
 #: bazzite_portal/ui/application.py:1084 bazzite_portal/ui/application.py:1263
-#, fuzzy, python-brace-format
-#| msgid "Reset Steam"
+#, python-brace-format
 msgid "Reset {steam}"
-msgstr "Επαναφορά Steam"
+msgstr "Επαναφορά {steam}"
 
 #: bazzite_portal/ui/application.py:1084
-#, fuzzy, python-brace-format
-#| msgid "Reset the Steam client without removing your games."
+#, python-brace-format
 msgid "Reset the {steam} client without removing your games."
-msgstr "Επαναφέρετε τον πελάτη Steam χωρίς να αφαιρέσετε τα παιχνίδια σας."
+msgstr "Επαναφέρετε τον πελάτη {steam} χωρίς να αφαιρέσετε τα παιχνίδια σας."
 
 #: bazzite_portal/ui/application.py:1126 bazzite_portal/ui/application.py:1244
 #: bazzite_portal/ui/application.py:1325 bazzite_portal/ui/application.py:1348
@@ -800,85 +767,69 @@ msgid "Open logs folder"
 msgstr "Άνοιγμα φακέλου αρχείων καταγραφής"
 
 #: bazzite_portal/ui/application.py:1258
-#, fuzzy, python-brace-format
-#| msgid "Reset Steam Installation?"
+#, python-brace-format
 msgid "Reset {steam} Installation?"
-msgstr "Επαναφορά εγκατάστασης Steam;"
+msgstr "Επαναφορά εγκατάστασης {steam};"
 
 #: bazzite_portal/ui/application.py:1260
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Steam will stop and sign you out. This only cleans the steam installation "
-#| "folder."
+#, python-brace-format
 msgid ""
 "{steam} will stop and sign you out. This only cleans the steam installation "
 "folder."
 msgstr ""
-"Το Steam θα τερματιστεί και θα αποσυνδεθείτε από τον λογαριασμό σας. Θα "
+"Το {steam} θα τερματιστεί και θα αποσυνδεθείτε από τον λογαριασμό σας. Θα "
 "γίνει εκκαθάριση μόνο του φακέλου εγκατάστασης του Steam."
 
 #: bazzite_portal/ui/application.py:1261
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Your games, Saves, Configuration, Music and Proton files will stay "
-#| "untouched."
+#, python-brace-format
 msgid ""
 "Your games, Saves, Configuration, Music and {proton} files will stay "
 "untouched."
 msgstr ""
 "Τα παιχνίδια σας, οι αποθηκεύσεις, οι ρυθμίσεις, η μουσική και τα αρχεία "
-"Proton θα παραμείνουν ανέπαφα."
+"{proton} θα παραμείνουν ανέπαφα."
 
 #: bazzite_portal/ui/application.py:1279
-#, fuzzy, python-brace-format
-#| msgid "Resetting Steam"
+#, python-brace-format
 msgid "Resetting {steam}"
-msgstr "Επαναφορά Steam"
+msgstr "Επαναφορά {steam} σε εξέλιξη"
 
 #: bazzite_portal/ui/application.py:1308
-#, fuzzy, python-brace-format
-#| msgid "Steam reset did not complete. Open Logs for details."
+#, python-brace-format
 msgid "{steam} reset did not complete. Open Logs for details."
 msgstr ""
-"Η επαναφορά του Steam δεν ολοκληρώθηκε. Ανοίξτε τα αρχεία καταγραφής για "
+"Η επαναφορά του {steam} δεν ολοκληρώθηκε. Ανοίξτε τα αρχεία καταγραφής για "
 "περισσότερες λεπτομέρειες."
 
 #: bazzite_portal/ui/application.py:1312
-#, fuzzy, python-brace-format
-#| msgid "Some Steam data has already been removed."
+#, python-brace-format
 msgid "Some {steam} data has already been removed."
-msgstr "Ορισμένα δεδομένα του Steam έχουν ήδη αφαιρεθεί."
+msgstr "Ορισμένα δεδομένα του {steam} έχουν ήδη αφαιρεθεί."
 
 #: bazzite_portal/ui/application.py:1315
-#, fuzzy, python-brace-format
-#| msgid "Steam reset finished after its progress window was closed."
+#, python-brace-format
 msgid "{steam} reset finished after its progress window was closed."
 msgstr ""
-"Η επαναφορά του Steam ολοκληρώθηκε μετά το κλείσιμο του παραθύρου προόδου."
+"Η επαναφορά του {steam} ολοκληρώθηκε μετά το κλείσιμο του παραθύρου προόδου."
 
 #: bazzite_portal/ui/application.py:1321
-#, fuzzy, python-brace-format
-#| msgid "Steam reset complete"
+#, python-brace-format
 msgid "{steam} reset complete"
-msgstr "Η επαναφορά του Steam ολοκληρώθηκε"
+msgstr "Η επαναφορά του {steam} ολοκληρώθηκε"
 
 #: bazzite_portal/ui/application.py:1323
-#, fuzzy, python-brace-format
-#| msgid "Steam reset is complete."
+#, python-brace-format
 msgid "{steam} reset is complete."
-msgstr "Η επαναφορά του Steam ολοκληρώθηκε."
+msgstr "Η επαναφορά του {steam} ολοκληρώθηκε."
 
 #: bazzite_portal/ui/application.py:1324
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "You can now open Steam. Its client files need to download again, so the "
-#| "first launch may take a while."
+#, python-brace-format
 msgid ""
 "You can now open {steam}. Its client files need to download again, so the "
 "first launch may take a while."
 msgstr ""
-"Μπορείτε τώρα να ανοίξετε το Steam. Τα αρχεία του πελάτη Steam πρέπει να "
-"ληφθούν ξανά, επομένως η πρώτη εκκίνηση ενδέχεται να διαρκέσει λίγο."
+"Μπορείτε τώρα να ανοίξετε το {steam}. Τα αρχεία του πελάτη πρέπει να ληφθούν "
+"ξανά, επομένως η πρώτη εκκίνηση ενδέχεται να διαρκέσει λίγο."
 
 #: bazzite_portal/ui/application.py:1331
 msgid "Collecting logs"
@@ -936,11 +887,10 @@ msgid "{action}. Open Logs for details."
 msgstr "{action}. Ανοίξτε τα αρχεία καταγραφής για περισσότερες λεπτομέρειες."
 
 #: bazzite_portal/ui/application.py:1531
-#, fuzzy, python-brace-format
-#| msgid "The GitHub issue form could not be prepared."
+#, python-brace-format
 msgid "The {github} issue form could not be prepared."
 msgstr ""
-"Δεν ήταν δυνατή η προετοιμασία της φόρμας αναφοράς προβλήματος στο GitHub."
+"Δεν ήταν δυνατή η προετοιμασία της φόρμας αναφοράς προβλήματος στο {github}."
 
 #: bazzite_portal/ui/application.py:1538 bazzite_portal/ui/application.py:2773
 #: bazzite_portal/ui/application.py:4842 bazzite_portal/ui/application.py:5272
@@ -1025,20 +975,26 @@ msgstr "Κατάσταση {status}"
 
 #: bazzite_portal/ui/application.py:1904 bazzite_portal/ui/application.py:1905
 #: bazzite_portal/ui/application.py:1942 bazzite_portal/ui/application.py:1943
-msgid "Remove favorite"
-msgstr "Αφαίρεση από τα αγαπημένα"
+#: bazzite_portal/ui/application.py:5505 bazzite_portal/ui/application.py:5516
+msgid "Unpin"
+msgstr ""
 
 #: bazzite_portal/ui/application.py:1904 bazzite_portal/ui/application.py:1905
 #: bazzite_portal/ui/application.py:1942 bazzite_portal/ui/application.py:1943
-msgid "Add favorite"
-msgstr "Προσθήκη στα αγαπημένα"
+#: bazzite_portal/ui/application.py:5505 bazzite_portal/ui/application.py:5516
+#, fuzzy
+#| msgid "Pinned"
+msgid "Pin"
+msgstr "Καρφιτσωμένο"
 
 #: bazzite_portal/ui/application.py:1910
 msgid "This tool has a missing or ambiguous ID"
 msgstr "Το αναγνωριστικό αυτού του εργαλείου λείπει ή είναι ασαφές"
 
 #: bazzite_portal/ui/application.py:1911
-msgid "Favorite unavailable: missing or ambiguous ID"
+#, fuzzy
+#| msgid "Favorite unavailable: missing or ambiguous ID"
+msgid "Pin unavailable: missing or ambiguous ID"
 msgstr ""
 "Το αγαπημένο δεν είναι διαθέσιμο: το αναγνωριστικό λείπει ή είναι ασαφές"
 
@@ -1085,15 +1041,12 @@ msgid "Update log"
 msgstr "Αρχείο καταγραφής ενημέρωσης"
 
 #: bazzite_portal/ui/application.py:2272
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "An RPM-OSTree transaction is active. Wait for it to finish before "
-#| "updating or restarting."
+#, python-brace-format
 msgid ""
 "An {rpm_ostree} transaction is active. Wait for it to finish before updating "
 "or restarting."
 msgstr ""
-"Μια διαδικασία RPM-OSTree βρίσκεται σε εξέλιξη. Περιμένετε μέχρι να "
+"Μια διαδικασία {rpm_ostree} βρίσκεται σε εξέλιξη. Περιμένετε μέχρι να "
 "ολοκληρωθεί πριν προχωρήσετε σε ενημέρωση ή επανεκκίνηση."
 
 #: bazzite_portal/ui/application.py:2283 bazzite_portal/ui/application.py:2363
@@ -1130,10 +1083,9 @@ msgid "Update step"
 msgstr "Στάδιο ενημέρωσης"
 
 #: bazzite_portal/ui/application.py:2353
-#, fuzzy, python-brace-format
-#| msgid "Bazzite System"
+#, python-brace-format
 msgid "{bazzite} System"
-msgstr "Σύστημα Bazzite"
+msgstr "Σύστημα {bazzite}"
 
 #: bazzite_portal/ui/application.py:2355
 msgid "Waiting to update"
@@ -1171,28 +1123,24 @@ msgstr "Δεν υπάρχει έξοδος καταγραφής της μονά�
 
 #: bazzite_portal/ui/application.py:2462
 #, fuzzy, python-brace-format
-#| msgid "Reboot Bazzite?"
-msgid "Reboot {bazzite}?"
-msgstr "Επανεκκίνηση του Bazzite;"
+#| msgid "Reboot {bazzite}?"
+msgid "Restart {bazzite}?"
+msgstr "Επανεκκίνηση του {bazzite};"
 
 #: bazzite_portal/ui/application.py:2462
 #, fuzzy, python-brace-format
 #| msgid ""
-#| "All update steps have finished. Reboot now to start the prepared Bazzite "
-#| "version. Save your work before continuing."
+#| "All update steps have finished. Reboot now to start the prepared "
+#| "{bazzite} version. Save your work before continuing."
 msgid ""
-"All update steps have finished. Reboot now to start the prepared {bazzite} "
+"All update steps have finished. Restart now to start the prepared {bazzite} "
 "version. Save your work before continuing."
 msgstr ""
 "Όλα τα στάδια της ενημέρωσης ολοκληρώθηκαν. Κάντε επανεκκίνηση τώρα για να "
-"εκκινήσετε την προετοιμασμένη έκδοση του Bazzite. Αποθηκεύστε την εργασία "
+"εκκινήσετε την προετοιμασμένη έκδοση του {bazzite}. Αποθηκεύστε την εργασία "
 "σας πριν συνεχίσετε."
 
 #: bazzite_portal/ui/application.py:2462 bazzite_portal/ui/application.py:2723
-msgid "Reboot"
-msgstr "Επανεκκίνηση"
-
-#: bazzite_portal/ui/application.py:2462
 msgid "Restart"
 msgstr "Επανεκκίνηση"
 
@@ -1240,30 +1188,25 @@ msgid "Rolling back…"
 msgstr "Επαναφορά σε προηγούμενη έκδοση…"
 
 #: bazzite_portal/ui/application.py:2689
-#, fuzzy, python-brace-format
-#| msgid "Bazzite is updating…"
+#, python-brace-format
 msgid "{bazzite} is updating…"
-msgstr "Το Bazzite ενημερώνεται…"
+msgstr "Το {bazzite} ενημερώνεται…"
 
 #: bazzite_portal/ui/application.py:2716
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "A system change is pending, but Bazzite Portal could not verify it. "
-#| "Restart is unavailable until its status can be checked."
+#, python-brace-format
 msgid ""
 "A system change is pending, but {app_name} could not verify it. Restart is "
 "unavailable until its status can be checked."
 msgstr ""
-"Εκκρεμεί μια αλλαγή στο σύστημα, αλλά το Bazzite Portal δεν μπόρεσε να την "
+"Εκκρεμεί μια αλλαγή στο σύστημα, αλλά το {app_name} δεν μπόρεσε να την "
 "επαληθεύσει. Η επανεκκίνηση δεν είναι διαθέσιμη μέχρι να ελεγχθεί η "
 "κατάστασή της."
 
 #: bazzite_portal/ui/application.py:2718
-#, fuzzy, python-brace-format
-#| msgid "Bazzite updates are unavailable. Open Logs for details."
+#, python-brace-format
 msgid "{bazzite} updates are unavailable. Open Logs for details."
 msgstr ""
-"Οι ενημερώσεις του Bazzite δεν είναι διαθέσιμες. Ανοίξτε τα αρχεία "
+"Οι ενημερώσεις του {bazzite} δεν είναι διαθέσιμες. Ανοίξτε τα αρχεία "
 "καταγραφής για περισσότερες λεπτομέρειες."
 
 #: bazzite_portal/ui/application.py:2723
@@ -1294,10 +1237,9 @@ msgid "Refresh"
 msgstr "Ανανέωση"
 
 #: bazzite_portal/ui/application.py:2855
-#, fuzzy, python-brace-format
-#| msgid "Bazzite Image Version"
+#, python-brace-format
 msgid "{bazzite} Image Version"
-msgstr "Έκδοση εικόνας συστήματος Bazzite"
+msgstr "Έκδοση εικόνας συστήματος {bazzite}"
 
 #: bazzite_portal/ui/application.py:2855
 msgid "The image and update track used by your running system."
@@ -1399,13 +1341,12 @@ msgstr ""
 "Επιλέξτε μια αποθηκευμένη, καρφιτσωμένη έκδοση του συστήματος για διαγραφή."
 
 #: bazzite_portal/ui/application.py:2956
-#, fuzzy, python-brace-format
-#| msgid "Follow the latest Stable or Testing release of your Bazzite image."
+#, python-brace-format
 msgid ""
 "Follow the latest {stable} or {testing} release of your {bazzite} image."
 msgstr ""
-"Ακολουθήστε την τελευταία σταθερή ή δοκιμαστική έκδοση της εικόνας "
-"συστήματος Bazzite."
+"Ακολουθήστε την τελευταία έκδοση του καναλιού {stable} ή {testing} για την "
+"εικόνα συστήματος {bazzite}."
 
 #: bazzite_portal/ui/application.py:2959
 msgid "Checking release channel…"
@@ -1426,10 +1367,9 @@ msgid "Rebase to specific image"
 msgstr "Μετάβαση σε συγκεκριμένη εικόνα συστήματος μέσω rebase"
 
 #: bazzite_portal/ui/application.py:2970 bazzite_portal/ui/application.py:4417
-#, fuzzy, python-brace-format
-#| msgid "Choose a Bazzite image, release channel and version."
+#, python-brace-format
 msgid "Choose a {bazzite} image, release channel and version."
-msgstr "Επιλέξτε εικόνα συστήματος Bazzite, κανάλι κυκλοφορίας και έκδοση."
+msgstr "Επιλέξτε εικόνα συστήματος {bazzite}, κανάλι κυκλοφορίας και έκδοση."
 
 #: bazzite_portal/ui/application.py:2980 bazzite_portal/ui/application.py:3768
 msgid "Remove layered apps"
@@ -1458,17 +1398,14 @@ msgid "Remove all layered apps"
 msgstr "Αφαίρεση όλων των εφαρμογών που έχουν εγκατασταθεί μέσω layering"
 
 #: bazzite_portal/ui/application.py:2988 bazzite_portal/ui/application.py:3629
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Remove all system layers. Your files, Bazzite app store apps, Homebrew "
-#| "apps and AppImages stay."
+#, python-brace-format
 msgid ""
 "Remove all system layers. Your files, {bazzite} app store apps, {homebrew} "
 "apps and {appimages} stay."
 msgstr ""
 "Αφαιρέστε όλα τα πακέτα που έχουν εγκατασταθεί μέσω layering. Τα προσωπικά "
-"σας αρχεία, οι εφαρμογές από το κατάστημα εφαρμογών του Bazzite, οι "
-"εφαρμογές Homebrew και τα AppImages θα διατηρηθούν."
+"σας αρχεία, οι εφαρμογές από το κατάστημα εφαρμογών του {bazzite}, οι "
+"εφαρμογές {homebrew} και τα {appimages} θα διατηρηθούν."
 
 #: bazzite_portal/ui/application.py:3029
 msgid "The system did not report a recognizable deployment state."
@@ -1567,26 +1504,20 @@ msgstr ""
 "Ανοίξτε για να δείτε την πρόοδο της διαδικασίας και τα αρχεία καταγραφής."
 
 #: bazzite_portal/ui/application.py:3123
-#, fuzzy
-#| msgid "Cancel rollback"
 msgid "Cancelling rollback…"
-msgstr "Ακύρωση επαναφοράς σε προηγούμενη έκδοση"
+msgstr "Ακύρωση επαναφοράς σε προηγούμενη έκδοση…"
 
 #: bazzite_portal/ui/application.py:3125
-#, fuzzy
-#| msgid "Rollback failed"
 msgid "Rollback cancelled"
-msgstr "Η επαναφορά σε προηγούμενη έκδοση απέτυχε"
+msgstr "Η επαναφορά σε προηγούμενη έκδοση ακυρώθηκε"
 
 #: bazzite_portal/ui/application.py:3125
 msgid "Rollback succeeded"
 msgstr "Η επαναφορά σε προηγούμενη έκδοση ολοκληρώθηκε με επιτυχία"
 
 #: bazzite_portal/ui/application.py:3127
-#, fuzzy
-#| msgid "Deployment cancellation failed"
 msgid "Rollback cancellation failed"
-msgstr "Η ακύρωση της έκδοσης του συστήματος απέτυχε"
+msgstr "Η ακύρωση της επαναφοράς σε προηγούμενη έκδοση απέτυχε"
 
 #: bazzite_portal/ui/application.py:3127 bazzite_portal/updates/monitor.py:506
 msgid "Rollback failed"
@@ -1649,10 +1580,8 @@ msgstr ""
 "περισσότερες λεπτομέρειες."
 
 #: bazzite_portal/ui/application.py:3381
-#, fuzzy
-#| msgid "Cancel rollback"
 msgid "Cancel rollback?"
-msgstr "Ακύρωση επαναφοράς σε προηγούμενη έκδοση"
+msgstr "Ακύρωση επαναφοράς σε προηγούμενη έκδοση;"
 
 #: bazzite_portal/ui/application.py:3382
 #, python-brace-format
@@ -1664,10 +1593,9 @@ msgstr ""
 "Η αποθηκευμένη έκδοση {version} θα παραμείνει διαθέσιμη."
 
 #: bazzite_portal/ui/application.py:3387
-#, fuzzy, python-brace-format
-#| msgid "Roll back Bazzite?"
+#, python-brace-format
 msgid "Roll back {bazzite}?"
-msgstr "Επαναφορά του Bazzite σε προηγούμενη έκδοση;"
+msgstr "Επαναφορά του {bazzite} σε προηγούμενη έκδοση;"
 
 #: bazzite_portal/ui/application.py:3388
 #, python-brace-format
@@ -1800,19 +1728,14 @@ msgid "Deployment cancellation is unavailable."
 msgstr "Η ακύρωση της έκδοσης του συστήματος δεν είναι διαθέσιμη."
 
 #: bazzite_portal/ui/application.py:3516
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Cancel the prepared Bazzite deployment {version} ({image})? This removes "
-#| "only the deployment prepared for the next restart. The running "
-#| "deployment, saved deployment, and personal files remain unchanged. This "
-#| "will not restart the computer."
+#, python-brace-format
 msgid ""
 "Cancel the prepared {bazzite} deployment {version} ({image})? This removes "
 "only the deployment prepared for the next restart. The running deployment, "
 "saved deployment, and personal files remain unchanged. This will not restart "
 "the computer."
 msgstr ""
-"Ακύρωση της προετοιμασμένης έκδοσης {version} ({image}) του Bazzite; Θα "
+"Ακύρωση της προετοιμασμένης έκδοσης {version} ({image}) του {bazzite}; Θα "
 "αφαιρεθεί μόνο η έκδοση του συστήματος που έχει προετοιμαστεί για την "
 "επόμενη επανεκκίνηση. Η τρέχουσα έκδοση, η αποθηκευμένη έκδοση και τα "
 "προσωπικά σας αρχεία θα παραμείνουν αμετάβλητα. Ο υπολογιστής δεν θα "
@@ -1964,10 +1887,9 @@ msgid "Rebase release channel"
 msgstr "Αλλαγή καναλιού κυκλοφορίας μέσω rebase"
 
 #: bazzite_portal/ui/application.py:3769
-#, fuzzy, python-brace-format
-#| msgid "Rebase Bazzite image"
+#, python-brace-format
 msgid "Rebase {bazzite} image"
-msgstr "Αλλαγή εικόνας συστήματος Bazzite μέσω rebase"
+msgstr "Αλλαγή εικόνας συστήματος {bazzite} μέσω rebase"
 
 #: bazzite_portal/ui/application.py:3770
 msgid "Delete pinned deployment"
@@ -1999,10 +1921,8 @@ msgid "Preparing image rebase…"
 msgstr "Προετοιμασία αλλαγής εικόνας συστήματος μέσω rebase…"
 
 #: bazzite_portal/ui/application.py:3925
-#, fuzzy
-#| msgid "Preparing deployment cancellation…"
 msgid "Preparing rollback cancellation…"
-msgstr "Προετοιμασία ακύρωσης έκδοσης του συστήματος…"
+msgstr "Προετοιμασία ακύρωσης επαναφοράς σε προηγούμενη έκδοση…"
 
 #: bazzite_portal/ui/application.py:3927
 msgid "Preparing rollback…"
@@ -2036,6 +1956,11 @@ msgid ""
 "app store ({flatpak} apps), {homebrew} apps, {appimages}, or your personal "
 "files. Restart manually when you are ready to apply the change."
 msgstr ""
+"Αυτή η ενέργεια αφαιρεί όλες τις εφαρμογές που έχουν εγκατασταθεί μέσω "
+"layering από το σύστημα. Δεν αφαιρεί εφαρμογές από το κατάστημα εφαρμογών "
+"του {bazzite} (εφαρμογές {flatpak}), εφαρμογές {homebrew}, {appimages} ή τα "
+"προσωπικά σας αρχεία. Κάντε χειροκίνητη επανεκκίνηση όταν είστε έτοιμοι να "
+"εφαρμόσετε την αλλαγή."
 
 #: bazzite_portal/ui/application.py:4015 bazzite_portal/ui/application.py:4103
 #: bazzite_portal/ui/application.py:4110 bazzite_portal/ui/application.py:4144
@@ -2043,14 +1968,12 @@ msgid "The package list changed. Review it again before confirming."
 msgstr "Η λίστα πακέτων άλλαξε. Ελέγξτε την ξανά πριν επιβεβαιώσετε."
 
 #: bazzite_portal/ui/application.py:4029
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Select the packages to remove. Apps included with Bazzite stay installed."
+#, python-brace-format
 msgid ""
 "Select the packages to remove. Apps included with {bazzite} stay installed."
 msgstr ""
 "Επιλέξτε τα πακέτα που θέλετε να αφαιρέσετε. Οι εφαρμογές που "
-"περιλαμβάνονται στο Bazzite θα παραμείνουν εγκατεστημένες."
+"περιλαμβάνονται στο {bazzite} θα παραμείνουν εγκατεστημένες."
 
 #: bazzite_portal/ui/application.py:4083 bazzite_portal/ui/application.py:4084
 msgid "Remove"
@@ -2110,11 +2033,10 @@ msgstr "Μια εγκατεστημένη έκδοση του συστήματο
 #: bazzite_portal/ui/application.py:4254 bazzite_portal/ui/application.py:4259
 #: bazzite_portal/ui/application.py:4271 bazzite_portal/ui/application.py:4273
 #: bazzite_portal/ui/application.py:4276
-#, fuzzy, python-brace-format
-#| msgid "Could not check saved Bazzite versions. Open Logs for details."
+#, python-brace-format
 msgid "Could not check saved {bazzite} versions. Open Logs for details."
 msgstr ""
-"Δεν ήταν δυνατός ο έλεγχος των αποθηκευμένων εκδόσεων του Bazzite. Ανοίξτε "
+"Δεν ήταν δυνατός ο έλεγχος των αποθηκευμένων εκδόσεων του {bazzite}. Ανοίξτε "
 "τα αρχεία καταγραφής για περισσότερες λεπτομέρειες."
 
 #: bazzite_portal/ui/application.py:4254
@@ -2164,19 +2086,17 @@ msgstr ""
 
 #: bazzite_portal/ui/application.py:4405 bazzite_portal/ui/application.py:4407
 #: bazzite_portal/ui/application.py:4470
-#, fuzzy, python-brace-format
-#| msgid "Could not check Bazzite images. Open Logs for details."
+#, python-brace-format
 msgid "Could not check {bazzite} images. Open Logs for details."
 msgstr ""
-"Δεν ήταν δυνατός ο έλεγχος των εικόνων συστήματος του Bazzite. Ανοίξτε τα "
+"Δεν ήταν δυνατός ο έλεγχος των εικόνων συστήματος του {bazzite}. Ανοίξτε τα "
 "αρχεία καταγραφής για περισσότερες λεπτομέρειες."
 
 #: bazzite_portal/ui/application.py:4405
-#, fuzzy, python-brace-format
-#| msgid "Changing Bazzite images is unavailable. Open Logs for details."
+#, python-brace-format
 msgid "Changing {bazzite} images is unavailable. Open Logs for details."
 msgstr ""
-"Η αλλαγή εικόνας συστήματος του Bazzite δεν είναι διαθέσιμη. Ανοίξτε τα "
+"Η αλλαγή εικόνας συστήματος του {bazzite} δεν είναι διαθέσιμη. Ανοίξτε τα "
 "αρχεία καταγραφής για περισσότερες λεπτομέρειες."
 
 #: bazzite_portal/ui/application.py:4407
@@ -2202,10 +2122,9 @@ msgstr ""
 "εξουσιοδότηση διαχειριστή. Ο υπολογιστής δεν θα επανεκκινηθεί αυτόματα."
 
 #: bazzite_portal/ui/application.py:4452
-#, fuzzy, python-brace-format
-#| msgid "Rebase Bazzite image?"
+#, python-brace-format
 msgid "Rebase {bazzite} image?"
-msgstr "Αλλαγή εικόνας συστήματος Bazzite μέσω rebase;"
+msgstr "Αλλαγή εικόνας συστήματος {bazzite} μέσω rebase;"
 
 #: bazzite_portal/ui/application.py:4455 bazzite_portal/ui/application.py:4467
 msgid ""
@@ -2274,10 +2193,9 @@ msgid "The target release channel is not verified."
 msgstr "Το επιθυμητό κανάλι κυκλοφορίας δεν έχει επαληθευτεί."
 
 #: bazzite_portal/ui/application.py:4541
-#, fuzzy, python-brace-format
-#| msgid "Rebasing to Bazzite Stable…"
+#, python-brace-format
 msgid "Rebasing to {bazzite} {track}…"
-msgstr "Μετάβαση στη σταθερή έκδοση του Bazzite μέσω rebase…"
+msgstr "Μετάβαση μέσω rebase στο {bazzite} {track}…"
 
 #: bazzite_portal/ui/application.py:4542
 msgid "The image is being prepared. You can keep using the computer."
@@ -2290,10 +2208,9 @@ msgid "Rebasing release channel…"
 msgstr "Αλλαγή καναλιού κυκλοφορίας μέσω rebase…"
 
 #: bazzite_portal/ui/application.py:4548
-#, fuzzy, python-brace-format
-#| msgid "Bazzite Stable is ready"
+#, python-brace-format
 msgid "{bazzite} {track} is ready"
-msgstr "Η σταθερή έκδοση του Bazzite είναι έτοιμη"
+msgstr "Το {bazzite} {track} είναι έτοιμο"
 
 #: bazzite_portal/ui/application.py:4549
 msgid "Restart manually to start the new release channel."
@@ -2305,16 +2222,14 @@ msgid "Release channel rebase failed"
 msgstr "Η αλλαγή καναλιού κυκλοφορίας μέσω rebase απέτυχε"
 
 #: bazzite_portal/ui/application.py:4555 bazzite_portal/ui/application.py:4564
-#, fuzzy, python-brace-format
-#| msgid "Rebase to Bazzite Stable"
+#, python-brace-format
 msgid "Rebase to {bazzite} {track}"
-msgstr "Μετάβαση στη σταθερή έκδοση του Bazzite μέσω rebase"
+msgstr "Μετάβαση στο {bazzite} {track} μέσω rebase"
 
 #: bazzite_portal/ui/application.py:4562
-#, fuzzy, python-brace-format
-#| msgid "Return to the latest Stable release"
+#, python-brace-format
 msgid "Return to the latest {track} release"
-msgstr "Επιστροφή στην τελευταία σταθερή έκδοση"
+msgstr "Επιστροφή στην τελευταία έκδοση του καναλιού {track}"
 
 #: bazzite_portal/ui/application.py:4565
 msgid "Download newer changes to try after restarting."
@@ -2323,10 +2238,9 @@ msgstr ""
 "επανεκκίνηση."
 
 #: bazzite_portal/ui/application.py:4567
-#, fuzzy, python-brace-format
-#| msgid "Return to the stable release after restarting."
+#, python-brace-format
 msgid "Return to the {track} release after restarting."
-msgstr "Επιστροφή στη σταθερή έκδοση μετά την επανεκκίνηση."
+msgstr "Επιστροφή στην έκδοση του καναλιού {track} μετά την επανεκκίνηση."
 
 #: bazzite_portal/ui/application.py:4602
 #, python-brace-format
@@ -2334,13 +2248,12 @@ msgid "Return this installation to the latest {target_name} release? "
 msgstr "Επαναφορά αυτής της εγκατάστασης στην τελευταία έκδοση {target_name}; "
 
 #: bazzite_portal/ui/application.py:4604
-#, fuzzy, python-brace-format
-#| msgid "Rebase this Bazzite installation from {value1} to {target_name}? "
+#, python-brace-format
 msgid ""
 "Rebase this {bazzite} installation from {current_track} to {target_name}? "
 msgstr ""
-"Αλλαγή αυτής της εγκατάστασης του Bazzite από {value1} σε {target_name} μέσω "
-"rebase; "
+"Μετάβαση αυτής της εγκατάστασης του {bazzite} από το κανάλι {current_track} "
+"στο {target_name} μέσω rebase; "
 
 #: bazzite_portal/ui/application.py:4607
 #, python-brace-format
@@ -2375,32 +2288,29 @@ msgid "The release channel request failed."
 msgstr "Το αίτημα αλλαγής καναλιού κυκλοφορίας απέτυχε."
 
 #: bazzite_portal/ui/application.py:4657
-#, fuzzy, python-brace-format
-#| msgid "Visit Bazzite documentation, community spaces, and source code."
+#, python-brace-format
 msgid "Visit {bazzite} documentation, community spaces, and source code."
 msgstr ""
 "Επισκεφθείτε την τεκμηρίωση, τις κοινότητες και το αποθετήριο πηγαίου κώδικα "
-"του Bazzite."
+"του {bazzite}."
 
 #: bazzite_portal/ui/application.py:4658
 msgid "Resources"
 msgstr "Πόροι"
 
 #: bazzite_portal/ui/application.py:4693
-#, fuzzy, python-brace-format
-#| msgid "Bazzite release and project announcements."
+#, python-brace-format
 msgid "{bazzite} release and project announcements."
-msgstr "Ανακοινώσεις σχετικά με τις εκδόσεις και το έργο Bazzite."
+msgstr "Ανακοινώσεις σχετικά με τις εκδόσεις και το έργο {bazzite}."
 
 #: bazzite_portal/ui/application.py:4695 bazzite_portal/ui/application.py:4742
 msgid "No announcements available"
 msgstr "Δεν υπάρχουν διαθέσιμες ανακοινώσεις"
 
 #: bazzite_portal/ui/application.py:4833
-#, fuzzy, python-brace-format
-#| msgid "This community link is not a valid HTTPS address."
+#, python-brace-format
 msgid "This community link is not a valid {https} address."
-msgstr "Αυτός ο σύνδεσμος κοινότητας δεν είναι έγκυρη διεύθυνση HTTPS."
+msgstr "Αυτός ο σύνδεσμος κοινότητας δεν είναι έγκυρη διεύθυνση {https}."
 
 #: bazzite_portal/ui/application.py:4847
 msgid "Preferences"
@@ -2435,17 +2345,15 @@ msgstr ""
 "χρήστες."
 
 #: bazzite_portal/ui/application.py:4854
-#, fuzzy, python-brace-format
-#| msgid "Show disabled UUPD steps"
+#, python-brace-format
 msgid "Show disabled {uupd} steps"
-msgstr "Εμφάνιση απενεργοποιημένων σταδίων UUPD"
+msgstr "Εμφάνιση απενεργοποιημένων σταδίων {uupd}"
 
 #: bazzite_portal/ui/application.py:4854
-#, fuzzy, python-brace-format
-#| msgid "Display steps disabled in UUPD. This does not enable them."
+#, python-brace-format
 msgid "Display steps disabled in {uupd}. This does not enable them."
 msgstr ""
-"Τα στάδια εμφάνισης είναι απενεργοποιημένα στο UUPD. Αυτή η ενέργεια δεν τα "
+"Εμφάνιση σταδίων που είναι απενεργοποιημένα στο {uupd}. Αυτό δεν τα "
 "ενεργοποιεί."
 
 #: bazzite_portal/ui/application.py:4855
@@ -2453,15 +2361,12 @@ msgid "Show unsupported rebase targets"
 msgstr "Εμφάνιση μη υποστηριζόμενων προορισμών rebase"
 
 #: bazzite_portal/ui/application.py:4856
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Include other desktops and the Unstable channel. Intended for advanced "
-#| "testing; these targets may cause problems."
+#, python-brace-format
 msgid ""
 "Include other desktops and the {track} channel. Intended for advanced "
 "testing; these targets may cause problems."
 msgstr ""
-"Συμπεριλάβετε άλλα περιβάλλοντα εργασίας και το ασταθές κανάλι. Προορίζονται "
+"Συμπεριλάβετε άλλα περιβάλλοντα εργασίας και το κανάλι {track}. Προορίζονται "
 "για προχωρημένες δοκιμές και ενδέχεται να προκαλέσουν προβλήματα."
 
 #: bazzite_portal/ui/application.py:4858
@@ -2505,17 +2410,15 @@ msgid "Notification icon theme"
 msgstr "Θέμα εικονιδίου ειδοποιήσεων"
 
 #: bazzite_portal/ui/application.py:4953
-#, fuzzy, python-brace-format
-#| msgid "Added to Steam."
+#, python-brace-format
 msgid "Add {app_name} to {steam}"
-msgstr "Προστέθηκε στο Steam."
+msgstr "Προσθήκη του {app_name} στο {steam}"
 
 #: bazzite_portal/ui/application.py:4954
-#, fuzzy, python-brace-format
-#| msgid "Open this app from your Steam library, including Gaming Mode."
+#, python-brace-format
 msgid "Open this app from your {steam} library, including Gaming Mode."
 msgstr ""
-"Ανοίξτε αυτή την εφαρμογή από τη βιβλιοθήκη σας στο Steam, ακόμα και στη "
+"Ανοίξτε αυτή την εφαρμογή από τη βιβλιοθήκη σας στο {steam}, ακόμα και στη "
 "λειτουργία παιχνιδιού."
 
 #: bazzite_portal/ui/application.py:4960
@@ -2568,7 +2471,7 @@ msgstr "Σχετικά"
 #: bazzite_portal/ui/application.py:4974
 #, python-brace-format
 msgid "About {app_name}"
-msgstr ""
+msgstr "Σχετικά με το {app_name}"
 
 #: bazzite_portal/ui/application.py:4980 bazzite_portal/ui/application.py:5111
 msgid "Could not save or load app preferences. Open Logs for details."
@@ -2577,23 +2480,20 @@ msgstr ""
 "Ανοίξτε τα αρχεία καταγραφής για περισσότερες λεπτομέρειες."
 
 #: bazzite_portal/ui/application.py:4997
-#, fuzzy, python-brace-format
-#| msgid "Added to Steam."
+#, python-brace-format
 msgid "Added to {steam}."
-msgstr "Προστέθηκε στο Steam."
+msgstr "Προστέθηκε στο {steam}."
 
 #: bazzite_portal/ui/application.py:4998
-#, fuzzy, python-brace-format
-#| msgid "Add to Steam requested."
+#, python-brace-format
 msgid "Add to {steam} requested."
-msgstr "Ζητήθηκε η προσθήκη στο Steam."
+msgstr "Ζητήθηκε η προσθήκη στο {steam}."
 
 #: bazzite_portal/ui/application.py:5001
-#, fuzzy, python-brace-format
-#| msgid "Could not add Bazzite Portal to Steam. Open Logs for details."
+#, python-brace-format
 msgid "Could not add {app_name} to {steam}. Open Logs for details."
 msgstr ""
-"Δεν ήταν δυνατή η προσθήκη του Bazzite Portal στο Steam. Ανοίξτε τα αρχεία "
+"Δεν ήταν δυνατή η προσθήκη του {app_name} στο {steam}. Ανοίξτε τα αρχεία "
 "καταγραφής για περισσότερες λεπτομέρειες."
 
 #: bazzite_portal/ui/application.py:5020
@@ -2606,12 +2506,7 @@ msgid "Unsupported rebase targets"
 msgstr "Μη υποστηριζόμενοι προορισμοί rebase"
 
 #: bazzite_portal/ui/application.py:5044
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Rebasing to unsupported targets, including other desktops and the "
-#| "Unstable channel, can and will break your system. The Bazzite team "
-#| "reserves the right not to provide support in these situations. Please "
-#| "read our documentation for further information."
+#, python-brace-format
 msgid ""
 "Rebasing to unsupported targets, including other desktops and the {track} "
 "channel, can and will break your system. The {bazzite} team reserves the "
@@ -2619,11 +2514,10 @@ msgid ""
 "documentation for further information."
 msgstr ""
 "Η μετάβαση μέσω rebase σε μη υποστηριζόμενους προορισμούς, "
-"συμπεριλαμβανομένων άλλων περιβαλλόντων εργασίας και του ασταθούς καναλιού, "
-"μπορεί και είναι πολύ πιθανό να προκαλέσει σοβαρά προβλήματα στο σύστημά "
-"σας. Η ομάδα του Bazzite διατηρεί το δικαίωμα να μην παρέχει υποστήριξη σε "
-"αυτές τις περιπτώσεις. Διαβάστε την τεκμηρίωσή μας για περισσότερες "
-"πληροφορίες."
+"συμπεριλαμβανομένων άλλων περιβαλλόντων εργασίας και του καναλιού {track}, "
+"μπορεί και πρόκειται να προκαλέσει σοβαρά προβλήματα στο σύστημά σας. Η "
+"ομάδα του {bazzite} διατηρεί το δικαίωμα να μην παρέχει υποστήριξη σε αυτές "
+"τις περιπτώσεις. Διαβάστε την τεκμηρίωσή μας για περισσότερες πληροφορίες."
 
 #: bazzite_portal/ui/application.py:5046
 msgid "OK"
@@ -2634,12 +2528,11 @@ msgid "Local app data cleared."
 msgstr "Τα τοπικά δεδομένα της εφαρμογής εκκαθαρίστηκαν."
 
 #: bazzite_portal/ui/application.py:5125
-#, fuzzy, python-brace-format
-#| msgid "Manage Bazzite updates, tools, and system settings."
+#, python-brace-format
 msgid "Manage {bazzite} updates, tools, and system settings."
 msgstr ""
 "Διαχειριστείτε τις ενημερώσεις, τα εργαλεία και τις ρυθμίσεις συστήματος του "
-"Bazzite."
+"{bazzite}."
 
 #: bazzite_portal/ui/application.py:5126
 msgid "translator-credits"
@@ -2649,14 +2542,6 @@ msgstr "Xarishark - Ζαχαρίας Ξενάκης"
 msgid "The requested action is missing or ambiguous."
 msgstr ""
 "Η ζητούμενη ενέργεια δεν υπάρχει ή δεν μπορεί να προσδιοριστεί με σαφήνεια."
-
-#: bazzite_portal/ui/application.py:5505 bazzite_portal/ui/application.py:5516
-msgid "Unfavorite"
-msgstr "Αφαίρεση από τα αγαπημένα"
-
-#: bazzite_portal/ui/application.py:5505 bazzite_portal/ui/application.py:5516
-msgid "Favorite"
-msgstr "Αγαπημένο"
 
 #: bazzite_portal/ui/application.py:5534
 msgid "Review selected"
@@ -2710,11 +2595,10 @@ msgid "Please wait."
 msgstr "Παρακαλώ περιμένετε."
 
 #: bazzite_portal/ui/image_wizard.py:277
-#, fuzzy, python-brace-format
-#| msgid "Could not load available Bazzite images. Try again."
+#, python-brace-format
 msgid "Could not load available {bazzite} images. Try again."
 msgstr ""
-"Δεν ήταν δυνατή η φόρτωση των διαθέσιμων εικόνων συστήματος του Bazzite. "
+"Δεν ήταν δυνατή η φόρτωση των διαθέσιμων εικόνων συστήματος του {bazzite}. "
 "Δοκιμάστε ξανά."
 
 #: bazzite_portal/ui/image_wizard.py:281
@@ -2726,20 +2610,18 @@ msgid "Loading versions…"
 msgstr "Φόρτωση εκδόσεων…"
 
 #: bazzite_portal/ui/image_wizard.py:310 bazzite_portal/ui/image_wizard.py:348
-#, fuzzy, python-brace-format
-#| msgid "Could not load Bazzite versions. Try again."
+#, python-brace-format
 msgid "Could not load {bazzite} versions. Try again."
-msgstr "Δεν ήταν δυνατή η φόρτωση των εκδόσεων του Bazzite. Δοκιμάστε ξανά."
+msgstr "Δεν ήταν δυνατή η φόρτωση των εκδόσεων του {bazzite}. Δοκιμάστε ξανά."
 
 #: bazzite_portal/ui/image_wizard.py:314 bazzite_portal/ui/image_wizard.py:355
 msgid "No dated releases are available."
 msgstr "Δεν υπάρχουν διαθέσιμες εκδόσεις με ημερομηνία κυκλοφορίας."
 
 #: bazzite_portal/ui/system_info.py:47
-#, fuzzy, python-brace-format
-#| msgid "Pinned Bazzite version"
+#, python-brace-format
 msgid "Pinned {bazzite} version"
-msgstr "Καρφιτσωμένη έκδοση του Bazzite"
+msgstr "Καρφιτσωμένη έκδοση του {bazzite}"
 
 #: bazzite_portal/ui/system_info.py:52
 #, python-brace-format
@@ -2772,10 +2654,9 @@ msgid "System Apps"
 msgstr "Εφαρμογές συστήματος"
 
 #: bazzite_portal/updates/model.py:19
-#, fuzzy, python-brace-format
-#| msgid "Rootful Distroboxes"
+#, python-brace-format
 msgid "Rootful {distrobox} containers"
-msgstr "Distroboxes με δικαιώματα διαχειριστή"
+msgstr "Κοντέινερ {distrobox} με δικαιώματα root"
 
 #: bazzite_portal/updates/model.py:127 bazzite_portal/updates/model.py:474
 msgid "An update module failed"
@@ -2875,10 +2756,9 @@ msgid "Scanning system metadata"
 msgstr "Σάρωση μεταδεδομένων συστήματος"
 
 #: bazzite_portal/updates/model.py:277
-#, fuzzy, python-brace-format
-#| msgid "Updating Homebrew dependencies"
+#, python-brace-format
 msgid "Updating {homebrew} dependencies"
-msgstr "Ενημέρωση εξαρτήσεων Homebrew"
+msgstr "Ενημέρωση εξαρτήσεων {homebrew}"
 
 #: bazzite_portal/updates/model.py:304
 #, python-brace-format
@@ -2886,10 +2766,9 @@ msgid "Upgrading {package}"
 msgstr "Αναβάθμιση {package}"
 
 #: bazzite_portal/updates/model.py:324
-#, fuzzy, python-brace-format
-#| msgid "Updating Homebrew"
+#, python-brace-format
 msgid "Updating {homebrew}"
-msgstr "Ενημέρωση Homebrew"
+msgstr "Ενημέρωση {homebrew}"
 
 #: bazzite_portal/updates/model.py:364
 #, python-brace-format
@@ -2897,34 +2776,30 @@ msgid "{current} of {total}"
 msgstr "{current} από {total}"
 
 #: bazzite_portal/updates/model.py:403
-#, fuzzy, python-brace-format
-#| msgid "UUPD could not check for system updates."
+#, python-brace-format
 msgid "{uupd} could not check for system updates."
-msgstr "Το UUPD δεν μπόρεσε να ελέγξει για ενημερώσεις συστήματος."
+msgstr "Το {uupd} δεν μπόρεσε να ελέγξει για ενημερώσεις συστήματος."
 
 #: bazzite_portal/updates/model.py:439
 msgid "Preparing system update"
 msgstr "Προετοιμασία ενημέρωσης συστήματος"
 
 #: bazzite_portal/updates/model.py:517
-#, fuzzy, python-brace-format
-#| msgid "Disabled in UUPD configuration."
+#, python-brace-format
 msgid "Disabled in {uupd} configuration."
-msgstr "Απενεργοποιημένο στις ρυθμίσεις του UUPD."
+msgstr "Απενεργοποιημένο στις ρυθμίσεις του {uupd}."
 
 #: bazzite_portal/updates/model.py:520
-#, fuzzy, python-brace-format
-#| msgid "Enabled by UUPD configuration; runtime eligibility is not checked."
+#, python-brace-format
 msgid "Enabled by {uupd} configuration; runtime eligibility is not checked."
 msgstr ""
-"Ενεργοποιημένο από τις ρυθμίσεις του UUPD. Δεν ελέγχεται η δυνατότητα "
-"εκτέλεσης."
+"Ενεργοποιημένο από τις ρυθμίσεις του {uupd}; δεν ελέγχεται αν πληρούνται οι "
+"προϋποθέσεις εκτέλεσης."
 
 #: bazzite_portal/updates/model.py:543
-#, fuzzy, python-brace-format
-#| msgid "UUPD has not reported a result for this step."
+#, python-brace-format
 msgid "{uupd} has not reported a result for this step."
-msgstr "Το UUPD δεν έχει αναφέρει αποτέλεσμα για αυτό το στάδιο."
+msgstr "Το {uupd} δεν έχει αναφέρει αποτέλεσμα για αυτό το στάδιο."
 
 #: bazzite_portal/updates/monitor.py:808
 msgid "Deployment operation failed."
@@ -2937,11 +2812,10 @@ msgstr ""
 "Περιμένετε μέχρι να ολοκληρωθεί."
 
 #: bazzite_portal/updates/monitor.py:937 bazzite_portal/updates/monitor.py:2051
-#, fuzzy, python-brace-format
-#| msgid "Bazzite is changing images. Wait for it to finish."
+#, python-brace-format
 msgid "{bazzite} is changing images. Wait for it to finish."
 msgstr ""
-"Το Bazzite αλλάζει εικόνα συστήματος. Περιμένετε μέχρι να ολοκληρωθεί η "
+"Το {bazzite} αλλάζει εικόνα συστήματος. Περιμένετε μέχρι να ολοκληρωθεί η "
 "διαδικασία."
 
 #: bazzite_portal/updates/monitor.py:1184
@@ -2978,11 +2852,10 @@ msgstr "Αυτή η μονάδα ενημέρωσης ανέφερε αποτυ�
 #: bazzite_portal/updates/monitor.py:1999
 #: bazzite_portal/updates/monitor.py:2023
 #: bazzite_portal/updates/monitor.py:2123
-#, fuzzy, python-brace-format
-#| msgid "Bazzite is changing update channels. Wait for it to finish."
+#, python-brace-format
 msgid "{bazzite} is changing update channels. Wait for it to finish."
 msgstr ""
-"Το Bazzite αλλάζει κανάλι ενημερώσεων. Περιμένετε μέχρι να ολοκληρωθεί η "
+"Το {bazzite} αλλάζει κανάλι ενημερώσεων. Περιμένετε μέχρι να ολοκληρωθεί η "
 "διαδικασία."
 
 #: bazzite_portal/updates/monitor.py:1861
@@ -3014,11 +2887,10 @@ msgstr ""
 "εξέλιξη. Περιμένετε μέχρι να ολοκληρωθεί."
 
 #: bazzite_portal/updates/monitor.py:1896
-#, fuzzy, python-brace-format
-#| msgid "An RPM-OSTree transaction is active. Wait for it to finish."
+#, python-brace-format
 msgid "An {rpm_ostree} transaction is active. Wait for it to finish."
 msgstr ""
-"Μια διαδικασία RPM-OSTree βρίσκεται σε εξέλιξη. Περιμένετε μέχρι να "
+"Μια διαδικασία {rpm_ostree} βρίσκεται σε εξέλιξη. Περιμένετε μέχρι να "
 "ολοκληρωθεί."
 
 #: bazzite_portal/updates/monitor.py:1921
@@ -3115,10 +2987,8 @@ msgstr ""
 "το κανάλι."
 
 #: packaging/bazzite-portal-agent.desktop:2
-#, fuzzy
-#| msgid "Update log"
 msgid "Update Monitor"
-msgstr "Αρχείο καταγραφής ενημέρωσης"
+msgstr "Παρακολούθηση ενημερώσεων"
 
 #: packaging/io.github.Xarishark.bazzite_portal.desktop:2
 msgid "Bazzite Portal"
@@ -3126,47 +2996,48 @@ msgstr "Bazzite Portal"
 
 #: packaging/io.github.Xarishark.bazzite_portal.desktop:3
 #: packaging/io.github.Xarishark.bazzite_portal.metainfo.xml:5
-#, fuzzy
-#| msgid "Manage Bazzite tools and system updates"
 msgid "Manage {bazzite} tools and system updates"
-msgstr "Διαχείριση εργαλείων του Bazzite και ενημερώσεων συστήματος"
+msgstr "Διαχείριση εργαλείων του {bazzite} και ενημερώσεων συστήματος"
 
 #: packaging/io.github.Xarishark.bazzite_portal.desktop:9
-#, fuzzy
-#| msgid "bazzite;setup;configuration;updates;"
 msgid "setup;configuration;updates;"
-msgstr "bazzite;αρχική ρύθμιση;παραμετροποίηση;ενημερώσεις;"
+msgstr "αρχική ρύθμιση;παραμετροποίηση;ενημερώσεις;"
 
 #: packaging/io.github.Xarishark.bazzite_portal.metainfo.xml:6
-#, fuzzy
-#| msgid "Bazzite contributors"
 msgid "{bazzite} contributors"
-msgstr "Συντελεστές του Bazzite"
+msgstr "Συντελεστές του {bazzite}"
 
 #: packaging/io.github.Xarishark.bazzite_portal.metainfo.xml:9
-#, fuzzy
-#| msgid ""
-#| "A desktop utility for Bazzite setup tools, pinned actions, system "
-#| "updates, rollback, and system information."
 msgid ""
 "A desktop utility for {bazzite} setup tools, pinned actions, system updates, "
 "rollback, and system information."
 msgstr ""
-"Μια εφαρμογή για το περιβάλλον εργασίας του Bazzite, που παρέχει εργαλεία "
+"Μια εφαρμογή για το περιβάλλον εργασίας του {bazzite}, που παρέχει εργαλεία "
 "αρχικής ρύθμισης, καρφιτσωμένες ενέργειες, ενημερώσεις συστήματος, επαναφορά "
 "σε προηγούμενη έκδοση και πληροφορίες συστήματος."
 
 #: packaging/io.github.Xarishark.bazzite_portal.metainfo.xml:9
-#, fuzzy
-#| msgid ""
-#| "Reconnect to automatic or manually started UUPD updates and see when a "
-#| "new system deployment is ready for restart."
 msgid ""
 "Reconnect to automatic or manually started {uupd} updates and see when a new "
 "system deployment is ready for restart."
 msgstr ""
-"Συνδεθείτε ξανά με αυτόματες ή χειροκίνητα εκκινημένες ενημερώσεις UUPD και "
-"δείτε πότε μια νέα έκδοση του συστήματος είναι έτοιμη για επανεκκίνηση."
+"Συνδεθείτε ξανά με αυτόματες ή χειροκίνητα εκκινημένες ενημερώσεις {uupd} "
+"και δείτε πότε μια νέα έκδοση του συστήματος είναι έτοιμη για επανεκκίνηση."
+
+#~ msgid "Remove favorite"
+#~ msgstr "Αφαίρεση από τα αγαπημένα"
+
+#~ msgid "Add favorite"
+#~ msgstr "Προσθήκη στα αγαπημένα"
+
+#~ msgid "Reboot"
+#~ msgstr "Επανεκκίνηση"
+
+#~ msgid "Unfavorite"
+#~ msgstr "Αφαίρεση από τα αγαπημένα"
+
+#~ msgid "Favorite"
+#~ msgstr "Αγαπημένο"
 
 #~ msgid "No saved, pinned deployments are available to delete."
 #~ msgstr ""
