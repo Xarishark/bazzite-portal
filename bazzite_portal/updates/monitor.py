@@ -26,6 +26,7 @@ from bazzite_portal.updates.model import (
 )
 from bazzite_portal.updates import journal as update_journal
 from bazzite_portal.maintenance import cancel_pending as cancel_pending_backend
+from bazzite_portal.maintenance import rollback_cancel as rollback_cancel_backend
 from bazzite_portal.maintenance import reset_layers as reset_layers_backend
 from bazzite_portal.maintenance import cache_clear as cache_clear_backend
 from bazzite_portal.maintenance import channel_switch as channel_switch_backend
@@ -477,6 +478,27 @@ def rollback_status():
                     "state": "unavailable", "error": "Rollback service is not installed."}
         if state.get("LoadState") != "loaded" or not state.get("ActiveState"):
             raise RuntimeError("Could not verify rollback service state.")
+        rows = json.loads(command(["systemctl", "list-units", "--all", "--no-pager", "--output=json",
+                                   "bazzite-portal-maintenance@cancel-rollback-*.service"]))
+        if not isinstance(rows, list):
+            raise ValueError("systemd returned malformed rollback-cancellation instance data")
+        units = list(dict.fromkeys(row.get("unit") for row in rows if isinstance(row, dict)
+                                   and isinstance(row.get("unit"), str)
+                                   and re.fullmatch(r"bazzite-portal-maintenance@cancel-rollback-[0-9a-f]{64}\.service",
+                                                    row["unit"])))
+        if len(units) > MAX_CANCEL_INSTANCES:
+            raise ValueError("Too many rollback-cancellation instances to inspect safely")
+        candidates = [(unit, state)]
+        for candidate in units:
+            candidate_state = service_state(candidate)
+            if candidate_state.get("LoadState") == "not-found":
+                continue
+            if candidate_state.get("LoadState") != "loaded" or not candidate_state.get("ActiveState"):
+                raise ValueError("Could not verify rollback-cancellation service state")
+            candidates.append((candidate, candidate_state))
+        active_candidates = [pair for pair in candidates if pair[1].get("ActiveState") in CANCEL_ACTIVE_STATES]
+        unit, state = max(active_candidates or candidates,
+                          key=lambda pair: _unit_timestamp(pair[1], "InactiveExitTimestampMonotonic"))
         active = state.get("ActiveState") in CANCEL_ACTIVE_STATES
         outcome = "running" if active else _cancel_result_state(state)
         error = ""
@@ -1037,9 +1059,10 @@ class Monitor:
         unit = status.get("unit", "")
         if (record.get("state") == "running" and status.get("available") is True
                 and status.get("state") == "idle"
-                and (not unit or (kind == "rollback" and unit == record["unit"]
-                                  == "bazzite-portal-maintenance@rollback.service"
-                                  and not status.get("invocation")))):
+                and (not unit or (kind == "rollback" and unit == "bazzite-portal-maintenance@rollback.service"
+                                  and (record["unit"] == unit or re.fullmatch(
+                                      r"bazzite-portal-maintenance@cancel-rollback-[0-9a-f]{64}\.service",
+                                      record["unit"])) and not status.get("invocation")))):
             # Fixed rollback units remain discoverable after their invocation
             # has been collected, unlike the dynamic helper instances.
             # The request thread can be waiting for PolicyKit while systemd has
@@ -1814,6 +1837,25 @@ def _cache_service_is_running():
     if status["state"] == "unknown":
         raise RuntimeError(status["error"] or "Could not verify download-cache cleanup state.")
     return status["state"] == "running"
+
+
+def start_cancel_rollback(token):
+    """Restore the running deployment as default without deleting any version."""
+    if not isinstance(token, str) or not rollback_cancel_backend.TOKEN_PATTERN.fullmatch(token):
+        raise ValueError("Invalid rollback cancellation token.")
+    data = json.loads(command(["rpm-ostree", "status", "--json"]))
+    selected = rollback_cancel_backend.target(data)
+    if not selected["available"] or selected["token"] != token:
+        raise RuntimeError(selected["reason"] or "The scheduled rollback changed after confirmation.")
+    if (_cancel_service_is_running() or _layer_service_is_running()
+            or _cache_service_is_running() or _channel_service_is_running()
+            or _image_switch_service_is_running() or _delete_service_is_running()):
+        raise RuntimeError(N_("Another maintenance operation is running."))
+    active = _managed_operation_active()
+    if active:
+        raise RuntimeError("Another system operation is running: {active}.".format(active=active))
+    _start_maintenance_unit("rollback", f"bazzite-portal-maintenance@cancel-rollback-{token}.service")
+    return "Rollback canceled."
 
 
 def start_cancel_pending(token):

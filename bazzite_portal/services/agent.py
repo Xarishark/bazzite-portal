@@ -13,6 +13,7 @@ from bazzite_portal.updates.monitor import (
     Monitor,
     start_operation,
     start_cancel_pending,
+    start_cancel_rollback,
     start_remove_layers,
     start_remove_selected_layers,
     start_clear_download_cache,
@@ -40,6 +41,7 @@ AGENT_XML = '''<node><interface name="io.github.Xarishark.bazzite_portal.Agent">
 <method name="GameOperation"><arg type="s" direction="in"/><arg type="v" direction="in"/></method>
 <method name="StartUpdate"/><method name="StartRollback"/><method name="Restart"/>
 <method name="CancelPending"><arg type="s" direction="in"/></method>
+<method name="CancelRollback"><arg type="s" direction="in"/></method>
 <method name="DeleteDeployment"><arg type="s" direction="in"/></method>
 <method name="StartImageSwitch"><arg type="s" direction="in"/><arg type="s" direction="in"/><arg type="s" direction="in"/></method>
 <method name="RemoveLayers"><arg type="s" direction="in"/></method>
@@ -504,6 +506,7 @@ class Agent:
                 expected = {
                     "StartRollback": "b",
                     "CancelPending": "(s)",
+                    "CancelRollback": "(s)",
                     "RemoveLayers": "(s)",
                     "RemoveSelectedLayers": "(sas)",
                     "ClearDownloadCache": "(s)",
@@ -559,7 +562,7 @@ class Agent:
                 invocation.return_value(None)
             else:
                 invocation.return_dbus_error(AGENT_ID + ".Error", self.store.errors[-1])
-        elif method in ("StartUpdate", "StartRollback", "Restart", "CancelPending", "RemoveLayers", "RemoveSelectedLayers", "ClearDownloadCache", "StartChannelSwitch", "DeleteDeployment", "StartImageSwitch"):
+        elif method in ("StartUpdate", "StartRollback", "CancelRollback", "Restart", "CancelPending", "RemoveLayers", "RemoveSelectedLayers", "ClearDownloadCache", "StartChannelSwitch", "DeleteDeployment", "StartImageSwitch"):
             if self.busy:
                 invocation.return_dbus_error(AGENT_ID + ".Error", N_("Another operation request is pending."))
                 return
@@ -571,12 +574,14 @@ class Agent:
             if self.active_timer is None:
                 self.active_timer = GLib.timeout_add_seconds(2, self._tick)
             self.monitor.refresh()
-            game_auth = game_auth_sender if method in ("StartRollback", "CancelPending", "RemoveLayers", "RemoveSelectedLayers", "ClearDownloadCache", "StartChannelSwitch", "DeleteDeployment", "StartImageSwitch") else None
+            game_auth = game_auth_sender if method in ("StartRollback", "CancelRollback", "CancelPending", "RemoveLayers", "RemoveSelectedLayers", "ClearDownloadCache", "StartChannelSwitch", "DeleteDeployment", "StartImageSwitch") else None
             def worker():
                 error = None
                 try:
                     def execute():
-                        if method == "CancelPending":
+                        if method == "CancelRollback":
+                            start_cancel_rollback(parameters.unpack()[0])
+                        elif method == "CancelPending":
                             start_cancel_pending(parameters.unpack()[0])
                         elif method == "RemoveLayers":
                             start_remove_layers(parameters.unpack()[0])
@@ -740,11 +745,11 @@ class Client:
         # request while that unit is still running; Changed snapshots continue
         # to carry live progress independently of this reply.
         timeout = 2_147_483_647 if method in {
-            "StartRollback", "CancelPending", "RemoveLayers", "RemoveSelectedLayers", "ClearDownloadCache", "StartChannelSwitch", "DeleteDeployment", "StartImageSwitch",
+            "StartRollback", "CancelRollback", "CancelPending", "RemoveLayers", "RemoveSelectedLayers", "ClearDownloadCache", "StartChannelSwitch", "DeleteDeployment", "StartImageSwitch",
         } else 120000
         wire_method, wire_parameters = method, parameters
         if self.game_auth_enabled and method in {
-            "StartRollback", "CancelPending", "RemoveLayers", "RemoveSelectedLayers", "ClearDownloadCache", "StartChannelSwitch", "DeleteDeployment", "StartImageSwitch",
+            "StartRollback", "CancelRollback", "CancelPending", "RemoveLayers", "RemoveSelectedLayers", "ClearDownloadCache", "StartChannelSwitch", "DeleteDeployment", "StartImageSwitch",
         }:
             original_parameters = (GLib.Variant("b", False) if method == "StartRollback"
                                    else parameters or GLib.Variant("()", ()))

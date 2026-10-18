@@ -24,7 +24,7 @@ from bazzite_portal.integration import steam as steam_shortcut
 from bazzite_portal.ui import system_info as system_presentation
 from bazzite_portal.artwork.icons import icon as app_icon
 from bazzite_portal.input.prompts import set_prompt_visible
-from bazzite_portal.maintenance import image_switch
+from bazzite_portal.maintenance import image_switch, rollback_cancel
 from bazzite_portal.input.controller import (
     SDLGamepad,
     ControllerDriver,
@@ -43,7 +43,7 @@ log = logging.getLogger(__name__)
 PAGES = (N_("Home"), N_("Tools"), N_("Updates"), N_("System"), "Management", N_("Troubleshooting"), N_("Community"), N_("Announcements"), "Settings")
 PAGE_LABELS = {
     "Home": 'Bazzite Portal', "Tools": _("Tools"), "Updates": _("Updates"),
-    "System": _("System information"), "Management": _("System management"),
+    "System": _("System information"), "Management": _("System Management"),
     "Troubleshooting": _("Troubleshooting"), "Community": _("Community"),
     "Announcements": _("Announcements"), "Settings": _("Options"),
 }
@@ -949,7 +949,7 @@ class Window(Adw.ApplicationWindow):
         page_title = PAGE_LABELS.get(name, "")
         self.header_title.set_title(format_message(page_title))
         if name in {N_("System"), "Management"}:
-            self.header_title.set_title(format_message(_("System information") if name == N_("System") else _("System management")))
+            self.header_title.set_title(format_message(_("System information") if name == N_("System") else _("System Management")))
             if not self.system_has_snapshot:
                 # Reveal the page before scheduling even the loading-state changes.
                 def load_first_visit():
@@ -1028,7 +1028,7 @@ class Window(Adw.ApplicationWindow):
         for title, destination, description in (
             (N_("Tools"), N_("Tools"), N_("Browse setup, fixes, and utilities from the system Portal.")),
             (N_("System information"), N_("System"), C_('View deployments, package layers and {rpm_ostree} status.', rpm_ostree='RPM-OSTree')),
-            (N_("System management"), "Management", N_("Cancel a pending deployment, remove layered apps or recover your system.")),
+            (N_("System Management"), "Management", N_("Cancel a pending deployment, remove layered apps or recover your system.")),
             (N_("Troubleshooting"), N_("Troubleshooting"), C_('Report a problem, collect system logs, or reset {steam}.', steam='Steam')),
             (N_("Community"), N_("Community"), C_('{bazzite} documentation, website, and community links.', bazzite='Bazzite')),
             (N_("Announcements"), N_("Announcements"), C_('View {bazzite} release and project announcements.', bazzite='Bazzite')),
@@ -2848,10 +2848,10 @@ class Window(Adw.ApplicationWindow):
 
     def _build_system(self):
         page, box = content_page(N_("System information"), "")
-        management_page, management_box = content_page(N_("System management"), "")
+        management_page, management_box = content_page(N_("System Management"), "")
         self.management_box = management_box
         self._add_system_refresh_heading(box, N_("System information"), "system")
-        self._add_system_refresh_heading(management_box, N_("System management"), "management")
+        self._add_system_refresh_heading(management_box, N_("System Management"), "management")
         self.system_group = group(C_('{bazzite} Image Version', bazzite='Bazzite'), N_("The image and update track used by your running system."))
         self.system_rows = {}
         for title in (N_("Image"), N_("Release channel")):
@@ -3088,16 +3088,10 @@ class Window(Adw.ApplicationWindow):
             return saved, N_("Checking previous deployment… Refresh system information to check rollback availability.")
         if not summary.get("known"):
             return saved, N_("Previous deployment availability is unknown. Refresh system information.")
-        pending_rollback = (
-            summary.get("engine") == "rpm-ostree"
-            and len(entries) == 2
-            and isinstance(next_restart, dict)
-            and next_restart.get("staged") is False
-            and isinstance(entries[1], dict)
-            and entries[1].get("role") == N_("Running now")
-        )
+        cancellation = rollback_cancel.target(self.image_deployment_status)
+        pending_rollback = cancellation.get("available") is True and isinstance(next_restart, dict)
         if pending_rollback:
-            saved = next_restart
+            saved = {**next_restart, "cancel_token": cancellation["token"]}
         if saved is None:
             if (summary.get("engine") == "bootc" and isinstance(next_restart, dict)
                     and next_restart.get("staged") is False):
@@ -3122,12 +3116,15 @@ class Window(Adw.ApplicationWindow):
         logs = getattr(self.snapshot, "rollback_logs", [])
         detail = error_text(getattr(self.snapshot, "rollback_error", ""), N_('Could not check rollback status. Open Logs for details.'), context='_sync_rollback_ui') or N_("Open to view operation progress and logs.")
         if (state == "running" or self._maintenance_row_should_open("rollback")):
+            unit = (getattr(self, "maintenance_pending_units", {}).get("rollback", {}).get("unit")
+                    or getattr(self.snapshot, "rollback_unit", ""))
+            cancelling = unit.startswith("bazzite-portal-maintenance@cancel-rollback-")
             if state == "running":
-                title = N_("Rolling back…")
+                title = N_("Cancelling rollback…") if cancelling else N_("Rolling back…")
             elif state == "success":
-                title = N_("Rollback succeeded")
+                title = N_("Rollback cancelled") if cancelling else N_("Rollback succeeded")
             elif state == "failed":
-                title = N_("Rollback failed")
+                title = N_("Rollback cancellation failed") if cancelling else N_("Rollback failed")
             else:
                 title = N_("Rollback status unknown")
             self.rollback_row.set_title(format_message(title))
@@ -3137,7 +3134,7 @@ class Window(Adw.ApplicationWindow):
         saved, reason = self._rollback_eligibility()
         enabled = saved is not None and not reason
         pending_rollback = bool(enabled and saved.get("role") == N_("Next restart"))
-        title = (N_("Cancel pending rollback") if pending_rollback else
+        title = (N_("Cancel rollback") if pending_rollback else
                  N_("Roll back to previous deployment") if enabled else
                  N_("Rollback already prepared") if reason.startswith("A rollback is already prepared") else
                  N_('No previous deployment is available.') if reason == N_("No previous deployment is available.") else
@@ -3181,6 +3178,16 @@ class Window(Adw.ApplicationWindow):
         # A prior successful cancellation can remain in the agent snapshot
         # after a different deployment has been prepared. Keep the live
         # cancellation action available instead of reopening that old result.
+        if kind == "rollback" and state == "success":
+            if (getattr(self, "deployment_summary_fresh", False)
+                    and not getattr(self, "system_loading", False)):
+                summary = getattr(self, "deployment_summary", None) or {}
+                entries = summary.get("entries", [])
+                if (summary.get("known") is True and
+                        (rollback_cancel.target(getattr(self, "image_deployment_status", None)).get("available") is True
+                         or any(isinstance(entry, dict) and entry.get("role") == N_("Saved deployment")
+                                for entry in entries))):
+                    return False
         if kind == "cancel" and state == "success":
             # Read the shared backend target directly. Eligibility itself uses
             # the row's lifecycle when checking shared blockers; calling it
@@ -3304,14 +3311,21 @@ class Window(Adw.ApplicationWindow):
                 row, kind, request_active=request_active if allow_open else False,
                 allow_open=allow_open)
 
-    def _request_rollback(self):
+    def _request_rollback(self, cancel_token=None):
         if self.closing:
             return
         if self.client is None or getattr(self.client, "closed", False):
             self.toast(N_("System status is unavailable. Open Logs for details."))
             return
+        if cancel_token is not None:
+            current, reason = self._rollback_eligibility()
+            if reason or current is None or current.get("cancel_token") != cancel_token:
+                self.toast(reason or N_("Rollback is unavailable."))
+                self._sync_rollback_ui()
+                return
         self.rollback_request_active = True
-        expected_unit = "bazzite-portal-maintenance@rollback.service"
+        expected_unit = (f"bazzite-portal-maintenance@cancel-rollback-{cancel_token}.service"
+                         if cancel_token else "bazzite-portal-maintenance@rollback.service")
         self._sync_maintenance_row("rollback")
         self._show_maintenance_log("rollback", expected_unit)
 
@@ -3324,12 +3338,18 @@ class Window(Adw.ApplicationWindow):
                 dialog.request_completed = not error
                 dialog.request_error = str(error) if error else ""
                 self._sync_maintenance_dialog()
+            self.deployment_summary_fresh = False
             self._sync_rollback_ui()
+            self._refresh_system_after_cancel()
             if error:
                 self.toast(public_error(error, N_("Rollback failed. Open Logs for details."), context='Rollback request'))
 
         try:
-            self.client.call("StartRollback", callback=lambda *_: finished(), error_callback=finished)
+            if cancel_token:
+                self.client.call("CancelRollback", GLib.Variant("(s)", (cancel_token,)),
+                                 callback=lambda *_: finished(), error_callback=finished)
+            else:
+                self.client.call("StartRollback", callback=lambda *_: finished(), error_callback=finished)
         except Exception as error:
             finished(error)
 
@@ -3344,19 +3364,21 @@ class Window(Adw.ApplicationWindow):
         if self.modal is not None:
             return
         version = self._short_deployment_text(saved.get("version"), 48)
-        cancel_pending_rollback = saved.get("role") == N_("Next restart")
+        cancel_token = saved.get("cancel_token")
+        cancel_pending_rollback = bool(cancel_token)
         expected_identity = saved.get("identity")
         def start_rollback():
             current, current_reason = self._rollback_eligibility()
             if (current_reason or current is None or current.get("role") != saved.get("role")
-                    or current.get("identity") != expected_identity):
+                    or current.get("identity") != expected_identity
+                    or current.get("cancel_token") != cancel_token):
                 self.toast(current_reason or N_("Rollback is unavailable."))
                 self._sync_rollback_ui()
                 return
-            self._request_rollback()
+            self._request_rollback(cancel_token)
         if cancel_pending_rollback:
             self.confirm(
-                N_("Cancel pending rollback?"),
+                N_("Cancel rollback?"),
                 _('Keep your current system for the next restart. The saved deployment, version {version}, will remain available.').format(version=version),
                 N_("Cancel rollback"), start_rollback,
             )
@@ -3733,7 +3755,7 @@ class Window(Adw.ApplicationWindow):
                 "previous_generation": self._maintenance_key(kind)[2],
             }
         dialog = Adw.Window(transient_for=self, modal=True, default_width=560,
-                            title={"rollback": _("Rollback"), "cancel": _("Cancel pending deployment"),
+                            title={"rollback": (_("Cancel rollback") if unit.startswith("bazzite-portal-maintenance@cancel-rollback-") else _("Rollback")), "cancel": _("Cancel pending deployment"),
                                    "layer": _("Remove layered apps"), "cache": _("Clear download cache"),
                                    "channel": _('Rebase release channel'), "image": _('Rebase {bazzite} image').format(bazzite='Bazzite'),
                                    "delete": _("Delete pinned deployment")}.get(kind, _("System operation")))
@@ -3891,7 +3913,9 @@ class Window(Adw.ApplicationWindow):
                     "cancel": _("Preparing deployment cancellation…"),
                     "channel": _('Preparing release channel rebase…'),
                     "image": _('Preparing image rebase…'),
-                    "rollback": _("Preparing rollback…"),
+                    "rollback": (_("Preparing rollback cancellation…")
+                                 if dialog.operation_key[0].startswith("bazzite-portal-maintenance@cancel-rollback-")
+                                 else _("Preparing rollback…")),
                     "layer": _("Preparing layer removal…"),
                     "delete": _("Preparing deployment deletion…"),
                 }.get(kind, _("Preparing operation…")))
