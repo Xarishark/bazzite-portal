@@ -293,7 +293,10 @@ def execute(
         retained_before = _remaining_deployments(current, canceled_id, canceled_checksum)
         if command_runner is _command:
             print("Removing the confirmed pending deployment...", flush=True)
-        command_runner(["rpm-ostree", "cleanup", "--pending"], timeout=None)
+        # cleanup --pending removes ALL unpinned deployments before the booted
+        # one, including a saved deployment selected by an earlier rollback.
+        # The confirmed staged target is index zero; remove only that entry.
+        command_runner(["ostree", "admin", "undeploy", "0"], timeout=None)
         after = _read_status(command_runner)
         after_deployments = after.get("deployments")
         if not isinstance(after_deployments, list):
