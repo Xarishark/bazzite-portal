@@ -20,7 +20,7 @@ class AnnouncementLoadError(ValueError):
     """A safe, user-facing explanation of why announcements could not load."""
 
 
-def source_path(config_path: str | Path, *, preview: bool = False) -> Path:
+def source_path(config_path: str | Path) -> Path:
     """Read announcements beside the active tools configuration."""
     return Path(config_path).with_name("announcements.yml")
 

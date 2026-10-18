@@ -230,7 +230,7 @@ class Tray:
         return self._pixmap_variants[key]
 
     def prepare_artwork(self, kind):
-        """Precompute raster and D-Bus values in the preview worker."""
+        """Precompute raster and D-Bus values in the rendering worker."""
         # Keep failures local to the worker result. A stale preparation must
         # not mark whichever theme is currently displayed as failed.
         self.artwork.pixmaps(kind)
