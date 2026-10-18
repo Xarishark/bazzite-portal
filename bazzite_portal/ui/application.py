@@ -1646,7 +1646,7 @@ class Window(Adw.ApplicationWindow):
         for pin in pins:
             item = portal.resolve(self.items, pin)
             title = item["action"].get("title", N_("Action")) if item else pin.get("title") or pin.get("id", N_("Unavailable tool"))
-            subtitle = item["category"] if item else N_("Unavailable or ambiguous · select to remove this pin")
+            subtitle = item["category"] if item else N_("Unavailable or ambiguous · select to unpin")
             row = Adw.ActionRow(title=GLib.markup_escape_text(title), subtitle=GLib.markup_escape_text(subtitle))
             row.pinned_reference = pin
             row.controller_focus_row = True
@@ -1660,9 +1660,9 @@ class Window(Adw.ApplicationWindow):
 
     def _remove_unavailable_pin(self, pin):
         self.confirm(
-            N_("Remove unavailable pinned tool?"),
+            N_("Unpin unavailable tool?"),
             N_("This pin no longer resolves to one unambiguous Portal action. Removing the pin does not run any script."),
-            N_("Remove pin"),
+            N_("Unpin"),
             lambda: self.toggle_pin(pin),
         )
 
