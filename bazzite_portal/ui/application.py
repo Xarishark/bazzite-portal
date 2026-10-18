@@ -3460,6 +3460,15 @@ class Window(Adw.ApplicationWindow):
             action_title, action_detail = title, detail
         elif state.cancel_state == "running":
             action_title, action_detail = title, detail
+        elif absent_pending:
+            # A previous operation result is not a failure to read the current
+            # deployment state. Keep unread logs reachable; once acknowledged,
+            # return to the authoritative no-pending-deployment status.
+            if self._maintenance_row_should_open("cancel"):
+                action_title, action_detail = title, N_("Open to view operation progress and logs.")
+            else:
+                action_title = N_("No pending deployment to cancel")
+                action_detail = N_("Your current system will start again. No system change is pending.")
         elif state.cancel_state == "failed" and enabled:
             action_title = N_("Retry pending deployment cancellation")
             action_detail = N_("The previous attempt failed. Your pending deployment can still be cancelled.")

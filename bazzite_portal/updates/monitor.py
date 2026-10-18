@@ -1089,7 +1089,26 @@ class Monitor:
             settled = _maintenance_request_status(kind)
             if settled is None:
                 return status
-            return self._maintenance_request_status_snapshot(status, settled)
+            merged = self._maintenance_request_status_snapshot(status, settled)
+            merged["_execution_idle"] = True
+            return merged
+        if (record.get("state") == "unknown" and status.get("available") is True
+                and record.get("error", "").startswith(
+                    "The operation outcome could not be verified after systemd collected the service.")
+                and status.get("state") == "idle"
+                and (not unit or (kind == "rollback" and unit == "bazzite-portal-maintenance@rollback.service"
+                                  and (record["unit"] == unit or re.fullmatch(
+                                      r"bazzite-portal-maintenance@cancel-rollback-[0-9a-f]{64}\.service",
+                                      record["unit"])) and not status.get("invocation")))):
+            merged = self._maintenance_request_status_snapshot(status, record)
+            # Unknown completion is historical, not proof of a live operation.
+            # Recheck execution on every refresh before unblocking other actions.
+            try:
+                merged["_execution_idle"] = (not _maintenance_request_is_live(kind, record)
+                                             and not _maintenance_job_is_queued(record["unit"]))
+            except (OSError, TypeError, ValueError, RuntimeError, subprocess.TimeoutExpired):
+                pass
+            return merged
         if (record.get("state") == "unknown" and status.get("available") is True
             and not record.get("error", "").startswith(
                 "The operation outcome could not be verified after systemd collected the service.")
@@ -1351,13 +1370,10 @@ class Monitor:
                 if self._journal_failed:
                     error = (error + "\n" + self._journal_failed).strip()
                 modules = module_steps(plan, self._modules.values(), result if run else "idle")
-                maintenance_busy = (running or cancel["state"] == "running" or layers["state"] == "running"
-                                    or cache["state"] == "running" or cancel["state"] == "unknown"
-                                    or layers["state"] == "unknown" or cache["state"] == "unknown"
-                                    or channel["state"] == "running" or channel["state"] == "unknown"
-                                    or image["state"] == "running" or image["state"] == "unknown"
-                                    or delete["state"] == "running" or delete["state"] == "unknown"
-                                    or rollback["state"] == "running" or rollback["state"] == "unknown")
+                maintenance_busy = running or any(
+                    item["state"] == "running"
+                    or item["state"] == "unknown" and not item.get("_execution_idle")
+                    for item in (cancel, layers, cache, channel, image, delete, rollback))
                 cache_reason = cache_target.get("reason", "") or (cache.get("error", "") if not cache["available"] else "")
                 if maintenance_busy:
                     cache_reason = N_("Another system operation is running or its state could not be verified.")
