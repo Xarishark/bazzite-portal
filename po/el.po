@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/app/"
-"\n"
-"POT-Creation-Date: 2026-10-18 16:01+0000\n"
+"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/"
+"app/\n"
+"POT-Creation-Date: 2026-10-18 16:13+0000\n"
 "PO-Revision-Date: 2026-10-18 16:13+0000\n"
 "Last-Translator: Zacharias Xenakis <xarishark@outlook.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/bazzite-portal/app/"
@@ -906,12 +906,16 @@ msgid "Unavailable tool"
 msgstr "Μη διαθέσιμο εργαλείο"
 
 #: bazzite_portal/ui/application.py:1649
-msgid "Unavailable or ambiguous · select to remove this pin"
+#, fuzzy
+#| msgid "Unavailable or ambiguous · select to remove this pin"
+msgid "Unavailable or ambiguous · select to unpin"
 msgstr "Μη διαθέσιμο ή ασαφές · επιλέξτε για να αφαιρέσετε αυτό το καρφίτσωμα"
 
 #: bazzite_portal/ui/application.py:1663
-msgid "Remove unavailable pinned tool?"
-msgstr "Αφαίρεση μη διαθέσιμου καρφιτσωμένου εργαλείου;"
+#, fuzzy
+#| msgid "Unavailable tool"
+msgid "Unpin unavailable tool?"
+msgstr "Μη διαθέσιμο εργαλείο"
 
 #: bazzite_portal/ui/application.py:1664
 msgid ""
@@ -922,8 +926,11 @@ msgstr ""
 "προσδιορισμένη ενέργεια του Portal. Η αφαίρεσή του δεν εκτελεί κανένα "
 "σενάριο."
 
-#: bazzite_portal/ui/application.py:1665
-msgid "Remove pin"
+#: bazzite_portal/ui/application.py:1665 bazzite_portal/ui/application.py:1904
+#: bazzite_portal/ui/application.py:1905 bazzite_portal/ui/application.py:1942
+#: bazzite_portal/ui/application.py:1943 bazzite_portal/ui/application.py:5505
+#: bazzite_portal/ui/application.py:5516
+msgid "Unpin"
 msgstr "Αφαίρεση καρφιτσώματος"
 
 #: bazzite_portal/ui/application.py:1700
@@ -972,12 +979,6 @@ msgstr "Τρέχουσα κατάσταση: {status}"
 #, python-brace-format
 msgid "Status {status}"
 msgstr "Κατάσταση {status}"
-
-#: bazzite_portal/ui/application.py:1904 bazzite_portal/ui/application.py:1905
-#: bazzite_portal/ui/application.py:1942 bazzite_portal/ui/application.py:1943
-#: bazzite_portal/ui/application.py:5505 bazzite_portal/ui/application.py:5516
-msgid "Unpin"
-msgstr "Αφαίρεση καρφιτσώματος"
 
 #: bazzite_portal/ui/application.py:1904 bazzite_portal/ui/application.py:1905
 #: bazzite_portal/ui/application.py:1942 bazzite_portal/ui/application.py:1943
@@ -3017,6 +3018,12 @@ msgid ""
 msgstr ""
 "Συνδεθείτε ξανά με αυτόματες ή χειροκίνητα εκκινημένες ενημερώσεις {uupd} "
 "και δείτε πότε μια νέα έκδοση του συστήματος είναι έτοιμη για επανεκκίνηση."
+
+#~ msgid "Remove unavailable pinned tool?"
+#~ msgstr "Αφαίρεση μη διαθέσιμου καρφιτσωμένου εργαλείου;"
+
+#~ msgid "Remove pin"
+#~ msgstr "Αφαίρεση καρφιτσώματος"
 
 #~ msgid "Remove favorite"
 #~ msgstr "Αφαίρεση από τα αγαπημένα"
