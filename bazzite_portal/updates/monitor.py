@@ -1095,6 +1095,16 @@ class Monitor:
         if not record:
             return status
         unit = status.get("unit", "")
+        if (kind == "rollback" and status.get("available") is True
+                and unit == "bazzite-portal-maintenance@rollback.service"
+                and status.get("state") == "idle" and not status.get("invocation")
+                and re.fullmatch(r"bazzite-portal-maintenance@cancel-rollback-[0-9a-f]{64}\.service",
+                                 record["unit"])):
+            # The unused fixed unit is an availability placeholder, not a new
+            # operation. Preserve the cancellation's exact result after its
+            # dynamic instance is collected, including terminal worker records.
+            status = {**status, "unit": ""}
+            unit = ""
         if (unit and unit != record["unit"] and status.get("available") is True
                 and _maintenance_discovery_predates_request(status, record)):
             # systemd retains failed instances longer than successful ones. An

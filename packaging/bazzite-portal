@@ -1,0 +1,2 @@
+#!/bin/sh
+exec /usr/bin/python3 -I /usr/share/bazzite-portal/bazzite_portal/__main__.py "$@"

@@ -84,10 +84,11 @@ def dated_track_tags(tags: list[str], track: str) -> list[str]:
     return sorted(selected, key=lambda tag: tuple(int(part) for part in re.findall(r"\d+", tag)), reverse=True)
 
 
-def available_tracks(tags: list[str], *, show_unsupported: bool = False) -> list[str]:
-    """Offer only channels with a moving tag or a valid dated release."""
-    tracks = ("stable", "testing", "unstable") if show_unsupported else ("stable", "testing")
-    return [track for track in tracks if track in tags or dated_track_tags(tags, track)]
+def available_tracks(image: str, *, show_unsupported: bool = False) -> list[str]:
+    """Use the known image-family channels without a registry lookup."""
+    if image == "bazzite-dx" or image.startswith("bazzite-dx-"):
+        return ["stable"]
+    return ["stable", "testing", "unstable"] if show_unsupported else ["stable", "testing"]
 
 
 class ImageWizard:
@@ -292,31 +293,7 @@ class ImageWizard:
             self._version_results.clear()
         self._image = image
         self._track = ""
-        self._tracks = []
-        cached = self._version_results.get((image, "all"))
-        if cached is not None:
-            self._channels_loaded(cached)
-            return
-        self._state("tracks", _("Loading versions…"), _("Please wait."), True)
-        self._run(lambda: self.query_versions(image, "all"), self._channels_loaded)
-
-    def _channels_loaded(self, result):
-        if not isinstance(result, dict):
-            result = {"reason": "The registry returned malformed version data."}
-        tags = result.get("versions", [])
-        if not isinstance(tags, list) or any(not isinstance(tag, str) for tag in tags):
-            result = {"reason": "The registry returned a malformed version list."}
-            tags = []
-        reason = public_error(result.get("reason"), C_('Could not load {bazzite} versions. Try again.', bazzite='Bazzite'),
-                              context="Loading Bazzite versions") if result.get("reason") else ""
-        self._tracks = [] if reason else available_tracks(tags, show_unsupported=self.show_unsupported)
-        if not self._tracks:
-            self._state("tracks", _("Choose Channel"), reason or _("No dated releases are available."))
-            return
-        self._version_results[(self._image, "all")] = {"versions": tags}
-        for track in self._tracks:
-            self._version_results[(self._image, track)] = {
-                "versions": ([track] if track in tags else []) + dated_track_tags(tags, track)}
+        self._tracks = available_tracks(image, show_unsupported=self.show_unsupported)
         self._show_tracks()
 
     def _show_tracks(self):
@@ -332,16 +309,29 @@ class ImageWizard:
     def _choose_track(self, track: str):
         if track not in self._tracks:
             return
+        self._generation += 1
         self._track = track
         cached = self._version_results.get((self._image, track))
         if cached is not None:
             self._show_versions(cached)
             self._focus_choices()
+            return
+        self._state("versions", _("Loading versions…"), _("Please wait."), True)
+        image = self._image
+        self._run(lambda: self.query_versions(image, track), self._show_versions)
 
     def _show_versions(self, result):
+        if not isinstance(result, dict):
+            result = {"reason": "The registry returned malformed version data."}
+        versions = result.get("versions", [])
+        if not isinstance(versions, list) or any(not isinstance(tag, str) for tag in versions):
+            result = {"reason": "The registry returned a malformed version list."}
+            versions = []
+        if result.get("reason"):
+            versions = []
         track = self._track
-        tags = dated_track_tags(result.get("versions", []), track)
-        self._tags = ([track] if track in result.get("versions", []) else []) + tags
+        tags = dated_track_tags(versions, track)
+        self._tags = ([track] if track in versions else []) + tags
         if self._tags and not result.get("reason"):
             self._version_results[(self._image, track)] = result
         track_label = _track_label(track)

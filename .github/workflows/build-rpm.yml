@@ -13,7 +13,7 @@ jobs:
       version: ${{ steps.metadata.outputs.version }}
     steps:
       - name: Install build dependencies
-        run: dnf install -y rpm-build rpmdevtools python3-devel python3-setuptools python3-wheel pyproject-rpm-macros python3-gobject python3-pyyaml desktop-file-utils appstream gettext systemd-rpm-macros git
+        run: dnf install -y rpm-build rpmdevtools python3 python3-gobject python3-pyyaml desktop-file-utils appstream gettext systemd-rpm-macros git
       - uses: actions/checkout@v7
         with:
           persist-credentials: false

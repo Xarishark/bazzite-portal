@@ -3,19 +3,21 @@
 %global _empty_manifest_terminate_build 0
 Name:           bazzite-portal
 Version:        @VERSION@
-Release:        1%{?dist}
+Release:        1
 Summary:        Bazzite tools and reconnectable system updates
 URL:            https://github.com/Xarishark/bazzite-portal
 License:        GPL-3.0-only AND LGPL-3.0-only AND LGPL-3.0-or-later AND Apache-2.0 AND CC0-1.0 AND ISC AND MIT
 Source0:        %{name}-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3 >= 3.11
 BuildRequires:  desktop-file-utils
 BuildRequires:  gettext
 BuildRequires:  appstream
 BuildRequires:  systemd-rpm-macros
+Requires:       python3 >= 3.11
+Requires:       python3-gobject >= 3.42
+Requires:       python3-pyyaml >= 6
+Requires:       gobject-introspection
 Requires:       gtk4 >= 4.10
 Requires:       libadwaita >= 1.4
 Requires:       SDL3 >= 3.2
@@ -27,16 +29,19 @@ updates, rollback and system information.
 %prep
 %autosetup
 
-%generate_buildrequires
-%pyproject_buildrequires
-
 %build
 python3 packaging/translations.py build
-%pyproject_wheel
 
 %install
-%pyproject_install
-%pyproject_save_files bazzite_portal
+mkdir -p %{buildroot}%{_datadir}/%{name}
+cp -a bazzite_portal %{buildroot}%{_datadir}/%{name}/
+find %{buildroot}%{_datadir}/%{name} -type d -name __pycache__ -prune -exec rm -rf {} +
+find %{buildroot}%{_datadir}/%{name} -type f -name '*.py[co]' -delete
+find %{buildroot}%{_datadir}/%{name} -type d -exec chmod 755 {} +
+find %{buildroot}%{_datadir}/%{name} -type f -exec chmod 644 {} +
+install -m 644 pyproject.toml %{buildroot}%{_datadir}/%{name}/pyproject.toml
+install -Dm755 packaging/bazzite-portal %{buildroot}%{_bindir}/bazzite-portal
+install -Dm755 packaging/bazzite-portal-maintenance %{buildroot}%{_libexecdir}/bazzite-portal-maintenance
 install -Dm644 build/packaging/%{appid}.desktop %{buildroot}%{_datadir}/applications/%{appid}.desktop
 install -Dm644 build/packaging/%{appid}.metainfo.xml %{buildroot}%{_datadir}/metainfo/%{appid}.metainfo.xml
 install -Dm644 bazzite_portal/assets/indicator/bazzite-portal.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/%{appid}.svg
@@ -68,10 +73,14 @@ systemctl daemon-reload >/dev/null 2>&1 || :
 systemctl daemon-reload >/dev/null 2>&1 || :
 %systemd_user_postun bazzite-portal-agent.service
 
-%files -f %{pyproject_files} -f %{name}.lang
+%files -f %{name}.lang
 %license LICENSE LICENSES NOTICE.md
 %doc README.md
 %{_bindir}/bazzite-portal
+%dir %{_datadir}/%{name}
+%{_datadir}/%{name}/bazzite_portal/
+%{_datadir}/%{name}/pyproject.toml
+%{_libexecdir}/bazzite-portal-maintenance
 %{_datadir}/applications/%{appid}.desktop
 %{_datadir}/metainfo/%{appid}.metainfo.xml
 %{_datadir}/icons/hicolor/scalable/apps/%{appid}.svg

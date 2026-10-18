@@ -49,13 +49,36 @@ Bump the app version ONLY in pyproject.toml under [project].version. Packaging d
 the other version fields automatically. Pushing a higher version to main creates
 a GitHub release after a successful RPM build.
 
+The RPM keeps application code in /usr/share/bazzite-portal and runs it with the
+system Python (3.11 or newer). Python libraries, GTK, libadwaita and SDL3 remain
+system package dependencies; the app is not tied to a Python minor-version directory.
+
 ## Temporary trial installation
+
+### Bazzite for up to  Fedora 44
 
 ```sh
 curl -fL https://github.com/Xarishark/bazzite-portal/releases/latest/download/bazzite-portal.rpm -o bazzite-portal.rpm
 curl -fL https://raw.githubusercontent.com/Xarishark/bazzite-portal/main/templates/announcements.yml -o announcements.yml
 sudo rpm-ostree usroverlay
 sudo rpm -Uvh ./bazzite-portal.rpm
+sudo rpm -e bazzite-updater
+sudo install -d -m 755 /usr/share/bazzite-portal
+sudo install -m 644 /usr/share/yafti/yafti.yml /usr/share/bazzite-portal/tools.yml
+sudo install -m 644 announcements.yml /usr/share/bazzite-portal/announcements.yml
+sudo systemctl daemon-reload
+systemctl --user daemon-reload
+systemctl --user start bazzite-portal-agent.service
+bazzite-portal
+```
+
+### Bazzite on Fedora 45 and after (Packages need to be signed)
+
+```sh
+curl -fL https://github.com/Xarishark/bazzite-portal/releases/latest/download/bazzite-portal.rpm -o bazzite-portal.rpm
+curl -fL https://raw.githubusercontent.com/Xarishark/bazzite-portal/main/templates/announcements.yml -o announcements.yml
+sudo rpm-ostree usroverlay
+sudo rpm --define '_pkgverify_level digest' -Uvh ./bazzite-portal.rpm
 sudo rpm -e bazzite-updater
 sudo install -d -m 755 /usr/share/bazzite-portal
 sudo install -m 644 /usr/share/yafti/yafti.yml /usr/share/bazzite-portal/tools.yml

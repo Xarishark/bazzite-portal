@@ -1,6 +1,7 @@
 """User-session monitor; GTK is intentionally never imported here."""
 import json
 import logging
+from pathlib import Path
 import sys
 import threading
 from gi.repository import Gio, GLib
@@ -28,6 +29,12 @@ from bazzite_portal.updates.model import indicator
 from bazzite_portal.core.i18n import C_, N_, format_message
 
 log = logging.getLogger(__name__)
+
+
+def _application_command(*arguments):
+    """Run the installed entry point with its private package path available."""
+    entry_point = Path(__file__).resolve().parent.parent / "__main__.py"
+    return [sys.executable, "-I", str(entry_point), *arguments]
 
 AGENT_ID = APP_ID + ".Agent"
 AGENT_PATH = "/io/github/Xarishark/bazzite_portal/Agent"
@@ -464,8 +471,8 @@ class Agent:
 
     def open_updates(self, home=False):
         try:
-            Gio.Subprocess.new([sys.executable, "-m", "bazzite_portal"]
-                               + ([] if home else ["--updates"]), Gio.SubprocessFlags.NONE)
+            Gio.Subprocess.new(_application_command(
+                *([] if home else ["--updates"])), Gio.SubprocessFlags.NONE)
         except GLib.Error as error:
             self.monitor.snapshot.error = str(error)
 
@@ -682,8 +689,7 @@ class Client:
         self.ready = False
         # Start the installed service; activation through the normal CLI supports source runs.
         try:
-            import sys
-            Gio.Subprocess.new([sys.executable, "-m", "bazzite_portal", "--agent"], Gio.SubprocessFlags.NONE)
+            Gio.Subprocess.new(_application_command("--agent"), Gio.SubprocessFlags.NONE)
         except GLib.Error as error:
             if not self.closed:
                 self.error(str(error))

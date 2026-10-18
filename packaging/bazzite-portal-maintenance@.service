@@ -4,7 +4,7 @@ Before=uupd.service uupd-manual.service
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/python3 -m bazzite_portal.maintenance.service %i
+ExecStart=/usr/libexec/bazzite-portal-maintenance %i
 TimeoutStartSec=infinity
 WorkingDirectory=/
 Environment=LC_ALL=C
