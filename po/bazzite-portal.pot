@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: Bazzite Portal / App\n"
 "Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/app/"
 "\n"
-"POT-Creation-Date: 2026-10-18 16:01+0000\n"
+"POT-Creation-Date: 2026-10-18 16:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -817,11 +817,11 @@ msgid "Unavailable tool"
 msgstr ""
 
 #: bazzite_portal/ui/application.py:1649
-msgid "Unavailable or ambiguous · select to remove this pin"
+msgid "Unavailable or ambiguous · select to unpin"
 msgstr ""
 
 #: bazzite_portal/ui/application.py:1663
-msgid "Remove unavailable pinned tool?"
+msgid "Unpin unavailable tool?"
 msgstr ""
 
 #: bazzite_portal/ui/application.py:1664
@@ -830,8 +830,11 @@ msgid ""
 "pin does not run any script."
 msgstr ""
 
-#: bazzite_portal/ui/application.py:1665
-msgid "Remove pin"
+#: bazzite_portal/ui/application.py:1665 bazzite_portal/ui/application.py:1904
+#: bazzite_portal/ui/application.py:1905 bazzite_portal/ui/application.py:1942
+#: bazzite_portal/ui/application.py:1943 bazzite_portal/ui/application.py:5505
+#: bazzite_portal/ui/application.py:5516
+msgid "Unpin"
 msgstr ""
 
 #: bazzite_portal/ui/application.py:1700
@@ -879,12 +882,6 @@ msgstr ""
 #: bazzite_portal/ui/application.py:1885
 #, python-brace-format
 msgid "Status {status}"
-msgstr ""
-
-#: bazzite_portal/ui/application.py:1904 bazzite_portal/ui/application.py:1905
-#: bazzite_portal/ui/application.py:1942 bazzite_portal/ui/application.py:1943
-#: bazzite_portal/ui/application.py:5505 bazzite_portal/ui/application.py:5516
-msgid "Unpin"
 msgstr ""
 
 #: bazzite_portal/ui/application.py:1904 bazzite_portal/ui/application.py:1905
