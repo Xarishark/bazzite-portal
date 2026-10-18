@@ -1901,14 +1901,14 @@ class Window(Adw.ApplicationWindow):
         area.set_margin_end(10)
         area.set_valign(Gtk.Align.CENTER)
         area.set_focusable(False)
-        area.set_tooltip_text(format_message(_("Remove favorite") if favorite else _("Add favorite")))
-        area.update_property([Gtk.AccessibleProperty.LABEL], [_("Remove favorite") if favorite else _("Add favorite")])
+        area.set_tooltip_text(format_message(_("Unpin") if favorite else _("Pin")))
+        area.update_property([Gtk.AccessibleProperty.LABEL], [_("Unpin") if favorite else _("Pin")])
         can_favorite = portal.resolve(self.items, portal.reference(item)) is not None
         area.set_sensitive(can_favorite)
         row.favorite_available = can_favorite
         if not can_favorite:
             area.set_tooltip_text(_("This tool has a missing or ambiguous ID"))
-            area.update_property([Gtk.AccessibleProperty.LABEL], [_("Favorite unavailable: missing or ambiguous ID")])
+            area.update_property([Gtk.AccessibleProperty.LABEL], [_("Pin unavailable: missing or ambiguous ID")])
         icon = Gtk.Image.new_from_icon_name("starred-symbolic" if favorite else "non-starred-symbolic")
         icon.set_pixel_size(18)
         area.append(Gtk.Box(hexpand=True))
@@ -1939,8 +1939,8 @@ class Window(Adw.ApplicationWindow):
         pointer_reveal = getattr(row, "pointer_hovered", False)
         row.favorite_icon.set_opacity(1.0 if favorite or pointer_reveal else 0.0)
         if row.favorite_available:
-            row.favorite_hit_area.set_tooltip_text(format_message(_("Remove favorite") if favorite else _("Add favorite")))
-            row.favorite_hit_area.update_property([Gtk.AccessibleProperty.LABEL], [_("Remove favorite") if favorite else _("Add favorite")])
+            row.favorite_hit_area.set_tooltip_text(format_message(_("Unpin") if favorite else _("Pin")))
+            row.favorite_hit_area.update_property([Gtk.AccessibleProperty.LABEL], [_("Unpin") if favorite else _("Pin")])
 
     def _action_row_key(self, item, row, keyval):
         if keyval in (Gdk.KEY_y, Gdk.KEY_Y):
@@ -2459,7 +2459,7 @@ class Window(Adw.ApplicationWindow):
         if self.snapshot.deployment:
             if not self.snapshot.deployment_known:
                 return
-            self.confirm(C_('Reboot {bazzite}?', bazzite='Bazzite'), C_('All update steps have finished. Reboot now to start the prepared {bazzite} version. Save your work before continuing.', bazzite='Bazzite'), N_("Reboot"), lambda: self._operation(N_("Restart")))
+            self.confirm(C_('Restart {bazzite}?', bazzite='Bazzite'), C_('All update steps have finished. Restart now to start the prepared {bazzite} version. Save your work before continuing.', bazzite='Bazzite'), N_("Restart"), lambda: self._operation(N_("Restart")))
             return
         self._awaiting_update_run = self.snapshot.run
         self._update_request_pending = True
@@ -2720,7 +2720,7 @@ class Window(Adw.ApplicationWindow):
         self.update_error.set_visible(bool(errors))
         reboot_ready = bool(state.deployment and state.deployment_known and not state.running)
         request_pending = getattr(self, "_update_request_pending", False)
-        self.update_button.set_label(format_message(_("Updating…") if state.running or request_pending else _("Reboot") if reboot_ready else _("Update")))
+        self.update_button.set_label(format_message(_("Updating…") if state.running or request_pending else _("Restart") if reboot_ready else _("Update")))
         self.update_button.set_visible(True)
         self.update_button.set_sensitive(self.status_received and state.available
             and not state.running and not request_pending and not transaction_active and (not state.deployment or state.deployment_known)
@@ -5502,7 +5502,7 @@ class Window(Adw.ApplicationWindow):
             target = controller_focused_target(self)
             item = getattr(target, "portal_item", None)
             favorite = bool(item and portal.reference(item) in self.store.pins())
-            action = _("Unfavorite") if favorite else _("Favorite")
+            action = _("Unpin") if favorite else _("Pin")
             has_favorite_action = True
         else:
             has_favorite_action = False
@@ -5513,7 +5513,7 @@ class Window(Adw.ApplicationWindow):
         prompts = ([] if log_open or information_open else [("confirm", _("Select"), labels)])
         prompts.append(("back", _("Back"), labels))
         if has_favorite_action:
-            action = _("Unfavorite") if favorite else _("Favorite")
+            action = _("Unpin") if favorite else _("Pin")
             prompts.append(("context_action", action, labels))
         if self.stack.get_visible_child_name() == N_("Updates") and not self.modal:
             text = _("D-pad Scroll") if log_open else ""
