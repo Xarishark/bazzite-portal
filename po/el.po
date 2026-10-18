@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/"
-"app/\n"
+"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/app/"
+"\n"
 "POT-Creation-Date: 2026-10-18 16:01+0000\n"
-"PO-Revision-Date: 2026-10-18 16:01+0000\n"
+"PO-Revision-Date: 2026-10-18 16:13+0000\n"
 "Last-Translator: Zacharias Xenakis <xarishark@outlook.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/bazzite-portal/app/"
 "el/>\n"
@@ -977,7 +977,7 @@ msgstr "Κατάσταση {status}"
 #: bazzite_portal/ui/application.py:1942 bazzite_portal/ui/application.py:1943
 #: bazzite_portal/ui/application.py:5505 bazzite_portal/ui/application.py:5516
 msgid "Unpin"
-msgstr ""
+msgstr "Αφαίρεση καρφιτσώματος"
 
 #: bazzite_portal/ui/application.py:1904 bazzite_portal/ui/application.py:1905
 #: bazzite_portal/ui/application.py:1942 bazzite_portal/ui/application.py:1943
@@ -992,11 +992,9 @@ msgid "This tool has a missing or ambiguous ID"
 msgstr "Το αναγνωριστικό αυτού του εργαλείου λείπει ή είναι ασαφές"
 
 #: bazzite_portal/ui/application.py:1911
-#, fuzzy
-#| msgid "Favorite unavailable: missing or ambiguous ID"
 msgid "Pin unavailable: missing or ambiguous ID"
 msgstr ""
-"Το αγαπημένο δεν είναι διαθέσιμο: το αναγνωριστικό λείπει ή είναι ασαφές"
+"Το καρφίτσωμα δεν είναι διαθέσιμο: το αναγνωριστικό λείπει ή είναι ασαφές"
 
 #: bazzite_portal/ui/application.py:2006
 msgid "No command is configured for this tool."
@@ -1122,16 +1120,12 @@ msgid "No module log output"
 msgstr "Δεν υπάρχει έξοδος καταγραφής της μονάδας"
 
 #: bazzite_portal/ui/application.py:2462
-#, fuzzy, python-brace-format
-#| msgid "Reboot {bazzite}?"
+#, python-brace-format
 msgid "Restart {bazzite}?"
 msgstr "Επανεκκίνηση του {bazzite};"
 
 #: bazzite_portal/ui/application.py:2462
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "All update steps have finished. Reboot now to start the prepared "
-#| "{bazzite} version. Save your work before continuing."
+#, python-brace-format
 msgid ""
 "All update steps have finished. Restart now to start the prepared {bazzite} "
 "version. Save your work before continuing."
