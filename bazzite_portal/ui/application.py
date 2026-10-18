@@ -3470,8 +3470,8 @@ class Window(Adw.ApplicationWindow):
                 action_title = N_("No pending deployment to cancel")
                 action_detail = N_("Your current system will start again. No system change is pending.")
         elif state.cancel_state == "failed" and enabled:
-            action_title = N_("Retry pending deployment cancellation")
-            action_detail = N_("The previous attempt failed. Your pending deployment can still be cancelled.")
+            action_title = N_("Cancel pending deployment")
+            action_detail = N_("Cancel only the verified prepared deployment before it is activated.")
         elif (self.cancel_waiting_snapshot or self.cancel_feedback
               or state.cancel_state in {"success", "failed", "unknown"}
               and (state.cancel_state != "success" or self._maintenance_row_should_open("cancel"))):

@@ -548,6 +548,44 @@ def _latest_maintenance_invocation(unit, started_at_us):
     return latest[1]
 
 
+def _maintenance_discovery_predates_request(status, record):
+    """Prove a retained inactive invocation is older than the latest request."""
+    unit, invocation = status.get("unit", ""), status.get("invocation", "")
+    requested_at = record.get("requested_at", 0)
+    if (status.get("state") not in {"success", "failed", "unknown"}
+            or not maintenance_logs.read_only_valid_unit(unit)
+            or not isinstance(invocation, str) or not INVOCATION_ID.fullmatch(invocation)
+            or type(requested_at) is not int or requested_at <= 0):
+        return False
+    try:
+        output = command(["journalctl", "-b", "_SYSTEMD_UNIT=" + unit,
+                          "_SYSTEMD_INVOCATION_ID=" + invocation.casefold(),
+                          "--no-pager", "--quiet", "-n", "128", "-o", "json"])
+        older = False
+        for line in output.splitlines():
+            try:
+                entry = json.loads(line)
+                if (not isinstance(entry, dict) or entry.get("_SYSTEMD_UNIT") != unit
+                        or entry.get("_SYSTEMD_INVOCATION_ID", "").casefold() != invocation.casefold()):
+                    continue
+                timestamp = int(entry["__REALTIME_TIMESTAMP"])
+            except (KeyError, TypeError, ValueError, AttributeError):
+                continue
+            if 0 < timestamp < requested_at:
+                older = True
+                break
+        if not older:
+            return False
+        current = service_state(unit)
+        # Inventory and journal reads can race a reused unit. Never hide a live
+        # operation or adopt an invocation different from the one just dated.
+        return (current.get("LoadState") == "loaded"
+                and current.get("ActiveState") in {"inactive", "failed"}
+                and current.get("InvocationID", "").casefold() == invocation.casefold())
+    except (OSError, TypeError, ValueError, RuntimeError, subprocess.TimeoutExpired):
+        return False
+
+
 def _maintenance_request(kind, unit, state="running", invocation="", error="", *, live=False):
     global _maintenance_records_generation
     with _maintenance_records_lock:
@@ -1057,6 +1095,20 @@ class Monitor:
         if not record:
             return status
         unit = status.get("unit", "")
+        if (unit and unit != record["unit"] and status.get("available") is True
+                and _maintenance_discovery_predates_request(status, record)):
+            # systemd retains failed instances longer than successful ones. An
+            # old failure must not replace a newer request whose unit was GC'd.
+            # Refresh the record after the blocking reads so completion or a
+            # still newer request cannot be replaced with its earlier state.
+            latest_record = _maintenance_request_status(kind)
+            if (latest_record is None
+                    or latest_record.get("requested_at", 0) < record.get("requested_at", 0)):
+                return status
+            record = latest_record
+            # Continue normal reconciliation with only stale discovery removed.
+            status = {**status, "unit": "", "invocation": "", "state": "idle", "error": ""}
+            unit = ""
         if (record.get("state") == "running" and status.get("available") is True
                 and status.get("state") == "idle"
                 and (not unit or (kind == "rollback" and unit == "bazzite-portal-maintenance@rollback.service"
