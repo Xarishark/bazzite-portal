@@ -83,11 +83,7 @@ def command_authorization(callback):
 def _gated_systemctl_start(argv):
     if not isinstance(argv, (list, tuple)) or len(argv) != 4 or list(argv[:2]) != ["systemctl", "start"]:
         return False
-    if list(argv[2:]) == ["--no-block", "bazzite-portal-maintenance@rollback.service"]:
-        return True
-    unit = argv[3]
-    return (argv[2] == "--wait" and unit != "bazzite-portal-maintenance@rollback.service"
-            and maintenance_service.valid_unit(unit))
+    return argv[2] == "--wait" and maintenance_service.valid_unit(argv[3])
 
 
 _GATED_CHILD = r'''import os, sys
@@ -941,6 +937,30 @@ def latest_journal_invocation(loaded_units):
     return "", "", "Could not inspect the UUPD journal. " + "; ".join(errors)
 
 
+def _maintenance_job_is_queued(unit):
+    """Inspect the typed systemd job table, never human-formatted output."""
+    text = command([
+        "busctl", "--system", "--json=short", "call", "org.freedesktop.systemd1",
+        "/org/freedesktop/systemd1", "org.freedesktop.systemd1.Manager", "ListJobs",
+    ])
+    if not isinstance(text, str) or len(text.encode("utf-8")) > 1024 * 1024:
+        raise ValueError("Could not verify systemd manager jobs.")
+    result = json.loads(text)
+    if (not isinstance(result, dict) or result.get("type") != "a(usssoo)"
+            or not isinstance(result.get("data"), list) or len(result["data"]) != 1
+            or not isinstance(result["data"][0], list)):
+        raise ValueError("Could not verify systemd manager jobs.")
+    jobs = result["data"][0]
+    for row in jobs:
+        if (not isinstance(row, list) or len(row) != 6
+                or type(row[0]) is not int or not 0 < row[0] <= 0xffffffff
+                or any(not isinstance(value, str) or not value for value in row[1:])
+                or any(not re.fullmatch(r"/(?:[A-Za-z0-9_]+(?:/[A-Za-z0-9_]+)*)?", value)
+                       for value in row[4:])):
+            raise ValueError("Could not verify systemd manager jobs.")
+    return any(row[1] == unit for row in jobs)
+
+
 class Monitor:
     def __init__(self, changed, scheduler):
         self.changed, self.scheduler = changed, scheduler
@@ -1016,7 +1036,12 @@ class Monitor:
             return status
         unit = status.get("unit", "")
         if (record.get("state") == "running" and status.get("available") is True
-                and status.get("state") == "idle" and not unit):
+                and status.get("state") == "idle"
+                and (not unit or (kind == "rollback" and unit == record["unit"]
+                                  == "bazzite-portal-maintenance@rollback.service"
+                                  and not status.get("invocation")))):
+            # Fixed rollback units remain discoverable after their invocation
+            # has been collected, unlike the dynamic helper instances.
             # The request thread can be waiting for PolicyKit while systemd has
             # not yet created the unit or queued a job. That is not evidence of
             # unit GC until the in-process start call has returned.
@@ -1026,15 +1051,7 @@ class Monitor:
             # completed service. Check the manager job table before resolving
             # the stale running record; if a start is still queued, keep it running.
             try:
-                jobs_text = command(["systemctl", "list-jobs", "--no-pager", "--output=json"])
-                if not isinstance(jobs_text, str):
-                    return self._maintenance_request_status_snapshot(status, record)
-                jobs = json.loads(jobs_text.strip() or "[]")
-                if not isinstance(jobs, list) or any(
-                        not isinstance(job, dict) or not isinstance(job.get("unit"), str)
-                        for job in jobs):
-                    return self._maintenance_request_status_snapshot(status, record)
-                if any(job["unit"] == record["unit"] for job in jobs):
+                if _maintenance_job_is_queued(record["unit"]):
                     return self._maintenance_request_status_snapshot(status, record)
             except (OSError, TypeError, ValueError, RuntimeError, subprocess.TimeoutExpired):
                 return self._maintenance_request_status_snapshot(status, record)
@@ -1060,15 +1077,7 @@ class Monitor:
             # reports that no operation is running; it makes no claim about
             # whether the previous operation completed.
             try:
-                jobs_text = command(["systemctl", "list-jobs", "--no-pager", "--output=json"])
-                if not isinstance(jobs_text, str):
-                    return self._maintenance_request_status_snapshot(status, record)
-                jobs = json.loads(jobs_text.strip() or "[]")
-                if not isinstance(jobs, list) or any(
-                        not isinstance(job, dict) or not isinstance(job.get("unit"), str)
-                        for job in jobs):
-                    return self._maintenance_request_status_snapshot(status, record)
-                if any(job["unit"] == record["unit"] for job in jobs):
+                if _maintenance_job_is_queued(record["unit"]):
                     return self._maintenance_request_status_snapshot(status, record)
             except (OSError, TypeError, ValueError, RuntimeError, subprocess.TimeoutExpired):
                 return self._maintenance_request_status_snapshot(status, record)
@@ -1774,17 +1783,7 @@ def start_operation(operation):
         _require_no_active_rpm_ostree_transaction()
     unit = "uupd-manual.service" if operation == "update" else "bazzite-portal-maintenance@rollback.service"
     if operation == "rollback":
-        started_at_us = time.time_ns() // 1_000
-        record = _maintenance_request("rollback", unit, live=True)
-        try:
-            command(["systemctl", "start", "--no-block", unit])
-        except Exception as error:
-            invocation = _latest_maintenance_invocation(unit, started_at_us)
-            state = "failed" if invocation or _is_proven_prestart_rejection(error, unit) else "unknown"
-            _maintenance_request("rollback", unit, state, invocation, str(error))
-            raise
-        finally:
-            _finish_live_maintenance_request("rollback", record["generation"])
+        _start_maintenance_unit("rollback", unit)
     else:
         command(["systemctl", "start", "--no-block", unit])
     return "Operation requested."

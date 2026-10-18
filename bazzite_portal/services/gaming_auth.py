@@ -37,12 +37,10 @@ def authorized_unit(argv):
         return None
     if argv[1] != "start":
         return None
-    if len(argv) == 4 and tuple(argv[2:]) == ("--no-block", "bazzite-portal-maintenance@rollback.service"):
-        return "bazzite-portal-maintenance@rollback.service"
     if argv[2] != "--wait":
         return None
     unit = argv[3]
-    if unit != "bazzite-portal-maintenance@rollback.service" and valid_unit(unit):
+    if valid_unit(unit):
         return unit
     return None
 

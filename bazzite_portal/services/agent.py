@@ -740,7 +740,7 @@ class Client:
         # request while that unit is still running; Changed snapshots continue
         # to carry live progress independently of this reply.
         timeout = 2_147_483_647 if method in {
-            "CancelPending", "RemoveLayers", "RemoveSelectedLayers", "ClearDownloadCache", "StartChannelSwitch", "DeleteDeployment", "StartImageSwitch",
+            "StartRollback", "CancelPending", "RemoveLayers", "RemoveSelectedLayers", "ClearDownloadCache", "StartChannelSwitch", "DeleteDeployment", "StartImageSwitch",
         } else 120000
         wire_method, wire_parameters = method, parameters
         if self.game_auth_enabled and method in {
