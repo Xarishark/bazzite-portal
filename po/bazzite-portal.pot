@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: Bazzite Portal / App\n"
 "Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/app/"
 "\n"
-"POT-Creation-Date: 2026-10-18 15:10+0000\n"
+"POT-Creation-Date: 2026-10-18 16:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -883,12 +883,14 @@ msgstr ""
 
 #: bazzite_portal/ui/application.py:1904 bazzite_portal/ui/application.py:1905
 #: bazzite_portal/ui/application.py:1942 bazzite_portal/ui/application.py:1943
-msgid "Remove favorite"
+#: bazzite_portal/ui/application.py:5505 bazzite_portal/ui/application.py:5516
+msgid "Unpin"
 msgstr ""
 
 #: bazzite_portal/ui/application.py:1904 bazzite_portal/ui/application.py:1905
 #: bazzite_portal/ui/application.py:1942 bazzite_portal/ui/application.py:1943
-msgid "Add favorite"
+#: bazzite_portal/ui/application.py:5505 bazzite_portal/ui/application.py:5516
+msgid "Pin"
 msgstr ""
 
 #: bazzite_portal/ui/application.py:1910
@@ -896,7 +898,7 @@ msgid "This tool has a missing or ambiguous ID"
 msgstr ""
 
 #: bazzite_portal/ui/application.py:1911
-msgid "Favorite unavailable: missing or ambiguous ID"
+msgid "Pin unavailable: missing or ambiguous ID"
 msgstr ""
 
 #: bazzite_portal/ui/application.py:2006
@@ -1020,21 +1022,17 @@ msgstr ""
 
 #: bazzite_portal/ui/application.py:2462
 #, python-brace-format
-msgid "Reboot {bazzite}?"
+msgid "Restart {bazzite}?"
 msgstr ""
 
 #: bazzite_portal/ui/application.py:2462
 #, python-brace-format
 msgid ""
-"All update steps have finished. Reboot now to start the prepared {bazzite} "
+"All update steps have finished. Restart now to start the prepared {bazzite} "
 "version. Save your work before continuing."
 msgstr ""
 
 #: bazzite_portal/ui/application.py:2462 bazzite_portal/ui/application.py:2723
-msgid "Reboot"
-msgstr ""
-
-#: bazzite_portal/ui/application.py:2462
 msgid "Restart"
 msgstr ""
 
@@ -2226,14 +2224,6 @@ msgstr ""
 
 #: bazzite_portal/ui/application.py:5281
 msgid "The requested action is missing or ambiguous."
-msgstr ""
-
-#: bazzite_portal/ui/application.py:5505 bazzite_portal/ui/application.py:5516
-msgid "Unfavorite"
-msgstr ""
-
-#: bazzite_portal/ui/application.py:5505 bazzite_portal/ui/application.py:5516
-msgid "Favorite"
 msgstr ""
 
 #: bazzite_portal/ui/application.py:5534

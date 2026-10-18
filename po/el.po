@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/app/"
-"\n"
-"POT-Creation-Date: 2026-10-18 15:10+0000\n"
+"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/"
+"app/\n"
+"POT-Creation-Date: 2026-10-18 16:01+0000\n"
 "PO-Revision-Date: 2026-10-18 16:01+0000\n"
 "Last-Translator: Zacharias Xenakis <xarishark@outlook.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/bazzite-portal/app/"
@@ -323,7 +323,8 @@ msgstr "Εκκρεμεί επανεκκίνηση"
 #: bazzite_portal/services/tray.py:296
 #, python-brace-format
 msgid "{bazzite} will boot into the new version on your next restart."
-msgstr "Το {bazzite} θα εκκινήσει στη νέα έκδοση κατά την επόμενη επανεκκίνηση."
+msgstr ""
+"Το {bazzite} θα εκκινήσει στη νέα έκδοση κατά την επόμενη επανεκκίνηση."
 
 #: bazzite_portal/services/tray.py:297
 msgid "Update failed"
@@ -974,20 +975,26 @@ msgstr "Κατάσταση {status}"
 
 #: bazzite_portal/ui/application.py:1904 bazzite_portal/ui/application.py:1905
 #: bazzite_portal/ui/application.py:1942 bazzite_portal/ui/application.py:1943
-msgid "Remove favorite"
-msgstr "Αφαίρεση από τα αγαπημένα"
+#: bazzite_portal/ui/application.py:5505 bazzite_portal/ui/application.py:5516
+msgid "Unpin"
+msgstr ""
 
 #: bazzite_portal/ui/application.py:1904 bazzite_portal/ui/application.py:1905
 #: bazzite_portal/ui/application.py:1942 bazzite_portal/ui/application.py:1943
-msgid "Add favorite"
-msgstr "Προσθήκη στα αγαπημένα"
+#: bazzite_portal/ui/application.py:5505 bazzite_portal/ui/application.py:5516
+#, fuzzy
+#| msgid "Pinned"
+msgid "Pin"
+msgstr "Καρφιτσωμένο"
 
 #: bazzite_portal/ui/application.py:1910
 msgid "This tool has a missing or ambiguous ID"
 msgstr "Το αναγνωριστικό αυτού του εργαλείου λείπει ή είναι ασαφές"
 
 #: bazzite_portal/ui/application.py:1911
-msgid "Favorite unavailable: missing or ambiguous ID"
+#, fuzzy
+#| msgid "Favorite unavailable: missing or ambiguous ID"
+msgid "Pin unavailable: missing or ambiguous ID"
 msgstr ""
 "Το αγαπημένο δεν είναι διαθέσιμο: το αναγνωριστικό λείπει ή είναι ασαφές"
 
@@ -1115,14 +1122,18 @@ msgid "No module log output"
 msgstr "Δεν υπάρχει έξοδος καταγραφής της μονάδας"
 
 #: bazzite_portal/ui/application.py:2462
-#, python-brace-format
-msgid "Reboot {bazzite}?"
+#, fuzzy, python-brace-format
+#| msgid "Reboot {bazzite}?"
+msgid "Restart {bazzite}?"
 msgstr "Επανεκκίνηση του {bazzite};"
 
 #: bazzite_portal/ui/application.py:2462
-#, python-brace-format
+#, fuzzy, python-brace-format
+#| msgid ""
+#| "All update steps have finished. Reboot now to start the prepared "
+#| "{bazzite} version. Save your work before continuing."
 msgid ""
-"All update steps have finished. Reboot now to start the prepared {bazzite} "
+"All update steps have finished. Restart now to start the prepared {bazzite} "
 "version. Save your work before continuing."
 msgstr ""
 "Όλα τα στάδια της ενημέρωσης ολοκληρώθηκαν. Κάντε επανεκκίνηση τώρα για να "
@@ -1130,10 +1141,6 @@ msgstr ""
 "σας πριν συνεχίσετε."
 
 #: bazzite_portal/ui/application.py:2462 bazzite_portal/ui/application.py:2723
-msgid "Reboot"
-msgstr "Επανεκκίνηση"
-
-#: bazzite_portal/ui/application.py:2462
 msgid "Restart"
 msgstr "Επανεκκίνηση"
 
@@ -2536,14 +2543,6 @@ msgid "The requested action is missing or ambiguous."
 msgstr ""
 "Η ζητούμενη ενέργεια δεν υπάρχει ή δεν μπορεί να προσδιοριστεί με σαφήνεια."
 
-#: bazzite_portal/ui/application.py:5505 bazzite_portal/ui/application.py:5516
-msgid "Unfavorite"
-msgstr "Αφαίρεση από τα αγαπημένα"
-
-#: bazzite_portal/ui/application.py:5505 bazzite_portal/ui/application.py:5516
-msgid "Favorite"
-msgstr "Αγαπημένο"
-
 #: bazzite_portal/ui/application.py:5534
 msgid "Review selected"
 msgstr "Έλεγχος επιλεγμένων"
@@ -3024,6 +3023,21 @@ msgid ""
 msgstr ""
 "Συνδεθείτε ξανά με αυτόματες ή χειροκίνητα εκκινημένες ενημερώσεις {uupd} "
 "και δείτε πότε μια νέα έκδοση του συστήματος είναι έτοιμη για επανεκκίνηση."
+
+#~ msgid "Remove favorite"
+#~ msgstr "Αφαίρεση από τα αγαπημένα"
+
+#~ msgid "Add favorite"
+#~ msgstr "Προσθήκη στα αγαπημένα"
+
+#~ msgid "Reboot"
+#~ msgstr "Επανεκκίνηση"
+
+#~ msgid "Unfavorite"
+#~ msgstr "Αφαίρεση από τα αγαπημένα"
+
+#~ msgid "Favorite"
+#~ msgstr "Αγαπημένο"
 
 #~ msgid "No saved, pinned deployments are available to delete."
 #~ msgstr ""
