@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
   <id>io.github.Xarishark.bazzite_portal</id>
-  <name>Bazzite Portal</name>
-  <summary>Manage Bazzite tools and system updates</summary>
-  <developer id="io.github.xarishark"><name>Bazzite contributors</name></developer>
+  <name translate="no">Bazzite Portal</name>
+  <summary>Manage {bazzite} tools and system updates</summary>
+  <developer id="io.github.xarishark"><name>{bazzite} contributors</name></developer>
   <url type="homepage">https://github.com/Xarishark/bazzite-portal</url>
   <url type="bugtracker">https://github.com/Xarishark/bazzite-portal/issues</url>
-  <description><p>A desktop utility for Bazzite setup tools, pinned actions, system updates, rollback, and system information.</p><p>Reconnect to automatic or manually started UUPD updates and see when a new system deployment is ready for restart.</p></description>
+  <description><p>A desktop utility for {bazzite} setup tools, pinned actions, system updates, rollback, and system information.</p><p>Reconnect to automatic or manually started {uupd} updates and see when a new system deployment is ready for restart.</p></description>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-only</project_license>
   <launchable type="desktop-id">io.github.Xarishark.bazzite_portal.desktop</launchable>

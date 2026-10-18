@@ -24,7 +24,7 @@ from bazzite_portal.updates.monitor import (
 from bazzite_portal.services.tray import Tray
 from bazzite_portal.artwork.appearance import artwork_kind
 from bazzite_portal.updates.model import indicator
-from bazzite_portal.core.i18n import N_, format_message
+from bazzite_portal.core.i18n import C_, N_, format_message
 
 log = logging.getLogger(__name__)
 
@@ -404,7 +404,7 @@ class Agent:
         if should_notify:
             if snapshot.failures:
                 log.warning("Failed update components: %s", ", ".join(snapshot.failures)[:2048])
-            self.notify(N_("Bazzite update failed") if snapshot.operation == "update" else N_("Bazzite rollback failed"), N_("Open Updates to inspect the operation log."))
+            self.notify(C_('{bazzite} update failed', bazzite='Bazzite') if snapshot.operation == "update" else C_('{bazzite} rollback failed', bazzite='Bazzite'), N_("Open Updates to inspect the operation log."))
 
     def _snapshot_payload(self, snapshot=None):
         snapshot = snapshot if snapshot is not None else self.monitor.snapshot

@@ -3,7 +3,7 @@
 import re
 
 from bazzite_portal.maintenance.deployments import summarize_deployments
-from bazzite_portal.core.i18n import C_, N_
+from bazzite_portal.core.i18n import C_, N_, channel_name
 
 MAX_PACKAGES = 512
 MAX_PACKAGE_TEXT = 512
@@ -44,14 +44,10 @@ def _track(reference):
     if not parts:
         return N_("Unknown")
     if parts["digest"]:
-        return N_("Pinned Bazzite version")
+        return C_('Pinned {bazzite} version', bazzite='Bazzite')
     tag = parts["tag"]
-    if tag == "stable":
-
-        return N_("Stable")
-    if tag == "testing":
-
-        return N_("Testing")
+    if tag in {"stable", "testing", "unstable"}:
+        return channel_name(tag)
     if tag and re.fullmatch(r"(?:testing-)?\d{2,4}\.\d{8}(?:\.\d+)?", tag):
         return C_("Pinned version · {tag}", tag=tag)
     return N_("Unknown")

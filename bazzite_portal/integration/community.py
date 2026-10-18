@@ -9,15 +9,15 @@ import xml.etree.ElementTree as ET
 from urllib.parse import urlsplit
 
 
-from bazzite_portal.core.i18n import N_
+from bazzite_portal.core.i18n import C_, N_
 
 LINKS = (
-    ("website", N_("Bazzite website"), N_("The Bazzite project website"), "https://bazzite.gg/"),
-    ("docs", N_("Documentations"), N_("Bazzite documentation"), "https://docs.bazzite.gg/"),
-    ("discord", "Discord", N_("Bazzite community and support"), "https://discord.bazzite.gg/"),
-    ("github", "GitHub", N_("Bazzite source repository"), "https://github.com/ublue-os/bazzite"),
-    ("reddit", "Reddit", N_("The Bazzite subreddit"), "https://www.reddit.com/r/Bazzite/"),
-    ("forums", N_("Forums"), N_("Universal Blue community forums"), "https://universal-blue.discourse.group/c/bazzite/5"),
+    ("website", C_('{bazzite} website', bazzite='Bazzite'), C_('The {bazzite} project website', bazzite='Bazzite'), "https://bazzite.gg/"),
+    ("docs", N_("Documentations"), C_('{bazzite} documentation', bazzite='Bazzite'), "https://docs.bazzite.gg/"),
+    ("discord", "Discord", C_('{bazzite} community and support', bazzite='Bazzite'), "https://discord.bazzite.gg/"),
+    ("github", "GitHub", C_('{bazzite} source repository', bazzite='Bazzite'), "https://github.com/ublue-os/bazzite"),
+    ("reddit", "Reddit", C_('The {bazzite} subreddit', bazzite='Bazzite'), "https://www.reddit.com/r/Bazzite/"),
+    ("forums", N_("Forums"), C_('{universal_blue} community forums', universal_blue='Universal Blue'), "https://universal-blue.discourse.group/c/bazzite/5"),
 )
 
 # Keep the established feed endpoint until its live replacement is verified.

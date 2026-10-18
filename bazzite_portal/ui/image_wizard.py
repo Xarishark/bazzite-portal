@@ -6,7 +6,7 @@ from datetime import datetime
 import re
 from typing import Any, Callable
 
-from bazzite_portal.core.i18n import _, N_
+from bazzite_portal.core.i18n import C_, _, N_, channel_name
 from bazzite_portal.core.errors import public_error
 
 
@@ -44,7 +44,7 @@ def track_subtitle(track: str) -> str:
 
 def _track_label(track: str) -> str:
 
-    return {"stable": _("Stable"), "testing": _("Testing"), "unstable": _("Unstable")}[track]
+    return channel_name(track)
 
 
 def format_version(tag: str, track: str) -> str:
@@ -267,7 +267,7 @@ class ImageWizard:
         def done(result):
             images = selectable_images(result.get("images", []))
             self._images = images
-            reason = public_error(result.get("reason"), N_("Could not load available Bazzite images. Try again."),
+            reason = public_error(result.get("reason"), C_('Could not load available {bazzite} images. Try again.', bazzite='Bazzite'),
                                   context="Loading Bazzite images") if result.get("reason") else ""
             self._state("images", _("Choose an Image"), reason)
             if not images:
@@ -310,7 +310,7 @@ class ImageWizard:
         if self._tags and not result.get("reason"):
             self._version_results[(self._image, track)] = result
         track_label = _track_label(track)
-        reason = public_error(result.get("reason"), N_("Could not load Bazzite versions. Try again."),
+        reason = public_error(result.get("reason"), C_('Could not load {bazzite} versions. Try again.', bazzite='Bazzite'),
                               context="Loading Bazzite versions") if result.get("reason") else ""
         self._state("versions", _("Choose a {track} Version").format(track=track_label), reason)
         for tag in self._tags:

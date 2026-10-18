@@ -19,7 +19,23 @@ except locale.Error:
     # A missing OS locale must not prevent the app from opening.
     pass
 _translation = _gettext.translation(DOMAIN, localedir=LOCALE_DIR, fallback=True)
+_FIXED_NAMES = frozenset({
+    "Bazzite Portal", "Bazzite", "Steam", "Homebrew", "Flatpak", "Universal Blue",
+    "GitHub", "GNOME", "KDE Plasma", "Xbox", "PlayStation", "RPM-OSTree", "UUPD",
+    "Discord", "AppImages", "Stable", "Testing", "Unstable",
+    "Proton", "Bootc", "bootc", "Distrobox", "HTTPS",
+})
+_CHANNEL_NAMES = {"stable": "Stable", "testing": "Testing", "unstable": "Unstable"}
+
+
+def channel_name(track):
+    """Official Bazzite channel names are identifiers, not translatable prose."""
+    return _CHANNEL_NAMES[track]
+
+
 def gettext(message):
+    if message in _FIXED_NAMES:
+        return message
     return _translation.gettext(message) if message else message
 
 

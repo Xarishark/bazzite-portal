@@ -485,7 +485,7 @@ def rollback_status():
         outcome = "running" if active else _cancel_result_state(state)
         error = ""
         if outcome == "failed":
-            error = state.get("Result") or N_("Rollback failed.")
+            error = state.get("Result") or N_('Rollback failed')
             if state.get("ExecMainStatus") not in (None, "", "0"):
                 error += f" (exit {state['ExecMainStatus']})"
         elif outcome == "unknown":
@@ -878,7 +878,7 @@ def _channel_service_is_running():
     if _delete_service_is_running():
         raise RuntimeError(N_("Saved-deployment deletion is running. Wait for it to finish."))
     if _image_switch_service_is_running():
-        raise RuntimeError(N_("Bazzite is changing images. Wait for it to finish."))
+        raise RuntimeError(C_('{bazzite} is changing images. Wait for it to finish.', bazzite='Bazzite'))
     return False
 
 
@@ -1756,7 +1756,7 @@ class Monitor:
 
 def start_operation(operation):
     if _channel_service_is_running():
-        raise RuntimeError(N_("Bazzite is changing update channels. Wait for it to finish."))
+        raise RuntimeError(C_('{bazzite} is changing update channels. Wait for it to finish.', bazzite='Bazzite'))
     if _cancel_service_is_running():
         raise RuntimeError(N_("Pending-deployment cancellation is running. Wait for it to finish."))
     if _layer_service_is_running():
@@ -1768,7 +1768,7 @@ def start_operation(operation):
     active = [unit for unit in SERVICES if service_state(unit).get("ActiveState") in ("active", "activating", "deactivating", "reloading")]
     if active:
         if operation == "update" and any(unit.startswith("uupd") for unit in active):
-            return N_("Attached to the running update.")
+            return "Attached to the running update."
         raise RuntimeError(N_("Another system operation is running. Wait for it to finish."))
     if operation in ("update", "rollback"):
         _require_no_active_rpm_ostree_transaction()
@@ -1787,7 +1787,7 @@ def start_operation(operation):
             _finish_live_maintenance_request("rollback", record["generation"])
     else:
         command(["systemctl", "start", "--no-block", unit])
-    return N_("Operation requested.")
+    return "Operation requested."
 
 
 def _require_no_active_rpm_ostree_transaction():
@@ -1803,7 +1803,7 @@ def _require_no_active_rpm_ostree_transaction():
             or not deployments_backend.summarize_deployments(data).get("known")):
         raise RuntimeError("Could not verify RPM-OSTree transaction state.")
     if cancel_pending_backend._has_transaction(data["transaction"]):
-        raise RuntimeError(N_("An RPM-OSTree transaction is active. Wait for it to finish."))
+        raise RuntimeError(C_('An {rpm_ostree} transaction is active. Wait for it to finish.', rpm_ostree='RPM-OSTree'))
 
 
 def _cancel_service_is_running():
@@ -1827,7 +1827,7 @@ def start_cancel_pending(token):
     if not pending["available"] or pending["token"] != token:
         raise RuntimeError(pending["reason"] or N_("The pending deployment changed after confirmation."))
     if _channel_service_is_running():
-        raise RuntimeError(N_("Bazzite is changing update channels. Wait for it to finish."))
+        raise RuntimeError(C_('{bazzite} is changing update channels. Wait for it to finish.', bazzite='Bazzite'))
     if _cancel_service_is_running():
         raise RuntimeError(N_("Pending-deployment cancellation is already running."))
     if _layer_service_is_running():
@@ -1839,7 +1839,7 @@ def start_cancel_pending(token):
         raise RuntimeError("Another system operation is running: {active}.".format(active=active))
     unit = f"bazzite-portal-maintenance@cancel-pending-{token}.service"
     _start_maintenance_unit("cancel", unit)
-    return N_("Pending-deployment cancellation completed.")
+    return "Pending-deployment cancellation completed."
 
 
 def _layer_service_is_running():
@@ -1859,7 +1859,7 @@ def start_remove_layers(token):
     if not selected["available"] or selected["token"] != token:
         raise RuntimeError(selected["reason"] or N_("The requested package list changed after confirmation."))
     if _channel_service_is_running():
-        raise RuntimeError(N_("Bazzite is changing update channels. Wait for it to finish."))
+        raise RuntimeError(C_('{bazzite} is changing update channels. Wait for it to finish.', bazzite='Bazzite'))
     if _layer_service_is_running() or _cancel_service_is_running():
         raise RuntimeError(N_("A package-layer or pending-deployment operation is already running."))
     if _cache_service_is_running():
@@ -1868,7 +1868,6 @@ def start_remove_layers(token):
     if active:
         raise RuntimeError("Another system operation is running: {active}.".format(active=active))
     _start_maintenance_unit("layers", f"bazzite-portal-maintenance@reset-layers-{token}.service")
-    return N_("Requested package-layer removal completed.")
 
 
 def start_remove_selected_layers(token, packages):
@@ -1888,7 +1887,7 @@ def start_remove_selected_layers(token, packages):
     if any(package not in confirmed["packages"] for package in packages):
         raise ValueError("Every selected package must be in the confirmed request list.")
     if _channel_service_is_running():
-        raise RuntimeError(N_("Bazzite is changing update channels. Wait for it to finish."))
+        raise RuntimeError(C_('{bazzite} is changing update channels. Wait for it to finish.', bazzite='Bazzite'))
     if status["state"] == "running" or _cancel_service_is_running():
         raise RuntimeError(N_("A package-layer or pending-deployment operation is already running."))
     if _cache_service_is_running():
@@ -1900,7 +1899,6 @@ def start_remove_selected_layers(token, packages):
     bitmap = sum(1 << indexes[package] for package in packages)
     instance = f"{token}-{bitmap:064x}"
     _start_maintenance_unit("layers", f"bazzite-portal-maintenance@remove-selected-layers-{instance}.service")
-    return N_("Selected requested package layers removed.")
 
 
 def start_clear_download_cache(token):
@@ -1913,14 +1911,14 @@ def start_clear_download_cache(token):
     if not selected["available"] or selected["token"] != token:
         raise RuntimeError(selected["reason"] or N_("The deployments or imported image references changed after confirmation."))
     if _channel_service_is_running():
-        raise RuntimeError(N_("Bazzite is changing update channels. Wait for it to finish."))
+        raise RuntimeError(C_('{bazzite} is changing update channels. Wait for it to finish.', bazzite='Bazzite'))
     if status["state"] == "running" or _cancel_service_is_running() or _layer_service_is_running():
-        raise RuntimeError(N_("Another maintenance operation is already running."))
+        raise RuntimeError(N_('Another maintenance operation is running.'))
     active = _managed_operation_active()
     if active:
         raise RuntimeError("Another system operation is running: {active}.".format(active=active))
     _start_maintenance_unit("cache", f"bazzite-portal-maintenance@clear-download-cache-{token}.service")
-    return N_("Download-cache cleanup completed. OSTree may retain shared objects used by other images.")
+    return "Download-cache cleanup completed. OSTree may retain shared objects used by other images."
 
 
 def download_channel_target():
@@ -1941,24 +1939,24 @@ def start_channel_switch(token):
     if _delete_service_is_running():
         raise RuntimeError(N_("Saved-deployment deletion is running. Wait for it to finish."))
     if _image_switch_service_is_running():
-        raise RuntimeError(N_("Bazzite is changing images. Wait for it to finish."))
+        raise RuntimeError(C_('{bazzite} is changing images. Wait for it to finish.', bazzite='Bazzite'))
     if not isinstance(token, str) or not channel_switch_backend.TOKEN_PATTERN.fullmatch(token):
         raise ValueError("Invalid channel-switch confirmation token.")
     status = channel_status()
     if status.get("state") == "unknown":
         raise RuntimeError(status.get("error") or "The previous channel-switch result could not be verified.")
     if status.get("state") == "running":
-        raise RuntimeError(N_('A channel rebase is already running.'))
+        raise RuntimeError(N_('A release channel rebase is already running.'))
     if not status["available"] or status["token"] != token:
         raise RuntimeError(status["reason"] or N_("The running deployment changed after confirmation."))
     if (_cancel_service_is_running() or _layer_service_is_running() or _cache_service_is_running()):
-        raise RuntimeError(N_("Another maintenance operation is already running."))
+        raise RuntimeError(N_('Another maintenance operation is running.'))
     active = _managed_operation_active()
     if active:
         raise RuntimeError("Another system operation is running: {active}.".format(active=active))
     unit = f"bazzite-portal-maintenance@channel-switch-{token}.service"
     _start_maintenance_unit("channel", unit)
-    return C_('Bazzite is rebasing to the {track} channel. Restart to apply the staged deployment.', track=status["target_track"])
+    return f'Bazzite is rebasing to the {status["target_track"]} channel. Restart to apply the staged deployment.'
 
 
 def start_image_switch(token, image, tag):
@@ -1984,13 +1982,13 @@ def start_image_switch(token, image, tag):
     if _channel_service_is_running():
         raise RuntimeError(N_("Another deployment operation is already running."))
     if _cancel_service_is_running() or _layer_service_is_running() or _cache_service_is_running():
-        raise RuntimeError(N_("Another maintenance operation is already running."))
+        raise RuntimeError(N_('Another maintenance operation is running.'))
     active = _managed_operation_active()
     if active:
         raise RuntimeError("Another system operation is running: {active}.".format(active=active))
     unit = f"bazzite-portal-maintenance@image-switch-{request['instance']}.service"
     _start_maintenance_unit("image", unit)
-    return C_('Bazzite is rebasing to {image}:{tag}. Restart to apply the staged deployment.', image=image, tag=tag)
+    return f'Bazzite is rebasing to {image}:{tag}. Restart to apply the staged deployment.'
 
 
 def start_delete_deployment(token):
@@ -2008,12 +2006,12 @@ def start_delete_deployment(token):
     if active:
         raise RuntimeError("Another system operation is running: {active}.".format(active=active))
     _start_maintenance_unit("delete", f"bazzite-portal-maintenance@delete-deployment-{token}.service")
-    return N_("Pinned deployment deleted.")
+    return N_('Pinned deployment deleted')
 
 
 def restart():
     if _channel_service_is_running():
-        raise RuntimeError(N_("Bazzite is changing update channels. Wait for it to finish."))
+        raise RuntimeError(C_('{bazzite} is changing update channels. Wait for it to finish.', bazzite='Bazzite'))
     if _cancel_service_is_running():
         raise RuntimeError(N_("Pending-deployment cancellation is running. Wait for it to finish."))
     if _layer_service_is_running():

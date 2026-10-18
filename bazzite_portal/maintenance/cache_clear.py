@@ -1,7 +1,7 @@
 """Identity-checked cleanup of imported, unused OSTree images and base cache."""
 
 from __future__ import annotations
-from bazzite_portal.core.i18n import N_
+from bazzite_portal.core.i18n import C_, N_
 
 import hashlib
 import json
@@ -64,7 +64,7 @@ def _token(identity: list[dict[str, Any]], refs: list[dict[str, str]]) -> str:
 def target(data: Any, imported_refs: Any) -> dict[str, Any]:
     """Select only imported image refs whose commit is absent from deployments."""
     if not isinstance(data, dict) or data.get("transaction") not in (None, False, "", [], {}):
-        return _unavailable(N_("An RPM-OSTree transaction is active or status is unavailable."))
+        return _unavailable(C_('An {rpm_ostree} transaction is active or status is unavailable.', rpm_ostree='RPM-OSTree'))
     identity = _deployment_identity(data)
     if identity is None:
         return _unavailable("Deployment identities are missing, malformed, or ambiguous.")

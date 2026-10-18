@@ -1,6 +1,6 @@
 """Identity-checked deletion of one saved rpm-ostree deployment."""
 from __future__ import annotations
-from bazzite_portal.core.i18n import N_
+from bazzite_portal.core.i18n import C_, N_
 
 import hashlib
 import json
@@ -49,7 +49,7 @@ def _snapshot(data: Any) -> tuple[list[dict[str, Any]], list[dict[str, Any]]] | 
     if sum(item["booted"] for item in entries) != 1:
         return _unavailable("Expected exactly one booted deployment.")
     if data.get("transaction") not in (None, False, "", [], {}):
-        return _unavailable(N_("An RPM-OSTree transaction is active."))
+        return _unavailable(C_('An {rpm_ostree} transaction is active.', rpm_ostree='RPM-OSTree'))
     identities = []
     for item in entries:
         identity = _identity(item)
@@ -90,7 +90,7 @@ def targets(data: Any) -> dict[str, Any]:
                          "version": _display(entry.get("version")),
                          "image": _display(identity["container-image-reference"]),
                          "pinned": entry["pinned"]})
-    return {"available": bool(selected), "reason": "" if selected else N_("No saved, pinned deployments are available to delete."),
+    return {"available": bool(selected), "reason": "" if selected else N_('No saved, pinned deployments can be deleted.'),
             "deployments": selected}
 
 

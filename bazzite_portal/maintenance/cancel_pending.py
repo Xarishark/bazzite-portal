@@ -1,7 +1,7 @@
 """Identity-checked removal of one staged rpm-ostree deployment."""
 
 from __future__ import annotations
-from bazzite_portal.core.i18n import N_
+from bazzite_portal.core.i18n import C_, N_
 
 import hashlib
 import json
@@ -78,7 +78,7 @@ def target(data: Any) -> dict[str, Any]:
         return _unavailable("Deployment status is not an object.")
     if "deployments" not in data:
         if "status" in data:
-            return _unavailable(N_("Bootc deployments cannot be canceled by this workflow."))
+            return _unavailable(C_("{bootc} deployments cannot be canceled by this workflow.", bootc="Bootc"))
         return _unavailable("RPM-OSTree deployment data is unavailable.")
     deployments = data.get("deployments")
     if not isinstance(deployments, list) or not deployments:
@@ -88,7 +88,7 @@ def target(data: Any) -> dict[str, Any]:
     if sum(entry["booted"] for entry in deployments) != 1:
         return _unavailable("Expected exactly one running deployment.")
     if _has_transaction(data.get("transaction")):
-        return _unavailable(N_("An RPM-OSTree transaction is active."))
+        return _unavailable(C_('An {rpm_ostree} transaction is active.', rpm_ostree='RPM-OSTree'))
 
     pending = deployments[0]
     booted = next(entry for entry in deployments if entry["booted"] is True)

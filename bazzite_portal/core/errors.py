@@ -7,7 +7,7 @@ from pathlib import Path
 import re
 import threading
 
-from .i18n import N_, _
+from .i18n import N_, _, format_message
 
 log = logging.getLogger(__name__)
 _reported = OrderedDict()
@@ -18,7 +18,7 @@ _lock = threading.Lock()
 def _messages():
     try:
         values = json.loads(Path(__file__).with_name("user_messages.json").read_text(encoding="utf-8"))
-        return frozenset(values) | frozenset(_(value) for value in values)
+        return frozenset(values) | frozenset(format_message(value) for value in values)
     except (OSError, ValueError, TypeError):
         # A missing resource must never cause raw diagnostic text to escape.
         return frozenset()
@@ -33,11 +33,11 @@ def public_error(error, fallback, *, context="Application"):
     """
     detail = str(error or "").strip()
     if not detail:
-        return _(fallback)
+        return format_message(fallback)
     wrapper = re.fullmatch(r"(?:g-io-error-quark: )?GDBus\.Error:[\w.]+: (.*?)(?: \([0-9]+\))?", detail, re.DOTALL)
     candidate = wrapper[1] if wrapper else detail
     if candidate in _messages():
-        return _(candidate)
+        return format_message(candidate)
     key = (context, detail[:4096])
     with _lock:
         report = key not in _reported
@@ -51,7 +51,7 @@ def public_error(error, fallback, *, context="Application"):
         return _("Another system operation is running. Wait for it to finish.")
     if candidate in {"Access denied", "Permission denied", "Not authorized"}:
         return _("Authorization was not granted. Try again or cancel.")
-    return _(fallback)
+    return format_message(fallback)
 
 
 def error_text(error, fallback=N_("Details are unavailable. Open Logs for more information."), *, context="Application"):

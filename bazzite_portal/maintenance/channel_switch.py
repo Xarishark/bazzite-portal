@@ -1,7 +1,7 @@
 """Identity-bound Bazzite stable/testing channel switch targets."""
 
 from __future__ import annotations
-from bazzite_portal.core.i18n import N_
+from bazzite_portal.core.i18n import C_, N_
 
 import hashlib
 import json
@@ -48,7 +48,7 @@ def target(data: Any, *, helper_available: bool = True) -> dict[str, Any]:
     if not deployments or len(deployments) > 64:
         return _unavailable("RPM-OSTree deployment list is empty or too large.")
     if data.get("transaction") not in (None, False, "", [], {}):
-        return _unavailable(N_("An RPM-OSTree transaction is active."))
+        return _unavailable(C_('An {rpm_ostree} transaction is active.', rpm_ostree='RPM-OSTree'))
     booted = [item for item in deployments if isinstance(item, dict) and item.get("booted") is True]
     if len(booted) != 1 or any(not isinstance(item, dict) or not isinstance(item.get("booted"), bool)
                                for item in deployments):
@@ -59,7 +59,7 @@ def target(data: Any, *, helper_available: bool = True) -> dict[str, Any]:
         return _unavailable("The running image reference is missing or malformed.")
     match = _REFERENCE.fullmatch(reference)
     if not match:
-        return _unavailable(N_("Only official Bazzite stable/testing track and release references are supported."))
+        return _unavailable(C_('Only official {bazzite} {tracks} track and release references are supported.', tracks="stable/testing", bazzite='Bazzite'))
     deployment_id, checksum, osname = running.get("id"), running.get("checksum"), running.get("osname")
     if (not isinstance(deployment_id, str) or not deployment_id.strip() or len(deployment_id) > 256
             or not isinstance(checksum, str) or not re.fullmatch(r"[0-9a-fA-F]{64}", checksum)

@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=Bazzite Portal Update Monitor
+Name=Update Monitor
 Exec=bazzite-portal --agent --session-start
 Type=Application
 NoDisplay=true
