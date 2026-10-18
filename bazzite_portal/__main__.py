@@ -1,6 +1,13 @@
 """Installed launcher and source-tree entry point."""
 import argparse
+from pathlib import Path
 import sys
+
+if __package__ in (None, ""):
+    # The installed launcher executes this file directly with -I, so Python
+    # does not add the application root to sys.path for package imports.
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 from bazzite_portal.integration.tools import DEFAULT_CONFIG
 
 

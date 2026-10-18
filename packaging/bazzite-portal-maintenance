@@ -1,0 +1,9 @@
+#!/usr/bin/python3 -I
+"""Run the installed maintenance dispatcher from its trusted private directory."""
+import sys
+
+sys.path.insert(0, "/usr/share/bazzite-portal")
+
+from bazzite_portal.maintenance.service import main
+
+raise SystemExit(main())
