@@ -33,18 +33,10 @@ jobs:
           rpmbuild -ba build/packaging/bazzite-portal.spec
           mkdir -p dist
           cp "$HOME"/rpmbuild/RPMS/noarch/*.rpm "$HOME"/rpmbuild/SRPMS/*.rpm dist/
-      - name: Prepare stable download filename
-        run: cp dist/*.noarch.rpm dist/bazzite-portal.rpm
-      - name: Generate RPM checksums
-        run: |
-          cd dist
-          md5sum *.rpm > MD5SUMS
       - uses: actions/upload-artifact@v7
         with:
           name: bazzite-portal-fedora44-rpms
-          path: |
-            dist/*.rpm
-            dist/MD5SUMS
+          path: dist/*.rpm
           if-no-files-found: error
 
   release:
@@ -62,28 +54,19 @@ jobs:
           ref: ${{ github.sha }}
           fetch-depth: 0
           persist-credentials: false
-      - uses: actions/download-artifact@v8
-        with:
-          name: bazzite-portal-fedora44-rpms
-          path: dist
-      - name: Verify release downloads
-        run: |
-          cd dist
-          md5sum -c MD5SUMS
-          test -s bazzite-portal.rpm
-          md5sum bazzite-portal.rpm > MD5SUMS
-      - name: Publish a new app version
+      - name: Prepare release
+        id: release
         uses: actions/github-script@v8
         env:
           APP_VERSION: ${{ needs.rpm.outputs.version }}
         with:
           script: |
-            const fs = require('node:fs');
-            const { execFileSync, spawnSync } = require('node:child_process');
+            const { spawnSync } = require('node:child_process');
             const repo = context.repo;
             const version = process.env.APP_VERSION;
             const pattern = /^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$/;
             if (!pattern.test(version)) throw new Error('Invalid app version');
+            core.setOutput('publish', 'false');
             const tag = `v${version}`;
             const compare = (a, b) => {
               const left = a.split('.').map(BigInt), right = b.split('.').map(BigInt);
@@ -105,47 +88,47 @@ jobs:
             }
             const existingTag = spawnSync('git', ['rev-parse', '--verify', '--quiet',
               `refs/tags/${tag}^{commit}`], { encoding: 'utf8' });
+            if (existingTag.error || ![0, 1].includes(existingTag.status)) {
+              throw new Error('Could not verify the release tag', { cause: existingTag.error });
+            }
             if (existingTag.status === 0 && existingTag.stdout.trim() !== context.sha) {
               throw new Error(`${tag} already points to another commit`);
             }
-            const notes = await github.rest.repos.generateReleaseNotes({
-              ...repo, tag_name: tag, target_commitish: context.sha,
-              ...(previous ? { previous_tag_name: previous.tag_name } : {})
-            });
-            const range = previous ? `${previous.tag_name}..${context.sha}` : context.sha;
-            const fields = execFileSync('git', ['log', '--reverse', '-z',
-              '--format=%H%x00%s%x00%an', range], { encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 })
-              .split('\0');
-            if (fields.at(-1) === '') fields.pop();
-            const escape = text => text.replace(/[\\`*_[\]<>]/g, '\\$&');
-            const commits = [];
-            for (let i = 0; i < fields.length; i += 3) {
-              const [sha, subject, author] = fields.slice(i, i + 3);
-              commits.push(`- ${escape(subject)} ([${sha.slice(0, 7)}](https://github.com/${repo.owner}/${repo.repo}/commit/${sha})) — ${escape(author)}`);
-            }
-            const body = `${notes.data.body}\n\n## All commits\n\n${commits.join('\n')}\n`;
-            let draft = releases.find(r => r.draft && r.tag_name === tag);
+            const draft = releases.find(r => r.draft && r.tag_name === tag);
             if (draft && draft.target_commitish !== context.sha) {
               throw new Error(`The existing draft for ${tag} targets another commit`);
             }
-            if (!draft) {
-              draft = (await github.rest.repos.createRelease({
-                ...repo, tag_name: tag, target_commitish: context.sha,
-                name: `Bazzite Portal ${version}`, body, draft: true, prerelease: false
-              })).data;
-            }
-            const assets = await github.paginate(github.rest.repos.listReleaseAssets,
-              { ...repo, release_id: draft.id, per_page: 100 });
-            const files = ['bazzite-portal.rpm', 'MD5SUMS'];
-            for (const name of files) {
-              const existing = assets.find(asset => asset.name === name);
-              if (existing) await github.rest.repos.deleteReleaseAsset({ ...repo, asset_id: existing.id });
-              await github.rest.repos.uploadReleaseAsset({
-                ...repo, release_id: draft.id, name, data: fs.readFileSync(`dist/${name}`),
-                headers: { 'content-type': name.endsWith('.rpm') ? 'application/x-rpm' : 'text/plain' }
-              });
-            }
-            await github.rest.repos.updateRelease({ ...repo, release_id: draft.id,
-              name: `Bazzite Portal ${version}`, body, draft: false, prerelease: false,
-              make_latest: 'true' });
-            core.info(`Published ${tag} with RPMs, checksums and the complete changelog.`);
+            core.setOutput('tag', tag);
+            core.setOutput('previous_tag', previous ? previous.tag_name : '');
+            core.setOutput('publish', 'true');
+      - uses: actions/download-artifact@v8
+        if: steps.release.outputs.publish == 'true'
+        with:
+          name: bazzite-portal-fedora44-rpms
+          path: dist
+      - name: Verify release downloads
+        id: binary
+        if: steps.release.outputs.publish == 'true'
+        shell: bash
+        run: |
+          shopt -s nullglob
+          rpms=(dist/*.noarch.rpm)
+          if (( ${#rpms[@]} != 1 )) || [[ ! -f "${rpms[0]}" || ! -s "${rpms[0]}" ]]; then
+            echo 'Expected exactly one nonempty binary RPM.' >&2
+            exit 1
+          fi
+          mv -- "${rpms[0]}" dist/bazzite-portal.rpm
+          printf 'rpm=dist/bazzite-portal.rpm\n' >> "$GITHUB_OUTPUT"
+      - name: Publish a new app version
+        if: steps.release.outputs.publish == 'true'
+        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
+        with:
+          tag_name: ${{ steps.release.outputs.tag }}
+          target_commitish: ${{ github.sha }}
+          name: Bazzite Portal ${{ needs.rpm.outputs.version }}
+          previous_tag: ${{ steps.release.outputs.previous_tag }}
+          generate_release_notes: true
+          files: ${{ steps.binary.outputs.rpm }}
+          fail_on_unmatched_files: true
+          prerelease: false
+          make_latest: true
