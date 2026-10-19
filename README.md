@@ -58,7 +58,7 @@ system package dependencies; the app is not tied to a Python minor-version direc
 ### Bazzite for up to  Fedora 44
 
 ```sh
-curl -fL https://github.com/Xarishark/bazzite-portal/releases/latest/download/bazzite-portal.rpm -o bazzite-portal.rpm
+curl -fLO https://github.com/Xarishark/bazzite-portal/releases/latest/download/bazzite-portal.rpm
 curl -fL https://raw.githubusercontent.com/Xarishark/bazzite-portal/main/templates/announcements.yml -o announcements.yml
 sudo rpm-ostree usroverlay
 sudo rpm -Uvh ./bazzite-portal.rpm
@@ -75,7 +75,7 @@ bazzite-portal
 ### Bazzite on Fedora 45 and after (Packages need to be signed)
 
 ```sh
-curl -fL https://github.com/Xarishark/bazzite-portal/releases/latest/download/bazzite-portal.rpm -o bazzite-portal.rpm
+curl -fLO https://github.com/Xarishark/bazzite-portal/releases/latest/download/bazzite-portal.rpm
 curl -fL https://raw.githubusercontent.com/Xarishark/bazzite-portal/main/templates/announcements.yml -o announcements.yml
 sudo rpm-ostree usroverlay
 sudo rpm --define '_pkgverify_level digest' -Uvh ./bazzite-portal.rpm
