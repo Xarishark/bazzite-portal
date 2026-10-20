@@ -4,9 +4,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Bazzite Portal / App\n"
-"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/app/"
-"\n"
-"POT-Creation-Date: 2026-10-20 14:51+0200\n"
+"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/"
+"app/\n"
+"POT-Creation-Date: 2026-10-20 15:03+0200\n"
 "PO-Revision-Date: 2026-10-20 13:03+0000\n"
 "Last-Translator: dani3690 <dani3690@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/bazzite-portal/"
@@ -38,11 +38,11 @@ msgstr ""
 msgid "Bouncing Mono"
 msgstr ""
 
-#: bazzite_portal/core/errors.py:66
-#, no-python-format
+#: bazzite_portal/core/errors.py:65
+#, python-brace-format
 msgid ""
 "Not enough free space. Free up space and try again. System updates need at "
-"least 3% free space on the installation drive."
+"least {minimum_free_space} free space on the installation drive."
 msgstr ""
 
 #: bazzite_portal/core/errors.py:68
