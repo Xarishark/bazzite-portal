@@ -12,13 +12,14 @@ import subprocess
 import sys
 from typing import Any, Callable
 
-from bazzite_portal.maintenance import cancel_pending
+from bazzite_portal.maintenance import runtime
 from bazzite_portal.maintenance import channel_switch
+from bazzite_portal.maintenance.status import read_status
 
 TOKEN_PATTERN = re.compile(r"^[0-9a-f]{64}$")
 CHECKSUM_PATTERN = re.compile(r"^[0-9a-fA-F]{64}$")
 MAX_STATUS_BYTES = 2 * 1024 * 1024
-MAX_TAGS_BYTES = cancel_pending.MAX_STATUS_BYTES
+MAX_TAGS_BYTES = runtime.MAX_OUTPUT_BYTES
 MAX_DEPLOYMENTS = 64
 MAX_TAGS = 10000
 MAX_TAG_BYTES = 64
@@ -152,7 +153,7 @@ def _list_tags(image: str, run_command: Callable[..., str]) -> list[str]:
     return tags
 
 
-def images(run_command: Callable[..., str] = cancel_pending._command, *,
+def images(run_command: Callable[..., str] = runtime.command, *,
            show_unsupported: bool = False) -> dict[str, Any]:
     """List the bundled image catalog, filtered to the running desktop by default."""
     snapshot = _snapshot(_read_status(run_command))
@@ -167,7 +168,7 @@ def images(run_command: Callable[..., str] = cancel_pending._command, *,
 
 
 def versions(image: str, track: str = "all",
-             run_command: Callable[..., str] = cancel_pending._command) -> dict[str, Any]:
+             run_command: Callable[..., str] = runtime.command) -> dict[str, Any]:
     """List selectable tags for one catalog-supported image and track."""
     if track not in {"stable", "testing", "unstable", "all"}:
         raise ValueError("Unsupported Bazzite image track.")
@@ -249,21 +250,12 @@ def prepare_request(data: Any, image: str, tag: str,
 
 
 def _read_status(run_command: Callable[..., str]) -> dict[str, Any]:
-    try:
-        raw = run_command(["rpm-ostree", "status", "--json"], timeout=15)
-        if not isinstance(raw, str) or len(raw.encode("utf-8", "replace")) > MAX_STATUS_BYTES:
-            raise ValueError("oversized status")
-        data = json.loads(raw)
-    except (TypeError, ValueError) as error:
-        raise RuntimeError("RPM-OSTree returned malformed deployment status.") from error
-    if not isinstance(data, dict):
-        raise RuntimeError("RPM-OSTree returned malformed deployment status.")
-    return data
+    return read_status(run_command, max_bytes=MAX_STATUS_BYTES)
 
 
 def execute(token: str, image: str, tag: str,
-            run_command: Callable[..., str] = cancel_pending._command,
-            lock_factory: Callable[[], Any] = cancel_pending._pending_lock) -> str:
+            run_command: Callable[..., str] = runtime.command,
+            lock_factory: Callable[[], Any] = runtime.maintenance_lock) -> str:
     """Revalidate a bounded choice and ask RPM-OSTree to stage exactly that target."""
     if not isinstance(token, str) or not TOKEN_PATTERN.fullmatch(token):
         raise ValueError("Invalid image-switch confirmation token.")
@@ -274,7 +266,7 @@ def execute(token: str, image: str, tag: str,
     with lock_factory():
         state = _read_status(run_command)
         current = verify_token(state, token, image, tag)
-        active = cancel_pending._active_operation(run_command)
+        active = runtime.active_operation(run_command)
         if active:
             raise RuntimeError(f"Cannot change images while {active} is running.")
         if tag not in _list_tags(image, run_command):
@@ -283,7 +275,7 @@ def execute(token: str, image: str, tag: str,
         # identity and transaction state immediately before the mutation.
         state = _read_status(run_command)
         current = verify_token(state, token, image, tag)
-        active = cancel_pending._active_operation(run_command)
+        active = runtime.active_operation(run_command)
         if active:
             raise RuntimeError(f"Cannot change images while {active} is running.")
         # The target is assembled only from the bundled catalog and a

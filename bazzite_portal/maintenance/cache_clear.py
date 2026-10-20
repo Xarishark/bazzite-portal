@@ -11,7 +11,8 @@ import subprocess
 import sys
 from typing import Any, Callable
 
-from bazzite_portal.maintenance import cancel_pending
+from bazzite_portal.maintenance import runtime
+from bazzite_portal.maintenance.status import read_status as _read_status
 
 TOKEN_PATTERN = re.compile(r"^[0-9a-f]{64}$")
 CHECKSUM_PATTERN = re.compile(r"^[0-9a-fA-F]{64}$")
@@ -97,16 +98,6 @@ def target(data: Any, imported_refs: Any) -> dict[str, Any]:
             "refs": candidates}
 
 
-def _read_status(run_command: Callable[..., str]) -> dict[str, Any]:
-    try:
-        data = json.loads(run_command(["rpm-ostree", "status", "--json"], timeout=15))
-    except (TypeError, ValueError) as exc:
-        raise RuntimeError("RPM-OSTree returned malformed deployment status.") from exc
-    if not isinstance(data, dict):
-        raise RuntimeError("RPM-OSTree returned malformed deployment status.")
-    return data
-
-
 def _read_refs(data: dict[str, Any], run_command: Callable[..., str]) -> list[dict[str, str]]:
     text = run_command(["ostree", "refs"], timeout=30)
     if not isinstance(text, str) or len(text.encode("utf-8", errors="replace")) > MAX_REF_OUTPUT:
@@ -130,8 +121,8 @@ def _current_target(run_command):
     return data, target(data, _read_refs(data, run_command))
 
 
-def execute(token: str, command_runner: Callable[..., str] = cancel_pending._command,
-            lock_factory: Callable[[], Any] = cancel_pending._pending_lock) -> str:
+def execute(token: str, command_runner: Callable[..., str] = runtime.command,
+            lock_factory: Callable[[], Any] = runtime.maintenance_lock) -> str:
     """Revalidate exact target refs, remove only those refs, then clean base cache."""
     if not isinstance(token, str) or not TOKEN_PATTERN.fullmatch(token):
         raise ValueError("Invalid download-cache token.")
@@ -139,13 +130,13 @@ def execute(token: str, command_runner: Callable[..., str] = cancel_pending._com
         data, initial = _current_target(command_runner)
         if not initial["available"] or initial["token"] != token:
             raise RuntimeError(initial["reason"] or "The deployment or imported image references changed after confirmation.")
-        active = cancel_pending._active_operation(command_runner)
+        active = runtime.active_operation(command_runner)
         if active:
             raise RuntimeError(f"Cannot clear the download cache while {active} is running.")
         current_data, current = _current_target(command_runner)
         if not current["available"] or current["token"] != token:
             raise RuntimeError(current["reason"] or "The deployment or imported image references changed before cleanup.")
-        active = cancel_pending._active_operation(command_runner)
+        active = runtime.active_operation(command_runner)
         if active:
             raise RuntimeError(f"Cannot clear the download cache while {active} is running.")
         before = _deployment_identity(current_data)

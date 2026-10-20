@@ -11,7 +11,8 @@ import subprocess
 import sys
 from typing import Any
 
-from bazzite_portal.maintenance import cancel_pending
+from bazzite_portal.maintenance import runtime
+from bazzite_portal.maintenance.status import read_status
 
 TOKEN_PATTERN = re.compile(r"^[0-9a-f]{64}$")
 MAX_STATUS_BYTES = 2 * 1024 * 1024
@@ -106,7 +107,7 @@ def verify_token(data: Any, token: str, *, helper_available: bool = True) -> dic
 def verify_switch_result(before: dict[str, Any], after: Any, reference: str) -> None:
     """Confirm RPM-OSTree staged the requested reference without changing the booted OS."""
     error = "The switch command finished, but the requested deployment could not be verified."
-    if not isinstance(after, dict) or cancel_pending._has_transaction(after.get("transaction")):
+    if not isinstance(after, dict) or runtime.has_transaction(after.get("transaction")):
         raise RuntimeError(error)
     deployments = after.get("deployments")
     if (not isinstance(deployments, list) or not 2 <= len(deployments) <= 64
@@ -117,15 +118,15 @@ def verify_switch_result(before: dict[str, Any], after: Any, reference: str) -> 
     original = next(item for item in before["deployments"] if item["booted"])
     if len(running) != 1:
         raise RuntimeError(error)
-    identity = cancel_pending._canonical_identity(original, original["osname"])
-    if (cancel_pending._canonical_identity(running[0], None) != identity
+    identity = runtime.canonical_deployment_identity(original, original["osname"])
+    if (runtime.canonical_deployment_identity(running[0], None) != identity
             or running[0].get("staged") is True):
         raise RuntimeError(error)
     pending = deployments[0]
     if (pending["booted"] or pending.get("staged") is not True
             or pending.get("osname") != original["osname"]
             or pending.get("container-image-reference") != reference
-            or cancel_pending._canonical_identity(pending, None) is None
+            or runtime.canonical_deployment_identity(pending, None) is None
             or any(item.get("staged") is True for item in deployments[1:])):
         raise RuntimeError(error)
 
@@ -159,20 +160,20 @@ def _rebase(run_command, reference: str) -> None:
         raise
 
 
-def execute(token: str, run_command=cancel_pending._command,
-            lock_factory=cancel_pending._pending_lock) -> str:
+def execute(token: str, run_command=runtime.command,
+            lock_factory=runtime.maintenance_lock) -> str:
     """Revalidate and ask RPM-OSTree to stage the latest image on the target track."""
     with lock_factory():
         data = _read_status(run_command)
         current = verify_token(data, token)
-        active = cancel_pending._active_operation(run_command)
+        active = runtime.active_operation(run_command)
         if active:
             raise RuntimeError(f"Cannot change update channels while {active} is running.")
         # Re-read after the operation inventory and bind authorization to that
         # fresh state immediately before staging the selected signed reference.
         data = _read_status(run_command)
         current = verify_token(data, token)
-        active = cancel_pending._active_operation(run_command)
+        active = runtime.active_operation(run_command)
         if active:
             raise RuntimeError(f"Cannot change update channels while {active} is running.")
         _rebase(run_command, current["target_reference"])
@@ -181,16 +182,7 @@ def execute(token: str, run_command=cancel_pending._command,
 
 
 def _read_status(run_command) -> dict[str, Any]:
-    try:
-        raw = run_command(["rpm-ostree", "status", "--json"], timeout=15)
-        if not isinstance(raw, str) or len(raw.encode("utf-8", "replace")) > MAX_STATUS_BYTES:
-            raise ValueError("oversized status")
-        data = json.loads(raw)
-    except (TypeError, ValueError) as error:
-        raise RuntimeError("RPM-OSTree returned malformed deployment status.") from error
-    if not isinstance(data, dict):
-        raise RuntimeError("RPM-OSTree returned malformed deployment status.")
-    return data
+    return read_status(run_command, max_bytes=MAX_STATUS_BYTES)
 
 
 def main(argv: list[str] | None = None) -> int:

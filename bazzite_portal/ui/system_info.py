@@ -27,8 +27,7 @@ def _reference_parts(value):
     return match.groupdict() if match else None
 
 
-def _variant(reference):
-    parts = _reference_parts(reference)
+def _variant(parts):
     if not parts:
         return N_("Unknown")
     name = parts["name"]
@@ -39,8 +38,7 @@ def _variant(reference):
                                   for word in suffix.split("-"))
 
 
-def _track(reference):
-    parts = _reference_parts(reference)
+def _track(parts):
     if not parts:
         return N_("Unknown")
     if parts["digest"]:
@@ -103,8 +101,8 @@ def summarize_system_presentation(system_information, deployment_summary=None):
                if isinstance(entry, dict) and entry.get("role") == "Running now"]
     if len(running) != 1:
         return result
-    reference = running[0].get("image")
-    result["variant"] = _variant(reference)
-    result["track"] = _track(reference)
+    parts = _reference_parts(running[0].get("image"))
+    result["variant"] = _variant(parts)
+    result["track"] = _track(parts)
     result["packages"] = _applied_packages(raw_status, summary)
     return result

@@ -10,7 +10,8 @@ import subprocess
 import sys
 from typing import Any, Callable
 
-from bazzite_portal.maintenance import cancel_pending
+from bazzite_portal.maintenance import runtime
+from bazzite_portal.maintenance.status import read_status as _read_status
 
 TOKEN_PATTERN = re.compile(r"^[0-9a-f]{64}$")
 CHECKSUM_PATTERN = re.compile(r"^[0-9a-fA-F]{64}$")
@@ -46,8 +47,7 @@ def target(data: Any) -> dict[str, Any]:
         return _unavailable(N_("A different deployment is selected for next boot."))
     if data.get("transaction") not in (None, False, "", [], {}):
         return _unavailable(C_('An {rpm_ostree} transaction is active.', rpm_ostree='RPM-OSTree'))
-    default = deployments[0]
-    booted = next(item for item in deployments if item["booted"])
+    booted = deployments[0]
     checksum = booted.get("checksum")
     if not isinstance(checksum, str) or not CHECKSUM_PATTERN.fullmatch(checksum):
         return _unavailable("The booted deployment checksum is missing or malformed.")
@@ -55,11 +55,9 @@ def target(data: Any) -> dict[str, Any]:
     deployment_id = booted.get("id")
     if not isinstance(stateroot, str) or not stateroot.strip() or not isinstance(deployment_id, str) or not deployment_id.strip():
         return _unavailable("The booted deployment stateroot identity is missing or malformed.")
-    if default.get("osname") != stateroot or not isinstance(default.get("id"), str) or not default.get("id").strip():
-        return _unavailable("The default deployment does not have a matching stateroot identity.")
     requested: list[str] = []
     for field in PACKAGE_FIELDS:
-        values = default.get(field)
+        values = booted.get(field)
         if not isinstance(values, list):
             return _unavailable("The booted deployment has malformed {field} data.".format(field=field))
         for value in values:
@@ -70,7 +68,7 @@ def target(data: Any) -> dict[str, Any]:
     packages = sorted(set(requested))
     if len(packages) > MAX_PACKAGES:
         return _unavailable("The requested package list is too large to confirm safely.")
-    applied_value = default.get("packages")
+    applied_value = booted.get("packages")
     applied_known = isinstance(applied_value, list) and len(applied_value) <= MAX_PACKAGES
     if applied_known:
         applied_known = all(isinstance(value, str) and value and len(value) <= MAX_PACKAGE_LENGTH
@@ -92,29 +90,15 @@ def target(data: Any) -> dict[str, Any]:
             "inactive_known": applied_known}
 
 
-def _command(argv, timeout=15):
-    return cancel_pending._command(argv, timeout)
-
-
-def _read_status(run_command):
-    try:
-        data = json.loads(run_command(["rpm-ostree", "status", "--json"], timeout=15))
-    except (TypeError, ValueError) as exc:
-        raise RuntimeError("RPM-OSTree returned malformed deployment status.") from exc
-    if not isinstance(data, dict):
-        raise RuntimeError("RPM-OSTree returned malformed deployment status.")
-    return data
-
-
 def _busy(run_command):
-    for unit in cancel_pending.OPERATION_UNITS:
+    for unit in runtime.OPERATION_UNITS:
         text = run_command(["systemctl", "show", unit, "--property=LoadState,ActiveState"], timeout=15)
         props = dict(line.split("=", 1) for line in text.splitlines() if "=" in line)
         if props.get("LoadState") == "not-found":
             continue
         if props.get("LoadState") != "loaded" or not props.get("ActiveState"):
             raise RuntimeError(f"Could not verify system operation state for {unit}.")
-        if props["ActiveState"] in cancel_pending.ACTIVE_STATES:
+        if props["ActiveState"] in runtime.ACTIVE_STATES:
             return unit
     text = run_command(["systemctl", "list-units", "--all", "--no-pager", "--output=json",
                         "bazzite-portal-*@*.service"], timeout=15)
@@ -140,7 +124,7 @@ def _busy(run_command):
             continue
         if props.get("LoadState") != "loaded" or not props.get("ActiveState"):
             raise RuntimeError(f"Could not verify package-layer removal state for {unit}.")
-        if props["ActiveState"] in cancel_pending.ACTIVE_STATES:
+        if props["ActiveState"] in runtime.ACTIVE_STATES:
             if own_invocation and props.get("InvocationID", "").lower() == own_invocation.lower():
                 continue
             return unit
@@ -163,13 +147,13 @@ def _busy(run_command):
             continue
         if props.get("LoadState") != "loaded" or not props.get("ActiveState"):
             raise RuntimeError(f"Could not verify system operation state for {unit}.")
-        if props["ActiveState"] in cancel_pending.ACTIVE_STATES:
+        if props["ActiveState"] in runtime.ACTIVE_STATES:
             return unit
     return ""
 
 
-def execute(token: str, command_runner: Callable[..., str] = _command,
-            lock_factory: Callable[[], Any] = cancel_pending._pending_lock,
+def execute(token: str, command_runner: Callable[..., str] = runtime.command,
+            lock_factory: Callable[[], Any] = runtime.maintenance_lock,
             selected_packages: list[str] | tuple[str, ...] | None = None) -> str:
     if not isinstance(token, str) or not TOKEN_PATTERN.fullmatch(token):
         raise ValueError("Invalid package-layer removal token.")

@@ -37,6 +37,7 @@ from bazzite_portal.maintenance import state as maintenance_state
 from bazzite_portal.updates import trace as update_trace
 from bazzite_portal.maintenance import service as maintenance_service
 from bazzite_portal.maintenance import deployments as deployments_backend
+from bazzite_portal.maintenance import runtime as maintenance_runtime
 from bazzite_portal.core.i18n import C_, N_
 
 UUPD_CONFIG_PATH = "/etc/uupd/config.json"
@@ -1408,6 +1409,10 @@ class Monitor:
             if discovery_error:
                 error = (error + "\n" + discovery_error).strip()
             with self._lock:
+                # Final replay rebuilds module state from the beginning. Keep
+                # the last published view until the complete evidence is ready.
+                if run and self._finish_run == run and run not in self._journal_finished:
+                    return
                 failures = list(self._failures)
                 result = "running" if running else "unknown"
                 if run and not running and run in self._journal_finished:
@@ -1546,6 +1551,8 @@ class Monitor:
 
     def _publish_running_service(self, unit, run, plan):
         with self._lock:
+            if self._finish_run == run:
+                return
             snapshot = Snapshot(**self.snapshot.to_dict())
             snapshot.available = True
             snapshot.running = True
@@ -1636,7 +1643,8 @@ class Monitor:
             while len(self._lines) > MAX_LOG_LINES or self._line_bytes > MAX_LOG_BYTES:
                 removed = self._lines.popleft()
                 self._line_bytes -= len(removed.encode("utf-8", errors="replace"))
-            if not self._journal_historical and self.snapshot.running and self.snapshot.run == run:
+            if (not self._journal_historical and self._finish_run != run
+                    and self.snapshot.running and self.snapshot.run == run):
                 token = (run, self._journal_generation)
                 if self._journal_publish_pending != token and hasattr(self.scheduler, "timeout_add"):
                     self._journal_publish_pending = token
@@ -1653,7 +1661,8 @@ class Monitor:
         with self._lock:
             if self._journal_publish_pending == (run, generation):
                 self._journal_publish_pending = None
-            if (self._closed or run != self._journal_run or generation != self._journal_generation
+            if (self._closed or self._finish_run == run
+                    or run != self._journal_run or generation != self._journal_generation
                     or run != self.snapshot.run or not self.snapshot.running):
                 return False
             snapshot = Snapshot(**self.snapshot.to_dict())
@@ -1893,7 +1902,7 @@ def start_operation(operation):
 def _require_no_active_rpm_ostree_transaction():
     """Recheck authoritative rpm-ostree state immediately before starting a job."""
     raw = command(["rpm-ostree", "status", "--json"])
-    if not isinstance(raw, str) or len(raw.encode("utf-8", errors="replace")) > cancel_pending_backend.MAX_STATUS_BYTES:
+    if not isinstance(raw, str) or len(raw.encode("utf-8", errors="replace")) > maintenance_runtime.MAX_OUTPUT_BYTES:
         raise RuntimeError("Could not verify RPM-OSTree transaction state.")
     try:
         data = json.loads(raw)
@@ -1902,7 +1911,7 @@ def _require_no_active_rpm_ostree_transaction():
     if (not isinstance(data, dict) or "transaction" not in data
             or not deployments_backend.summarize_deployments(data).get("known")):
         raise RuntimeError("Could not verify RPM-OSTree transaction state.")
-    if cancel_pending_backend._has_transaction(data["transaction"]):
+    if maintenance_runtime.has_transaction(data["transaction"]):
         raise RuntimeError(C_('An {rpm_ostree} transaction is active. Wait for it to finish.', rpm_ostree='RPM-OSTree'))
 
 
@@ -2143,6 +2152,8 @@ def restart():
         raise RuntimeError(error or N_("There is no pending deployment to restart into."))
     if _cache_service_is_running():
         raise RuntimeError(N_("Download-cache cleanup is running. Wait for it to finish."))
+    if _image_switch_service_is_running() or _delete_service_is_running():
+        raise RuntimeError(N_("Another deployment-management operation is running. Wait for it to finish."))
     command(["systemctl", "reboot"])
 
 

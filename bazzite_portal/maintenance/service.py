@@ -8,6 +8,9 @@ import re
 import subprocess
 import sys
 
+from bazzite_portal.maintenance import runtime
+from bazzite_portal.maintenance.status import read_status
+
 
 UNIT_PREFIX = "bazzite-portal-maintenance@"
 UNIT_SUFFIX = ".service"
@@ -70,23 +73,21 @@ def valid_unit(unit: str) -> bool:
 
 def _rollback() -> int:
     """Run rollback only after the shared lock and fresh busy checks pass."""
-    from bazzite_portal.maintenance import cancel_pending
-
-    with cancel_pending._pending_lock():
-        status = cancel_pending._read_status(cancel_pending._command)
-        if cancel_pending._has_transaction(status.get("transaction")):
+    with runtime.maintenance_lock():
+        status = read_status(runtime.command)
+        if runtime.has_transaction(status.get("transaction")):
             raise RuntimeError("Refusing rollback while an RPM-OSTree transaction is active.")
         # The unified rollback instance is necessarily active while this code
         # runs. Check external work and the legacy rollback unit explicitly;
         # all new app maintenance instances coordinate through the shared lock.
-        active = _rollback_busy_operation(cancel_pending._command)
+        active = _rollback_busy_operation(runtime.command)
         if active:
             raise RuntimeError(f"Refusing rollback while {active} is running.")
 
         # Recheck directly before invoking the helper in case an external
         # rpm-ostree transaction began while the systemd state was queried.
-        status = cancel_pending._read_status(cancel_pending._command)
-        if cancel_pending._has_transaction(status.get("transaction")):
+        status = read_status(runtime.command)
+        if runtime.has_transaction(status.get("transaction")):
             raise RuntimeError("Refusing rollback while an RPM-OSTree transaction is active.")
 
         environment = {**os.environ, "LC_ALL": "C"}
@@ -99,8 +100,6 @@ def _rollback() -> int:
 
 def _rollback_busy_operation(run_command) -> str:
     """Check only operations that do not coordinate through our maintenance lock."""
-    from bazzite_portal.maintenance.cancel_pending import ACTIVE_STATES
-
     for unit in ("uupd.service", "uupd-manual.service", "bazzite-portal-rollback.service"):
         text = run_command(["systemctl", "show", unit, "--property=LoadState,ActiveState"], timeout=15)
         properties = dict(line.split("=", 1) for line in text.splitlines() if "=" in line)
@@ -110,7 +109,7 @@ def _rollback_busy_operation(run_command) -> str:
             continue
         if load != "loaded" or not active:
             raise RuntimeError(f"Could not verify system operation state for {unit}.")
-        if active in ACTIVE_STATES:
+        if active in runtime.ACTIVE_STATES:
             return unit
     return ""
 
