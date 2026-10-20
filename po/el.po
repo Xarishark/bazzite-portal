@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/"
-"app/\n"
+"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/app/"
+"\n"
 "POT-Creation-Date: 2026-10-20 14:51+0200\n"
-"PO-Revision-Date: 2026-10-18 16:17+0000\n"
+"PO-Revision-Date: 2026-10-20 13:03+0000\n"
 "Last-Translator: Zacharias Xenakis <xarishark@outlook.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/bazzite-portal/app/"
 "el/>\n"
@@ -52,40 +52,49 @@ msgid ""
 "The download's signature could not be verified. Try again later. If the "
 "problem continues, open Logs for details."
 msgstr ""
+"Δεν ήταν δυνατή η επαλήθευση της ψηφιακής υπογραφής του αρχείου που λήφθηκε. "
+"Δοκιμάστε ξανά αργότερα. Αν το πρόβλημα επιμένει, ανοίξτε τα αρχεία "
+"καταγραφής για περισσότερες λεπτομέρειες."
 
 #: bazzite_portal/core/errors.py:70
 msgid ""
 "A downloaded file failed checksum verification. Try again later and check "
 "the operation log if the problem continues."
 msgstr ""
+"Ένα αρχείο που λήφθηκε δεν πέρασε τον έλεγχο αθροίσματος ελέγχου. Δοκιμάστε "
+"ξανά αργότερα και ελέγξτε το αρχείο καταγραφής της διαδικασίας αν το "
+"πρόβλημα επιμένει."
 
 #: bazzite_portal/core/errors.py:72
 msgid ""
 "A package conflict is blocking this system change. Review your layered apps "
 "in System Management, then try again."
 msgstr ""
+"Μια σύγκρουση πακέτων εμποδίζει αυτή την αλλαγή στο σύστημα. Ελέγξτε τις "
+"εφαρμογές που έχουν εγκατασταθεί μέσω layering στη Διαχείριση συστήματος και "
+"δοκιμάστε ξανά."
 
 #: bazzite_portal/core/errors.py:74
 msgid "The download server is busy. Wait a little and try again."
 msgstr ""
+"Ο διακομιστής λήψεων είναι απασχολημένος. Περιμένετε λίγο και δοκιμάστε ξανά."
 
 #: bazzite_portal/core/errors.py:76
-#, fuzzy
-#| msgid ""
-#| "Could not check download-cache status. Refresh system information and try "
-#| "again."
 msgid ""
 "Could not connect to the download server. Check your connection and try "
 "again."
 msgstr ""
-"Δεν ήταν δυνατός ο έλεγχος της κατάστασης της προσωρινής μνήμης λήψεων. "
-"Ανανεώστε τις πληροφορίες συστήματος και δοκιμάστε ξανά."
+"Δεν ήταν δυνατή η σύνδεση με τον διακομιστή λήψεων. Ελέγξτε τη σύνδεσή σας "
+"και δοκιμάστε ξανά."
 
 #: bazzite_portal/core/errors.py:78
 msgid ""
 "Could not download software repository information. Try again later. If this "
 "continues, check your repository settings or open Logs."
 msgstr ""
+"Δεν ήταν δυνατή η λήψη πληροφοριών αποθετηρίου λογισμικού. Δοκιμάστε ξανά "
+"αργότερα. Αν το πρόβλημα επιμένει, ελέγξτε τις ρυθμίσεις των αποθετηρίων ή "
+"ανοίξτε τα αρχεία καταγραφής."
 
 #: bazzite_portal/core/errors.py:121 bazzite_portal/ui/application.py:2287
 #: bazzite_portal/ui/application.py:2290 bazzite_portal/ui/application.py:2562
@@ -1200,16 +1209,12 @@ msgid "{bazzite} is updating…"
 msgstr "Το {bazzite} ενημερώνεται…"
 
 #: bazzite_portal/ui/application.py:2537
-#, fuzzy
-#| msgid "Loading…"
 msgid "Rebasing…"
-msgstr "Φόρτωση…"
+msgstr "Εκτέλεση rebase…"
 
 #: bazzite_portal/ui/application.py:2541
-#, fuzzy
-#| msgid "System operation"
 msgid "System operation in progress…"
-msgstr "Διαδικασία συστήματος"
+msgstr "Διαδικασία συστήματος σε εξέλιξη…"
 
 #: bazzite_portal/ui/application.py:2574
 #, python-brace-format
@@ -1234,7 +1239,7 @@ msgstr "Ενημέρωση…"
 
 #: bazzite_portal/ui/application.py:2584
 msgid "Busy"
-msgstr ""
+msgstr "Απασχολημένο"
 
 #: bazzite_portal/ui/application.py:2612
 msgid "The update request could not be sent. Open Logs for details."
