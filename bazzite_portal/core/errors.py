@@ -7,7 +7,7 @@ from pathlib import Path
 import re
 import threading
 
-from .i18n import N_, _, format_message
+from .i18n import C_, N_, _, format_message
 
 log = logging.getLogger(__name__)
 _reported = OrderedDict()
@@ -62,8 +62,8 @@ def _error_category(detail, logs):
     evidence.extend(line for line in (logs or ()) if isinstance(line, str))
     joined = "\n".join(evidence)
     if _SPACE_ERROR.search(joined):
-        # xgettext:no-python-format
-        return _("Not enough free space. Free up space and try again. System updates need at least 3% free space on the installation drive.")
+        return C_("Not enough free space. Free up space and try again. System updates need at least {minimum_free_space} free space on the installation drive.",
+                  minimum_free_space="3%")
     if _SIGNATURE_FAILURE.search(joined):
         return _("The download's signature could not be verified. Try again later. If the problem continues, open Logs for details.")
     if _CHECKSUM_FAILURE.search(joined):
