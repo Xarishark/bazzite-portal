@@ -2194,7 +2194,8 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             status_text = {"pending": N_("Waiting to update"), "skipped": N_("Skipped"), "unknown": N_("Status unavailable")}.get(status, status.replace("_", " ").capitalize())
             detail = str(module.get("error") or module.get("detail") or "").strip()
             if status == "failed" or module.get("error"):
-                detail = public_error(detail, N_("Update failed. Open the update log for details."), context="Update step: " + identity)
+                detail = public_error(detail, N_("Update failed. Open the update log for details."), context="Update step: " + identity,
+                                      logs=module.get("logs", ()) if status == "failed" else ())
             up_to_date = identity == "system" and status == "skipped" and detail == N_("No system update is available.")
             if up_to_date:
                 status = "success"

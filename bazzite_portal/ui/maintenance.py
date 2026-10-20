@@ -1162,9 +1162,10 @@ class SystemManagementUI:
             dialog.maintenance_log_status.set_text(_("A newer operation is available. Reopen this action to view it."))
             dialog.maintenance_log_status.set_visible(True)
             return
-        error = error_text(getattr(self.snapshot, kind + "_error", ""), N_('Details are unavailable. Open Logs for more information.'), context='_sync_maintenance_dialog')
-        log_error = error_text(getattr(self.snapshot, kind + "_log_error", ""), N_('Details are unavailable. Open Logs for more information.'), context='_sync_maintenance_dialog')
         state = getattr(self.snapshot, kind + "_state", "unknown")
+        error = error_text(getattr(self.snapshot, kind + "_error", ""), N_('Details are unavailable. Open Logs for more information.'), context='_sync_maintenance_dialog',
+                           logs=getattr(self.snapshot, kind + "_logs", ()) if state == "failed" else ())
+        log_error = error_text(getattr(self.snapshot, kind + "_log_error", ""), N_('Details are unavailable. Open Logs for more information.'), context='_sync_maintenance_dialog')
         self._set_maintenance_indicator(dialog, state)
         dialog.maintenance_summary.remove_css_class("success")
         dialog.maintenance_summary.remove_css_class("error")
@@ -1762,7 +1763,8 @@ class SystemManagementUI:
             detail = N_("Restart manually to start the new release channel.")
         elif state == "failed" and self._maintenance_row_should_open("channel"):
             title = N_('Release channel rebase failed')
-            detail = error_text(status.get("error"), N_('Could not check the release channel. Open Logs for details.'), context='_sync_channel_ui') or N_("The operation failed. Refresh system information to check the current state.")
+            detail = error_text(status.get("error"), N_('Could not check the release channel. Open Logs for details.'), context='_sync_channel_ui',
+                                logs=self.snapshot.channel_logs) or N_("The operation failed. Refresh system information to check the current state.")
         elif reason:
 
             title = (_('Rebase to {bazzite} {track}').format(bazzite='Bazzite',
