@@ -1409,6 +1409,10 @@ class Monitor:
             if discovery_error:
                 error = (error + "\n" + discovery_error).strip()
             with self._lock:
+                # Final replay rebuilds module state from the beginning. Keep
+                # the last published view until the complete evidence is ready.
+                if run and self._finish_run == run and run not in self._journal_finished:
+                    return
                 failures = list(self._failures)
                 result = "running" if running else "unknown"
                 if run and not running and run in self._journal_finished:
@@ -1547,6 +1551,8 @@ class Monitor:
 
     def _publish_running_service(self, unit, run, plan):
         with self._lock:
+            if self._finish_run == run:
+                return
             snapshot = Snapshot(**self.snapshot.to_dict())
             snapshot.available = True
             snapshot.running = True
@@ -1637,7 +1643,8 @@ class Monitor:
             while len(self._lines) > MAX_LOG_LINES or self._line_bytes > MAX_LOG_BYTES:
                 removed = self._lines.popleft()
                 self._line_bytes -= len(removed.encode("utf-8", errors="replace"))
-            if not self._journal_historical and self.snapshot.running and self.snapshot.run == run:
+            if (not self._journal_historical and self._finish_run != run
+                    and self.snapshot.running and self.snapshot.run == run):
                 token = (run, self._journal_generation)
                 if self._journal_publish_pending != token and hasattr(self.scheduler, "timeout_add"):
                     self._journal_publish_pending = token
@@ -1654,7 +1661,8 @@ class Monitor:
         with self._lock:
             if self._journal_publish_pending == (run, generation):
                 self._journal_publish_pending = None
-            if (self._closed or run != self._journal_run or generation != self._journal_generation
+            if (self._closed or self._finish_run == run
+                    or run != self._journal_run or generation != self._journal_generation
                     or run != self.snapshot.run or not self.snapshot.running):
                 return False
             snapshot = Snapshot(**self.snapshot.to_dict())
