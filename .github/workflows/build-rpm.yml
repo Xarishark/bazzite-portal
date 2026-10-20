@@ -132,3 +132,28 @@ jobs:
           fail_on_unmatched_files: true
           prerelease: false
           make_latest: true
+      - name: Trigger COPR build
+        if: steps.release.outputs.publish == 'true'
+        env:
+          COPR_WEBHOOK_URL: ${{ secrets.COPR_WEBHOOK_URL }}
+        run: |
+          if [ -z "$COPR_WEBHOOK_URL" ]; then
+            echo '::warning::COPR_WEBHOOK_URL is not configured; skipping COPR build.'
+            exit 0
+          fi
+          # Use COPR's package-specific GitHub endpoint; custom ignores commit overrides.
+          case "$COPR_WEBHOOK_URL" in
+            https://copr.fedorainfracloud.org/webhooks/github/*/bazzite-portal/) ;;
+            *) echo '::error::COPR_WEBHOOK_URL must be the package-specific COPR GitHub webhook URL.'; exit 1 ;;
+          esac
+          # Submit the released SHA, even if the configured branch has since advanced.
+          jq -n --arg ref "$GITHUB_REF" --arg sha "$GITHUB_SHA" \
+            --arg repository "$GITHUB_REPOSITORY" \
+            '{ref: $ref, after: $sha,
+              repository: {clone_url: ("https://github.com/" + $repository + ".git")},
+              commits: [{added: [], removed: [], modified: ["pyproject.toml"]}]}' \
+            > "$RUNNER_TEMP/copr-webhook.json"
+          curl --fail --silent --show-error --connect-timeout 10 --max-time 60 \
+            --output /dev/null --request POST --header 'Content-Type: application/json' \
+            --header 'X-GitHub-Event: push' --data-binary "@$RUNNER_TEMP/copr-webhook.json" \
+            "$COPR_WEBHOOK_URL"
