@@ -4,10 +4,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Bazzite Portal / App\n"
-"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/"
-"app/\n"
+"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/app/"
+"\n"
 "POT-Creation-Date: 2026-10-20 15:03+0200\n"
-"PO-Revision-Date: 2026-10-20 13:03+0000\n"
+"PO-Revision-Date: 2026-10-20 20:46+0000\n"
 "Last-Translator: dani3690 <dani3690@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/bazzite-portal/"
 "app/it/>\n"
@@ -24,19 +24,19 @@ msgstr "Nativo"
 
 #: bazzite_portal/artwork/appearance.py:16
 msgid "Spinning"
-msgstr ""
+msgstr "Rotazione"
 
 #: bazzite_portal/artwork/appearance.py:17
 msgid "Bouncing"
-msgstr ""
+msgstr "Rimbalzo"
 
 #: bazzite_portal/artwork/appearance.py:18
 msgid "Spinning Mono"
-msgstr ""
+msgstr "Rotazione monocromatica"
 
 #: bazzite_portal/artwork/appearance.py:19
 msgid "Bouncing Mono"
-msgstr ""
+msgstr "Rimbalzo monocromatico"
 
 #: bazzite_portal/core/errors.py:65
 #, python-brace-format
@@ -44,40 +44,55 @@ msgid ""
 "Not enough free space. Free up space and try again. System updates need at "
 "least {minimum_free_space} free space on the installation drive."
 msgstr ""
+"Spazio libero insufficiente. Libera spazio e riprova. Gli aggiornamenti di "
+"sistema richiedono almeno {minimum_free_space} di spazio libero nell'unità "
+"di installazione."
 
 #: bazzite_portal/core/errors.py:68
 msgid ""
 "The download's signature could not be verified. Try again later. If the "
 "problem continues, open Logs for details."
 msgstr ""
+"Non è stato possibile verificare la firma del download. Riprova più tardi. "
+"Se il problema persiste, apri i file di log per maggiori dettagli."
 
 #: bazzite_portal/core/errors.py:70
 msgid ""
 "A downloaded file failed checksum verification. Try again later and check "
 "the operation log if the problem continues."
 msgstr ""
+"La verifica del checksum di un file scaricato non è riuscita. Riprova più "
+"tardi e, se il problema persiste, consulta i log delle operazioni."
 
 #: bazzite_portal/core/errors.py:72
 msgid ""
 "A package conflict is blocking this system change. Review your layered apps "
 "in System Management, then try again."
 msgstr ""
+"Un conflitto tra pacchetti impedisce questa modifica al sistema. Controlla "
+"le applicazioni installate tramite layering in Gestione del sistema, quindi "
+"riprova."
 
 #: bazzite_portal/core/errors.py:74
 msgid "The download server is busy. Wait a little and try again."
-msgstr ""
+msgstr "Il server di download è occupato. Riprova più tardi."
 
 #: bazzite_portal/core/errors.py:76
 msgid ""
 "Could not connect to the download server. Check your connection and try "
 "again."
 msgstr ""
+"Impossibile connettersi al server di download. Controlla la connessione a "
+"Internet e riprova."
 
 #: bazzite_portal/core/errors.py:78
 msgid ""
 "Could not download software repository information. Try again later. If this "
 "continues, check your repository settings or open Logs."
 msgstr ""
+"Impossibile scaricare le informazioni sul repository del software. Riprova "
+"più tardi. Se il problema persiste, controlla le impostazioni del repository "
+"oppure apri i file di log."
 
 #: bazzite_portal/core/errors.py:121 bazzite_portal/ui/application.py:2287
 #: bazzite_portal/ui/application.py:2290 bazzite_portal/ui/application.py:2562
@@ -102,7 +117,7 @@ msgstr ""
 
 #: bazzite_portal/input/prompts.py:119
 msgid "D-pad"
-msgstr ""
+msgstr "Croce direzionale"
 
 #: bazzite_portal/integration/community.py:13
 #, python-brace-format
@@ -165,11 +180,15 @@ msgstr ""
 msgid ""
 "Resolve the selected next-boot deployment before clearing the download cache."
 msgstr ""
+"Prima di svuotare la cache dei download, risolvi il problema con la versione "
+"del sistema selezionata per il prossimo avvio."
 
 #: bazzite_portal/maintenance/cancel_pending.py:41
 #, python-brace-format
 msgid "{bootc} deployments cannot be canceled by this workflow."
 msgstr ""
+"Le versioni del sistema {bootc} non possono essere annullate tramite questa "
+"procedura."
 
 #: bazzite_portal/maintenance/cancel_pending.py:51
 #: bazzite_portal/maintenance/channel_switch.py:52
