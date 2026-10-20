@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: Bazzite Portal / App\n"
 "Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/"
 "app/\n"
-"POT-Creation-Date: 2026-10-20 14:51+0200\n"
-"PO-Revision-Date: 2026-10-19 19:29+0000\n"
+"POT-Creation-Date: 2026-10-20 15:03+0200\n"
+"PO-Revision-Date: 2026-10-20 13:03+0000\n"
 "Last-Translator: dani3690 <dani3690@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/bazzite-portal/"
 "app/it/>\n"
@@ -38,11 +38,11 @@ msgstr ""
 msgid "Bouncing Mono"
 msgstr ""
 
-#: bazzite_portal/core/errors.py:66
-#, no-python-format
+#: bazzite_portal/core/errors.py:65
+#, python-brace-format
 msgid ""
 "Not enough free space. Free up space and try again. System updates need at "
-"least 3% free space on the installation drive."
+"least {minimum_free_space} free space on the installation drive."
 msgstr ""
 
 #: bazzite_portal/core/errors.py:68
@@ -97,7 +97,8 @@ msgstr "L'autorizzazione non è stata concessa. Riprova oppure annulla."
 #: bazzite_portal/ui/maintenance.py:1433 bazzite_portal/ui/maintenance.py:1659
 msgid "Details are unavailable. Open Logs for more information."
 msgstr ""
-"I dettagli non sono disponibili. Apri i log per ulteriori informazioni."
+"I dettagli non sono disponibili. Apri i file di log per ulteriori "
+"informazioni."
 
 #: bazzite_portal/input/prompts.py:119
 msgid "D-pad"
@@ -147,10 +148,10 @@ msgid "{universal_blue} community forums"
 msgstr "Forum della comunità di {universal_blue}"
 
 #: bazzite_portal/maintenance/cache_clear.py:68
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "An {rpm_ostree} transaction is active or status is unavailable."
 msgstr ""
-"È in corso una transazione di {rpm_ostree} oppure il suo stato non è "
+"È in corso una operazione di {rpm_ostree} oppure il suo stato non è "
 "disponibile."
 
 #: bazzite_portal/maintenance/cache_clear.py:75
@@ -177,7 +178,7 @@ msgstr ""
 #: bazzite_portal/maintenance/reset_layers.py:49
 #, python-brace-format
 msgid "An {rpm_ostree} transaction is active."
-msgstr "È in corso una transazione di {rpm_ostree}."
+msgstr "È in corso una operazione di {rpm_ostree}."
 
 #: bazzite_portal/maintenance/cancel_pending.py:64
 msgid "There is no pending deployment."
@@ -186,14 +187,15 @@ msgstr "Non è presente alcuna operazione di sistema in sospeso."
 #: bazzite_portal/maintenance/cancel_pending.py:66
 msgid "The next boot is a scheduled rollback or other non-staged deployment."
 msgstr ""
-"Il prossimo avvio è programmato per un ripristino alla versione precedente o "
-"per un'altra installazione non predisposta."
+"Al prossimo avvio è previsto il ripristino a una versione precedente del "
+"sistema oppure l'avvio di un'altra versione non predisposta come "
+"aggiornamento in sospeso."
 
 #: bazzite_portal/maintenance/cancel_pending.py:68
 msgid "The pending deployment is pinned or its pin state is unknown."
 msgstr ""
-"La versione del sistema in sospeso è bloccata oppure il suo stato di blocco "
-"è sconosciuto."
+"La versione del sistema in sospeso è contrassegnata per impedirne la "
+"rimozione oppure non è possibile determinarne lo stato."
 
 #: bazzite_portal/maintenance/channel_switch.py:63
 #, python-brace-format
@@ -255,7 +257,7 @@ msgstr ""
 #: bazzite_portal/maintenance/image_switch.py:187
 #, python-brace-format
 msgid "No {track} versions are available for {image}."
-msgstr ""
+msgstr "Non sono disponibili versioni di {track} per {image}."
 
 #: bazzite_portal/maintenance/image_switch.py:207
 #, python-brace-format
@@ -283,8 +285,7 @@ msgstr ""
 #: bazzite_portal/maintenance/reset_layers.py:47
 #: bazzite_portal/ui/maintenance.py:824
 msgid "A different deployment is selected for next boot."
-msgstr ""
-"Per il prossimo avvio è stata selezionata una versione diversa del sistema."
+msgstr "Per il prossimo avvio è selezionata una versione diversa del sistema."
 
 #: bazzite_portal/maintenance/reset_layers.py:86
 #: bazzite_portal/ui/maintenance.py:823
@@ -308,19 +309,21 @@ msgstr "Apri Aggiornamenti per consultare il registro delle operazioni."
 #: bazzite_portal/services/agent.py:465 bazzite_portal/ui/application.py:681
 #: bazzite_portal/ui/application.py:858 bazzite_portal/ui/application.py:3634
 msgid "Open Updates"
-msgstr ""
+msgstr "Apri Aggiornamenti"
 
 #: bazzite_portal/services/agent.py:574
 msgid "Another operation request is pending."
-msgstr ""
+msgstr "C'è un'altra operazione in attesa."
 
 #: bazzite_portal/services/agent.py:617
 msgid "Operation request failed."
-msgstr ""
+msgstr "Si è verificato un errore durante l'operazione."
 
 #: bazzite_portal/services/agent.py:730 bazzite_portal/ui/application.py:2577
 msgid "Could not read update status. Open Logs for details."
 msgstr ""
+"Impossibile leggere lo stato dell'aggiornamento. Apri i file di log per "
+"maggiori dettagli."
 
 #: bazzite_portal/services/tray.py:295
 msgid "Updating"
@@ -451,23 +454,23 @@ msgstr "Opzioni"
 
 #: bazzite_portal/ui/application.py:216
 msgid "Installed"
-msgstr ""
+msgstr "Installato"
 
 #: bazzite_portal/ui/application.py:216
 msgid "Enabled"
-msgstr ""
+msgstr "Attivato"
 
 #: bazzite_portal/ui/application.py:216
 msgid "Not installed"
-msgstr ""
+msgstr "Non installato"
 
 #: bazzite_portal/ui/application.py:217
 msgid "Disabled"
-msgstr ""
+msgstr "Disattivato"
 
 #: bazzite_portal/ui/application.py:217
 msgid "Removed"
-msgstr ""
+msgstr "Rimosso"
 
 #: bazzite_portal/ui/application.py:249 bazzite_portal/ui/application.py:251
 #: bazzite_portal/ui/application.py:253 bazzite_portal/ui/maintenance.py:23
@@ -477,7 +480,7 @@ msgstr "Non disponibile"
 
 #: bazzite_portal/ui/application.py:266
 msgid "None recorded"
-msgstr ""
+msgstr "Non sono presenti pacchetti"
 
 #: bazzite_portal/ui/application.py:314 bazzite_portal/ui/application.py:318
 #: bazzite_portal/ui/application.py:319 bazzite_portal/ui/application.py:1289
@@ -487,16 +490,16 @@ msgstr ""
 #: bazzite_portal/ui/image_wizard.py:161 bazzite_portal/ui/image_wizard.py:165
 #: bazzite_portal/ui/maintenance.py:1097 bazzite_portal/ui/maintenance.py:1281
 msgid "Back"
-msgstr ""
+msgstr "Indietro"
 
 #: bazzite_portal/ui/application.py:366
 msgid "Gaming-mode authentication is unavailable."
-msgstr ""
+msgstr "L'autenticazione in modalità gioco non è disponibile."
 
 #: bazzite_portal/ui/application.py:373
 msgid ""
 "Controller input is unavailable. Reconnect your controller and try again."
-msgstr ""
+msgstr "Il controller non è disponibile. Ricollegalo e riprova."
 
 #: bazzite_portal/ui/application.py:379 bazzite_portal/ui/application.py:1515
 #: bazzite_portal/ui/application.py:1525 bazzite_portal/ui/application.py:1801
