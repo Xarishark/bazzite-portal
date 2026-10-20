@@ -2144,6 +2144,8 @@ def restart():
         raise RuntimeError(error or N_("There is no pending deployment to restart into."))
     if _cache_service_is_running():
         raise RuntimeError(N_("Download-cache cleanup is running. Wait for it to finish."))
+    if _image_switch_service_is_running() or _delete_service_is_running():
+        raise RuntimeError(N_("Another deployment-management operation is running. Wait for it to finish."))
     command(["systemctl", "reboot"])
 
 
