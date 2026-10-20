@@ -217,6 +217,7 @@ class SystemManagementUI:
         self.stack.add_named(management_page, "Management")
 
     @staticmethod
+
     def _short_deployment_text(value, limit):
         text = str(value).strip() if value is not None else ""
         if not text:
@@ -443,9 +444,6 @@ class SystemManagementUI:
         if row is None:
             return
         state = getattr(self.snapshot, kind + "_state", "unavailable")
-        unit = getattr(self.snapshot, kind + "_unit", "")
-        invocation = getattr(self.snapshot, kind + "_invocation", "")
-        acknowledged = (kind, *self._maintenance_key(kind, unit, invocation)) in getattr(self, "maintenance_acknowledged", set())
         pending = kind in getattr(self, "maintenance_pending_units", {})
         busy = request_active or allow_open and pending or allow_open and state == "running"
         spinner = getattr(row, "maintenance_spinner", None)
@@ -471,14 +469,12 @@ class SystemManagementUI:
         spinner.start() if busy else spinner.stop()
         for css_class in ("success", "error"):
             row.remove_css_class(css_class)
-        can_reopen = bool(allow_open and (request_active or unit and (state == "running" or
-                                    state in {"success", "failed", "unknown"} and not acknowledged))
-                          )
+        can_reopen = bool(allow_open and (request_active or self._maintenance_row_should_open(kind)))
         if can_reopen:
             row.set_sensitive(True)
             row.set_activatable(True)
 
-    def _sync_maintenance_row(self, kind):
+    def _reconcile_maintenance_pending(self, kind):
         pending = getattr(self, "maintenance_pending_units", {}).get(kind)
         if pending:
             unit = getattr(self.snapshot, kind + "_unit", "")
@@ -491,6 +487,9 @@ class SystemManagementUI:
             if unit == pending["unit"] and (fresh_invocation or new_generation and authoritative_terminal_without_invocation):
                 self.maintenance_pending_units.pop(kind, None)
                 self.maintenance_expected_units.pop(kind, None)
+
+    def _sync_maintenance_row(self, kind):
+        self._reconcile_maintenance_pending(kind)
         if kind == "rollback":
             rows = (getattr(self, "rollback_row", None),)
             request_active = getattr(self, "rollback_request_active", False) or kind in self.maintenance_pending_units
@@ -976,6 +975,7 @@ class SystemManagementUI:
                     if expected_unit == getattr(self.snapshot, kind + "_unit", "") else "",
                 "previous_generation": self._maintenance_key(kind)[2],
             }
+            self._render_status()
         dialog = Adw.Window(transient_for=self, modal=True, default_width=560,
                             title={"rollback": (_("Cancel rollback") if unit.startswith("bazzite-portal-maintenance@cancel-rollback-") else _("Rollback")), "cancel": _("Cancel pending deployment"),
                                    "layer": _("Remove layered apps"), "cache": _("Clear download cache"),
@@ -1071,6 +1071,7 @@ class SystemManagementUI:
         return
 
     @staticmethod
+
     def _set_maintenance_indicator(dialog, state):
         state = state if state in {"running", "success", "failed"} else "unknown"
         dialog.maintenance_spinner.set_visible(state == "running")

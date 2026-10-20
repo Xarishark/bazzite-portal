@@ -1465,7 +1465,7 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
     def _render_home_activity(self):
         if not hasattr(self, "home_status"):
             return
-        running = bool(self.snapshot.running)
+        running = bool(self._active_system_operations() or self._deployment_transaction_active())
         if running:
             self.home_status.add_css_class("bazzite-update-active-row")
         else:
@@ -2243,17 +2243,13 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         management = self.snapshot.management
         if isinstance(management, dict) and management:
             return bool((management.get("summary") or {}).get("transaction"))
-        return bool((self.image_deployment_status or {}).get("transaction"))
+        return bool((getattr(self, "image_deployment_status", None) or {}).get("transaction"))
 
-    def _management_blocker_reason(self, excluding=None):
-        """Return the shared explanation when another system action is active."""
-        if excluding and self._maintenance_row_should_open(excluding):
-            return ""
-        if self._deployment_transaction_active():
-            return N_('Another system operation is running. Wait for it to finish.')
+    def _active_system_operations(self):
+        """Include requests awaiting service discovery, not just live transactions."""
         state = self.snapshot
         active = set()
-        if state.running:
+        if state.running or getattr(self, "_update_request_pending", False):
             active.add("update")
         checks = {
             "rollback": (getattr(self, "rollback_request_active", False)
@@ -2267,21 +2263,29 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
                       or getattr(state, "cache_state", "") == "running"),
             "channel": (getattr(self, "channel_request_active", False)
                         or getattr(state, "channel_state", "") == "running"
-                        or isinstance(self.channel_status, dict)
+                        or isinstance(getattr(self, "channel_status", None), dict)
                         and self.channel_status.get("state") == "running"),
             "image": (getattr(self, "image_request_active", False)
                       or getattr(state, "image_state", "") == "running"
-                      or isinstance(self.image_status, dict)
+                      or isinstance(getattr(self, "image_status", None), dict)
                       and self.image_status.get("state") == "running"),
             "delete": (getattr(self, "delete_request_active", False)
                        or getattr(state, "delete_state", "") == "running"
-                       or isinstance(self.delete_status, dict)
+                       or isinstance(getattr(self, "delete_status", None), dict)
                        and self.delete_status.get("state") == "running"),
         }
         active.update(kind for kind, running in checks.items() if running)
         active.update(kind for kind in getattr(self, "maintenance_pending_units", {})
                       if kind in checks)
-        active.discard(excluding)
+        return active
+
+    def _management_blocker_reason(self, excluding=None):
+        """Return the shared explanation when another system action is active."""
+        if excluding and self._maintenance_row_should_open(excluding):
+            return ""
+        if self._deployment_transaction_active():
+            return N_('Another system operation is running. Wait for it to finish.')
+        active = self._active_system_operations() - {excluding}
         if active:
             return N_('Another system operation is running. Wait for it to finish.')
         return ""
@@ -2289,10 +2293,7 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
     def _primary_update_action(self):
         if not self.status_received:
             return
-        if self._deployment_transaction_active():
-            return
-        if (getattr(self, "_update_request_pending", False) or self.snapshot.running or self.snapshot.cancel_state == "running"
-                or self.snapshot.layer_state == "running"):
+        if self._management_blocker_reason():
             return
         if not self.snapshot.available:
             return
@@ -2506,6 +2507,10 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
 
     def _render_status(self):
         state = self.snapshot
+        for kind in tuple(self.maintenance_pending_units):
+            self._reconcile_maintenance_pending(kind)
+        active_operations = self._active_system_operations()
+        maintenance_busy = bool(active_operations - {"update"})
         historical_run = bool(state.run and not state.running
                               and state.run != getattr(self, "_observed_update_run", ""))
         dismissed_result = (not state.running and state.result in {"success", "failed"}
@@ -2528,6 +2533,12 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         self.log_heading.set_text(_("Update log"))
         if state.running:
             text = N_("Rolling back…") if state.operation == "rollback" else C_('{bazzite} is updating…', bazzite='Bazzite')
+        elif active_operations & {"channel", "image"}:
+            text = N_("Rebasing…")
+        elif "rollback" in active_operations:
+            text = N_("Rolling back…")
+        elif maintenance_busy:
+            text = N_("System operation in progress…")
         else:
             text = C_('Update {bazzite} and Apps', bazzite='Bazzite')
         detail = state.stage if state.running and state.stage else ""
@@ -2544,15 +2555,21 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
                 row = self._update_step_rows.get(identity)
                 if row is not None:
                     detail = " • ".join(filter(None, (row.get_title(), row.get_subtitle())))
-        if state.running and error_text(state.error, N_('Details are unavailable. Open Logs for more information.'), context='_render_status'):
-            detail = (detail + " · " if detail else "") + error_text(state.error, N_('Details are unavailable. Open Logs for more information.'), context='_render_status')
+        status_error = error_text(state.error, N_('Details are unavailable. Open Logs for more information.'), context='_render_status')
+        if state.running and status_error:
+            detail = (detail + " · " if detail else "") + status_error
+        if maintenance_busy and not state.running:
+            detail = N_('Another system operation is running. Wait for it to finish.')
         self.home_status.set_title(format_message(text))
         self.home_status.set_subtitle(format_message(format_message(detail) if detail else _("Update your system and installed apps.")))
         errors = []
         transaction_active = self._deployment_transaction_active()
-        self.update_transaction_notice.set_visible(transaction_active and not state.running)
-        if error_text(state.error, N_('Details are unavailable. Open Logs for more information.'), context='_render_status') and state.result != "failed":
-            errors.append(error_text(state.error, N_('Details are unavailable. Open Logs for more information.'), context='_render_status'))
+        self.update_transaction_notice.set_text(format_message(
+            N_('Another system operation is running. Wait for it to finish.') if maintenance_busy
+            else C_('An {rpm_ostree} transaction is active. Wait for it to finish before updating or restarting.', rpm_ostree='RPM-OSTree')))
+        self.update_transaction_notice.set_visible((transaction_active or maintenance_busy) and not state.running)
+        if status_error and state.result != "failed":
+            errors.append(status_error)
         if state.deployment and not state.deployment_known:
             errors.append(C_('A system change is pending, but {app_name} could not verify it. Restart is unavailable until its status can be checked.', app_name='Bazzite Portal'))
         if self.status_received and not state.available:
@@ -2561,11 +2578,19 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         self.update_error.set_visible(bool(errors))
         reboot_ready = bool(state.deployment and state.deployment_known and not state.running)
         request_pending = getattr(self, "_update_request_pending", False)
-        self.update_button.set_label(format_message(_("Updating…") if state.running or request_pending else _("Restart") if reboot_ready else _("Update")))
+        if state.running or request_pending:
+            update_label = _("Updating…")
+        elif maintenance_busy or transaction_active:
+            update_label = _("Busy")
+        elif reboot_ready:
+            update_label = _("Restart")
+        else:
+            update_label = _("Update")
+        self.update_button.set_label(format_message(update_label))
         self.update_button.set_visible(True)
         self.update_button.set_sensitive(self.status_received and state.available
-            and not state.running and not request_pending and not transaction_active and (not state.deployment or state.deployment_known)
-            and state.cancel_state != "running" and state.layer_state != "running")
+            and not state.running and not request_pending and not transaction_active and not maintenance_busy
+            and (not state.deployment or state.deployment_known))
         self._sync_rollback_ui()
         self._sync_cancel_pending_ui()
         self._sync_channel_ui()
