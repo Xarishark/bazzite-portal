@@ -9,6 +9,8 @@ import sys
 from typing import Any, Callable
 
 from bazzite_portal.maintenance import cancel_pending
+from bazzite_portal.maintenance import runtime
+from bazzite_portal.maintenance.status import read_status
 
 MAX_DEPLOYMENTS = 64
 MAX_IDENTITY_BYTES = 128 * 1024
@@ -29,7 +31,7 @@ def _text(value: Any, limit: int, *, empty: bool = False) -> bool:
 def _snapshot(data: Any) -> list[dict[str, Any]]:
     if not isinstance(data, dict) or "deployments" not in data:
         raise ValueError("RPM-OSTree deployment data is unavailable.")
-    if cancel_pending._has_transaction(data.get("transaction")):
+    if runtime.has_transaction(data.get("transaction")):
         raise ValueError("An RPM-OSTree transaction is active.")
     entries = data["deployments"]
     if not isinstance(entries, list) or not entries or len(entries) > MAX_DEPLOYMENTS:
@@ -42,7 +44,7 @@ def _snapshot(data: Any) -> list[dict[str, Any]]:
         deployment_id, checksum = entry.get("id"), entry.get("checksum")
         osname, reference = entry.get("osname"), entry.get("container-image-reference", "")
         if (not _text(deployment_id, 256) or deployment_id != deployment_id.strip()
-                or not isinstance(checksum, str) or not cancel_pending.CHECKSUM_PATTERN.fullmatch(checksum)
+                or not isinstance(checksum, str) or not runtime.CHECKSUM_PATTERN.fullmatch(checksum)
                 or not _text(osname, 256) or osname != osname.strip()
                 or not _text(reference, 2048, empty=True)
                 or not isinstance(entry.get("booted"), bool)
@@ -80,12 +82,12 @@ def target(data: Any) -> dict[str, Any]:
     except ValueError as exc:
         return _unavailable(str(exc))
     return {"available": True, "token": hashlib.sha256(_encoded(identities)).hexdigest(),
-            "reason": "", "version": cancel_pending._clean(data["deployments"][booted_index].get("version")),
+            "reason": "", "version": runtime.clean_text(data["deployments"][booted_index].get("version")),
             "identity": identities[booted_index]["checksum"]}
 
 
-def execute(token: str, command_runner: Callable[..., str] = cancel_pending._command,
-            lock_factory: Callable[[], Any] = cancel_pending._pending_lock) -> str:
+def execute(token: str, command_runner: Callable[..., str] = runtime.command,
+            lock_factory: Callable[[], Any] = runtime.maintenance_lock) -> str:
     """Restore the confirmed running deployment without deleting any saved one."""
     if not isinstance(token, str) or not TOKEN_PATTERN.fullmatch(token):
         raise ValueError("Invalid rollback cancellation token.")
@@ -94,20 +96,20 @@ def execute(token: str, command_runner: Callable[..., str] = cancel_pending._com
     with lock_factory():
         current = None
         for _ in range(2):
-            current = cancel_pending._read_status(command_runner)
+            current = read_status(command_runner)
             candidate = target(current)
             if not candidate["available"] or candidate["token"] != token:
                 raise RuntimeError(candidate["reason"] or "The deployment list changed after confirmation.")
-            active = cancel_pending._active_operation(command_runner)
+            active = runtime.active_operation(command_runner)
             if active:
                 raise RuntimeError(f"Cannot cancel rollback while {active} is running.")
         assert current is not None
         before = _snapshot(current)
         index = next(index for index, item in enumerate(before) if item["booted"])
-        if command_runner is cancel_pending._command:
+        if command_runner is runtime.command:
             print("Restoring the running deployment as the next boot default...", flush=True)
         command_runner(["ostree", "admin", "set-default", str(index)], timeout=None)
-        after_data = cancel_pending._read_status(command_runner)
+        after_data = read_status(command_runner)
         try:
             after = _snapshot(after_data)
         except ValueError as exc:

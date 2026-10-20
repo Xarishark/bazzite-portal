@@ -37,6 +37,7 @@ from bazzite_portal.maintenance import state as maintenance_state
 from bazzite_portal.updates import trace as update_trace
 from bazzite_portal.maintenance import service as maintenance_service
 from bazzite_portal.maintenance import deployments as deployments_backend
+from bazzite_portal.maintenance import runtime as maintenance_runtime
 from bazzite_portal.core.i18n import C_, N_
 
 UUPD_CONFIG_PATH = "/etc/uupd/config.json"
@@ -1893,7 +1894,7 @@ def start_operation(operation):
 def _require_no_active_rpm_ostree_transaction():
     """Recheck authoritative rpm-ostree state immediately before starting a job."""
     raw = command(["rpm-ostree", "status", "--json"])
-    if not isinstance(raw, str) or len(raw.encode("utf-8", errors="replace")) > cancel_pending_backend.MAX_STATUS_BYTES:
+    if not isinstance(raw, str) or len(raw.encode("utf-8", errors="replace")) > maintenance_runtime.MAX_OUTPUT_BYTES:
         raise RuntimeError("Could not verify RPM-OSTree transaction state.")
     try:
         data = json.loads(raw)
@@ -1902,7 +1903,7 @@ def _require_no_active_rpm_ostree_transaction():
     if (not isinstance(data, dict) or "transaction" not in data
             or not deployments_backend.summarize_deployments(data).get("known")):
         raise RuntimeError("Could not verify RPM-OSTree transaction state.")
-    if cancel_pending_backend._has_transaction(data["transaction"]):
+    if maintenance_runtime.has_transaction(data["transaction"]):
         raise RuntimeError(C_('An {rpm_ostree} transaction is active. Wait for it to finish.', rpm_ostree='RPM-OSTree'))
 
 

@@ -8,6 +8,8 @@ import sys
 from typing import Any
 
 from bazzite_portal.maintenance import reset_layers
+from bazzite_portal.maintenance import runtime
+from bazzite_portal.maintenance.status import read_status
 
 INSTANCE_PATTERN = re.compile(r"^([0-9a-f]{64})-([0-9a-f]{64})$")
 
@@ -32,7 +34,7 @@ def execute(token: str, bitmap: str) -> str:
         raise ValueError("Invalid package-layer removal token.")
     if not isinstance(bitmap, str) or not re.fullmatch(r"[0-9a-f]{64}", bitmap):
         raise ValueError("Invalid package selection bitmap.")
-    data = reset_layers._read_status(reset_layers._command)
+    data = read_status(runtime.command)
     chosen = decode_selection(data, token, bitmap)
     return reset_layers.execute(token, selected_packages=chosen)
 

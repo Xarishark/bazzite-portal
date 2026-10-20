@@ -10,7 +10,8 @@ import subprocess
 import sys
 from typing import Any, Callable
 
-from bazzite_portal.maintenance import cancel_pending
+from bazzite_portal.maintenance import runtime
+from bazzite_portal.maintenance.status import read_status as _read_status
 
 TOKEN_PATTERN = re.compile(r"^[0-9a-f]{64}$")
 CHECKSUM_PATTERN = re.compile(r"^[0-9a-fA-F]{64}$")
@@ -101,18 +102,8 @@ def _display(value: Any) -> str:
     return cleaned[:512] or "Unknown"
 
 
-def _read_status(run_command: Callable[..., str]) -> dict[str, Any]:
-    try:
-        data = json.loads(run_command(["rpm-ostree", "status", "--json"], timeout=15))
-    except (TypeError, ValueError) as exc:
-        raise RuntimeError("RPM-OSTree returned malformed deployment status.") from exc
-    if not isinstance(data, dict):
-        raise RuntimeError("RPM-OSTree returned malformed deployment status.")
-    return data
-
-
 def _busy(run_command: Callable[..., str]) -> str:
-    return cancel_pending._active_operation(run_command)
+    return runtime.active_operation(run_command)
 
 
 def _candidate_for_token(data: dict[str, Any], token: str) -> tuple[int, dict[str, Any], dict[str, Any]]:
@@ -146,8 +137,8 @@ def _all_identities(data: dict[str, Any]) -> list[tuple[dict[str, Any], bool, bo
     return result
 
 
-def execute(token: str, command_runner: Callable[..., str] = cancel_pending._command,
-            lock_factory: Callable[[], Any] = cancel_pending._pending_lock) -> str:
+def execute(token: str, command_runner: Callable[..., str] = runtime.command,
+            lock_factory: Callable[[], Any] = runtime.maintenance_lock) -> str:
     """Revalidate one displayed target, unpin if necessary, then undeploy and verify."""
     if not isinstance(token, str) or not TOKEN_PATTERN.fullmatch(token):
         raise ValueError("Invalid saved-deployment deletion token.")
