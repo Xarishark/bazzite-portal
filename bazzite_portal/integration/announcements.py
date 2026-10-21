@@ -8,7 +8,6 @@ from pathlib import Path
 from urllib.parse import urlsplit
 
 MAX_FILE_BYTES = 256 * 1024
-MAX_ITEMS = 50
 MAX_TITLE_LENGTH = 256
 MAX_SUBTITLE_LENGTH = 512
 MAX_LINK_LENGTH = 2048
@@ -66,9 +65,6 @@ def load_announcements(path: str | Path) -> list[dict[str, object]]:
         raise AnnouncementLoadError("The announcements file could not be read.") from exc
     if not isinstance(document, list):
         raise AnnouncementLoadError("The announcements file must contain a YAML list.")
-    if len(document) > MAX_ITEMS:
-        raise AnnouncementLoadError("The announcements file contains too many items.")
-
     result: list[dict[str, object]] = []
     for index, item in enumerate(document, start=1):
         if not isinstance(item, dict) or set(item) - {"title", "date", "link", "subtitle"}:
