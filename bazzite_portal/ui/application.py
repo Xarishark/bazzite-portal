@@ -1745,7 +1745,8 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
                     and getattr(target_dialog, "portal_item", None) is item):
                 self._apply_portal_status_to_dialog(target_dialog, item, normalized)
 
-        self.work(lambda: portal.status(script), status_ready, executor=self.portal_status_executor)
+        self.work(lambda: portal.status(script, tool=action.get("id") or action.get("title")),
+                  status_ready, executor=self.portal_status_executor)
 
     def _add_favorite_hit_area(self, row, item, favorite):
         area = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)

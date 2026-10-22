@@ -1,7 +1,10 @@
 """Image-owned YAML and stable action references, independent of GTK."""
 import hashlib
 import json
+import logging
 import subprocess
+
+log = logging.getLogger(__name__)
 
 DEFAULT_CONFIG = "/usr/share/bazzite-portal/tools.yml"
 
@@ -56,11 +59,14 @@ def terminal(script):
     return subprocess.Popen(["xdg-terminal-exec", "--app-id=" + APP_ID, "--title=Bazzite Portal", "--", "bash", "--noprofile", "--norc", "-lc", script])
 
 
-def status(script):
+def status(script, *, tool=None):
     if not script:
         return ""
     try:
         result = subprocess.run(["bash", "--noprofile", "--norc", "-lc", script], capture_output=True, text=True, timeout=3)
         return next((line.strip() for line in result.stdout.splitlines() if line.strip()), "") if result.returncode == 0 else ""
-    except (OSError, subprocess.TimeoutExpired):
+    except subprocess.TimeoutExpired as error:
+        log.warning("Tool status check timed out after %ss (tool=%r)", error.timeout, tool or "unspecified")
+        return ""
+    except OSError:
         return ""
