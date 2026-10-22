@@ -30,7 +30,7 @@ ARTWORK_KINDS = (
     "native-gnome-restart", "native-gnome-failed",
 )
 ANIMATED_KINDS = ("updating", "bouncing", "kde", "updating-mono",
-                  "bouncing-mono", "native-kde-update")
+                  "bouncing-mono", "native-kde-update", "native-gnome-update")
 NATIVE_PATHS = {
     "native-kde-restart": KDE_RESTART, "native-kde-failed": KDE_FAILED,
     "native-gnome-restart": GNOME_RESTART, "native-gnome-failed": GNOME_FAILED,
@@ -80,29 +80,6 @@ def kde_svg_frames(source, frame_count=FRAME_COUNT):
         frame_paths[1].set("transform", "rotate(%s %s %s)" % (angle, center_x, center_y))
         frames.append(ET.tostring(frame, encoding="unicode"))
     return tuple(frames)
-
-
-def gnome_spinning_svg(source):
-    """Reduce classic spinner padding inside GNOME's small panel icon slot."""
-    if isinstance(source, bytes):
-        source = source.decode("utf-8")
-    try:
-        root = ET.fromstring(source)
-        x, y, width, height = map(float, root.get("viewBox", "").split())
-    except (ET.ParseError, ValueError) as error:
-        raise ValueError("invalid spinning tray SVG viewBox") from error
-    if (root.tag.split("}")[-1] != "svg"
-            or not all(math.isfinite(value) for value in (x, y, width, height))
-            or width <= 0 or height <= 0):
-        raise ValueError("invalid spinning tray SVG viewBox")
-    inset = 1 / 16
-    root.set("viewBox", " ".join(format(value, ".12g") for value in (
-        x + width * inset, y + height * inset,
-        width * (1 - 2 * inset), height * (1 - 2 * inset))))
-    namespace = root.tag[1:].split("}", 1)[0] if root.tag.startswith("{") else ""
-    if namespace:
-        ET.register_namespace("", namespace)
-    return ET.tostring(root, encoding="unicode")
 
 
 def rotated_svg_frames(source, frame_count=FRAME_COUNT, monochrome=False,
@@ -359,6 +336,28 @@ def _native_kde_frames(source, frame_count=FRAME_COUNT, foreground=MONO):
     return tuple(output)
 
 
+def _native_gnome_frames(source, frame_count=FRAME_COUNT, foreground=MONO):
+    """Bounce the native arrow cutout without moving its surrounding shape."""
+    if frame_count < 1:
+        raise ValueError("frame_count must be positive")
+    root = _monochrome(ET.fromstring(source), foreground=foreground)
+    path = next(item for item in root.iter() if item.tag.split("}")[-1] == "path")
+    outer, separator, arrow = path.get("d", "").partition(" z m 0 5 ")
+    if not separator or not arrow.endswith(" z m 0 0"):
+        raise ValueError("unexpected GNOME update compound path")
+    outer += " z"
+    arrow = "M 8 5 " + arrow.removesuffix(" z m 0 0") + " z"
+    path.set("d", outer)
+    path.set("mask", "url(#tray-motion-mask)")
+    frames = []
+    for index in range(frame_count):
+        canvas = ET.fromstring(ET.tostring(root, encoding="unicode"))
+        offset = 0.5 * math.sin(2 * math.pi * index / frame_count)
+        _add_motion_mask(canvas, outer, "", arrow, "translate(0 %.3f)" % offset)
+        frames.append(ET.tostring(canvas, encoding="unicode"))
+    return tuple(frames)
+
+
 def _native_failure_svg(update_source, failure_source, kde=False, foreground=MONO):
     """Keep the native update symbol and place its native error mark in the badge."""
     try:
@@ -381,18 +380,42 @@ def _native_failure_svg(update_source, failure_source, kde=False, foreground=MON
                  if group is not None else [])
         if len(paths) != 2:
             raise ValueError("unexpected KDE update SVG structure")
-        # Keep the busy symbol's arrow, remove its disk and spinner, and reuse
-        # that exact badge position for the installed native failure symbol.
+        # Keep the busy symbol's arrow, remove its disk and spinner, and fit
+        # the native failure badge within the source SVG's lower-right area.
         group.remove(paths[0])
         group.remove(paths[1])
-        x, y, size = "11", "11", "10"
+        viewbox = [float(value) for value in root.get("viewBox").split()]
+        x = format(viewbox[0] + viewbox[2] * .5, "g")
+        y = format(viewbox[1] + viewbox[3] * .5, "g")
+        size = format(viewbox[2] * 10 / 22, "g")
     else:
         viewbox = [float(value) for value in root.get("viewBox").split()]
         if len(viewbox) != 4:
             raise ValueError("invalid native update viewBox")
         x, y, size = str(viewbox[0] + viewbox[2] * .58), str(viewbox[1] + viewbox[3] * .58), str(viewbox[2] * .38)
-    nested_tag = "{%s}svg" % namespace if namespace else "svg"
-    nested = ET.SubElement(root, nested_tag, {
+    tag = "{%s}" % namespace if namespace else ""
+    # The emblem's transparent details must reveal the panel, not the update
+    # symbol underneath; otherwise a monochrome error mark becomes a solid dot.
+    body = ET.Element(tag + "g", {"mask": "url(#native-error-background-mask)"})
+    for child in list(root):
+        if child.tag.split("}")[-1] != "defs":
+            root.remove(child)
+            body.append(child)
+    root.append(body)
+    defs = ET.SubElement(root, tag + "defs")
+    mask = ET.SubElement(defs, tag + "mask", {
+        "id": "native-error-background-mask", "maskUnits": "userSpaceOnUse",
+    })
+    vx, vy, vw, vh = map(float, root.get("viewBox").split())
+    ET.SubElement(mask, tag + "rect", {
+        "x": str(vx), "y": str(vy), "width": str(vw), "height": str(vh), "fill": "white",
+    })
+    ET.SubElement(mask, tag + "circle", {
+        "cx": str(float(x) + float(size) / 2),
+        "cy": str(float(y) + float(size) / 2),
+        "r": str(float(size) * .52), "fill": "black",
+    })
+    nested = ET.SubElement(root, tag + "svg", {
         "x": x, "y": y, "width": size, "height": size,
         "viewBox": failure.get("viewBox"), "preserveAspectRatio": "xMidYMid meet",
     })
@@ -445,14 +468,12 @@ class TrayArtwork:
     """One tray instance's bounded cache of running and pending artwork."""
 
     def __init__(self, svg_path=DEFAULT_SVG, logo_path=DEFAULT_LOGO,
-                 portal_path=DEFAULT_PORTAL, theme_paths=None, foreground=MONO,
-                 panel_desktop=""):
+                 portal_path=DEFAULT_PORTAL, theme_paths=None, foreground=MONO):
         self.svg_path = Path(svg_path)
         self.logo_path = Path(logo_path)
         self.portal_path = Path(portal_path)
         self.theme_paths = theme_paths or {"kde": KDE_UPDATE, "gnome": GNOME_UPDATE}
         self.foreground = foreground
-        self.panel_desktop = panel_desktop
         self._svg = None
         self._running = None
         self._pending = None
@@ -530,10 +551,10 @@ class TrayArtwork:
             return self._native[kind][frame % FRAME_COUNT]
         if kind == "native-gnome-update":
             if kind not in self._native:
-                root = ET.fromstring(self._native_source("gnome"))
-                self._native[kind] = self._render_set(ET.tostring(
-                    _monochrome(root, foreground=self.foreground), encoding="unicode"))
-            return self._native[kind]
+                frames = _native_gnome_frames(self._native_source("gnome"),
+                                              foreground=self.foreground)
+                self._native[kind] = tuple(self._render_set(svg) for svg in frames)
+            return self._native[kind][frame % FRAME_COUNT]
         if kind.startswith("native-") and kind in NATIVE_PATHS:
             if kind not in self._native:
                 if kind.endswith("-failed"):
@@ -554,10 +575,7 @@ class TrayArtwork:
             return self._themes[kind]
         if kind == "updating":
             if self._running is None:
-                source = self._source()
-                if self.panel_desktop == "gnome":
-                    source = gnome_spinning_svg(source)
-                frames = rotated_svg_frames(source)
+                frames = rotated_svg_frames(self._source())
                 self._running = tuple(self._render_set(svg) for svg in frames)
             return self._running[frame % FRAME_COUNT]
         if kind == "kde":

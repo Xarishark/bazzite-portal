@@ -16,6 +16,12 @@ Weblate automatically generates the POT template and manages translations:
 
 <img src=".github/screenshots/home-gnome.png" alt="Bazzite Portal home on GNOME" width="900">
 
+## Icon themes
+
+| Spinning | Bouncing | Spinning Mono | Bouncing Mono | Native (Plasma) | Native (GNOME) |
+| :---: | :---: | :---: | :---: | :---: | :---: |
+| <img src=".github/screenshots/icon-themes/spinning.gif" alt="Spinning icon animation" width="96"> | <img src=".github/screenshots/icon-themes/bouncing.gif" alt="Bouncing icon animation" width="96"> | <img src=".github/screenshots/icon-themes/spinning-mono.gif" alt="Monochrome spinning icon animation" width="96"> | <img src=".github/screenshots/icon-themes/bouncing-mono.gif" alt="Monochrome bouncing icon animation" width="96"> | <img src=".github/screenshots/icon-themes/native-plasma.gif" alt="Native Plasma icon animation" width="96"> | <img src=".github/screenshots/icon-themes/native-gnome.gif" alt="Native GNOME bouncing arrow animation" width="96"> |
+
 ## YAML configuration
 
 The app expects two files in /usr/share/bazzite-portal/:

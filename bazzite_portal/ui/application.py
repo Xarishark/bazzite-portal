@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 import subprocess
 import sys
+import threading
 import gi
 gi.require_version("Gtk", "4.0")
 gi.require_version("Gdk", "4.0")
@@ -284,6 +285,8 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             max_workers=4, thread_name_prefix="bazzite-portal-status")
         self.snapshot = Snapshot()
         self.items = []
+        self._dirty_tools = {}
+        self._tool_status_requests = {}
         self.modal = None
         self.controller = None
         self.controller_navigation = False
@@ -850,6 +853,7 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         self.home_update_artwork = HomeUpdateIcon(self.home_activity_icon, self.executor)
         self.connect("map", lambda *_: (self._render_home_activity(), self._acknowledge_update_result()))
         self.connect("notify::is-active", lambda *_: self._acknowledge_update_result())
+        self.connect("notify::is-active", lambda *_: self._refresh_dirty_tools())
         self.connect("unmap", lambda *_: self._render_home_activity())
         self.stack.connect("notify::visible-child-name", lambda *_: self._render_home_activity())
         self.home_activity = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
@@ -1477,6 +1481,8 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             return
 
     def _render_pins(self):
+        self.pin_group.portal_status_generation = getattr(self.pin_group, "portal_status_generation", 0) + 1
+        self.pin_group.portal_status_rows = {}
         for row in self.pin_rows:
             self.pin_group.remove(row)
         self.pin_rows.clear()
@@ -1485,17 +1491,24 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         for pin in pins:
             item = portal.resolve(self.items, pin)
             title = item["action"].get("title", N_("Action")) if item else pin.get("title") or pin.get("id", N_("Unavailable tool"))
-            subtitle = item["category"] if item else N_("Unavailable or ambiguous · select to unpin")
+            subtitle = item["action"].get("description", "") if item else N_("Unavailable or ambiguous · select to unpin")
             row = Adw.ActionRow(title=GLib.markup_escape_text(title), subtitle=GLib.markup_escape_text(subtitle))
+            row.set_title_lines(2)
+            row.set_subtitle_lines(3)
             row.pinned_reference = pin
             row.controller_focus_row = True
             row.set_activatable(True)
             if item:
+                row.portal_item = item
                 row.connect("activated", lambda *_args, selected=item: self.open_action(selected))
+                if item["action"].get("status_script"):
+                    self._add_tool_status(row, self.pin_group)
             else:
                 row.connect("activated", lambda *_args, selected=pin: self._remove_unavailable_pin(selected))
             self.pin_group.add(row)
             self.pin_rows.append(row)
+            if item and item["action"].get("status_script"):
+                self._request_portal_status(item, row=row)
 
     def _remove_unavailable_pin(self, pin):
         self.confirm(
@@ -1626,7 +1639,7 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             return
         destination = self.search_results_box if self.tools_search_active else self.tools_box
         destination.portal_status_generation = getattr(destination, "portal_status_generation", 0) + 1
-        status_generation = destination.portal_status_generation
+        destination.portal_status_rows = {}
         while child := destination.get_first_child():
             destination.remove(child)
         if self.config_error:
@@ -1660,25 +1673,7 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             row.set_activatable(True)
             row.connect("activated", lambda *_args, selected=item: self.open_action(selected))
             if action.get("status_script"):
-                icon, text = portal_status_presentation("")
-                status = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
-                status.set_valign(Gtk.Align.CENTER)
-                status_icon = Gtk.Label(label=icon)
-                status_text = Gtk.Label(label=text)
-                status_icon.set_wrap(False)
-                status_text.set_wrap(False)
-                status_icon.set_single_line_mode(True)
-                status_text.set_single_line_mode(True)
-                status.append(status_icon)
-                status.append(status_text)
-                status.set_tooltip_text(_("Checking current status…"))
-                status.update_property([Gtk.AccessibleProperty.LABEL], [_("Checking status")])
-                row.add_suffix(status)
-                row.status_box = status
-                row.status_icon = status_icon
-                row.status_text = status_text
-                row.portal_status_generation = status_generation
-                row.portal_status_container = destination
+                self._add_tool_status(row, destination)
             self._add_favorite_hit_area(row, item, pin in pins)
             keys = Gtk.EventControllerKey()
             keys.connect("key-pressed", lambda _keys, keyval, _keycode, _state, selected=item, target=row:
@@ -1687,34 +1682,57 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             row.favorite_key_controller = keys
             groups[category].add(row)
             if action.get("status_script"):
-                self._request_portal_status(item, row=row, generation=status_generation)
+                self._request_portal_status(item, row=row)
 
-    def _request_portal_status(self, item, *, row=None, generation=None, dialog=None):
+    def _add_tool_status(self, row, container):
+        icon, text = portal_status_presentation("")
+        status = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+        status.set_valign(Gtk.Align.CENTER)
+        row.status_icon = Gtk.Label(label=icon)
+        row.status_text = Gtk.Label(label=text)
+        for widget in (row.status_icon, row.status_text):
+            widget.set_wrap(False)
+            widget.set_single_line_mode(True)
+            status.append(widget)
+        status.set_tooltip_text(_("Checking current status…"))
+        status.update_property([Gtk.AccessibleProperty.LABEL], [_("Checking status")])
+        row.add_suffix(status)
+        row.status_box = status
+        row.portal_status_generation = container.portal_status_generation
+        row.portal_status_container = container
+
+    def _request_portal_status(self, item, *, row=None, dialog=None, refresh=False):
         if self.closing:
             return
-        if row is not None and (getattr(row, "portal_status_pending", False)
-                                or hasattr(row, "portal_status_token")):
+        key = id(item)
+        if row is not None:
+            row.portal_status_container.portal_status_rows[key] = row
             if dialog is not None and hasattr(row, "portal_status_token"):
                 self._apply_portal_status_to_dialog(dialog, item, row.portal_status_token)
-            return
+            if not refresh and hasattr(row, "portal_status_token"):
+                return
         action = item.get("action", {})
         script = action.get("status_script")
         if not script:
             return
-        if row is not None:
-            row.portal_status_pending = True
+        if key in self._tool_status_requests:
+            self._tool_status_requests[key] |= refresh
+            return
+        self._tool_status_requests[key] = False
 
         def status_ready(token):
             if self.closing:
                 return
+            if self._tool_status_requests.pop(key):
+                self._request_portal_status(item, refresh=True)
+                return
             normalized = token.strip() if isinstance(token, str) else ""
-            if row is not None:
-                container = row.portal_status_container
-                if (generation != getattr(container, "portal_status_generation", 0)
-                        or row.portal_status_generation != generation
+            for container in (self.pin_group, self.tools_box, self.search_results_box):
+                row = getattr(container, "portal_status_rows", {}).get(key)
+                if (row is None
+                        or row.portal_status_generation != container.portal_status_generation
                         or not row.is_ancestor(container)):
-                    return
-                row.portal_status_pending = False
+                    continue
                 row.portal_status_token = normalized
                 icon, status_text = portal_status_presentation(normalized)
                 row.status_icon.set_text(icon)
@@ -1722,12 +1740,13 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
                 unknown = not normalized or normalized.casefold() == "unknown"
                 row.status_box.set_tooltip_text(format_message(_("Current status is unknown.") if unknown else _("Current status: {status}").format(status=status_text)))
                 row.status_box.update_property([Gtk.AccessibleProperty.LABEL], [_("Status {status}").format(status=status_text)])
-            target_dialog = dialog or self.modal
+            target_dialog = self.modal
             if (target_dialog is not None and target_dialog is self.modal
                     and getattr(target_dialog, "portal_item", None) is item):
                 self._apply_portal_status_to_dialog(target_dialog, item, normalized)
 
-        self.work(lambda: portal.status(script), status_ready, executor=self.portal_status_executor)
+        self.work(lambda: portal.status(script, tool=action.get("id") or action.get("title")),
+                  status_ready, executor=self.portal_status_executor)
 
     def _add_favorite_hit_area(self, row, item, favorite):
         area = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
@@ -1840,11 +1859,36 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         else:
             self._action_dialog(action, item, confirmation=True)
 
-    def _launch_script(self, script, refresh=None):
+    def _refresh_tool_status(self, item):
+        if self.closing:
+            return GLib.SOURCE_REMOVE
+        self._request_portal_status(item, refresh=True)
+        return GLib.SOURCE_REMOVE
+
+    def _refresh_dirty_tools(self):
+        if self.closing or not self.is_active():
+            return
+        dirty, self._dirty_tools = self._dirty_tools, {}
+        for item in dirty.values():
+            self._refresh_tool_status(item)
+
+    def _launch_script(self, script, refresh=None, *, item=None):
         if not script:
             self.toast(N_("No command is configured for this tool."))
             return
-        self.work(lambda: portal.terminal(script), lambda _process: refresh() if refresh else None)
+        def launched(process):
+            if refresh:
+                refresh()
+            if item is None or not item["action"].get("status_script"):
+                return
+            self._dirty_tools[id(item)] = item
+            def finished():
+                process.wait()
+                GLib.idle_add(self._refresh_tool_status, item)
+            # Waiting for an interactive terminal must not occupy a work-pool
+            # slot or keep Portal alive after its window closes.
+            threading.Thread(target=finished, daemon=True).start()
+        self.work(lambda: portal.terminal(script), launched)
 
     def _apply_portal_status_to_dialog(self, dialog, item, token):
         if dialog is not self.modal or getattr(dialog, "portal_item", None) is not item:
@@ -1913,7 +1957,7 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
                 if on_confirm is not None:
                     on_confirm()
                 else:
-                    self._launch_script(action.get("script"))
+                    self._launch_script(action.get("script"), item=item)
 
             for prompt, text, callback in zip(self.confirmation_prompts, (N_("Yes"), N_("No")),
                                                (confirm_yes, dialog.close)):
@@ -1940,7 +1984,7 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
                 box.append(dialog.portal_status_label)
             def run_option(option):
                 dialog.close()
-                self._launch_script(option.get("script"))
+                self._launch_script(option.get("script"), item=item)
             for option in action.get("options") or []:
                 widget = ModalOptionButton(label=option.get("label", N_("Run")))
                 widget.controller_label = option.get("label", N_("Run"))
@@ -1968,12 +2012,12 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
                 if first_option is None:
                     first_option = widget
             if item is not None and action.get("status_script"):
-                current_row = next((candidate for candidate in controller_focus_targets(self.tools_view)
-                                    if getattr(candidate, "portal_item", None) is item), None)
+                current_row = next((rows[id(item)]
+                                    for container in (self.pin_group, self.tools_box, self.search_results_box)
+                                    if id(item) in (rows := getattr(container, "portal_status_rows", {}))), None)
                 if current_row is not None:
                     self._request_portal_status(
                         item, row=current_row,
-                        generation=getattr(current_row, "portal_status_generation", None),
                         dialog=dialog,
                     )
                 else:
@@ -3329,7 +3373,74 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             self._set_favorite_emphasis(widget, True)
         widget.grab_focus()
 
+    def _jump_tool_category(self, step):
+        rows = [target for target in controller_focus_targets(self.tools_view)
+                if getattr(target, "portal_item", None) is not None]
+        if not rows:
+            return
+        categories = {}
+        for row in rows:
+            categories.setdefault(row.portal_item["category"], row)
+        names = list(categories)
+        focus = controller_focused_target(self)
+        item = getattr(focus, "portal_item", None)
+        if item is None or item["category"] not in categories:
+            target = rows[0] if step > 0 else categories[names[-1]]
+        else:
+            index = names.index(item["category"]) + step
+            if not 0 <= index < len(names):
+                return
+            target = categories[names[index]]
+        self._scroll_tool_category(target)
+
+    def _stop_tool_category_scroll(self):
+        animation = getattr(self, "_category_scroll_animation", None)
+        if animation is not None:
+            animation.pause()
+            self._category_scroll_animation = None
+        restore = getattr(self, "_category_scroll_restore", None)
+        if restore is not None:
+            restore()
+            self._category_scroll_restore = None
+
+    def _scroll_tool_category(self, row):
+        self._stop_tool_category_scroll()
+        scroll = self.catalog_scroll
+        viewport = scroll.get_child()
+        content = viewport.get_child() if isinstance(viewport, Gtk.Viewport) else viewport
+        category = row.get_ancestor(Adw.PreferencesGroup)
+        bounds = (category or row).compute_bounds(content)
+        if not bounds[0]:
+            self._set_controller_focus(row)
+            return
+        adjustment = scroll.get_vadjustment()
+        destination = max(adjustment.get_lower(), min(bounds[1].get_y() - 12,
+                          adjustment.get_upper() - adjustment.get_page_size()))
+        # GTK's automatic focus reveal otherwise scrolls the first tool to
+        # the bottom before our category-heading animation can begin.
+        if isinstance(viewport, Gtk.Viewport):
+            previous = viewport.get_scroll_to_focus()
+            viewport.set_scroll_to_focus(False)
+            self._category_scroll_restore = lambda: viewport.set_scroll_to_focus(previous)
+        self._set_controller_focus(row)
+        target = Adw.PropertyAnimationTarget.new(adjustment, "value")
+        animation = Adw.TimedAnimation.new(scroll, adjustment.get_value(), destination, 160, target)
+        animation.set_easing(Adw.Easing.EASE_OUT_CUBIC)
+        self._category_scroll_animation = animation
+        def finished(*_args):
+            if self._category_scroll_animation is animation:
+                self._category_scroll_animation = None
+                restore = getattr(self, "_category_scroll_restore", None)
+                if restore is not None:
+                    restore()
+                    self._category_scroll_restore = None
+        animation.connect("done", finished)
+        animation.play()
+
     def _dispatch(self, command):
+        if (command not in ("left", "right") or self.modal is not None
+                or self.stack.get_visible_child_name() != N_("Tools") or self.tools_search_active):
+            self._stop_tool_category_scroll()
         labels = getattr(getattr(self.controller, "backend", None), "button_labels", {})
         self._refresh_context_prompts(labels)
         self._refresh_update_prompts(labels)
@@ -3391,6 +3502,14 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             if hasattr(self.modal, "package_scroll") and command in ("up", "down"):
                 adjustment = self.modal.package_scroll.get_vadjustment()
                 adjustment.set_value(adjustment.get_value() + (-48 if command == "up" else 48))
+            return
+        if (self.modal is None and self.stack.get_visible_child_name() == N_("Tools")
+                and command in ("left", "right")):
+            if not self.tools_search_active:
+                self.controller_navigation = True
+                self._sync_controller_style_mode()
+                self._jump_tool_category(-1 if command == "left" else 1)
+                self._update_controller_legend(labels)
             return
         if command in ("confirm", "up", "down", "left", "right", "context_action"):
             self.controller_navigation = True
@@ -3606,6 +3725,7 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             parent = parent.get_parent()
 
     def _close(self, *_):
+        self._stop_tool_category_scroll()
         application = self.get_application()
         if application is not None and application.window is self:
             application.window = None
