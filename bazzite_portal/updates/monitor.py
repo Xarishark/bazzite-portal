@@ -466,6 +466,41 @@ def _maintenance_discovery_predates_request(status, record):
         return False
 
 
+def _save_maintenance_records():
+    try:
+        maintenance_state.save(_maintenance_records)
+    except (OSError, ValueError, TypeError):
+        # Local history is best effort and must never block system operations.
+        pass
+
+
+def maintenance_viewed_results():
+    """Recover exact read markers from this boot's durable request records."""
+    with _maintenance_records_lock:
+        return {("layer" if kind == "layers" else kind):
+                (record["unit"], record.get("invocation", ""), record["generation"])
+                for kind, record in _maintenance_records.items() if record.get("viewed") is True}
+
+
+def mark_maintenance_viewed(kind, unit, invocation, generation):
+    """Mark only the acknowledged request, never a newer concurrent result."""
+    kind = "layers" if kind == "layer" else kind
+    with _maintenance_records_lock:
+        record = _maintenance_records.get(kind)
+        if record is None or (record["unit"], record.get("invocation", ""),
+                              record["generation"]) != (unit, invocation, generation):
+            return
+        record["viewed"] = True
+        _save_maintenance_records()
+
+
+def clear_maintenance_viewed():
+    with _maintenance_records_lock:
+        for record in _maintenance_records.values():
+            record.pop("viewed", None)
+        _save_maintenance_records()
+
+
 def _maintenance_request(kind, unit, state="running", invocation="", error="", *, live=False):
     global _maintenance_records_generation
     with _maintenance_records_lock:
@@ -484,15 +519,14 @@ def _maintenance_request(kind, unit, state="running", invocation="", error="", *
             "requested_at": (time.time_ns() // 1_000 if state == "running"
                               else (previous or {}).get("requested_at", 0)),
         }
+        if (previous and previous.get("viewed") is True and state != "running"
+                and (previous["unit"], previous.get("invocation", ""), previous["generation"])
+                == (unit, invocation, generation)):
+            record["viewed"] = True
         _maintenance_records[kind] = record
         if live:
             _maintenance_live_requests.add((kind, generation))
-        try:
-            maintenance_state.save(_maintenance_records)
-        except (OSError, ValueError, TypeError):
-            # The system service remains authoritative; local history is a
-            # best-effort reopen aid and must not block an operation request.
-            pass
+        _save_maintenance_records()
         return dict(record)
 
 

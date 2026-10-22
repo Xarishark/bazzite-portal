@@ -11,6 +11,9 @@ from bazzite_portal.core.first_login import FirstLogin
 from bazzite_portal.integration import steam
 from bazzite_portal.updates.monitor import (
     Monitor,
+    maintenance_viewed_results,
+    mark_maintenance_viewed,
+    clear_maintenance_viewed,
     start_operation,
     start_cancel_pending,
     start_cancel_rollback,
@@ -166,7 +169,7 @@ class Agent:
         self.notified = set()
         self._runtime_dismissed = {"run": "", "deployment": "",
                                    "notified_run": "", "result_viewed_run": ""}
-        self.maintenance_viewed = {}
+        self.maintenance_viewed = maintenance_viewed_results()
         self.busy = False
         self.tray = None
         self.steam_artwork = None
@@ -441,6 +444,7 @@ class Agent:
         if self.maintenance_viewed.get(kind) == key:
             return False
         self.maintenance_viewed[kind] = key
+        mark_maintenance_viewed(kind, *key)
         self._publish_snapshot(snapshot)
         return True
 
@@ -534,6 +538,7 @@ class Agent:
                                            "notified_run": "", "result_viewed_run": ""}
                 self.notified.clear()
                 self.maintenance_viewed.clear()
+                clear_maintenance_viewed()
                 self._preferences_changed()
                 self.monitor.refresh()
                 self._publish_snapshot()
