@@ -12,7 +12,7 @@ from bazzite_portal.artwork.frames import (
     ANIMATED_KINDS,
     ARTWORK_KINDS,
 )
-from bazzite_portal.artwork.appearance import native_desktop, semantic_kind
+from bazzite_portal.artwork.appearance import semantic_kind
 
 ITEM_XML = '''<node><interface name="org.kde.StatusNotifierItem">
 <method name="Activate"><arg type="i" direction="in"/><arg type="i" direction="in"/></method>
@@ -61,12 +61,7 @@ class Tray:
         if appearance_watcher is not None and hasattr(appearance_watcher, "changed"):
             appearance_watcher.changed = self._appearance_changed
         self._foreground = self._appearance.foreground
-        try:
-            self._panel_desktop = native_desktop()
-        except ValueError:
-            self._panel_desktop = ""
-        self.artwork = TrayArtwork(foreground=self._foreground,
-                                  panel_desktop=self._panel_desktop)
+        self.artwork = TrayArtwork(foreground=self._foreground)
         self._pixmap_variants = {}
         self._tooltip_variants = {}
         self.artwork_failed = False
@@ -94,8 +89,7 @@ class Tray:
         self._appearance_generation += 1
         generation, kind = self._appearance_generation, self.kind
         if kind not in ARTWORK_KINDS or self.artwork_failed:
-            self.artwork = TrayArtwork(foreground=foreground,
-                                      panel_desktop=self._panel_desktop)
+            self.artwork = TrayArtwork(foreground=foreground)
             self._pixmap_variants.clear()
             self._tooltip_variants.clear()
             return
@@ -110,8 +104,7 @@ class Tray:
         def render():
             try:
                 artwork = TrayArtwork(old.svg_path, old.logo_path, old.portal_path,
-                                      old.theme_paths, foreground=foreground,
-                                      panel_desktop=self._panel_desktop)
+                                      old.theme_paths, foreground=foreground)
                 for frame in range(FRAME_COUNT if kind in ANIMATED_KINDS else 1):
                     artwork.pixmaps(kind, frame)
                 result = (artwork, None)

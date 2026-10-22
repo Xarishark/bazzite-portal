@@ -82,29 +82,6 @@ def kde_svg_frames(source, frame_count=FRAME_COUNT):
     return tuple(frames)
 
 
-def gnome_spinning_svg(source):
-    """Reduce classic spinner padding inside GNOME's small panel icon slot."""
-    if isinstance(source, bytes):
-        source = source.decode("utf-8")
-    try:
-        root = ET.fromstring(source)
-        x, y, width, height = map(float, root.get("viewBox", "").split())
-    except (ET.ParseError, ValueError) as error:
-        raise ValueError("invalid spinning tray SVG viewBox") from error
-    if (root.tag.split("}")[-1] != "svg"
-            or not all(math.isfinite(value) for value in (x, y, width, height))
-            or width <= 0 or height <= 0):
-        raise ValueError("invalid spinning tray SVG viewBox")
-    inset = 1 / 16
-    root.set("viewBox", " ".join(format(value, ".12g") for value in (
-        x + width * inset, y + height * inset,
-        width * (1 - 2 * inset), height * (1 - 2 * inset))))
-    namespace = root.tag[1:].split("}", 1)[0] if root.tag.startswith("{") else ""
-    if namespace:
-        ET.register_namespace("", namespace)
-    return ET.tostring(root, encoding="unicode")
-
-
 def rotated_svg_frames(source, frame_count=FRAME_COUNT, monochrome=False,
                        foreground=MONO):
     """Rotate updater cutouts in a mask while the gradient circle stays fixed."""
@@ -403,11 +380,14 @@ def _native_failure_svg(update_source, failure_source, kde=False, foreground=MON
                  if group is not None else [])
         if len(paths) != 2:
             raise ValueError("unexpected KDE update SVG structure")
-        # Keep the busy symbol's arrow, remove its disk and spinner, and reuse
-        # that exact badge position for the installed native failure symbol.
+        # Keep the busy symbol's arrow, remove its disk and spinner, and fit
+        # the native failure badge within the source SVG's lower-right area.
         group.remove(paths[0])
         group.remove(paths[1])
-        x, y, size = "11", "11", "10"
+        viewbox = [float(value) for value in root.get("viewBox").split()]
+        x = format(viewbox[0] + viewbox[2] * .5, "g")
+        y = format(viewbox[1] + viewbox[3] * .5, "g")
+        size = format(viewbox[2] * 10 / 22, "g")
     else:
         viewbox = [float(value) for value in root.get("viewBox").split()]
         if len(viewbox) != 4:
@@ -467,14 +447,12 @@ class TrayArtwork:
     """One tray instance's bounded cache of running and pending artwork."""
 
     def __init__(self, svg_path=DEFAULT_SVG, logo_path=DEFAULT_LOGO,
-                 portal_path=DEFAULT_PORTAL, theme_paths=None, foreground=MONO,
-                 panel_desktop=""):
+                 portal_path=DEFAULT_PORTAL, theme_paths=None, foreground=MONO):
         self.svg_path = Path(svg_path)
         self.logo_path = Path(logo_path)
         self.portal_path = Path(portal_path)
         self.theme_paths = theme_paths or {"kde": KDE_UPDATE, "gnome": GNOME_UPDATE}
         self.foreground = foreground
-        self.panel_desktop = panel_desktop
         self._svg = None
         self._running = None
         self._pending = None
@@ -576,10 +554,7 @@ class TrayArtwork:
             return self._themes[kind]
         if kind == "updating":
             if self._running is None:
-                source = self._source()
-                if self.panel_desktop == "gnome":
-                    source = gnome_spinning_svg(source)
-                frames = rotated_svg_frames(source)
+                frames = rotated_svg_frames(self._source())
                 self._running = tuple(self._render_set(svg) for svg in frames)
             return self._running[frame % FRAME_COUNT]
         if kind == "kde":
