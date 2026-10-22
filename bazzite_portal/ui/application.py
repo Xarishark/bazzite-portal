@@ -300,9 +300,6 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         self.closing = False
         self.log_text = ""
         self.client = None
-        self._gaming_auth = None
-        self._gaming_auth_dialog = None
-        self._gaming_auth_entry = None
         self.notices = Adw.ToastOverlay()
         set_window_content(self, self.notices)
         toolbar = Adw.ToolbarView()
@@ -358,15 +355,6 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         self.client = Client(self._snapshot_changed, self.toast)
         self.connect("map", lambda *_: self.client.set_visible(True) if not self.closing else None)
         self.connect("unmap", lambda *_: self.client.set_visible(False) if not self.closing else None)
-        if gaming_mode():
-            try:
-                from bazzite_portal.services.gaming_auth import GamingAuthServer
-                self._gaming_auth = GamingAuthServer(
-                    self.client.connection, self._gaming_auth_challenge,
-                    on_ready=self._gaming_auth_ready,
-                    on_error=self.toast)
-            except Exception:
-                self.toast(N_("Gaming-mode authentication is unavailable."))
         try:
             backend = SDLGamepad()
             self.controller = ControllerDriver(backend, self._controller_context, self._dispatch,
@@ -384,117 +372,6 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
     def toast(self, message):
         if not self.closing:
             self.notices.add_toast(Adw.Toast(title=format_message(message)[:500]))
-
-    def _gaming_auth_ready(self, ready):
-        if self.client is not None:
-            self.client.game_auth_enabled = bool(ready and self._gaming_auth is not None)
-
-    def _gaming_auth_challenge(self, event, text, echo_on):
-        if self.closing:
-            return
-        if event == "completed":
-            dialog = self._gaming_auth_dialog
-            self._gaming_auth_dialog = None
-            if self._gaming_auth_entry is not None:
-                self._gaming_auth_entry.set_text("")
-            self._gaming_auth_entry = None
-            self._gaming_auth_submit = None
-            if dialog is not None:
-                dialog.close()
-            return
-        if self._gaming_auth_dialog is None:
-            modal_parent = self.modal
-            dialog = self._report_modal(_("Administrator authentication"), 480)
-            dialog.modal_parent = modal_parent
-            if modal_parent is not None:
-                dialog.set_transient_for(modal_parent)
-            if gaming_mode():
-                dialog.fullscreen()
-            box = self._report_modal_box(dialog, top_aligned=gaming_mode())
-            entry = Gtk.PasswordEntry(show_peek_icon=False)
-            entry.set_property("placeholder-text", _("Password"))
-            entry.set_property("activates-default", True)
-            entry.get_delegate().set_invisible_char("*")
-            entry.get_settings().set_property("gtk-entry-password-hint-timeout", 0)
-            self._gaming_auth_entry = entry
-            box.append(entry)
-            box.append(label(_("Enter your administrator password to continue."), "title-3"))
-            self._gaming_auth_status = label("", "dim-label")
-            self._gaming_auth_status.set_visible(False)
-            box.append(self._gaming_auth_status)
-            cancel_button = button(_("Cancel"), self._cancel_gaming_auth)
-            submit_button = button(_("Authenticate"), self._submit_gaming_auth)
-            submit_button.set_sensitive(False)
-            submit_button.set_receives_default(True)
-            dialog.set_default_widget(submit_button)
-            anchor = self._fixed_modal_actions(dialog, box, (
-                ("back", cancel_button), ("confirm", submit_button)))
-            dialog.connect("close-request", lambda *_: self._gaming_auth_dialog_closed(dialog))
-            self._gaming_auth_dialog = dialog
-            self._gaming_auth_submit = submit_button
-            dialog.connect("map", lambda *_: GLib.idle_add(self._open_auth_keyboard, dialog))
-            self._present_report_modal(dialog, entry)
-        status = getattr(self, "_gaming_auth_status", None)
-        if status is not None:
-            if event == "request":
-                status.set_text("")
-                status.set_visible(False)
-                if self._gaming_auth_submit is not None:
-                    self._gaming_auth_submit.set_sensitive(True)
-            elif event == "info":
-                status.set_text(format_message(text or ""))
-                status.set_visible(bool(text))
-            elif event == "error":
-                status.set_text(public_error(text, N_("Authentication failed."), context="Authentication") + "  " + _("Try again or cancel."))
-                status.set_visible(True)
-        if self._gaming_auth_entry is not None:
-            # Keep all entered authentication text masked, including prompts
-            # that request echoed input.
-            if event == "request":
-                self._gaming_auth_entry.grab_focus()
-
-    def _open_auth_keyboard(self, dialog):
-        if (not self.closing and dialog is self._gaming_auth_dialog
-                and dialog.get_mapped() and self._gaming_auth_entry is not None):
-            self._gaming_auth_entry.grab_focus()
-            self.work(lambda: subprocess.Popen(
-                ["steam", "-ifrunning", "steam://open/keyboard"],
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL), lambda _: None)
-        return GLib.SOURCE_REMOVE
-
-    def _submit_gaming_auth(self, *_):
-        entry = self._gaming_auth_entry
-        server = self._gaming_auth
-        if entry is None or server is None:
-            return
-        secret = entry.get_text()
-        entry.set_text("")
-        if not secret:
-            entry.grab_focus()
-            return
-        try:
-            server.respond(secret)
-        finally:
-            secret = ""
-            entry.set_text("")
-
-    def _cancel_gaming_auth(self, *_):
-        if self._gaming_auth is not None:
-            self._gaming_auth.cancel()
-        dialog = self._gaming_auth_dialog
-        if dialog is not None:
-            dialog.close()
-
-    def _gaming_auth_dialog_closed(self, dialog):
-        if self._gaming_auth_dialog is dialog:
-            self._gaming_auth_dialog = None
-            if self._gaming_auth_entry is not None:
-                self._gaming_auth_entry.set_text("")
-            self._gaming_auth_entry = None
-            self._gaming_auth_submit = None
-            if self._gaming_auth is not None:
-                self._gaming_auth.cancel()
-        return self._report_modal_closed(dialog)
 
     def _install_input_mode_controllers(self, window):
         motion = Gtk.EventControllerMotion()
@@ -3737,8 +3614,6 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             self._native_focus_timeout = None
         if self.controller:
             self.controller.close()
-        if self._gaming_auth is not None:
-            self._gaming_auth.close()
         if self.client:
             self.client.close()
         self.executor.shutdown(wait=False, cancel_futures=True)
