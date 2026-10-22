@@ -1481,6 +1481,8 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             return
 
     def _render_pins(self):
+        self.pin_group.portal_status_generation = getattr(self.pin_group, "portal_status_generation", 0) + 1
+        self.pin_group.portal_status_rows = {}
         for row in self.pin_rows:
             self.pin_group.remove(row)
         self.pin_rows.clear()
@@ -1489,17 +1491,24 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         for pin in pins:
             item = portal.resolve(self.items, pin)
             title = item["action"].get("title", N_("Action")) if item else pin.get("title") or pin.get("id", N_("Unavailable tool"))
-            subtitle = item["category"] if item else N_("Unavailable or ambiguous · select to unpin")
+            subtitle = item["action"].get("description", "") if item else N_("Unavailable or ambiguous · select to unpin")
             row = Adw.ActionRow(title=GLib.markup_escape_text(title), subtitle=GLib.markup_escape_text(subtitle))
+            row.set_title_lines(2)
+            row.set_subtitle_lines(3)
             row.pinned_reference = pin
             row.controller_focus_row = True
             row.set_activatable(True)
             if item:
+                row.portal_item = item
                 row.connect("activated", lambda *_args, selected=item: self.open_action(selected))
+                if item["action"].get("status_script"):
+                    self._add_tool_status(row, self.pin_group)
             else:
                 row.connect("activated", lambda *_args, selected=pin: self._remove_unavailable_pin(selected))
             self.pin_group.add(row)
             self.pin_rows.append(row)
+            if item and item["action"].get("status_script"):
+                self._request_portal_status(item, row=row)
 
     def _remove_unavailable_pin(self, pin):
         self.confirm(
@@ -1718,7 +1727,7 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
                 self._request_portal_status(item, refresh=True)
                 return
             normalized = token.strip() if isinstance(token, str) else ""
-            for container in (self.tools_box, self.search_results_box):
+            for container in (self.pin_group, self.tools_box, self.search_results_box):
                 row = getattr(container, "portal_status_rows", {}).get(key)
                 if (row is None
                         or row.portal_status_generation != container.portal_status_generation
@@ -2003,7 +2012,7 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
                     first_option = widget
             if item is not None and action.get("status_script"):
                 current_row = next((rows[id(item)]
-                                    for container in (self.tools_box, self.search_results_box)
+                                    for container in (self.pin_group, self.tools_box, self.search_results_box)
                                     if id(item) in (rows := getattr(container, "portal_status_rows", {}))), None)
                 if current_row is not None:
                     self._request_portal_status(
