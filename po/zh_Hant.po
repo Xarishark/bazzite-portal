@@ -4,12 +4,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Bazzite Portal / App\n"
-"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/"
-"app/\n"
+"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/app/"
+"\n"
 "POT-Creation-Date: 2026-10-22 23:19+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-10-22 21:23+0000\n"
+"Last-Translator: Yun Kwan Shek "
+"<starfish7c0b917ee1024be8@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
+"projects/bazzite-portal/app/zh_Hant/>\n"
 "Language: zh_Hant\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,23 +21,23 @@ msgstr ""
 
 #: bazzite_portal/artwork/appearance.py:15
 msgid "Native"
-msgstr ""
+msgstr "原生"
 
 #: bazzite_portal/artwork/appearance.py:16
 msgid "Spinning"
-msgstr ""
+msgstr "旋轉"
 
 #: bazzite_portal/artwork/appearance.py:17
 msgid "Bouncing"
-msgstr ""
+msgstr "彈跳"
 
 #: bazzite_portal/artwork/appearance.py:18
 msgid "Spinning Mono"
-msgstr ""
+msgstr "旋轉（單色）"
 
 #: bazzite_portal/artwork/appearance.py:19
 msgid "Bouncing Mono"
-msgstr ""
+msgstr "彈跳（單色）"
 
 #: bazzite_portal/core/errors.py:65
 #, python-brace-format
@@ -43,50 +45,54 @@ msgid ""
 "Not enough free space. Free up space and try again. System updates need at "
 "least {minimum_free_space} free space on the installation drive."
 msgstr ""
+"儲存空間不足，請清理空間後再試。進行系統更新需額外{minimum_free_space}的儲存"
+"空間。"
 
 #: bazzite_portal/core/errors.py:68
 msgid ""
 "The download's signature could not be verified. Try again later. If the "
 "problem continues, open Logs for details."
-msgstr ""
+msgstr "無法驗證已下載檔案的簽名，請稍後再試。若問題持續，請查看系統日誌。"
 
 #: bazzite_portal/core/errors.py:70
 msgid ""
 "A downloaded file failed checksum verification. Try again later and check "
 "the operation log if the problem continues."
-msgstr ""
+msgstr "有已下載的檔案在驗證時出現錯誤，請稍後再試。若問題持續，請查看運行日誌。"
 
 #: bazzite_portal/core/errors.py:72
 msgid ""
 "A package conflict is blocking this system change. Review your layered apps "
 "in System Management, then try again."
 msgstr ""
+"由於軟件包出現衝突，此系統變更操作被阻止。請於系統管理頁面中檢查疊加套件後再"
+"試。"
 
 #: bazzite_portal/core/errors.py:74
 msgid "The download server is busy. Wait a little and try again."
-msgstr ""
+msgstr "伺服器當前較繁忙，請稍後再試。"
 
 #: bazzite_portal/core/errors.py:76
 msgid ""
 "Could not connect to the download server. Check your connection and try "
 "again."
-msgstr ""
+msgstr "無法連線至伺服器，請檢查你的連線狀態之後再試一次。"
 
 #: bazzite_portal/core/errors.py:78
 msgid ""
 "Could not download software repository information. Try again later. If this "
 "continues, check your repository settings or open Logs."
-msgstr ""
+msgstr "無法下載軟件倉資訊，請稍後再試。若問題持續，請查看軟件倉設置或系統日誌。"
 
 #: bazzite_portal/core/errors.py:121 bazzite_portal/ui/application.py:2331
 #: bazzite_portal/ui/application.py:2334 bazzite_portal/ui/application.py:2606
 #: bazzite_portal/ui/application.py:2612 bazzite_portal/updates/monitor.py:1891
 msgid "Another system operation is running. Wait for it to finish."
-msgstr ""
+msgstr "目前有另一系統變更正在進行中，請完成後再試。"
 
 #: bazzite_portal/core/errors.py:123
 msgid "Authorization was not granted. Try again or cancel."
-msgstr ""
+msgstr "獲取權限失敗，請重試或取消。"
 
 #: bazzite_portal/core/errors.py:127 bazzite_portal/ui/application.py:2602
 #: bazzite_portal/ui/maintenance.py:237 bazzite_portal/ui/maintenance.py:1105
@@ -95,74 +101,74 @@ msgstr ""
 #: bazzite_portal/ui/maintenance.py:1396 bazzite_portal/ui/maintenance.py:1425
 #: bazzite_portal/ui/maintenance.py:1433 bazzite_portal/ui/maintenance.py:1659
 msgid "Details are unavailable. Open Logs for more information."
-msgstr ""
+msgstr "無法獲取更多資訊，請查看系統日誌。"
 
 #: bazzite_portal/input/prompts.py:119
 msgid "D-pad"
-msgstr ""
+msgstr "D-pad"
 
 #: bazzite_portal/integration/community.py:13
 #, python-brace-format
 msgid "{bazzite} website"
-msgstr ""
+msgstr "{bazzite} 網址"
 
 #: bazzite_portal/integration/community.py:13
 #, python-brace-format
 msgid "The {bazzite} project website"
-msgstr ""
+msgstr "{bazzite} 項目網址"
 
 #: bazzite_portal/integration/community.py:14
 msgid "Documentations"
-msgstr ""
+msgstr "文檔"
 
 #: bazzite_portal/integration/community.py:14
 #, python-brace-format
 msgid "{bazzite} documentation"
-msgstr ""
+msgstr "{bazzite} 指南"
 
 #: bazzite_portal/integration/community.py:15
 #, python-brace-format
 msgid "{bazzite} community and support"
-msgstr ""
+msgstr "{bazzite} 社區與支援"
 
 #: bazzite_portal/integration/community.py:16
 #, python-brace-format
 msgid "{bazzite} source repository"
-msgstr ""
+msgstr "{bazzite} 項目倉庫"
 
 #: bazzite_portal/integration/community.py:17
 #, python-brace-format
 msgid "The {bazzite} subreddit"
-msgstr ""
+msgstr "{bazzite} subreddit"
 
 #: bazzite_portal/integration/community.py:18
 msgid "Forums"
-msgstr ""
+msgstr "論壇"
 
 #: bazzite_portal/integration/community.py:18
 #, python-brace-format
 msgid "{universal_blue} community forums"
-msgstr ""
+msgstr "{universal_blue} 社區論壇"
 
 #: bazzite_portal/maintenance/cache_clear.py:68
 #, python-brace-format
 msgid "An {rpm_ostree} transaction is active or status is unavailable."
-msgstr ""
+msgstr "一個 {rpm_ostree} 的變更正在進行中，或未能提供更多資訊。"
 
 #: bazzite_portal/maintenance/cache_clear.py:75
 #: bazzite_portal/maintenance/cache_clear.py:78
 msgid "Cancel the pending deployment before clearing the download cache."
-msgstr ""
+msgstr "取消待部署的鏡像，然後清理下載快取。"
 
 #: bazzite_portal/maintenance/cache_clear.py:76
 msgid ""
 "Resolve the selected next-boot deployment before clearing the download cache."
-msgstr ""
+msgstr "處理待部署的鏡像，然後清理下載快取。"
 
 #: bazzite_portal/maintenance/cancel_pending.py:41
 #, python-brace-format
 msgid "{bootc} deployments cannot be canceled by this workflow."
-msgstr ""
+msgstr "{bootc} 部署的鏡像無法被此操作更改。"
 
 #: bazzite_portal/maintenance/cancel_pending.py:51
 #: bazzite_portal/maintenance/channel_switch.py:52
@@ -171,44 +177,44 @@ msgstr ""
 #: bazzite_portal/maintenance/reset_layers.py:49
 #, python-brace-format
 msgid "An {rpm_ostree} transaction is active."
-msgstr ""
+msgstr "一個 {rpm_ostree} 的變更正在進行中。"
 
 #: bazzite_portal/maintenance/cancel_pending.py:64
 msgid "There is no pending deployment."
-msgstr ""
+msgstr "現時暫未有待部署的鏡像。"
 
 #: bazzite_portal/maintenance/cancel_pending.py:66
 msgid "The next boot is a scheduled rollback or other non-staged deployment."
-msgstr ""
+msgstr "下一次啓動將爲系統回滾或非待部署的鏡像。"
 
 #: bazzite_portal/maintenance/cancel_pending.py:68
 msgid "The pending deployment is pinned or its pin state is unknown."
-msgstr ""
+msgstr "下一次啓動將爲已固定的鏡像；或爲固定狀態未知的鏡像。"
 
 #: bazzite_portal/maintenance/channel_switch.py:63
 #, python-brace-format
 msgid ""
 "Only official {bazzite} {tracks} track and release references are supported."
-msgstr ""
+msgstr "目前僅支持 {bazzite} {tracks} 更新頻道及編號。"
 
 #: bazzite_portal/maintenance/channel_switch.py:91
 msgid "Resolve the pending deployment before changing update channels."
-msgstr ""
+msgstr "處理待部署的鏡像，然後更改更新頻道。"
 
 #: bazzite_portal/maintenance/channel_switch.py:159
 msgid ""
 "You’re already using this image and channel. Use Update to get the latest "
 "version."
-msgstr ""
+msgstr "你目前已在此鏡像及更新頻道上，「更新」以獲取最新版本。"
 
 #: bazzite_portal/maintenance/delete_deployments.py:64
 msgid "Resolve the next-boot deployment before deleting saved deployments."
-msgstr ""
+msgstr "處理待部署的鏡像，然後刪除已儲存的鏡像。"
 
 #: bazzite_portal/maintenance/delete_deployments.py:94
 #: bazzite_portal/ui/maintenance.py:1474
 msgid "No saved, pinned deployments can be deleted."
-msgstr ""
+msgstr "沒有已儲存或已固定的鏡像可供刪除。"
 
 #: bazzite_portal/maintenance/delete_deployments.py:100
 #: bazzite_portal/maintenance/deployments.py:12
@@ -222,66 +228,66 @@ msgstr ""
 #: bazzite_portal/ui/system_info.py:66 bazzite_portal/ui/system_info.py:69
 #: bazzite_portal/ui/system_info.py:78
 msgid "Unknown"
-msgstr ""
+msgstr "未知"
 
 #: bazzite_portal/maintenance/image_switch.py:111
 msgid "Resolve the pending deployment before changing images."
-msgstr ""
+msgstr "處理待部署的鏡像，然後更改鏡像。"
 
 #: bazzite_portal/maintenance/image_switch.py:118
 #, python-brace-format
 msgid "Only supported official {bazzite} image references can be changed."
-msgstr ""
+msgstr "目前僅支持更改 {bazzite} 鏡像的編號。"
 
 #: bazzite_portal/maintenance/image_switch.py:166
 #, python-brace-format
 msgid "No official {bazzite} images are available."
-msgstr ""
+msgstr "目前未有可用的官方 {bazzite} 鏡像。"
 
 #: bazzite_portal/maintenance/image_switch.py:187
 #, python-brace-format
 msgid "No {track} versions are available for {image}."
-msgstr ""
+msgstr "{image}鏡像沒有可用的 {track}。"
 
 #: bazzite_portal/maintenance/image_switch.py:207
 #, python-brace-format
 msgid "Unsupported {bazzite} image variant."
-msgstr ""
+msgstr "不支持的{bazzite}系統鏡像風味。"
 
 #: bazzite_portal/maintenance/image_switch.py:209
 #, python-brace-format
 msgid "Unsupported {bazzite} image version."
-msgstr ""
+msgstr "不支持的{bazzite}系統鏡像版本。"
 
 #: bazzite_portal/maintenance/image_switch.py:222
 msgid ""
 "This image and version are already running. Use Update to check for a newer "
 "version."
-msgstr ""
+msgstr "你目前已在此鏡像、版本及更新頻道上，「更新」以獲取最新版本。"
 
 #: bazzite_portal/maintenance/logs.py:147
 msgid "Some operation output was unavailable or omitted."
-msgstr ""
+msgstr "有一些操作輸出不可用或被剔除。"
 
 #: bazzite_portal/maintenance/reset_layers.py:47
 #: bazzite_portal/ui/maintenance.py:824
 msgid "A different deployment is selected for next boot."
-msgstr ""
+msgstr "下一次啓動將使用新的待部署鏡像。"
 
 #: bazzite_portal/maintenance/reset_layers.py:86
 #: bazzite_portal/ui/maintenance.py:823
 msgid "No requested package layers are present."
-msgstr ""
+msgstr "目前未有系統疊加套件的請求。"
 
 #: bazzite_portal/services/agent.py:416
 #, python-brace-format
 msgid "{bazzite} update failed"
-msgstr ""
+msgstr "{bazzite} 更新失敗"
 
 #: bazzite_portal/services/agent.py:416
 #, python-brace-format
 msgid "{bazzite} rollback failed"
-msgstr ""
+msgstr "{bazzite} 回退失敗"
 
 #: bazzite_portal/services/agent.py:416
 msgid "Open Updates to inspect the operation log."
