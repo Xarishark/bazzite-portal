@@ -1792,11 +1792,17 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         dialog.option_buttons = {}
         self.modal = dialog
         restore = None
-        if item is not None and self.stack.get_visible_child_name() == N_("Tools"):
+        page_name = self.stack.get_visible_child_name()
+        if item is not None and page_name in (N_("Home"), N_("Tools")):
             view_name = "search" if self.tools_search_active else "catalog"
-            opener = next((target for target in controller_focus_targets(self.tools_view)
+            if page_name == N_("Tools"):
+                targets = controller_focus_targets(self.tools_view)
+                scroll = self.search_results_scroll if self.tools_search_active else self.catalog_scroll
+            else:
+                targets = self.pin_rows
+                scroll = self.stack.get_child_by_name(page_name)
+            opener = next((target for target in targets
                            if getattr(target, "portal_item", None) is item), None)
-            scroll = self.search_results_scroll if self.tools_search_active else self.catalog_scroll
             restore = (opener, view_name, scroll.get_vadjustment().get_value(), self.controller_navigation)
         toolbar = Adw.ToolbarView()
         set_window_content(dialog, toolbar)
@@ -1929,14 +1935,14 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             if restore is not None:
                 def restore_opener():
                     opener, view_name, value, opened_with_controller = restore
-                    if self.closing or self.stack.get_visible_child_name() != N_("Tools"):
+                    if self.closing or self.modal is not None or self.stack.get_visible_child_name() != page_name:
                         return GLib.SOURCE_REMOVE
                     if restore_parent_activation:
                         self.present()
-                    self.tools_search_active = view_name == "search"
-                    self.tools_view.set_visible_child_name(view_name)
-                    adjustment = self.search_results_scroll.get_vadjustment() if self.tools_search_active else self.catalog_scroll.get_vadjustment()
-                    adjustment.set_value(value)
+                    if page_name == N_("Tools"):
+                        self.tools_search_active = view_name == "search"
+                        self.tools_view.set_visible_child_name(view_name)
+                    scroll.get_vadjustment().set_value(value)
                     if opener is not None and opener.get_mapped():
                         if opened_with_controller and self.controller_navigation:
                             self._set_controller_focus(opener)
