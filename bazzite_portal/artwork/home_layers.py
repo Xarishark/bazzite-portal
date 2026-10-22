@@ -11,7 +11,7 @@ from bazzite_portal.artwork.frames import (
     rotated_svg_frames,
     bouncing_svg_frames,
     _native_kde_frames,
-    _monochrome,
+    _native_gnome_frames,
 )
 
 
@@ -40,7 +40,15 @@ def layers(theme):
     """Split existing artwork once, retaining its original gradient and cutouts."""
     kind = artwork_kind(theme, "updating")
     if kind == "native-gnome-update":
-        return {"base": _svg(_monochrome(ET.fromstring(_read(GNOME_UPDATE)))), "motion": "none"}
+        root = ET.fromstring(_native_gnome_frames(_read(GNOME_UPDATE), 1)[0])
+        body = next(element for element in root if element.tag.split("}")[-1] == "path")
+        body.attrib.pop("mask")
+        mask = next(element for element in root.iter() if element.get("id") == "tray-motion-mask")
+        moving = deepcopy(next(element for element in mask.iter()
+                               if element.tag.split("}")[-1] == "g")[0])
+        moving.set("fill", "white")
+        return {"base": _only(root, [body]), "moving": _only(root, [moving]),
+                "masked": True, "motion": "bounce", "amplitude": .5 / 16}
     if kind == "native-kde-update":
         root = ET.fromstring(_native_kde_frames(_read(KDE_UPDATE), 1)[0])
         group = next(element for element in root if element.tag.split("}")[-1] == "g")

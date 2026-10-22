@@ -30,7 +30,7 @@ ARTWORK_KINDS = (
     "native-gnome-restart", "native-gnome-failed",
 )
 ANIMATED_KINDS = ("updating", "bouncing", "kde", "updating-mono",
-                  "bouncing-mono", "native-kde-update")
+                  "bouncing-mono", "native-kde-update", "native-gnome-update")
 NATIVE_PATHS = {
     "native-kde-restart": KDE_RESTART, "native-kde-failed": KDE_FAILED,
     "native-gnome-restart": GNOME_RESTART, "native-gnome-failed": GNOME_FAILED,
@@ -359,6 +359,28 @@ def _native_kde_frames(source, frame_count=FRAME_COUNT, foreground=MONO):
     return tuple(output)
 
 
+def _native_gnome_frames(source, frame_count=FRAME_COUNT, foreground=MONO):
+    """Bounce the native arrow cutout without moving its surrounding shape."""
+    if frame_count < 1:
+        raise ValueError("frame_count must be positive")
+    root = _monochrome(ET.fromstring(source), foreground=foreground)
+    path = next(item for item in root.iter() if item.tag.split("}")[-1] == "path")
+    outer, separator, arrow = path.get("d", "").partition(" z m 0 5 ")
+    if not separator or not arrow.endswith(" z m 0 0"):
+        raise ValueError("unexpected GNOME update compound path")
+    outer += " z"
+    arrow = "M 8 5 " + arrow.removesuffix(" z m 0 0") + " z"
+    path.set("d", outer)
+    path.set("mask", "url(#tray-motion-mask)")
+    frames = []
+    for index in range(frame_count):
+        canvas = ET.fromstring(ET.tostring(root, encoding="unicode"))
+        offset = 0.5 * math.sin(2 * math.pi * index / frame_count)
+        _add_motion_mask(canvas, outer, "", arrow, "translate(0 %.3f)" % offset)
+        frames.append(ET.tostring(canvas, encoding="unicode"))
+    return tuple(frames)
+
+
 def _native_failure_svg(update_source, failure_source, kde=False, foreground=MONO):
     """Keep the native update symbol and place its native error mark in the badge."""
     try:
@@ -530,10 +552,10 @@ class TrayArtwork:
             return self._native[kind][frame % FRAME_COUNT]
         if kind == "native-gnome-update":
             if kind not in self._native:
-                root = ET.fromstring(self._native_source("gnome"))
-                self._native[kind] = self._render_set(ET.tostring(
-                    _monochrome(root, foreground=self.foreground), encoding="unicode"))
-            return self._native[kind]
+                frames = _native_gnome_frames(self._native_source("gnome"),
+                                              foreground=self.foreground)
+                self._native[kind] = tuple(self._render_set(svg) for svg in frames)
+            return self._native[kind][frame % FRAME_COUNT]
         if kind.startswith("native-") and kind in NATIVE_PATHS:
             if kind not in self._native:
                 if kind.endswith("-failed"):
