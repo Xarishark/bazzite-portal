@@ -3373,7 +3373,74 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             self._set_favorite_emphasis(widget, True)
         widget.grab_focus()
 
+    def _jump_tool_category(self, step):
+        rows = [target for target in controller_focus_targets(self.tools_view)
+                if getattr(target, "portal_item", None) is not None]
+        if not rows:
+            return
+        categories = {}
+        for row in rows:
+            categories.setdefault(row.portal_item["category"], row)
+        names = list(categories)
+        focus = controller_focused_target(self)
+        item = getattr(focus, "portal_item", None)
+        if item is None or item["category"] not in categories:
+            target = rows[0] if step > 0 else categories[names[-1]]
+        else:
+            index = names.index(item["category"]) + step
+            if not 0 <= index < len(names):
+                return
+            target = categories[names[index]]
+        self._scroll_tool_category(target)
+
+    def _stop_tool_category_scroll(self):
+        animation = getattr(self, "_category_scroll_animation", None)
+        if animation is not None:
+            animation.pause()
+            self._category_scroll_animation = None
+        restore = getattr(self, "_category_scroll_restore", None)
+        if restore is not None:
+            restore()
+            self._category_scroll_restore = None
+
+    def _scroll_tool_category(self, row):
+        self._stop_tool_category_scroll()
+        scroll = self.catalog_scroll
+        viewport = scroll.get_child()
+        content = viewport.get_child() if isinstance(viewport, Gtk.Viewport) else viewport
+        category = row.get_ancestor(Adw.PreferencesGroup)
+        bounds = (category or row).compute_bounds(content)
+        if not bounds[0]:
+            self._set_controller_focus(row)
+            return
+        adjustment = scroll.get_vadjustment()
+        destination = max(adjustment.get_lower(), min(bounds[1].get_y() - 12,
+                          adjustment.get_upper() - adjustment.get_page_size()))
+        # GTK's automatic focus reveal otherwise scrolls the first tool to
+        # the bottom before our category-heading animation can begin.
+        if isinstance(viewport, Gtk.Viewport):
+            previous = viewport.get_scroll_to_focus()
+            viewport.set_scroll_to_focus(False)
+            self._category_scroll_restore = lambda: viewport.set_scroll_to_focus(previous)
+        self._set_controller_focus(row)
+        target = Adw.PropertyAnimationTarget.new(adjustment, "value")
+        animation = Adw.TimedAnimation.new(scroll, adjustment.get_value(), destination, 160, target)
+        animation.set_easing(Adw.Easing.EASE_OUT_CUBIC)
+        self._category_scroll_animation = animation
+        def finished(*_args):
+            if self._category_scroll_animation is animation:
+                self._category_scroll_animation = None
+                restore = getattr(self, "_category_scroll_restore", None)
+                if restore is not None:
+                    restore()
+                    self._category_scroll_restore = None
+        animation.connect("done", finished)
+        animation.play()
+
     def _dispatch(self, command):
+        if (command not in ("left", "right") or self.modal is not None
+                or self.stack.get_visible_child_name() != N_("Tools") or self.tools_search_active):
+            self._stop_tool_category_scroll()
         labels = getattr(getattr(self.controller, "backend", None), "button_labels", {})
         self._refresh_context_prompts(labels)
         self._refresh_update_prompts(labels)
@@ -3435,6 +3502,14 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             if hasattr(self.modal, "package_scroll") and command in ("up", "down"):
                 adjustment = self.modal.package_scroll.get_vadjustment()
                 adjustment.set_value(adjustment.get_value() + (-48 if command == "up" else 48))
+            return
+        if (self.modal is None and self.stack.get_visible_child_name() == N_("Tools")
+                and command in ("left", "right")):
+            if not self.tools_search_active:
+                self.controller_navigation = True
+                self._sync_controller_style_mode()
+                self._jump_tool_category(-1 if command == "left" else 1)
+                self._update_controller_legend(labels)
             return
         if command in ("confirm", "up", "down", "left", "right", "context_action"):
             self.controller_navigation = True
@@ -3650,6 +3725,7 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             parent = parent.get_parent()
 
     def _close(self, *_):
+        self._stop_tool_category_scroll()
         application = self.get_application()
         if application is not None and application.window is self:
             application.window = None
