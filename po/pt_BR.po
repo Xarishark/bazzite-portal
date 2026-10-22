@@ -7,7 +7,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/app/"
 "\n"
 "POT-Creation-Date: 2026-10-21 18:40+0200\n"
-"PO-Revision-Date: 2026-10-21 22:16+0000\n"
+"PO-Revision-Date: 2026-10-22 08:40+0000\n"
 "Last-Translator: Crono <epochvoyager@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "bazzite-portal/app/pt_BR/>\n"
@@ -606,11 +606,11 @@ msgstr ""
 #: bazzite_portal/ui/application.py:843 bazzite_portal/ui/application.py:2543
 #, python-brace-format
 msgid "Update {bazzite} and Apps"
-msgstr "Atualizar Aplicativos e o {bazzite}"
+msgstr "Atualizar o {bazzite} e Programas"
 
 #: bazzite_portal/ui/application.py:843 bazzite_portal/ui/application.py:2564
 msgid "Update your system and installed apps."
-msgstr "Atualizar seus aplicativos e o sistema."
+msgstr "Atualiza o sistema e seus aplicativos."
 
 #: bazzite_portal/ui/application.py:865
 msgid "Explore"
@@ -618,7 +618,7 @@ msgstr "Explorar"
 
 #: bazzite_portal/ui/application.py:868
 msgid "Browse setup, fixes, and utilities from the system Portal."
-msgstr "Ver ajustes, utilitários e soluções do Portal do sistema."
+msgstr "Ver ajustes, utilitários e soluções do Portal."
 
 #: bazzite_portal/ui/application.py:869
 #, python-brace-format
@@ -638,46 +638,50 @@ msgstr ""
 #, python-brace-format
 msgid "Report a problem, collect system logs, or reset {steam}."
 msgstr ""
+"Relate um problema, recolha registros do sistema, ou redefina o {steam}."
 
 #: bazzite_portal/ui/application.py:872
 #, python-brace-format
 msgid "{bazzite} documentation, website, and community links."
-msgstr ""
+msgstr "Documentação do {bazzite}, o site, e links da comunidade."
 
 #: bazzite_portal/ui/application.py:873 bazzite_portal/ui/application.py:2762
 #, python-brace-format
 msgid "View {bazzite} release and project announcements."
-msgstr ""
+msgstr "Veja notícias e lançamentos do {bazzite}."
 
 #: bazzite_portal/ui/application.py:884 bazzite_portal/ui/application.py:2763
 msgid "The configuration file for this category is missing or invalid."
 msgstr ""
+"O arquivo de configuração desta categoria está indisponível ou é inválido."
 
 #: bazzite_portal/ui/application.py:888 bazzite_portal/ui/maintenance.py:71
 msgid "Loading…"
-msgstr ""
+msgstr "Carregando…"
 
 #: bazzite_portal/ui/application.py:893
 msgid "Pinned tools"
-msgstr ""
+msgstr "Ferramentas fixadas"
 
 #: bazzite_portal/ui/application.py:901
 #, python-brace-format
 msgid "Get help, collect diagnostic logs, or repair the {steam} client."
 msgstr ""
+"Obtenha ajuda, recolha registros pra diagnóstico, ou repare o cliente do "
+"{steam}."
 
 #: bazzite_portal/ui/application.py:908
 msgid "Report a problem"
-msgstr ""
+msgstr "Relate um problema"
 
 #: bazzite_portal/ui/application.py:908
 #, python-brace-format
 msgid "Collect relevant logs and open a {bazzite} {github} issue."
-msgstr ""
+msgstr "Recolhe registros relevantes e abre um issue no {github} do {bazzite}."
 
 #: bazzite_portal/ui/application.py:916
 msgid "Collect system logs"
-msgstr ""
+msgstr "Recolher registros do sistema"
 
 #: bazzite_portal/ui/application.py:916
 msgid "Save logs and hardware details for troubleshooting on your Desktop."
