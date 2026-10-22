@@ -393,8 +393,29 @@ def _native_failure_svg(update_source, failure_source, kde=False, foreground=MON
         if len(viewbox) != 4:
             raise ValueError("invalid native update viewBox")
         x, y, size = str(viewbox[0] + viewbox[2] * .58), str(viewbox[1] + viewbox[3] * .58), str(viewbox[2] * .38)
-    nested_tag = "{%s}svg" % namespace if namespace else "svg"
-    nested = ET.SubElement(root, nested_tag, {
+    tag = "{%s}" % namespace if namespace else ""
+    # The emblem's transparent details must reveal the panel, not the update
+    # symbol underneath; otherwise a monochrome error mark becomes a solid dot.
+    body = ET.Element(tag + "g", {"mask": "url(#native-error-background-mask)"})
+    for child in list(root):
+        if child.tag.split("}")[-1] != "defs":
+            root.remove(child)
+            body.append(child)
+    root.append(body)
+    defs = ET.SubElement(root, tag + "defs")
+    mask = ET.SubElement(defs, tag + "mask", {
+        "id": "native-error-background-mask", "maskUnits": "userSpaceOnUse",
+    })
+    vx, vy, vw, vh = map(float, root.get("viewBox").split())
+    ET.SubElement(mask, tag + "rect", {
+        "x": str(vx), "y": str(vy), "width": str(vw), "height": str(vh), "fill": "white",
+    })
+    ET.SubElement(mask, tag + "circle", {
+        "cx": str(float(x) + float(size) / 2),
+        "cy": str(float(y) + float(size) / 2),
+        "r": str(float(size) * .52), "fill": "black",
+    })
+    nested = ET.SubElement(root, tag + "svg", {
         "x": x, "y": y, "width": size, "height": size,
         "viewBox": failure.get("viewBox"), "preserveAspectRatio": "xMidYMid meet",
     })
