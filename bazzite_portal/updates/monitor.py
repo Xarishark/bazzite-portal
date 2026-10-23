@@ -3,11 +3,9 @@ import json
 import os
 import re
 import subprocess
-import sys
 import tempfile
 import threading
 import time
-from contextlib import contextmanager
 from collections import deque
 from bazzite_portal.updates.model import (
     SERVICES,
@@ -53,120 +51,6 @@ _maintenance_live_requests = set()
 
 
 _COMMAND_OUTPUT_TAIL_BYTES = 2 * 1024 * 1024
-_command_authorization = threading.local()
-
-
-class CommandAuthorizationError(RuntimeError):
-    """The UI did not register authorization for a gated system operation."""
-
-
-@contextmanager
-def command_authorization(callback):
-    """Authorize only approved systemctl starts made in this worker context.
-
-    callback(pid, proc_start_time, argv) must register the exact process with
-    the session UI and return a cleanup callable. Other commands retain their
-    existing execution path.
-    """
-    previous = getattr(_command_authorization, "callback", None)
-    _command_authorization.callback = callback
-    try:
-        yield
-    finally:
-        if previous is None:
-            try:
-                del _command_authorization.callback
-            except AttributeError:
-                pass
-        else:
-            _command_authorization.callback = previous
-
-
-def _gated_systemctl_start(argv):
-    if not isinstance(argv, (list, tuple)) or len(argv) != 4 or list(argv[:2]) != ["systemctl", "start"]:
-        return False
-    return argv[2] == "--wait" and maintenance_service.valid_unit(argv[3])
-
-
-_GATED_CHILD = r'''import os, sys
-fd = int(sys.argv[1])
-try:
-    gate = os.read(fd, 1)
-finally:
-    os.close(fd)
-if gate != b"1":
-    raise SystemExit(125)
-argv = __import__("json").loads(sys.argv[2])
-os.execvpe(argv[0], argv, os.environ)
-'''
-
-
-def _proc_start_time(pid):
-    """Read Linux /proc stat starttime, handling spaces in the comm field."""
-    with open(f"/proc/{pid}/stat", "r", encoding="ascii") as stream:
-        text = stream.read()
-    close = text.rfind(")")
-    if close < 0:
-            raise RuntimeError("Could not verify the system command process identity.")
-    fields = text[close + 1:].split()
-    try:
-        return int(fields[19])
-    except (IndexError, ValueError) as error:
-        raise RuntimeError("Could not verify the system command process identity.") from error
-
-
-def _authorized_run(argv, timeout, stdout, stderr, env, callback, exec_path=None):
-    read_fd, write_fd = os.pipe()
-    cleanup = None
-    process = None
-    exec_argv = [exec_path, *argv[1:]] if exec_path else list(argv)
-    try:
-        os.set_inheritable(read_fd, True)
-        process = subprocess.Popen(
-            [sys.executable, "-c", _GATED_CHILD, str(read_fd),
-            json.dumps(exec_argv)],
-            stdin=subprocess.DEVNULL, stdout=stdout, stderr=stderr, env=env,
-            start_new_session=True, pass_fds=(read_fd,), close_fds=True,
-        )
-        os.close(read_fd)
-        read_fd = -1
-        start_time = _proc_start_time(process.pid)
-        cleanup = callback(process.pid, start_time, exec_argv)
-        if not callable(cleanup):
-            raise CommandAuthorizationError("The gaming authorization request was not registered.")
-        os.write(write_fd, b"1")
-        os.close(write_fd)
-        write_fd = -1
-        returncode = process.wait(timeout=timeout)
-        return subprocess.CompletedProcess(argv, returncode)
-    except subprocess.TimeoutExpired:
-        if process is not None and process.poll() is None:
-            process.terminate()
-            try:
-                process.wait(timeout=1)
-            except subprocess.TimeoutExpired:
-                process.kill()
-                process.wait()
-        raise
-    except Exception:
-        if process is not None and process.poll() is None:
-            process.terminate()
-            try:
-                process.wait(timeout=1)
-            except subprocess.TimeoutExpired:
-                process.kill()
-                process.wait()
-        raise
-    finally:
-        if read_fd >= 0:
-            os.close(read_fd)
-        if write_fd >= 0:
-            os.close(write_fd)
-        if cleanup:
-            try:
-                cleanup()
-            except Exception:
-                pass
 
 
 def _read_output_tail(stream, limit):
@@ -181,13 +65,8 @@ def command(argv, timeout=15):
     # unrelated loader and desktop warnings on stderr must not corrupt it.
     with tempfile.TemporaryFile() as stdout, tempfile.TemporaryFile() as stderr:
         env = {**os.environ, "LC_ALL": "C"}
-        callback = getattr(_command_authorization, "callback", None)
-        if callback and _gated_systemctl_start(argv):
-            result = _authorized_run(argv, timeout, stdout, stderr, env, callback,
-                                     exec_path="/usr/bin/systemctl")
-        else:
-            result = subprocess.run(argv, stdin=subprocess.DEVNULL, stdout=stdout, stderr=stderr,
-                                    timeout=timeout, env=env, start_new_session=True)
+        result = subprocess.run(argv, stdin=subprocess.DEVNULL, stdout=stdout, stderr=stderr,
+                                timeout=timeout, env=env, start_new_session=True)
         if result.returncode:
             # Bound the combined error text to the same tail size as before,
             # reserving space for both streams and preferring stderr first.
@@ -587,6 +466,41 @@ def _maintenance_discovery_predates_request(status, record):
         return False
 
 
+def _save_maintenance_records():
+    try:
+        maintenance_state.save(_maintenance_records)
+    except (OSError, ValueError, TypeError):
+        # Local history is best effort and must never block system operations.
+        pass
+
+
+def maintenance_viewed_results():
+    """Recover exact read markers from this boot's durable request records."""
+    with _maintenance_records_lock:
+        return {("layer" if kind == "layers" else kind):
+                (record["unit"], record.get("invocation", ""), record["generation"])
+                for kind, record in _maintenance_records.items() if record.get("viewed") is True}
+
+
+def mark_maintenance_viewed(kind, unit, invocation, generation):
+    """Mark only the acknowledged request, never a newer concurrent result."""
+    kind = "layers" if kind == "layer" else kind
+    with _maintenance_records_lock:
+        record = _maintenance_records.get(kind)
+        if record is None or (record["unit"], record.get("invocation", ""),
+                              record["generation"]) != (unit, invocation, generation):
+            return
+        record["viewed"] = True
+        _save_maintenance_records()
+
+
+def clear_maintenance_viewed():
+    with _maintenance_records_lock:
+        for record in _maintenance_records.values():
+            record.pop("viewed", None)
+        _save_maintenance_records()
+
+
 def _maintenance_request(kind, unit, state="running", invocation="", error="", *, live=False):
     global _maintenance_records_generation
     with _maintenance_records_lock:
@@ -605,15 +519,14 @@ def _maintenance_request(kind, unit, state="running", invocation="", error="", *
             "requested_at": (time.time_ns() // 1_000 if state == "running"
                               else (previous or {}).get("requested_at", 0)),
         }
+        if (previous and previous.get("viewed") is True and state != "running"
+                and (previous["unit"], previous.get("invocation", ""), previous["generation"])
+                == (unit, invocation, generation)):
+            record["viewed"] = True
         _maintenance_records[kind] = record
         if live:
             _maintenance_live_requests.add((kind, generation))
-        try:
-            maintenance_state.save(_maintenance_records)
-        except (OSError, ValueError, TypeError):
-            # The system service remains authoritative; local history is a
-            # best-effort reopen aid and must not block an operation request.
-            pass
+        _save_maintenance_records()
         return dict(record)
 
 
@@ -635,8 +548,6 @@ def _maintenance_request_status(kind):
 
 def _is_proven_prestart_rejection(error, unit):
     """Return true only when evidence proves authorization stopped this unit before start."""
-    if isinstance(error, CommandAuthorizationError):
-        return True
     accepted_reasons = {
         "Access denied",
         "Interactive authentication required",

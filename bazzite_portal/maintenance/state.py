@@ -55,9 +55,12 @@ def _valid_record(kind, record):
             or type(requested_at) is not int or requested_at < 0
             or not isinstance(error, str)):
         return None
-    return {"unit": unit, "state": state, "invocation": invocation.lower(),
+    valid = {"unit": unit, "state": state, "invocation": invocation.lower(),
             "generation": generation, "requested_at": requested_at,
             "error": error[:1024]}
+    if record.get("viewed") is True:
+        valid["viewed"] = True
+    return valid
 
 
 def load(path=None, *, boot_id=None):

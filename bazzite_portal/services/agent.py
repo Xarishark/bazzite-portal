@@ -6,12 +6,14 @@ import sys
 import threading
 from gi.repository import Gio, GLib
 from bazzite_portal import APP_ID
-from bazzite_portal.updates import monitor as system
 from bazzite_portal.core.storage import Store
 from bazzite_portal.core.first_login import FirstLogin
 from bazzite_portal.integration import steam
 from bazzite_portal.updates.monitor import (
     Monitor,
+    maintenance_viewed_results,
+    mark_maintenance_viewed,
+    clear_maintenance_viewed,
     start_operation,
     start_cancel_pending,
     start_cancel_rollback,
@@ -45,7 +47,6 @@ AGENT_XML = '''<node><interface name="io.github.Xarishark.bazzite_portal.Agent">
 <method name="MaintenanceViewed"><arg type="s" direction="in"/><arg type="s" direction="in"/><arg type="s" direction="in"/><arg type="x" direction="in"/></method>
 <method name="WindowVisible"><arg type="b" direction="in"/></method>
 <method name="UpdatesViewed"><arg type="s" direction="in"/></method>
-<method name="GameOperation"><arg type="s" direction="in"/><arg type="v" direction="in"/></method>
 <method name="StartUpdate"/><method name="StartRollback"/><method name="Restart"/>
 <method name="CancelPending"><arg type="s" direction="in"/></method>
 <method name="CancelRollback"><arg type="s" direction="in"/></method>
@@ -168,7 +169,7 @@ class Agent:
         self.notified = set()
         self._runtime_dismissed = {"run": "", "deployment": "",
                                    "notified_run": "", "result_viewed_run": ""}
-        self.maintenance_viewed = {}
+        self.maintenance_viewed = maintenance_viewed_results()
         self.busy = False
         self.tray = None
         self.steam_artwork = None
@@ -443,6 +444,7 @@ class Agent:
         if self.maintenance_viewed.get(kind) == key:
             return False
         self.maintenance_viewed[kind] = key
+        mark_maintenance_viewed(kind, *key)
         self._publish_snapshot(snapshot)
         return True
 
@@ -505,33 +507,6 @@ class Agent:
         self._publish_snapshot(snapshot)
 
     def _method(self, connection, sender, path, interface, method, parameters, invocation):
-        game_auth_sender = None
-        if method == "GameOperation":
-            try:
-                operation = parameters.get_child_value(0).get_string()
-                operation_parameters = parameters.get_child_value(1).get_variant()
-                expected = {
-                    "StartRollback": "b",
-                    "CancelPending": "(s)",
-                    "CancelRollback": "(s)",
-                    "RemoveLayers": "(s)",
-                    "RemoveSelectedLayers": "(sas)",
-                    "ClearDownloadCache": "(s)",
-                    "StartChannelSwitch": "(s)",
-                    "DeleteDeployment": "(s)",
-                    "StartImageSwitch": "(sss)",
-                }
-                if operation not in expected or operation_parameters.get_type_string() != expected[operation]:
-                    raise ValueError("Invalid gaming operation request.")
-                if operation == "StartRollback":
-                    if operation_parameters.get_boolean():
-                        raise ValueError("Invalid gaming operation request.")
-                    operation_parameters = None
-            except (TypeError, ValueError, AttributeError):
-                invocation.return_dbus_error(AGENT_ID + ".Error", "Invalid gaming operation request.")
-                return
-            method, parameters = operation, operation_parameters
-            game_auth_sender = sender
         if method == "GetSnapshot":
             invocation.return_value(GLib.Variant("(s)", (json.dumps(self._snapshot_payload()),)))
         elif method == "Refresh":
@@ -563,6 +538,7 @@ class Agent:
                                            "notified_run": "", "result_viewed_run": ""}
                 self.notified.clear()
                 self.maintenance_viewed.clear()
+                clear_maintenance_viewed()
                 self._preferences_changed()
                 self.monitor.refresh()
                 self._publish_snapshot()
@@ -581,37 +557,30 @@ class Agent:
             if self.active_timer is None:
                 self.active_timer = GLib.timeout_add_seconds(2, self._tick)
             self.monitor.refresh()
-            game_auth = game_auth_sender if method in ("StartRollback", "CancelRollback", "CancelPending", "RemoveLayers", "RemoveSelectedLayers", "ClearDownloadCache", "StartChannelSwitch", "DeleteDeployment", "StartImageSwitch") else None
             def worker():
                 error = None
                 try:
-                    def execute():
-                        if method == "CancelRollback":
-                            start_cancel_rollback(parameters.unpack()[0])
-                        elif method == "CancelPending":
-                            start_cancel_pending(parameters.unpack()[0])
-                        elif method == "RemoveLayers":
-                            start_remove_layers(parameters.unpack()[0])
-                        elif method == "RemoveSelectedLayers":
-                            token, selected = parameters.unpack()
-                            start_remove_selected_layers(token, selected)
-                        elif method == "ClearDownloadCache":
-                            start_clear_download_cache(parameters.unpack()[0])
-                        elif method == "StartChannelSwitch":
-                            start_channel_switch(parameters.unpack()[0])
-                        elif method == "DeleteDeployment":
-                            start_delete_deployment(parameters.unpack()[0])
-                        elif method == "StartImageSwitch":
-                            start_image_switch(*parameters.unpack())
-                        elif method == "Restart":
-                            restart()
-                        else:
-                            start_operation("update" if method == "StartUpdate" else "rollback")
-                    if game_auth:
-                        with system.command_authorization(self._game_authorization(game_auth)):
-                            execute()
+                    if method == "CancelRollback":
+                        start_cancel_rollback(parameters.unpack()[0])
+                    elif method == "CancelPending":
+                        start_cancel_pending(parameters.unpack()[0])
+                    elif method == "RemoveLayers":
+                        start_remove_layers(parameters.unpack()[0])
+                    elif method == "RemoveSelectedLayers":
+                        token, selected = parameters.unpack()
+                        start_remove_selected_layers(token, selected)
+                    elif method == "ClearDownloadCache":
+                        start_clear_download_cache(parameters.unpack()[0])
+                    elif method == "StartChannelSwitch":
+                        start_channel_switch(parameters.unpack()[0])
+                    elif method == "DeleteDeployment":
+                        start_delete_deployment(parameters.unpack()[0])
+                    elif method == "StartImageSwitch":
+                        start_image_switch(*parameters.unpack())
+                    elif method == "Restart":
+                        restart()
                     else:
-                        execute()
+                        start_operation("update" if method == "StartUpdate" else "rollback")
                 except Exception as exception:
                     log.exception("Operation request failed: %s", method)
                     error = str(exception) or N_("Operation request failed.")
@@ -627,30 +596,6 @@ class Agent:
                 return False
             threading.Thread(target=worker, daemon=True).start()
 
-    def _game_authorization(self, sender):
-        """Ask the initiating GUI to bind a fallback listener to one PID."""
-        def prepare(pid, start_time, argv):
-            def release():
-                try:
-                    self.connection.call_sync(
-                        sender, AGENT_PATH + "/GamingAuth", AGENT_ID + ".GamingAuth", "Release",
-                        GLib.Variant("(t)", (pid,)), None, Gio.DBusCallFlags.NONE, 3000, None)
-                except GLib.Error:
-                    pass
-            try:
-                response = self.connection.call_sync(
-                    sender, AGENT_PATH + "/GamingAuth", AGENT_ID + ".GamingAuth", "Prepare",
-                    GLib.Variant("(ttas)", (pid, start_time, argv)),
-                    GLib.VariantType.new("(b)"), Gio.DBusCallFlags.NONE, 30000, None)
-                if not response.unpack()[0]:
-                    release()
-                    raise RuntimeError("Gaming-mode authorization was not registered.")
-            except Exception:
-                release()
-                raise
-            return release
-        return prepare
-
     def run(self):
         self.loop.run()
 
@@ -662,7 +607,6 @@ class Client:
         self.changed, self.error = changed, error
         self.connection = Gio.bus_get_sync(Gio.BusType.SESSION, None)
         self.closed = False
-        self.game_auth_enabled = False
         self.signal_subscription = self.connection.signal_subscribe(
             AGENT_ID, AGENT_ID, "Changed", AGENT_PATH, None,
             Gio.DBusSignalFlags.NONE, self._signal)
@@ -753,15 +697,7 @@ class Client:
         timeout = 2_147_483_647 if method in {
             "StartRollback", "CancelRollback", "CancelPending", "RemoveLayers", "RemoveSelectedLayers", "ClearDownloadCache", "StartChannelSwitch", "DeleteDeployment", "StartImageSwitch",
         } else 120000
-        wire_method, wire_parameters = method, parameters
-        if self.game_auth_enabled and method in {
-            "StartRollback", "CancelRollback", "CancelPending", "RemoveLayers", "RemoveSelectedLayers", "ClearDownloadCache", "StartChannelSwitch", "DeleteDeployment", "StartImageSwitch",
-        }:
-            original_parameters = (GLib.Variant("b", False) if method == "StartRollback"
-                                   else parameters or GLib.Variant("()", ()))
-            wire_method = "GameOperation"
-            wire_parameters = GLib.Variant("(sv)", (method, original_parameters))
-        self.connection.call(AGENT_ID, AGENT_PATH, AGENT_ID, wire_method, wire_parameters, None, Gio.DBusCallFlags.NONE, timeout, None, finished)
+        self.connection.call(AGENT_ID, AGENT_PATH, AGENT_ID, method, parameters, None, Gio.DBusCallFlags.NONE, timeout, None, finished)
 
     def set_visible(self, visible):
         if self.closed:

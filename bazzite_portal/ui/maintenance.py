@@ -175,15 +175,11 @@ class SystemManagementUI:
         self.channel_switch_row.controller_read_only_focus = True
         self.channel_switch_row.set_activatable(True)
         self.channel_switch_row.connect("activated", lambda *_: self._confirm_channel_switch())
-        shield = app_icon("shield", 20, N_("Requires administrator authorization"))
-        shield.set_tooltip_text(_("Requires administrator authorization"))
-        self.channel_switch_row.add_prefix(shield)
         self.channel_group.add(self.channel_switch_row)
         self.channel_specific_row = Adw.ActionRow(
             title=_('Rebase to specific image'), subtitle=_('Choose a {bazzite} image, release channel and version.').format(bazzite='Bazzite')
         )
         self.channel_specific_row.controller_focus_row = True
-        self.channel_specific_row.add_prefix(app_icon("shield", 20, N_("Requires administrator authorization")))
         self.channel_specific_row.controller_read_only_focus = True
         self.channel_specific_row.set_activatable(True)
         self.channel_specific_row.connect("activated", lambda *_: self._show_image_selection())
@@ -209,9 +205,6 @@ class SystemManagementUI:
         self.layers_request_active = False
         for row in (self.rollback_row, self.cancel_pending_row, self.clear_cache_row, self.delete_pinned_deployments_row,
                     self.layers_row, self.reset_layers_row):
-            shield = app_icon("shield", 20, N_("Requires administrator authorization"))
-            shield.set_tooltip_text(format_message(N_("Requires administrator authorization")))
-            row.add_prefix(shield)
             row.controller_read_only_focus = True
         self.stack.add_named(page, N_("System"))
         self.stack.add_named(management_page, "Management")
@@ -1082,11 +1075,6 @@ class SystemManagementUI:
         dialog = self.modal
         if dialog is not None and hasattr(dialog, "maintenance_legend"):
             return dialog
-        auth_dialog = getattr(self, "_gaming_auth_dialog", None)
-        parent = getattr(auth_dialog, "modal_parent", None)
-        if (parent is not None and not getattr(parent, "maintenance_closed", False)
-                and parent.get_visible() and hasattr(parent, "maintenance_legend")):
-            return parent
         return None
 
     def _sync_maintenance_dialog(self):
