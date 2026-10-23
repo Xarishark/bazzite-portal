@@ -4,10 +4,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Bazzite Portal / App\n"
-"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/"
-"app/\n"
+"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/app/"
+"\n"
 "POT-Creation-Date: 2026-10-23 02:20+0200\n"
-"PO-Revision-Date: 2026-10-22 21:23+0000\n"
+"PO-Revision-Date: 2026-10-24 10:51+0000\n"
 "Last-Translator: dani3690 <dani3690@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/bazzite-portal/"
 "app/it/>\n"
@@ -140,7 +140,7 @@ msgstr "Documentazione di {bazzite}"
 #: bazzite_portal/integration/community.py:15
 #, python-brace-format
 msgid "{bazzite} community and support"
-msgstr "Community e supporto di {bazzite}"
+msgstr "Comunità e assistenza di {bazzite}"
 
 #: bazzite_portal/integration/community.py:16
 #, python-brace-format
@@ -1068,35 +1068,37 @@ msgstr "In attesa dell'aggiornamento"
 #: bazzite_portal/ui/application.py:2124
 msgid "Update failed. Open the update log for details."
 msgstr ""
+"Aggiornamento non riuscito. Apri il log dell'aggiornamento per maggiori "
+"dettagli."
 
 #: bazzite_portal/ui/application.py:2126 bazzite_portal/updates/model.py:416
 msgid "No system update is available."
-msgstr ""
+msgstr "Non sono disponibili aggiornamenti del sistema."
 
 #: bazzite_portal/ui/application.py:2132
 msgid "Updated"
-msgstr ""
+msgstr "Aggiornato"
 
 #: bazzite_portal/ui/application.py:2134
 msgid "New version ready on next restart"
-msgstr ""
+msgstr "La nuova versione sarà disponibile al prossimo riavvio"
 
 #: bazzite_portal/ui/application.py:2136 bazzite_portal/updates/monitor.py:1473
 msgid "Reading update progress…"
-msgstr ""
+msgstr "Controllo dello stato dell'aggiornamento…"
 
 #: bazzite_portal/ui/application.py:2158
 msgid "Logs unavailable"
-msgstr ""
+msgstr "I log non sono disponibili"
 
 #: bazzite_portal/ui/application.py:2160
 msgid "No module log output"
-msgstr ""
+msgstr "Nessun risultato nel log del modulo"
 
 #: bazzite_portal/ui/application.py:2230
 #, python-brace-format
 msgid "Restart {bazzite}?"
-msgstr ""
+msgstr "Riavviare {bazzite}?"
 
 #: bazzite_portal/ui/application.py:2230
 #, python-brace-format
@@ -1104,22 +1106,24 @@ msgid ""
 "All update steps have finished. Restart now to start the prepared {bazzite} "
 "version. Save your work before continuing."
 msgstr ""
+"Tutte le fasi dell'aggiornamento sono terminate. Riavvia ora per utilizzare "
+"la nuova versione di {bazzite}. Salva il tuo lavoro prima di continuare."
 
 #: bazzite_portal/ui/application.py:2230 bazzite_portal/ui/application.py:2513
 msgid "Restart"
-msgstr ""
+msgstr "Riavvia"
 
 #: bazzite_portal/ui/application.py:2287
 msgid "This release has no written notes."
-msgstr ""
+msgstr "Questa versione non include note di rilascio."
 
 #: bazzite_portal/ui/application.py:2291
 msgid "Could not load the changelog. Try again later."
-msgstr ""
+msgstr "Non è stato possibile caricare le note di rilascio. Riprova più tardi."
 
 #: bazzite_portal/ui/application.py:2291
 msgid "No matching release notes were found."
-msgstr ""
+msgstr "Non sono disponibili note di rilascio per questa versione."
 
 #: bazzite_portal/ui/application.py:2296 bazzite_portal/ui/application.py:2305
 #: bazzite_portal/ui/maintenance.py:77 bazzite_portal/ui/maintenance.py:233
@@ -1127,41 +1131,41 @@ msgstr ""
 #: bazzite_portal/ui/maintenance.py:282 bazzite_portal/ui/maintenance.py:293
 #: bazzite_portal/ui/maintenance.py:343
 msgid "Next restart"
-msgstr ""
+msgstr "Al prossimo riavvio"
 
 #: bazzite_portal/ui/application.py:2297
 msgid "Running now"
-msgstr ""
+msgstr "In uso"
 
 #: bazzite_portal/ui/application.py:2305
 msgid "Pending update"
-msgstr ""
+msgstr "Aggiornamento in sospeso"
 
 #: bazzite_portal/ui/application.py:2305
 msgid "Installed version"
-msgstr ""
+msgstr "Versione installata"
 
 #: bazzite_portal/ui/application.py:2310
 msgid "No verified release version and channel are available."
-msgstr ""
+msgstr "Non sono disponibili una versione e un canale di rilascio verificati."
 
 #: bazzite_portal/ui/application.py:2462 bazzite_portal/ui/application.py:2466
 #: bazzite_portal/ui/maintenance.py:330
 msgid "Rolling back…"
-msgstr ""
+msgstr "Ripristino della versione precedente in corso…"
 
 #: bazzite_portal/ui/application.py:2462
 #, python-brace-format
 msgid "{bazzite} is updating…"
-msgstr ""
+msgstr "{bazzite} è in fase di aggiornamento…"
 
 #: bazzite_portal/ui/application.py:2464
 msgid "Rebasing…"
-msgstr ""
+msgstr "Passaggio a una nuova versione in corso…"
 
 #: bazzite_portal/ui/application.py:2468
 msgid "System operation in progress…"
-msgstr ""
+msgstr "Operazione di sistema in corso…"
 
 #: bazzite_portal/ui/application.py:2501
 #, python-brace-format
@@ -1169,23 +1173,30 @@ msgid ""
 "A system change is pending, but {app_name} could not verify it. Restart is "
 "unavailable until its status can be checked."
 msgstr ""
+"Una modifica al sistema è in sospeso, ma {app_name} non è riuscita a "
+"verificarla. Il riavvio non è disponibile finché non sarà possibile "
+"controllarne lo stato."
 
 #: bazzite_portal/ui/application.py:2503
 #, python-brace-format
 msgid "{bazzite} updates are unavailable. Open Logs for details."
 msgstr ""
+"Gli aggiornamenti di {bazzite} non sono disponibili. Apri i log per maggiori "
+"dettagli."
 
 #: bazzite_portal/ui/application.py:2509
 msgid "Updating…"
-msgstr ""
+msgstr "Aggiornamento in corso…"
 
 #: bazzite_portal/ui/application.py:2511
 msgid "Busy"
-msgstr ""
+msgstr "Un'altra operazione è in corso"
 
 #: bazzite_portal/ui/application.py:2539
 msgid "The update request could not be sent. Open Logs for details."
 msgstr ""
+"Non è stato possibile inviare la richiesta di aggiornamento. Apri i log per "
+"maggiori dettagli."
 
 #: bazzite_portal/ui/application.py:2542 bazzite_portal/ui/maintenance.py:313
 #: bazzite_portal/ui/maintenance.py:523 bazzite_portal/ui/maintenance.py:603
@@ -1193,15 +1204,18 @@ msgstr ""
 #: bazzite_portal/ui/maintenance.py:1708
 msgid "System status is unavailable. Open Logs for details."
 msgstr ""
+"Lo stato del sistema non è disponibile. Apri i log per maggiori dettagli."
 
 #: bazzite_portal/ui/application.py:2564
 msgid "Read the rebase documentation"
-msgstr ""
+msgstr "Consulta la documentazione sul cambio di base del sistema"
 
 #: bazzite_portal/ui/application.py:2611
 #, python-brace-format
 msgid "Visit {bazzite} documentation, community spaces, and source code."
 msgstr ""
+"Scopri la documentazione di {bazzite}, gli spazi della comunità e il codice "
+"sorgente."
 
 #: bazzite_portal/ui/application.py:2612
 msgid "Resources"
@@ -1219,7 +1233,7 @@ msgstr ""
 #: bazzite_portal/ui/application.py:2787
 #, python-brace-format
 msgid "This community link is not a valid {https} address."
-msgstr ""
+msgstr "Questo collegamento della comunità non è un indirizzo {https} valido."
 
 #: bazzite_portal/ui/application.py:2801
 msgid "Preferences"
