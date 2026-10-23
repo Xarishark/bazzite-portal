@@ -97,6 +97,13 @@ def format_message(message):
     # With no installed catalog there is nothing to translate or compile.
     if type(_translation) is _gettext.NullTranslations:
         return message
+    # Compose Brew progress subtitles from existing independently translated
+    # labels. Package names stay verbatim, as they do in installation progress.
+    progress = re.fullmatch(r"(Downloading|Updating) · ([0-9]+) of ([0-9]+)(?: - ([\w+@./-]+))?", message)
+    if progress:
+        counter = format_message(C_("{current} of {total}", current=progress[2], total=progress[3]))
+        package = f" - {progress[4]}" if progress[4] else ""
+        return f"{gettext(progress[1])} · {counter}{package}"
     for pattern, template in _message_patterns():
         match = pattern.fullmatch(message)
         if match is not None:
