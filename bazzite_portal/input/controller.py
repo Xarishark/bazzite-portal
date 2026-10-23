@@ -146,6 +146,11 @@ class SDLGamepad:
         for name, (result, arguments) in signatures.items():
             function = getattr(self.sdl, name)
             function.restype, function.argtypes = result, arguments
+        self.resume()
+
+    def resume(self):
+        if self.initialized:
+            return
         # SDL has no window to track focus. The GTK dispatcher gates input instead.
         self.sdl.SDL_SetHint(b'SDL_JOYSTICK_ALLOW_BACKGROUND_EVENTS', b'1')
         if not self.sdl.SDL_InitSubSystem(self.INIT_GAMEPAD):
@@ -205,7 +210,7 @@ class ControllerDriver:
     """GLib timer lifecycle and focus gating, also usable with mocked backends."""
 
     def __init__(self, backend, context, dispatch, scheduler=GLib, on_connections_changed=None,
-                 on_activity=None):
+                 on_activity=None, *, active=True):
         self.backend, self.context, self.dispatch = backend, context, dispatch
         self.on_connections_changed = on_connections_changed
         self.on_activity = on_activity
@@ -213,16 +218,57 @@ class ControllerDriver:
         self.inputs = {}
         self.last_context = None
         self.connected = None
-        self.source = scheduler.timeout_add(16, self.poll)
+        self.active = active
+        self.closed = False
+        self.failed = False
+        self.source = scheduler.timeout_add(16, self.poll) if active else None
+        if not active:
+            self.backend.close()
+
+    def set_active(self, active):
+        active = bool(active)
+        if self.closed or self.failed or active == self.active:
+            return
+        if not active:
+            self._stop()
+            return
+        try:
+            self.backend.resume()
+            self.active = True
+            self.source = self.scheduler.timeout_add(16, self.poll)
+        except Exception as error:
+            self._disable(error)
+
+    def _stop(self):
+        if self.source is not None:
+            self.scheduler.source_remove(self.source)
+            self.source = None
+        self.active = False
+        self.backend.close()
+        self.inputs.clear()
+        self.last_context = None
+
+    def _disable(self, error):
+        print(f'Warning: Controller support disabled: {error}', file=sys.stderr)
+        self._stop()
+        self.failed = True
+        if self.connected and self.on_connections_changed:
+            self.connected = False
+            self.on_connections_changed(False)
 
     def reset_inputs(self):
         for state in self.inputs.values():
             state.reset()
 
     def poll(self):
+        if not self.active or self.closed:
+            return False
         try:
-            samples = self.backend.sample()
             context = self.context()
+            if not context:
+                self.set_active(False)
+                return False
+            samples = self.backend.sample()
             connected = {sample[0] for sample in samples}
             is_connected = bool(connected)
             if is_connected != self.connected:
@@ -233,9 +279,6 @@ class ControllerDriver:
             if context != self.last_context:
                 self.reset_inputs()
                 self.last_context = context
-            if not context:
-                self.reset_inputs()
-                return True
             pending = []
             now = time.monotonic()
             active = any(buttons or max(abs(x), abs(y)) >= 0.35
@@ -257,20 +300,14 @@ class ControllerDriver:
                     break
             return True
         except Exception as error:
-            print(f'Warning: Controller support disabled: {error}', file=sys.stderr)
-            self.source = None
-            self.backend.close()
-            if self.connected and self.on_connections_changed:
-                self.connected = False
-                self.on_connections_changed(False)
+            self._disable(error)
             return False
 
     def close(self):
-        if self.source is not None:
-            self.scheduler.source_remove(self.source)
-            self.source = None
-        self.backend.close()
-        self.inputs.clear()
+        if self.closed:
+            return
+        self.closed = True
+        self._stop()
         if self.connected and self.on_connections_changed:
             self.connected = False
             self.on_connections_changed(False)

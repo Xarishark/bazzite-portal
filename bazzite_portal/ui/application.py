@@ -293,6 +293,7 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         self.controller_connected = False
         self.controller_priority = ControllerPriority()
         self._native_focus_timeout = None
+        self._controller_focus_sync_source = None
         self._last_pointer_position = {}
         self.controller_focus_widget = None
         self._controller_focus_established = False
@@ -359,7 +360,8 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             backend = SDLGamepad()
             self.controller = ControllerDriver(backend, self._controller_context, self._dispatch,
                                                on_connections_changed=self._controller_connections_changed,
-                                               on_activity=self._controller_activity)
+                                               on_activity=self._controller_activity, active=False)
+            self._schedule_controller_focus_sync()
         except Exception as error:
             self.toast(public_error(error, N_("Controller input is unavailable. Reconnect your controller and try again."), context="Controller initialization"))
         self._render_status()
@@ -374,6 +376,8 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             self.notices.add_toast(Adw.Toast(title=format_message(message)[:500]))
 
     def _install_input_mode_controllers(self, window):
+        for signal in ("notify::is-active", "map", "unmap"):
+            window.connect(signal, lambda *_: self._schedule_controller_focus_sync())
         motion = Gtk.EventControllerMotion()
         motion.connect("motion", lambda _controller, x, y, root=window: self._pointer_moved(root, x, y))
         motion.connect("leave", lambda _controller, root=window: self._pointer_left(root))
@@ -3251,6 +3255,19 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         window = self.modal or self
         return (id(window), self.stack.get_visible_child_name()) if window.is_active() and window.get_visible() else None
 
+    def _schedule_controller_focus_sync(self):
+        if self.closing or self._controller_focus_sync_source is not None:
+            return
+        # A parent loses activation before its modal gains it. Coalesce that
+        # transition so switching between Portal windows need not reopen SDL.
+        self._controller_focus_sync_source = GLib.idle_add(self._sync_controller_focus)
+
+    def _sync_controller_focus(self):
+        self._controller_focus_sync_source = None
+        if not self.closing and self.controller is not None:
+            self.controller.set_active(self._controller_context() is not None)
+        return GLib.SOURCE_REMOVE
+
     def _set_controller_focus(self, widget):
         previous = self.controller_focus_widget
         if previous is not None and previous is not widget:
@@ -3626,6 +3643,9 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         if application is not None and application.window is self:
             application.window = None
         self.closing = True
+        if self._controller_focus_sync_source is not None:
+            GLib.source_remove(self._controller_focus_sync_source)
+            self._controller_focus_sync_source = None
         self.home_update_artwork.close()
         self._last_pointer_position.clear()
         if self._native_focus_timeout is not None:
