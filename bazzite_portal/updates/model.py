@@ -266,7 +266,7 @@ def live_module_detail(line, active, packages=None, progress=None):
                                 and re.fullmatch(r"[a-zA-Z0-9_][a-zA-Z0-9_+@.-]*(?:/[a-zA-Z0-9_][a-zA-Z0-9_+@.-]*)*", app)
                                 for app in apps)
                         and len(set(apps)) == len(apps)):
-                    progress.update(total=len(apps), planned=list(apps), completed=[],
+                    progress.update(total=len(apps), planned=list(apps), completed=[], downloaded=[],
                                     collecting=False, fraction=0.0)
                 return ""
             if re.fullmatch(r"==> Upgrading [0-9]+ dependents? of upgraded (?:formula|formulae):", message):
@@ -278,6 +278,11 @@ def live_module_detail(line, active, packages=None, progress=None):
             total = re.fullmatch(r"==> (?:Would upgrade|Upgrading) ([0-9]+) outdated packages?:?", message)
             if total:
                 if progress.get("scope_unknown"):
+                    return ""
+                if ("downloaded" in progress and not progress.get("current")
+                        and int(total[1]) == progress.get("total")):
+                    # The native summary follows fetching; keep the adapter's
+                    # early inventory and downloads already counted against it.
                     return ""
                 progress.clear()
                 progress["fraction"] = None
@@ -295,6 +300,27 @@ def live_module_detail(line, active, packages=None, progress=None):
                 if len(planned) == count:
                     progress["fraction"] = 0.0
                 return ""
+            downloaded = progress.get("downloaded")
+            if (downloaded is not None and not progress.get("current")
+                    and message.startswith("==> Fetching downloads for:")):
+                counter = C_("{current} of {total}", current=len(downloaded), total=count)
+                return f"{N_('Downloading')} · {counter}"
+            bottle = re.fullmatch(
+                r"✔[\ufe0e\ufe0f]? Bottle ([\w+@.-]+(?:/[\w+@.-]+)*) \([^()\n]+\)"
+                r"(?:\s+(?:Downloaded|Verified)\s+[^\n]+)?", message)
+            if bottle and downloaded is not None:
+                # A bottle is the package payload; Bottle Manifest is metadata.
+                # Tapped names may be shortened, but must identify one plan item.
+                matches = [app for app in planned
+                           if app == bottle[1] or app.rsplit("/", 1)[-1] == bottle[1]]
+                if len(matches) == 1:
+                    app = matches[0]
+                    if app not in downloaded:
+                        downloaded.append(app)
+                    progress["fraction"] = (len(downloaded) + len(progress["completed"])) / (2 * count)
+                    if not progress.get("current"):
+                        counter = C_("{current} of {total}", current=len(downloaded), total=count)
+                        return f"{N_('Downloading')} · {counter}"
             upgrading = re.fullmatch(r"==> Upgrading ([\w+@.-]+(?:/[\w+@.-]+)*)", message)
             if upgrading:
                 progress["collecting"] = False
@@ -309,17 +335,29 @@ def live_module_detail(line, active, packages=None, progress=None):
                     started.append(upgrading[1])
                 ordinal = started.index(upgrading[1]) + 1
                 progress["item"] = f"{ordinal}/{count}"
-                progress["fraction"] = max(progress.get("fraction") or 0.0, (ordinal - 1) / count)
+                if downloaded is not None:
+                    # Cached payloads or missing download lines must not leave
+                    # a successfully installed package's download unaccounted.
+                    if upgrading[1] not in downloaded:
+                        downloaded.append(upgrading[1])
+                    progress["fraction"] = (len(downloaded) + len(progress["completed"])) / (2 * count)
+                else:
+                    progress["fraction"] = max(progress.get("fraction") or 0.0, (ordinal - 1) / count)
             installed = re.search(r"(?:^|\s)(?:[^\s]+/)?Cellar/([^/\s]+)/[^/\s]+:\s+[0-9,]+ files?", message)
             current = progress.get("current")
             if (installed and count and current in planned
                     and installed[1] == current.rsplit("/", 1)[-1]
                     and current not in progress["completed"]):
                 progress["completed"].append(current)
-                progress["fraction"] = max(progress.get("fraction") or 0.0,
-                                           (progress["started"].index(current) + 1) / count)
+                if downloaded is not None:
+                    progress["fraction"] = (len(downloaded) + len(progress["completed"])) / (2 * count)
+                else:
+                    progress["fraction"] = max(progress.get("fraction") or 0.0,
+                                               (progress["started"].index(current) + 1) / count)
             if current and progress.get("item"):
-                return f"{progress['item']} - {current}"[:512]
+                counter = C_("{current} of {total}",
+                             current=progress["started"].index(current) + 1, total=count)
+                return f"{N_('Updating')} · {counter} - {current}"[:512]
         if re.fullmatch(r"==> Updating Homebrew(?:\.{3}|…)?", message):
             return C_('Updating {homebrew}', homebrew='Homebrew')
         match = re.match(r"==> (?:Upgrading|Installing|Pouring|Fetching) (.+)", message)

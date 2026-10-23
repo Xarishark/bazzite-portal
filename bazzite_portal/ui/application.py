@@ -279,6 +279,7 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         self.config_path = Path(config_path)
         self.status_received = False
         self.store = Store()
+        self._pins = self.store.pins()
         self._update_console_open = bool(self.store.preferences().get("show_logs", False))
         self.executor = concurrent.futures.ThreadPoolExecutor(max_workers=4, thread_name_prefix="bazzite-portal")
         self.portal_status_executor = concurrent.futures.ThreadPoolExecutor(
@@ -293,6 +294,7 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         self.controller_connected = False
         self.controller_priority = ControllerPriority()
         self._native_focus_timeout = None
+        self._controller_focus_sync_source = None
         self._last_pointer_position = {}
         self.controller_focus_widget = None
         self._controller_focus_established = False
@@ -359,7 +361,8 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             backend = SDLGamepad()
             self.controller = ControllerDriver(backend, self._controller_context, self._dispatch,
                                                on_connections_changed=self._controller_connections_changed,
-                                               on_activity=self._controller_activity)
+                                               on_activity=self._controller_activity, active=False)
+            self._schedule_controller_focus_sync()
         except Exception as error:
             self.toast(public_error(error, N_("Controller input is unavailable. Reconnect your controller and try again."), context="Controller initialization"))
         self._render_status()
@@ -374,6 +377,8 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             self.notices.add_toast(Adw.Toast(title=format_message(message)[:500]))
 
     def _install_input_mode_controllers(self, window):
+        for signal in ("notify::is-active", "map", "unmap"):
+            window.connect(signal, lambda *_: self._schedule_controller_focus_sync())
         motion = Gtk.EventControllerMotion()
         motion.connect("motion", lambda _controller, x, y, root=window: self._pointer_moved(root, x, y))
         motion.connect("leave", lambda _controller, root=window: self._pointer_left(root))
@@ -383,6 +388,11 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         click.connect("pressed", lambda *_args: self._native_input_mode())
         window.add_controller(click)
         window.pointer_click_controller = click
+        scroll = Gtk.EventControllerScroll.new(Gtk.EventControllerScrollFlags.BOTH_AXES)
+        scroll.set_propagation_phase(Gtk.PropagationPhase.CAPTURE)
+        scroll.connect("scroll", self._native_scrolled)
+        window.add_controller(scroll)
+        window.pointer_scroll_controller = scroll
         keys = Gtk.EventControllerKey()
         keys.set_propagation_phase(Gtk.PropagationPhase.CAPTURE)
         keys.connect("key-pressed", self._native_key_pressed)
@@ -393,10 +403,18 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         if not self.controller_priority.request_native_takeover():
             self._schedule_native_focus_clear()
             return
+        if (not self.controller_navigation and not self._controller_focus_established
+                and self.controller_focus_widget is None):
+            return  # Native motion/keys must not repeatedly walk every hidden page.
         self.controller_navigation = False
         self._sync_controller_style_mode()
         self._controller_focus_established = False
         self._clear_controller_focus_visuals()
+
+    def _native_scrolled(self, _controller, _dx, _dy):
+        self._stop_tool_category_scroll()
+        self._native_input_mode()
+        return False  # Leave wheel/touchpad scrolling to the scrolled window.
 
     def _native_key_pressed(self, _controller, keyval, _keycode, state):
         self._native_input_mode()
@@ -454,11 +472,12 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
 
     def _set_pointer_hover(self, row):
         previous = getattr(self, "_pointer_hovered_row", None)
-        if previous is not row:
-            if previous is not None:
-                previous.pointer_hovered = False
-                self._set_favorite_emphasis(previous, False)
-            self._pointer_hovered_row = row
+        if previous is row:
+            return
+        if previous is not None:
+            previous.pointer_hovered = False
+            self._set_favorite_emphasis(previous, False)
+        self._pointer_hovered_row = row
         if row is not None:
             row.pointer_hovered = True
             self._set_favorite_emphasis(row, False)
@@ -627,6 +646,8 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         if name == "Announcements" and not self.announcements_available:
             return
         previous_page = self.stack.get_visible_child_name()
+        if name in {N_("Home"), N_("Tools")}:
+            self._refresh_pins()
         if (previous_page == N_("Updates") and name != N_("Updates")
                 and self.snapshot.run and not self.snapshot.running
                 and self.snapshot.result in {"success", "failed"}):
@@ -1363,7 +1384,7 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         for row in self.pin_rows:
             self.pin_group.remove(row)
         self.pin_rows.clear()
-        pins = self.store.pins()
+        pins = self._pins
         self.pin_group.set_visible(bool(pins))
         for pin in pins:
             item = portal.resolve(self.items, pin)
@@ -1401,19 +1422,30 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             pins.remove(pin)
         elif len(pins) < 100:
             pins.append(pin)
+        self._save_pins(pins)
+
+    def _refresh_pins(self):
+        pins = self.store.pins()
+        if pins != self._pins:
+            self._pins = pins
+            self._render_pins()
+            self._sync_tool_favorites()
+
+    def _save_pins(self, pins):
         if not self.store.write("pins", {"items": pins}):
             self.toast(public_error(self.store.errors[-1], N_("Could not save app preferences. Open Logs for details."), context='App preferences'))
+            return False
+        self._pins = pins
         self._render_pins()
         self._sync_tool_favorites()
         self._update_controller_legend()
+        return True
 
     def move_pin(self, index, delta):
         pins = self.store.pins()
         if 0 <= index + delta < len(pins):
             pins[index], pins[index + delta] = pins[index + delta], pins[index]
-            if not self.store.write("pins", {"items": pins}):
-                self.toast(public_error(self.store.errors[-1], N_("Could not save app preferences. Open Logs for details."), context='App preferences'))
-            self._render_pins()
+            self._save_pins(pins)
 
     def _build_tools(self):
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
@@ -1532,7 +1564,7 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             destination.append(Adw.StatusPage(title=_("No matching tools"), description=_("Try another search."), icon_name="system-search-symbolic"))
             return
         groups = {}
-        pins = self.store.pins()
+        pins = self._pins
         for item in results:
             category = item["category"]
             if category not in groups:
@@ -1636,8 +1668,6 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         area.set_margin_end(10)
         area.set_valign(Gtk.Align.CENTER)
         area.set_focusable(False)
-        area.set_tooltip_text(format_message(_("Unpin") if favorite else _("Pin")))
-        area.update_property([Gtk.AccessibleProperty.LABEL], [_("Unpin") if favorite else _("Pin")])
         can_favorite = portal.resolve(self.items, portal.reference(item)) is not None
         area.set_sensitive(can_favorite)
         row.favorite_available = can_favorite
@@ -1652,7 +1682,7 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         row.favorite_hit_area = area
         row.favorite_icon = icon
         row.favorite_reference = portal.reference(item)
-        self._set_favorite_emphasis(row, False)
+        self._set_favorite_state(row, favorite)
 
         gesture = Gtk.GestureClick()
         gesture.set_button(1)
@@ -1665,17 +1695,22 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
     def _set_favorite_emphasis(self, row, active):
         if not hasattr(row, "favorite_icon"):
             return
-        favorite = row.favorite_reference in self.store.pins()
+        pointer_reveal = getattr(row, "pointer_hovered", False)
+        row.favorite_icon.set_opacity(1.0 if row.favorite_pinned or pointer_reveal else 0.0)
+
+    def _set_favorite_state(self, row, favorite):
+        if getattr(row, "favorite_pinned", None) == favorite:
+            return
+        row.favorite_pinned = favorite
         row.favorite_icon.set_from_icon_name("starred-symbolic" if favorite else "non-starred-symbolic")
         if favorite:
             row.favorite_icon.add_css_class("bazzite-favorite")
         else:
             row.favorite_icon.remove_css_class("bazzite-favorite")
-        pointer_reveal = getattr(row, "pointer_hovered", False)
-        row.favorite_icon.set_opacity(1.0 if favorite or pointer_reveal else 0.0)
         if row.favorite_available:
             row.favorite_hit_area.set_tooltip_text(format_message(_("Unpin") if favorite else _("Pin")))
             row.favorite_hit_area.update_property([Gtk.AccessibleProperty.LABEL], [_("Unpin") if favorite else _("Pin")])
+        self._set_favorite_emphasis(row, False)
 
     def _action_row_key(self, item, row, keyval):
         if keyval in (Gdk.KEY_y, Gdk.KEY_Y):
@@ -1693,12 +1728,9 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             pins.remove(pin)
         else:
             pins.append(pin)
-        if not self.store.write("pins", {"items": pins}):
-            self.toast(public_error(self.store.errors[-1], N_("Could not save app preferences. Open Logs for details."), context='App preferences'))
         controller_restore = self.controller_navigation
-        self._render_pins()
-        self._sync_tool_favorites()
-        self._update_controller_legend()
+        if not self._save_pins(pins):
+            return
         if row is not None:
             def restore_focus():
                 if self.closing or self.stack.get_visible_child_name() != N_("Tools"):
@@ -1721,7 +1753,7 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             while pending:
                 widget = pending.pop()
                 if hasattr(widget, "favorite_icon"):
-                    self._set_favorite_emphasis(widget, False)
+                    self._set_favorite_state(widget, widget.favorite_reference in self._pins)
                 child = widget.get_first_child()
                 while child:
                     pending.append(child)
@@ -3058,8 +3090,10 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             self.controller_style_choice.set_text((_("Automatic"), "Xbox", "PlayStation")[self.controller_style_dropdown.get_selected()])
             self._refresh_all_prompts()
             set_prompt_visible(self.legend, self._prompts_visible())
+            self._pins = self.store.pins()
             self._render_pins()
             self._render_tools()
+            self._sync_tool_favorites()
             self._render_home_activity()
             self._set_update_console(self.store.preferences()["show_logs"])
             self.settings_errors.set_text("\n".join(public_error(error, N_("Could not save or load app preferences. Open Logs for details."), context='App preferences') for error in self.store.errors))
@@ -3237,6 +3271,19 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
     def _controller_context(self):
         window = self.modal or self
         return (id(window), self.stack.get_visible_child_name()) if window.is_active() and window.get_visible() else None
+
+    def _schedule_controller_focus_sync(self):
+        if self.closing or self._controller_focus_sync_source is not None:
+            return
+        # A parent loses activation before its modal gains it. Coalesce that
+        # transition so switching between Portal windows need not reopen SDL.
+        self._controller_focus_sync_source = GLib.idle_add(self._sync_controller_focus)
+
+    def _sync_controller_focus(self):
+        self._controller_focus_sync_source = None
+        if not self.closing and self.controller is not None:
+            self.controller.set_active(self._controller_context() is not None)
+        return GLib.SOURCE_REMOVE
 
     def _set_controller_focus(self, widget):
         previous = self.controller_focus_widget
@@ -3530,7 +3577,7 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
                 self.stack.get_visible_child_name() == N_("Tools") and not self.tools_search_active):
             target = controller_focused_target(self)
             item = getattr(target, "portal_item", None)
-            favorite = bool(item and portal.reference(item) in self.store.pins())
+            favorite = bool(item and portal.reference(item) in self._pins)
             action = _("Unpin") if favorite else _("Pin")
             has_favorite_action = True
         else:
@@ -3613,6 +3660,9 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         if application is not None and application.window is self:
             application.window = None
         self.closing = True
+        if self._controller_focus_sync_source is not None:
+            GLib.source_remove(self._controller_focus_sync_source)
+            self._controller_focus_sync_source = None
         self.home_update_artwork.close()
         self._last_pointer_position.clear()
         if self._native_focus_timeout is not None:
