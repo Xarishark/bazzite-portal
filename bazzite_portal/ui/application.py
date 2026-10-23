@@ -383,6 +383,11 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         click.connect("pressed", lambda *_args: self._native_input_mode())
         window.add_controller(click)
         window.pointer_click_controller = click
+        scroll = Gtk.EventControllerScroll.new(Gtk.EventControllerScrollFlags.BOTH_AXES)
+        scroll.set_propagation_phase(Gtk.PropagationPhase.CAPTURE)
+        scroll.connect("scroll", self._native_scrolled)
+        window.add_controller(scroll)
+        window.pointer_scroll_controller = scroll
         keys = Gtk.EventControllerKey()
         keys.set_propagation_phase(Gtk.PropagationPhase.CAPTURE)
         keys.connect("key-pressed", self._native_key_pressed)
@@ -393,10 +398,18 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         if not self.controller_priority.request_native_takeover():
             self._schedule_native_focus_clear()
             return
+        if (not self.controller_navigation and not self._controller_focus_established
+                and self.controller_focus_widget is None):
+            return  # Native motion/keys must not repeatedly walk every hidden page.
         self.controller_navigation = False
         self._sync_controller_style_mode()
         self._controller_focus_established = False
         self._clear_controller_focus_visuals()
+
+    def _native_scrolled(self, _controller, _dx, _dy):
+        self._stop_tool_category_scroll()
+        self._native_input_mode()
+        return False  # Leave wheel/touchpad scrolling to the scrolled window.
 
     def _native_key_pressed(self, _controller, keyval, _keycode, state):
         self._native_input_mode()
