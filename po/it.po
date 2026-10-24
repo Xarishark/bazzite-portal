@@ -4,10 +4,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Bazzite Portal / App\n"
-"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/"
-"app/\n"
+"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/app/"
+"\n"
 "POT-Creation-Date: 2026-10-24 12:52+0200\n"
-"PO-Revision-Date: 2026-10-24 10:51+0000\n"
+"PO-Revision-Date: 2026-10-24 15:28+0000\n"
 "Last-Translator: dani3690 <dani3690@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/bazzite-portal/"
 "app/it/>\n"
@@ -119,7 +119,7 @@ msgstr ""
 #: bazzite_portal/updates/model.py:402
 #, python-brace-format
 msgid "{current} of {total}"
-msgstr ""
+msgstr "{current} di {total}"
 
 #: bazzite_portal/input/prompts.py:119
 msgid "D-pad"
@@ -1224,16 +1224,16 @@ msgstr ""
 
 #: bazzite_portal/ui/application.py:2644
 msgid "Resources"
-msgstr ""
+msgstr "Risorse"
 
 #: bazzite_portal/ui/application.py:2679
 #, python-brace-format
 msgid "{bazzite} release and project announcements."
-msgstr ""
+msgstr "Novità sulle versioni di {bazzite} e annunci sul progetto."
 
 #: bazzite_portal/ui/application.py:2681 bazzite_portal/ui/application.py:2728
 msgid "No announcements available"
-msgstr ""
+msgstr "Nessun annuncio disponibile"
 
 #: bazzite_portal/ui/application.py:2819
 #, python-brace-format
@@ -1242,45 +1242,49 @@ msgstr "Questo collegamento della comunità non è un indirizzo {https} valido."
 
 #: bazzite_portal/ui/application.py:2833
 msgid "Preferences"
-msgstr ""
+msgstr "Preferenze"
 
 #: bazzite_portal/ui/application.py:2837
 msgid "Open app at login"
-msgstr ""
+msgstr "apri l'app all'accesso"
 
 #: bazzite_portal/ui/application.py:2837
 msgid "Open the window at login. Background monitoring starts independently."
 msgstr ""
+"Apri la finestra all'accesso. Il monitoraggio in background si avvia "
+"indipendentemente."
 
 #: bazzite_portal/ui/application.py:2838
 msgid "Hide notification area icon"
-msgstr ""
+msgstr "Nascondi l'icona nell'area di notifica"
 
 #: bazzite_portal/ui/application.py:2838
 msgid "Hide the update icon in the notification area."
-msgstr ""
+msgstr "Nascondi l'icona degli aggiornamenti nell'area di notifica."
 
 #: bazzite_portal/ui/application.py:2839
 msgid "Show console during update"
-msgstr ""
+msgstr "Mostra la console durante l'aggiornamento"
 
 #: bazzite_portal/ui/application.py:2839
 msgid "Show the console on the Updates screen. Intended for advanced users."
 msgstr ""
+"Mostra la console nella schermata degli aggiornamenti. Funzione pensata per "
+"utenti esperti."
 
 #: bazzite_portal/ui/application.py:2840
 #, python-brace-format
 msgid "Show disabled {uupd} steps"
-msgstr ""
+msgstr "Mostra i passaggi disabilitati di {uupd}"
 
 #: bazzite_portal/ui/application.py:2840
 #, python-brace-format
 msgid "Display steps disabled in {uupd}. This does not enable them."
-msgstr ""
+msgstr "Mostra i passaggi disabilitati in {uupd}. Questo non li abilita."
 
 #: bazzite_portal/ui/application.py:2841
 msgid "Show unsupported rebase targets"
-msgstr ""
+msgstr "Mostra le destinazioni non supportate per il cambio di base del sistema"
 
 #: bazzite_portal/ui/application.py:2842
 #, python-brace-format
@@ -1288,18 +1292,22 @@ msgid ""
 "Include other desktops and the {track} channel. Intended for advanced "
 "testing; these targets may cause problems."
 msgstr ""
+"Include altri ambienti desktop e il canale {track}. Funzione pensata per i "
+"test avanzati: queste destinazioni potrebbero causare problemi."
 
 #: bazzite_portal/ui/application.py:2844
 msgid "Don’t ask before running tools"
-msgstr ""
+msgstr "Non chiedere conferma prima di eseguire gli strumenti"
 
 #: bazzite_portal/ui/application.py:2844
 msgid "Skip confirmation for tools that run without an options dialog."
 msgstr ""
+"Salta la conferma per gli strumenti che non prevedono una finestra delle "
+"opzioni."
 
 #: bazzite_portal/ui/application.py:2845
 msgid "Always show controller prompts"
-msgstr ""
+msgstr "Mostra sempre i prompt del controller"
 
 #: bazzite_portal/ui/application.py:2845
 msgid "Keep button prompts visible when no controller is connected."
