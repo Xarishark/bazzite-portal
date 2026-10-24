@@ -4,10 +4,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Bazzite Portal / App\n"
-"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/"
-"app/\n"
+"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/app/"
+"\n"
 "POT-Creation-Date: 2026-10-23 02:20+0200\n"
-"PO-Revision-Date: 2026-10-22 21:23+0000\n"
+"PO-Revision-Date: 2026-10-24 10:51+0000\n"
 "Last-Translator: Yun Kwan Shek "
 "<starfish7c0b917ee1024be8@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
@@ -160,17 +160,17 @@ msgstr "一個 {rpm_ostree} 的變更正在進行中，或未能提供更多資�
 #: bazzite_portal/maintenance/cache_clear.py:75
 #: bazzite_portal/maintenance/cache_clear.py:78
 msgid "Cancel the pending deployment before clearing the download cache."
-msgstr "取消待部署的鏡像，然後清理下載快取。"
+msgstr "取消待部署的鏡像後，方可清理下載快取。"
 
 #: bazzite_portal/maintenance/cache_clear.py:76
 msgid ""
 "Resolve the selected next-boot deployment before clearing the download cache."
-msgstr "處理待部署的鏡像，然後清理下載快取。"
+msgstr "處理待部署的鏡像後，方可清理下載快取。"
 
 #: bazzite_portal/maintenance/cancel_pending.py:41
 #, python-brace-format
 msgid "{bootc} deployments cannot be canceled by this workflow."
-msgstr "{bootc} 部署的鏡像無法被此操作更改。"
+msgstr "{bootc} 部署的鏡像無法被此操作取消。"
 
 #: bazzite_portal/maintenance/cancel_pending.py:51
 #: bazzite_portal/maintenance/channel_switch.py:52
@@ -187,7 +187,7 @@ msgstr "現時暫未有待部署的鏡像。"
 
 #: bazzite_portal/maintenance/cancel_pending.py:66
 msgid "The next boot is a scheduled rollback or other non-staged deployment."
-msgstr "下一次啓動將爲系統回滾或非待部署的鏡像。"
+msgstr "下一次啓動將爲系統回退或非待部署的鏡像。"
 
 #: bazzite_portal/maintenance/cancel_pending.py:68
 msgid "The pending deployment is pinned or its pin state is unknown."
@@ -201,7 +201,7 @@ msgstr "目前僅支持 {bazzite} {tracks} 更新頻道及編號。"
 
 #: bazzite_portal/maintenance/channel_switch.py:91
 msgid "Resolve the pending deployment before changing update channels."
-msgstr "處理待部署的鏡像，然後更改更新頻道。"
+msgstr "處理待部署的鏡像後，方可更改更新頻道。"
 
 #: bazzite_portal/maintenance/channel_switch.py:159
 msgid ""
@@ -211,7 +211,7 @@ msgstr "你目前已在此鏡像及更新頻道上，「更新」以獲取最新
 
 #: bazzite_portal/maintenance/delete_deployments.py:64
 msgid "Resolve the next-boot deployment before deleting saved deployments."
-msgstr "處理待部署的鏡像，然後刪除已儲存的鏡像。"
+msgstr "處理待部署的鏡像後，方可刪除已儲存的鏡像。"
 
 #: bazzite_portal/maintenance/delete_deployments.py:94
 #: bazzite_portal/ui/maintenance.py:1462
@@ -234,7 +234,7 @@ msgstr "未知"
 
 #: bazzite_portal/maintenance/image_switch.py:111
 msgid "Resolve the pending deployment before changing images."
-msgstr "處理待部署的鏡像，然後更改鏡像。"
+msgstr "處理待部署的鏡像後，方可更改鏡像。"
 
 #: bazzite_portal/maintenance/image_switch.py:118
 #, python-brace-format
@@ -293,59 +293,59 @@ msgstr "{bazzite} 回退失敗"
 
 #: bazzite_portal/services/agent.py:417
 msgid "Open Updates to inspect the operation log."
-msgstr ""
+msgstr "打開「更新」頁面以查看操作日誌。"
 
 #: bazzite_portal/services/agent.py:467 bazzite_portal/ui/application.py:561
 #: bazzite_portal/ui/application.py:739 bazzite_portal/ui/application.py:3635
 msgid "Open Updates"
-msgstr ""
+msgstr "打開更新頁面"
 
 #: bazzite_portal/services/agent.py:550
 msgid "Another operation request is pending."
-msgstr ""
+msgstr "目前尚有待處理的操作。"
 
 #: bazzite_portal/services/agent.py:586
 msgid "Operation request failed."
-msgstr ""
+msgstr "操作失敗。"
 
 #: bazzite_portal/services/agent.py:674 bazzite_portal/ui/application.py:2504
 msgid "Could not read update status. Open Logs for details."
-msgstr ""
+msgstr "無法讀取更新狀態，打開日誌以獲取更多資訊。"
 
 #: bazzite_portal/services/tray.py:288
 msgid "Updating"
-msgstr ""
+msgstr "正在更新"
 
 #: bazzite_portal/services/tray.py:288
 #, python-brace-format
 msgid "Updates are running. Open {app_name} for progress."
-msgstr ""
+msgstr "目前正在更新，打開 {app_name} 以查看進度。"
 
 #: bazzite_portal/services/tray.py:289
 msgid "Restart pending"
-msgstr ""
+msgstr "有待重啟"
 
 #: bazzite_portal/services/tray.py:289
 #, python-brace-format
 msgid "{bazzite} will boot into the new version on your next restart."
-msgstr ""
+msgstr "{bazzite} 將於重啟後啟動至新版本。"
 
 #: bazzite_portal/services/tray.py:290
 msgid "Update failed"
-msgstr ""
+msgstr "更新失敗"
 
 #: bazzite_portal/services/tray.py:290
 #, python-brace-format
 msgid "An update failed. Open {app_name} for details."
-msgstr ""
+msgstr "更新失敗，打開 {app_name} 以查看更多資訊。"
 
 #: bazzite_portal/services/tray.py:308
 msgid "Open"
-msgstr ""
+msgstr "打開"
 
 #: bazzite_portal/services/tray.py:308
 msgid "Dismiss"
-msgstr ""
+msgstr "關閉"
 
 #: bazzite_portal/ui/application.py:48 bazzite_portal/ui/application.py:344
 #: bazzite_portal/ui/application.py:409 bazzite_portal/ui/application.py:410
@@ -358,7 +358,7 @@ msgstr ""
 #: bazzite_portal/ui/application.py:3500 bazzite_portal/ui/application.py:3510
 #: bazzite_portal/ui/application.py:3550 bazzite_portal/ui/application.py:3575
 msgid "Home"
-msgstr ""
+msgstr "主頁"
 
 #: bazzite_portal/ui/application.py:48 bazzite_portal/ui/application.py:50
 #: bazzite_portal/ui/application.py:407 bazzite_portal/ui/application.py:416
@@ -373,7 +373,7 @@ msgstr ""
 #: bazzite_portal/ui/application.py:3503 bazzite_portal/ui/application.py:3514
 #: bazzite_portal/ui/application.py:3530
 msgid "Tools"
-msgstr ""
+msgstr "工具"
 
 #: bazzite_portal/ui/application.py:48 bazzite_portal/ui/application.py:50
 #: bazzite_portal/ui/application.py:630 bazzite_portal/ui/application.py:640
@@ -387,7 +387,7 @@ msgstr ""
 #: bazzite_portal/ui/application.py:3678
 #: packaging/io.github.Xarishark.bazzite_portal.desktop:16
 msgid "Updates"
-msgstr ""
+msgstr "更新"
 
 #: bazzite_portal/ui/application.py:48 bazzite_portal/ui/application.py:662
 #: bazzite_portal/ui/application.py:670 bazzite_portal/ui/application.py:671
@@ -398,7 +398,7 @@ msgstr ""
 #: bazzite_portal/ui/maintenance.py:777 bazzite_portal/ui/maintenance.py:793
 #: bazzite_portal/ui/maintenance.py:801 bazzite_portal/updates/model.py:16
 msgid "System"
-msgstr ""
+msgstr "系統"
 
 #: bazzite_portal/ui/application.py:48 bazzite_portal/ui/application.py:52
 #: bazzite_portal/ui/application.py:752 bazzite_portal/ui/application.py:782
@@ -407,66 +407,66 @@ msgstr ""
 #: bazzite_portal/ui/application.py:895 bazzite_portal/ui/application.py:974
 #: bazzite_portal/ui/application.py:992
 msgid "Troubleshooting"
-msgstr ""
+msgstr "疑難排解"
 
 #: bazzite_portal/ui/application.py:48 bazzite_portal/ui/application.py:52
 #: bazzite_portal/ui/application.py:753 bazzite_portal/ui/application.py:2611
 #: bazzite_portal/ui/application.py:2644
 msgid "Community"
-msgstr ""
+msgstr "社群"
 
 #: bazzite_portal/ui/application.py:48 bazzite_portal/ui/application.py:53
 #: bazzite_portal/ui/application.py:754 bazzite_portal/ui/application.py:2647
 #: bazzite_portal/ui/application.py:2662
 msgid "Announcements"
-msgstr ""
+msgstr "公告"
 
 #: bazzite_portal/ui/application.py:51 bazzite_portal/ui/application.py:671
 #: bazzite_portal/ui/application.py:750 bazzite_portal/ui/maintenance.py:63
 #: bazzite_portal/ui/maintenance.py:66
 msgid "System information"
-msgstr ""
+msgstr "系統資訊"
 
 #: bazzite_portal/ui/application.py:51 bazzite_portal/ui/application.py:671
 #: bazzite_portal/ui/application.py:751 bazzite_portal/ui/maintenance.py:64
 #: bazzite_portal/ui/maintenance.py:67
 msgid "System Management"
-msgstr ""
+msgstr "系統管理"
 
 #: bazzite_portal/ui/application.py:53 bazzite_portal/ui/application.py:712
 #: bazzite_portal/ui/application.py:715 bazzite_portal/ui/application.py:716
 msgid "Options"
-msgstr ""
+msgstr "設定"
 
 #: bazzite_portal/ui/application.py:217
 msgid "Installed"
-msgstr ""
+msgstr "已安裝"
 
 #: bazzite_portal/ui/application.py:217
 msgid "Enabled"
-msgstr ""
+msgstr "已啟用"
 
 #: bazzite_portal/ui/application.py:217
 msgid "Not installed"
-msgstr ""
+msgstr "未安裝"
 
 #: bazzite_portal/ui/application.py:218
 msgid "Disabled"
-msgstr ""
+msgstr "未啟用"
 
 #: bazzite_portal/ui/application.py:218
 msgid "Removed"
-msgstr ""
+msgstr "已移除"
 
 #: bazzite_portal/ui/application.py:250 bazzite_portal/ui/application.py:252
 #: bazzite_portal/ui/application.py:254 bazzite_portal/ui/maintenance.py:23
 #: bazzite_portal/ui/maintenance.py:217
 msgid "Unavailable"
-msgstr ""
+msgstr "不適用"
 
 #: bazzite_portal/ui/application.py:267
 msgid "None recorded"
-msgstr ""
+msgstr "未有任何記錄"
 
 #: bazzite_portal/ui/application.py:314 bazzite_portal/ui/application.py:318
 #: bazzite_portal/ui/application.py:319 bazzite_portal/ui/application.py:1170
@@ -476,102 +476,102 @@ msgstr ""
 #: bazzite_portal/ui/image_wizard.py:161 bazzite_portal/ui/image_wizard.py:165
 #: bazzite_portal/ui/maintenance.py:1085 bazzite_portal/ui/maintenance.py:1269
 msgid "Back"
-msgstr ""
+msgstr "返回"
 
 #: bazzite_portal/ui/application.py:364
 msgid ""
 "Controller input is unavailable. Reconnect your controller and try again."
-msgstr ""
+msgstr "未偵測到任何手柄／控制器，請重新連接後再試。"
 
 #: bazzite_portal/ui/application.py:370 bazzite_portal/ui/application.py:1405
 #: bazzite_portal/ui/application.py:1415 bazzite_portal/ui/application.py:1697
 #: bazzite_portal/ui/application.py:2985 bazzite_portal/ui/application.py:3072
 msgid "Could not save app preferences. Open Logs for details."
-msgstr ""
+msgstr "無法儲存應用程式偏好設定，請打開日誌已查看更多資訊。"
 
 #: bazzite_portal/ui/application.py:503 bazzite_portal/ui/application.py:833
 #: bazzite_portal/ui/application.py:1831 bazzite_portal/ui/application.py:1834
 #: bazzite_portal/ui/application.py:1845 bazzite_portal/ui/application.py:1854
 #: bazzite_portal/ui/application.py:2605
 msgid "Yes"
-msgstr ""
+msgstr "是"
 
 #: bazzite_portal/ui/application.py:503 bazzite_portal/ui/application.py:832
 #: bazzite_portal/ui/application.py:1831 bazzite_portal/ui/application.py:1834
 #: bazzite_portal/ui/application.py:1845 bazzite_portal/ui/application.py:2605
 msgid "No"
-msgstr ""
+msgstr "否"
 
 #: bazzite_portal/ui/application.py:532 bazzite_portal/ui/application.py:1170
 #: bazzite_portal/ui/application.py:1885 bazzite_portal/ui/application.py:3542
 #: bazzite_portal/ui/application.py:3562 bazzite_portal/ui/image_wizard.py:213
 #: bazzite_portal/ui/maintenance.py:1248
 msgid "Select"
-msgstr ""
+msgstr "選取"
 
 #: bazzite_portal/ui/application.py:547 bazzite_portal/ui/application.py:1988
 msgid "Show changelog"
-msgstr ""
+msgstr "顯示更新日誌"
 
 #: bazzite_portal/ui/application.py:560 bazzite_portal/ui/application.py:717
 msgid "Open Options"
-msgstr ""
+msgstr "打開設定"
 
 #: bazzite_portal/ui/application.py:562 bazzite_portal/ui/application.py:563
 #: bazzite_portal/ui/maintenance.py:34 bazzite_portal/ui/maintenance.py:38
 msgid "Refresh system information"
-msgstr ""
+msgstr "重新整理系統資訊"
 
 #: bazzite_portal/ui/application.py:564 bazzite_portal/ui/application.py:1434
 #: bazzite_portal/ui/application.py:1527
 msgid "Search for a tool"
-msgstr ""
+msgstr "搜索工具"
 
 #: bazzite_portal/ui/application.py:615 bazzite_portal/ui/maintenance.py:1587
 msgid "The request failed. Open Logs for details."
-msgstr ""
+msgstr "請求失敗，打開日誌以查看更多資訊。"
 
 #: bazzite_portal/ui/application.py:723 bazzite_portal/ui/application.py:2470
 #, python-brace-format
 msgid "Update {bazzite} and Apps"
-msgstr ""
+msgstr "更新 {bazzite} 與應用程式"
 
 #: bazzite_portal/ui/application.py:723 bazzite_portal/ui/application.py:2491
 msgid "Update your system and installed apps."
-msgstr ""
+msgstr "更新系統與應用程式。"
 
 #: bazzite_portal/ui/application.py:746
 msgid "Explore"
-msgstr ""
+msgstr "發現"
 
 #: bazzite_portal/ui/application.py:749
 msgid "Browse setup, fixes, and utilities from the system Portal."
-msgstr ""
+msgstr "在系統 Portal 中搜尋設置、補丁與工具。"
 
 #: bazzite_portal/ui/application.py:750
 #, python-brace-format
 msgid "View deployments, package layers and {rpm_ostree} status."
-msgstr ""
+msgstr "查看待部署鏡像、系統疊加套件與 {rpm_ostree} 狀態。"
 
 #: bazzite_portal/ui/application.py:751
 msgid ""
 "Cancel a pending deployment, remove layered apps or recover your system."
-msgstr ""
+msgstr "取消待部署的鏡像，移除系統疊加套件，或進行系統復原。"
 
 #: bazzite_portal/ui/application.py:752
 #, python-brace-format
 msgid "Report a problem, collect system logs, or reset {steam}."
-msgstr ""
+msgstr "回報問題，保存系統日誌，或重設 {steam}。"
 
 #: bazzite_portal/ui/application.py:753
 #, python-brace-format
 msgid "{bazzite} documentation, website, and community links."
-msgstr ""
+msgstr "{bazzite} 文檔，網址與社群。"
 
 #: bazzite_portal/ui/application.py:754 bazzite_portal/ui/application.py:2689
 #, python-brace-format
 msgid "View {bazzite} release and project announcements."
-msgstr ""
+msgstr "查看 {bazzite} 版本發佈詳情及項目公告。"
 
 #: bazzite_portal/ui/application.py:765 bazzite_portal/ui/application.py:2690
 msgid "The configuration file for this category is missing or invalid."
