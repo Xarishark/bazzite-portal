@@ -210,10 +210,13 @@ class ControllerDriver:
     """GLib timer lifecycle and focus gating, also usable with mocked backends."""
 
     def __init__(self, backend, context, dispatch, scheduler=GLib, on_connections_changed=None,
-                 on_activity=None, *, active=True):
+                 on_activity=None, *, active=True, has_focus=None, release_delay_ms=0):
         self.backend, self.context, self.dispatch = backend, context, dispatch
         self.on_connections_changed = on_connections_changed
         self.on_activity = on_activity
+        self.has_focus = has_focus
+        self.release_delay_ms = release_delay_ms
+        self.release_source = None
         self.scheduler = scheduler
         self.inputs = {}
         self.last_context = None
@@ -233,24 +236,41 @@ class ControllerDriver:
             self._stop()
             return
         try:
-            self.backend.resume()
+            if self.release_source is not None:
+                self.scheduler.source_remove(self.release_source)
+                self.release_source = None
+            else:
+                self.backend.resume()
             self.active = True
             self.source = self.scheduler.timeout_add(16, self.poll)
         except Exception as error:
             self._disable(error)
 
-    def _stop(self):
+    def _stop(self, *, immediate=False):
         if self.source is not None:
             self.scheduler.source_remove(self.source)
             self.source = None
         self.active = False
-        self.backend.close()
         self.inputs.clear()
         self.last_context = None
+        # Stop polling immediately. Only defer the expensive SDL teardown so
+        # asynchronous focus changes between owned windows can reuse it.
+        if immediate or not self.release_delay_ms:
+            if self.release_source is not None:
+                self.scheduler.source_remove(self.release_source)
+                self.release_source = None
+            self.backend.close()
+        elif self.release_source is None:
+            self.release_source = self.scheduler.timeout_add(self.release_delay_ms, self._release_backend)
+
+    def _release_backend(self):
+        self.release_source = None
+        self.backend.close()
+        return False
 
     def _disable(self, error):
         print(f'Warning: Controller support disabled: {error}', file=sys.stderr)
-        self._stop()
+        self._stop(immediate=True)
         self.failed = True
         if self.connected and self.on_connections_changed:
             self.connected = False
@@ -266,6 +286,13 @@ class ControllerDriver:
         try:
             context = self.context()
             if not context:
+                # An owned window can still have focus while a newly opened
+                # modal is waiting for activation. Keep SDL, but never sample
+                # or dispatch input into the old window during that handoff.
+                self.reset_inputs()
+                self.last_context = None
+                if self.has_focus is not None and self.has_focus():
+                    return True
                 self.set_active(False)
                 return False
             samples = self.backend.sample()
@@ -307,7 +334,7 @@ class ControllerDriver:
         if self.closed:
             return
         self.closed = True
-        self._stop()
+        self._stop(immediate=True)
         if self.connected and self.on_connections_changed:
             self.connected = False
             self.on_connections_changed(False)
