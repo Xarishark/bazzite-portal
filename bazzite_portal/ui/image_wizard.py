@@ -96,12 +96,14 @@ class ImageWizard:
 
     def __init__(self, owner, *, query_images: Callable[[], dict[str, Any]],
                  query_versions: Callable[[str, str], dict[str, Any]],
-                 on_selected: Callable[[str, str], None], show_unsupported: bool = False):
+                 on_selected: Callable[[str, str], None], show_unsupported: bool = False,
+                 restore_target=None):
         self.owner = owner
         self.query_images = query_images
         self.query_versions = query_versions
         self.on_selected = on_selected
         self.show_unsupported = show_unsupported
+        self.restore_target = restore_target
         self._generation = 0
         self._stage = "images"
         self._image = ""
@@ -115,6 +117,12 @@ class ImageWizard:
 
     def show(self):
         ui, owner = self.ui, self.owner
+        page = owner.stack.get_visible_child()
+        adjustment = page.get_vadjustment() if hasattr(page, "get_vadjustment") else None
+        self._restore = (self.restore_target or owner.get_focus(),
+                         owner.stack.get_visible_child_name(), adjustment,
+                         adjustment.get_value() if adjustment is not None else None,
+                         owner.controller_navigation)
         self.dialog = ui.Adw.Window(transient_for=owner, modal=True,
                                     title=_("Choose an Image"), default_width=560,
                                     default_height=520)
@@ -179,11 +187,43 @@ class ImageWizard:
         ui.set_window_content(self.dialog, toolbar)
         owner.modal = self.dialog
         owner._install_input_mode_controllers(self.dialog)
-        self.dialog.connect("close-request", lambda *_: owner._clear_confirm_modal(self.dialog))
+        self.dialog.connect("close-request", self._closed)
         self.dialog.present()
         owner._update_controller_legend()
         self._load_images()
         return self.dialog
+
+    def _closed(self, dialog):
+        self._generation += 1
+        current = self.owner.modal is dialog
+        self.owner._clear_confirm_modal(dialog)
+        if current:
+            self.restore_after_close(dialog)
+        return False
+
+    def restore_after_close(self, dialog):
+        """Return to the originating row unless another surface replaced it."""
+        app = self.owner.get_application()
+        activate = dialog.is_active() or (app is not None and app.get_active_window() is dialog)
+        def restore():
+            owner = self.owner
+            target, page_name, adjustment, value, controller = self._restore
+            if (owner.closing or owner.modal is not None or target is None
+                    or owner.stack.get_visible_child_name() != page_name
+                    or not target.get_mapped() or not target.get_sensitive()):
+                return self.ui.GLib.SOURCE_REMOVE
+            if activate:
+                owner.present()
+            if adjustment is not None:
+                adjustment.set_value(value)
+            if controller and owner.controller_navigation:
+                owner._set_controller_focus(target)
+            else:
+                owner._native_input_mode()
+                target.grab_focus()
+            owner._update_controller_legend()
+            return self.ui.GLib.SOURCE_REMOVE
+        self.ui.GLib.idle_add(restore)
 
     def _clear_rows(self):
         while (row := self.list_box.get_row_at_index(0)) is not None:
