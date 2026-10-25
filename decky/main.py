@@ -10,7 +10,7 @@ sys.path[:0] = [str(PLUGIN_ROOT), str(PLUGIN_ROOT / "vendor")]
 
 import decky
 from backend import messages as text
-from backend.payload import compact_state
+from backend.payload import LogReader, compact_state
 from backend.presentation import TOKEN_PATTERN, rollback_cancel_target
 from backend.transport import AgentConnection, decode_snapshot
 from jeepney.wrappers import DBusErrorResponse
@@ -42,6 +42,7 @@ class Plugin:
         self.installer_read = None
         self.installer_request = None
         self.connect_lock = asyncio.Lock()
+        self.log_reader = LogReader()
         self.state = {"connection": "connecting", "snapshot": None,
                       "request_pending": False, "error": "", "revision": 0,
                       "rollback_cancel_target": rollback_cancel_target(None),
@@ -168,6 +169,9 @@ class Plugin:
     async def get_state(self):
         return compact_state(self.state)
 
+    async def get_logs(self, cursor=None):
+        # Cached worker output only; no journal query, operation or polling loop.
+        return self.log_reader.read(self.state.get("snapshot"), cursor)
 
 
 
