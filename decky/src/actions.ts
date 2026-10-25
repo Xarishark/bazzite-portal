@@ -60,6 +60,11 @@ export function actions(state: State): Action[] {
     {id: restartReady ? "restart" : "update", label: s.running && s.operation === "update" ? m.updating : base ? m.busy : restartReady ? m.restart : m.update,
       reason: base || (!s.available ? m.unavailable : s.deployment && !s.deployment_known ? m.verify : ""),
       title: restartReady ? m.restartTitle : "", body: restartReady ? m.restartBody : "", target: restartReady ? {deployment: s.deployment!} : {}},
+    {id: "channel", label: format(returning ? m.channelReturn : m.channelLabel, {track}), reason: channelReason,
+      title: format(returning ? m.channelReturnTitle : m.channelTitle, {target_name: `Bazzite ${track}`}),
+      body: format(returning ? m.channelReturnBody : m.channelBody,
+        {target_name: `Bazzite ${track}`, current_track: text(channel?.current_track).replace(/^./, c => c.toUpperCase()), version: text(channel?.version), image: text(channel?.image)}),
+      target: {token: channel?.token || ""}},
 
   ];
 }

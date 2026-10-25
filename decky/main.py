@@ -20,6 +20,7 @@ EVENT = "portal_state"
 PORTAL = Path("/usr/bin/bazzite-portal")
 OPERATIONS = {
     "update": "StartUpdate",
+    "channel": "StartChannelSwitch",
 }
 
 
