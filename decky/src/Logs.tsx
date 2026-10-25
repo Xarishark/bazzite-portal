@@ -12,6 +12,10 @@ export function Logs() {
   const scroll = useRef<HTMLDivElement>(null);
   const following = useRef(true);
   const lines = snapshot?.operation === "update" ? logs.logs : undefined;
+  useEffect(() => {following.current = true;}, [snapshot?.run]);
+  useEffect(() => {
+    if (following.current && scroll.current) scroll.current.scrollTop = scroll.current.scrollHeight;
+  }, [lines]);
   return <Focusable {...{focusable: true, autoFocus: true}} preferredFocus className="portal-logs-page"
     actionDescriptionMap={{[GamepadButton.OK]: null}}
     onCancelButton={event => {event.preventDefault(); event.stopPropagation(); Navigation.NavigateBack();}}
