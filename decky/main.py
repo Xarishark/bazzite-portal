@@ -133,7 +133,31 @@ class Plugin:
                 log.warning("Could not connect to Portal worker", exc_info=True)
                 self._set(connection="unavailable", error=text.UNAVAILABLE)
                 return
+            if self.supervisor is None or self.supervisor.done():
+                self.supervisor = asyncio.create_task(self._supervise())
 
+    async def _supervise(self):
+        while not self.closing and self.watch is not None:
+            watch = self.watch
+            try:
+                await watch.wait_closed()
+            except asyncio.CancelledError:
+                raise
+            except Exception:
+                log.debug("Portal connection ended", exc_info=True)
+            if self.closing or watch is not self.watch:
+                return
+            self._set(connection="reconnecting", snapshot=None, error=text.CONNECTION_LOST)
+            # Bounded backoff occurs only after an actual connection failure.
+            # Agent absence on a healthy bus uses NameOwnerChanged, not polling.
+            for delay in (0, 1, 2):
+                if delay:
+                    await asyncio.sleep(delay)
+                await self._connect()
+                if self.watch is not None:
+                    break
+            else:
+                return
 
     async def get_state(self):
         return compact_state(self.state)
@@ -145,6 +169,14 @@ class Plugin:
 
 
 
+    async def reconnect(self):
+        self._set(connection="reconnecting", snapshot=None, error="")
+        if self.supervisor is not None and not self.supervisor.done():
+            self.supervisor.cancel()
+            await asyncio.gather(self.supervisor, return_exceptions=True)
+        self.supervisor = None
+        await self._connect()
+        return compact_state(self.state)
 
 
 
