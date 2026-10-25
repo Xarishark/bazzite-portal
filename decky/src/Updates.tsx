@@ -71,6 +71,8 @@ export function Updates({state, action, sending, visible, onUpdate, onBack, show
         unavailable={Boolean(action.reason) || startingUpdate} busy={runningUpdate || startingUpdate}
         onClick={() => {if (runningUpdate || startingUpdate || blockedReason) return; onUpdate();}} /></PanelSectionRow>
       {notice ? <PanelSectionRow><div className="portal-panel-status" role="status">{notice}</div></PanelSectionRow> : null}
+      {steps.filter(step => !(step.status === "skipped" && step.source === "config")).map(step =>
+        <PanelSectionRow key={step.id}><ComponentProgress step={step} deploymentReady={Boolean(snapshot?.deployment)} /></PanelSectionRow>)}
       {runningUpdate && !steps.length ? <PanelSectionRow><div className="portal-panel-activity"><Throbber /><span>{snapshot?.stage || m.updating}</span></div></PanelSectionRow> : null}
       {snapshot && completed && !dismissed ? <PanelSectionRow><div className="portal-panel-status">{snapshot.result === "success" ? m.succeeded : snapshot.result === "unknown" ? m.statusUnknown : m.operationFailed}</div></PanelSectionRow> : null}
       {showLogs ? <PanelSectionRow><DialogButton className="portal-panel-button" disabled={!snapshot} onClick={() => navigate(LOGS_ROUTE)}>{m.logs}</DialogButton></PanelSectionRow> : null}
