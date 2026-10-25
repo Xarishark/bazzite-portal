@@ -21,6 +21,8 @@ PORTAL = Path("/usr/bin/bazzite-portal")
 OPERATIONS = {
     "update": "StartUpdate",
     "channel": "StartChannelSwitch",
+    "rollback": "StartRollback",
+    "cancel_rollback": "CancelRollback",
 }
 
 

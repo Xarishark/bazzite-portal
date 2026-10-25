@@ -60,6 +60,11 @@ export function actions(state: State): Action[] {
     {id: restartReady ? "restart" : "update", label: s.running && s.operation === "update" ? m.updating : base ? m.busy : restartReady ? m.restart : m.update,
       reason: base || (!s.available ? m.unavailable : s.deployment && !s.deployment_known ? m.verify : ""),
       title: restartReady ? m.restartTitle : "", body: restartReady ? m.restartBody : "", target: restartReady ? {deployment: s.deployment!} : {}},
+    {id: cancelling ? "cancel_rollback" : "rollback", label: cancelling ? m.cancelRollback : m.rollback,
+      reason: rollbackReason, title: cancelling ? m.cancelRollbackTitle : m.rollbackTitle,
+      body: format(cancelling ? m.cancelRollbackBody : m.rollbackBody, {version: text(rollback?.version)}),
+      target: cancelling ? {token: cancellation?.token || "", identity: text(rollback?.identity, "")}
+        : {identity: text(rollback?.identity, ""), role: text(rollback?.role, "")}},
     {id: "channel", label: format(returning ? m.channelReturn : m.channelLabel, {track}), reason: channelReason,
       title: format(returning ? m.channelReturnTitle : m.channelTitle, {target_name: `Bazzite ${track}`}),
       body: format(returning ? m.channelReturnBody : m.channelBody,
