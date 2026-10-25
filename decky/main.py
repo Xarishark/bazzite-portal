@@ -19,6 +19,7 @@ log = logging.getLogger(__name__)
 EVENT = "portal_state"
 PORTAL = Path("/usr/bin/bazzite-portal")
 OPERATIONS = {
+    "update": "StartUpdate",
 }
 
 
@@ -239,7 +240,42 @@ class Plugin:
             return "s", (token,)
         return None, ()
 
+    async def request_action(self, action, target=None):
+        try:
+            signature, arguments = self._check_request(action, {} if target is None else target)
+        except (RuntimeError, ValueError) as error:
+            return {"accepted": False, "error": str(error)}
+        self._set(request_pending=True, pending_action=action, error="")
+        watch = self.watch
+        self.request = asyncio.create_task(self._run_request(watch, OPERATIONS[action], signature, arguments))
+        return {"accepted": True, "error": ""}
 
+    async def _run_request(self, watch, method, signature, arguments):
+        cancelled = False
+        try:
+            await watch.call(method, signature, arguments, timeout=2_147_483)
+        except asyncio.CancelledError:
+            cancelled = True
+            raise
+        except Exception as error:
+            log.warning("Portal request %s failed: %s", method, error)
+            if watch is self.watch and not self.closing:
+                if isinstance(error, DBusErrorResponse):
+                    # Preserve Portal's own complete error text without the
+                    # D-Bus exception name and tuple representation.
+                    data = error.data
+                    detail = data[0] if data and isinstance(data[0], str) else text.REQUEST_FAILED
+                elif isinstance(error, (EOFError, ConnectionError, asyncio.TimeoutError)):
+                    detail = text.REQUEST_UNCERTAIN
+                else:
+                    detail = str(error) or text.REQUEST_FAILED
+                self._set(error=detail[:4096])
+        finally:
+            if watch is self.watch and not self.closing:
+                self._set(request_pending=False, pending_action="")
+                if not cancelled and not watch.closed:
+                    # Status-only read after completion, never an operation retry.
+                    await watch.snapshot()
 
 
 

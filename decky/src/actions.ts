@@ -57,6 +57,9 @@ export function actions(state: State): Action[] {
   const returning = channel?.current_track === targetTrack;
   const restartReady = false;
   return [
+    {id: restartReady ? "restart" : "update", label: s.running && s.operation === "update" ? m.updating : base ? m.busy : restartReady ? m.restart : m.update,
+      reason: base || (!s.available ? m.unavailable : s.deployment && !s.deployment_known ? m.verify : ""),
+      title: restartReady ? m.restartTitle : "", body: restartReady ? m.restartBody : "", target: restartReady ? {deployment: s.deployment!} : {}},
 
   ];
 }
