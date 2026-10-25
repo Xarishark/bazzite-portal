@@ -66,6 +66,11 @@ export function OperationModal({action, inspect, closeModal = () => {}}: {action
     const frame = view.requestAnimationFrame(() => button.focus({preventScroll: true}));
     return () => view.cancelAnimationFrame(frame);
   }, [phase]);
+  useEffect(() => () => {
+    const key = seen.current, current = operation(currentState().snapshot, kind);
+    if (key && currentState().connection === "connected" && current.terminal && sameKey(current.key, key))
+      void maintenanceViewed(kind, ...key).catch(() => {});
+  }, [kind]);
   useEffect(() => {
     if (phase === "progress" && !bound && !state.request_pending && state.error && state.revision > requestRevision.current) setFailure(state.error);
   }, [phase, bound, state.request_pending, state.error, state.revision]);

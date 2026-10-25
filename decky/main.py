@@ -178,6 +178,22 @@ class Plugin:
 
 
 
+    async def maintenance_viewed(self, kind, unit, invocation, generation):
+        snapshot = self.state.get("snapshot") or {}
+        if (not normal_user() or self.state["connection"] != "connected" or self.watch is None
+                or kind not in {"rollback", "cancel", "cache", "channel"}
+                or not isinstance(unit, str) or not unit or not isinstance(invocation, str)
+                or type(generation) is not int or generation <= 0
+                or snapshot.get(kind + "_state") not in {"success", "failed", "unknown"}
+                or (unit, invocation, generation) != (snapshot.get(kind + "_unit"),
+                    snapshot.get(kind + "_invocation", ""), (snapshot.get("maintenance_generations") or {}).get(kind))):
+            return {"accepted": False}
+        try:
+            await self.watch.call("MaintenanceViewed", "sssx", (kind, unit, invocation, generation))
+            return {"accepted": True}
+        except (DBusErrorResponse, OSError, RuntimeError, asyncio.TimeoutError):
+            log.debug("Could not mark Portal operation viewed", exc_info=True)
+            return {"accepted": False}
 
     async def reconnect(self):
         self._set(connection="reconnecting", snapshot=None, error="")
