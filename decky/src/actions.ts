@@ -72,7 +72,8 @@ export function actions(state: State): Action[] {
       target: {token: channel?.token || ""}},
     {id: "cancel_pending", label: m.cancelPending, reason: pendingReason, title: m.cancelPendingTitle,
       body: format(m.cancelPendingBody, {version: text(pending?.version), image: text(pending?.image)}), target: {token: pending?.token || ""}},
-
+    {id: "clear_cache", label: m.clearCache, reason: cacheReason, title: m.clearCacheTitle,
+      body: m.clearCacheBody, target: {token: s.cache_token || ""}},
   ];
 }
 

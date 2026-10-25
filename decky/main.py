@@ -24,6 +24,7 @@ OPERATIONS = {
     "rollback": "StartRollback",
     "cancel_rollback": "CancelRollback",
     "cancel_pending": "CancelPending",
+    "clear_cache": "ClearDownloadCache",
 }
 
 
