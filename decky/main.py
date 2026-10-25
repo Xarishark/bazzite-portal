@@ -178,6 +178,66 @@ class Plugin:
         await self._connect()
         return compact_state(self.state)
 
+    def _check_request(self, action, target):
+        if not normal_user():
+            raise RuntimeError(text.NORMAL_USER)
+        if action not in OPERATIONS:
+            raise ValueError(text.INVALID_ACTION)
+        if self.state["connection"] != "connected" or self.watch is None:
+            raise RuntimeError(text.UNAVAILABLE)
+        state = self.state.get("snapshot") or {}
+        management = state.get("management") or {}
+        summary = management.get("summary") or {}
+        transaction = summary.get("transaction")
+        if transaction is not None and transaction is not False and transaction != "" and transaction != [] and transaction != {}:
+            raise RuntimeError(text.BUSY)
+        if self.state["request_pending"] or state.get("request_busy") or state.get("running") or any(
+                state.get(kind + "_state") == "running"
+                for kind in ("rollback", "cancel", "layer", "cache", "channel", "image", "delete")):
+            raise RuntimeError(text.BUSY)
+        if not isinstance(target, dict):
+            raise ValueError(text.CHANGED)
+        if action == "update" and (state.get("available") is not True or state.get("deployment")):
+            raise ValueError(text.INVALID_ACTION)
+        if action == "restart" and (state.get("available") is not True
+                or state.get("deployment_known") is not True or not state.get("deployment")
+                or target.get("deployment") != state.get("deployment")):
+            raise ValueError(text.CHANGED)
+        if action == "rollback":
+            entries = summary.get("entries") or []
+            saved = next((entry for entry in entries if isinstance(entry, dict)
+                          and entry.get("role") == "Saved deployment"), None)
+            prepared = any(isinstance(entry, dict) and entry.get("role") == "Next restart"
+                           for entry in entries)
+            if (summary.get("known") is not True or saved is None or prepared
+                    or self.state["rollback_cancel_target"].get("available")
+                    or not isinstance(saved.get("identity"), str)
+                    or not saved["identity"].strip() or saved["identity"].strip().lower() == "unknown"
+                    or target.get("identity") != saved.get("identity")
+                    or target.get("role") != saved.get("role")):
+                raise ValueError(text.CHANGED)
+        if action == "clear_cache":
+            token = target.get("token")
+            if (management and management.get("known") is not True
+                    or state.get("cache_available") is not True
+                    or state.get("cache_state") in {"unknown", "unavailable"}
+                    or not isinstance(token, str) or not TOKEN_PATTERN.fullmatch(token)
+                    or state.get("cache_token") != token):
+                raise ValueError(text.CACHE_CHANGED)
+            return "s", (token,)
+        if action in {"channel", "cancel_pending", "cancel_rollback"}:
+            token = target.get("token")
+            if not isinstance(token, str) or not TOKEN_PATTERN.fullmatch(token):
+                raise ValueError(text.CHANGED)
+            if action == "cancel_rollback":
+                latest = self.state["rollback_cancel_target"]
+            else:
+                management = state.get("management") or {}
+                latest = management.get("channel_status" if action == "channel" else "cancel_target") or {}
+            if latest.get("available") is not True or latest.get("token") != token:
+                raise ValueError(text.CHANGED)
+            return "s", (token,)
+        return None, ()
 
 
 
