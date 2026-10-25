@@ -2981,8 +2981,10 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             if result.cancelled():
                 return
             try:
-                artwork_ready = result.result()
-                message = (C_('Added to {steam}.', steam='Steam') if artwork_ready else
+                shortcut = result.result()
+                message = (C_('{app_name} is already in your {steam} library.', app_name='Bazzite Portal', steam='Steam')
+                           if shortcut['already_added'] else
+                           C_('Added to {steam}.', steam='Steam') if shortcut['artwork_ready'] else
                            C_('Add to {steam} requested.', steam='Steam'))
             except Exception as error:
                 log.warning("Add to Steam failed: %s", error)
