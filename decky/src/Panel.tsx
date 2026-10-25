@@ -64,6 +64,8 @@ export function Panel() {
     finally {requestInFlight.current = false; setSending(false);}
   }
   function confirm(action: Action) {
+    const active = rowOperation(currentState(), action.id);
+    if (active?.running || active?.inspect) {openOperation(action, true); return;}
     if (action.reason || sending) {showReason(action.label, action.reason || m.requestPending); return;}
     if (action.id === "update") {void execute(action); return;}
     if (action.id === "restart") {
@@ -89,7 +91,7 @@ export function Panel() {
       onUpdate={() => confirm(controls[0])} onBack={() => setPage("main")} showLogs={showLogs} navigate={navigate} /> : <>
     <PanelSection title={m.management}>
       {controls.slice(1).map(action => {
-        const active = rowOperation({...state, snapshot: null, request_pending: false}, action.id);
+        const active = rowOperation(state, action.id);
         const unavailable = Boolean(action.reason || sending) && !active?.running && !active?.inspect;
         return <PanelSectionRow key={action.id}>
           <div className="portal-action" data-unavailable={unavailable}>
