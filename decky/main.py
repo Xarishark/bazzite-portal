@@ -117,6 +117,9 @@ class Plugin:
             if not normal_user():
                 self._set(connection="unavailable", snapshot=None, error=text.NORMAL_USER)
                 return
+            if not PORTAL.is_file():
+                self._set(connection="not_installed", snapshot=None, error=text.NOT_INSTALLED)
+                return
             watch = AgentConnection(self._changed)
             self.watch = watch
             try:
