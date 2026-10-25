@@ -23,6 +23,7 @@ OPERATIONS = {
     "channel": "StartChannelSwitch",
     "rollback": "StartRollback",
     "cancel_rollback": "CancelRollback",
+    "cancel_pending": "CancelPending",
 }
 
 

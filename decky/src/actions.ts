@@ -70,6 +70,8 @@ export function actions(state: State): Action[] {
       body: format(returning ? m.channelReturnBody : m.channelBody,
         {target_name: `Bazzite ${track}`, current_track: text(channel?.current_track).replace(/^./, c => c.toUpperCase()), version: text(channel?.version), image: text(channel?.image)}),
       target: {token: channel?.token || ""}},
+    {id: "cancel_pending", label: m.cancelPending, reason: pendingReason, title: m.cancelPendingTitle,
+      body: format(m.cancelPendingBody, {version: text(pending?.version), image: text(pending?.image)}), target: {token: pending?.token || ""}},
 
   ];
 }
