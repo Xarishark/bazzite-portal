@@ -3,7 +3,7 @@ import { DialogButton, Focusable, PanelSection, PanelSectionRow, ProgressBar } f
 import { Action, Module, State } from "./types";
 import { bootedIdentity } from "./actions";
 import { messages as m } from "./messages";
-const LOGS_ROUTE = "/bazzite-portal/logs";
+import { LOGS_ROUTE } from "./Logs";
 import { Throbber } from "./Throbber";
 import { BazziteIcon } from "./BazziteIcon";
 import { updatesViewed } from "./state";
