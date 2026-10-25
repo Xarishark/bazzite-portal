@@ -80,7 +80,7 @@ export function Panel() {
   return <div ref={root} className="portal-panel">
     <style>{styles}</style>
     {page === "main" ? <PanelSection><PanelSectionRow><UpdateButton label={m.update}
-      onClick={() => confirm(controls[0])} /></PanelSectionRow></PanelSection> : null}
+      onClick={() => setPage("updates")} /></PanelSectionRow></PanelSection> : null}
     {!connected ? <PanelSection title={m.app}>
       <PanelSectionRow><div className="portal-panel-status" role="status">{statusText}</div></PanelSectionRow>
       <PanelSectionRow><ButtonItem layout="below" onClick={() => {void reconnect().catch(() => setError(m.backendUnavailable));}}>{m.reconnect}</ButtonItem></PanelSectionRow>
