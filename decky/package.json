@@ -1,0 +1,30 @@
+{
+  "name": "bazzite-portal",
+  "version": "0.9.9",
+  "private": true,
+  "description": "Bazzite Portal's Decky buddy",
+  "type": "module",
+  "license": "GPL-3.0-only AND BSD-3-Clause AND Apache-2.0 AND MIT",
+  "scripts": {
+    "build": "rollup -c",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@decky/rollup": "1.0.1",
+    "@decky/ui": "4.9.2",
+    "@types/react": "18.3.3",
+    "@types/react-dom": "18.3.0",
+    "rollup": "4.38.0",
+    "typescript": "5.8.2"
+  },
+  "dependencies": {
+    "@decky/api": "1.1.2",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remark-gfm": "4.0.1",
+    "remark-html": "16.0.1",
+    "remark-parse": "11.0.0",
+    "tslib": "2.8.1",
+    "unified": "11.0.5"
+  }
+}
