@@ -8,6 +8,7 @@ import { messages as m } from "./messages";
 import { loadPreferences, setPage, usePanelState } from "./panel-state";
 import { UpdateButton, Updates } from "./Updates";
 import { usePanelEntry } from "./panel-navigation";
+import { openOperation, showReason } from "./OperationModal";
 import { rowOperation } from "./operations";
 import { Throbber } from "./Throbber";
 import { styles } from "./styles";
@@ -63,14 +64,14 @@ export function Panel() {
     finally {requestInFlight.current = false; setSending(false);}
   }
   function confirm(action: Action) {
-    if (action.reason || sending) {showModal(<ConfirmModal bAlertDialog strTitle={action.label} strDescription={action.reason || m.requestPending} />); return;}
+    if (action.reason || sending) {showReason(action.label, action.reason || m.requestPending); return;}
     if (action.id === "update") {void execute(action); return;}
     if (action.id === "restart") {
       showModal(<ConfirmModal strTitle={action.title} strDescription={action.body} strOKButtonText={m.restart}
         strCancelButtonText={m.cancel} onOK={() => {void execute(action);}} />);
       return;
     }
-    setError("");
+    openOperation(action, false);
   }
   const statusText = state.connection === "not_installed" ? m.notInstalled : state.connection === "connecting" ? m.connecting
     : state.connection === "reconnecting" ? m.reconnecting : state.error || m.backendUnavailable;
