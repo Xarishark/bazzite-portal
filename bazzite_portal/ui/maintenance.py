@@ -1658,10 +1658,14 @@ class SystemManagementUI:
                     self.toast(N_("Enable unsupported rebase targets in Settings to choose this image or channel."))
                     return
             self.confirm(title, body, N_('Rebase'), lambda: self._request_image_switch(target))
+            self.modal.connect("close-request", lambda dialog: (
+                wizard.restore_after_close(dialog), False)[1])
 
-        ImageWizard(self, query_images=query_images, query_versions=query_versions,
-                    on_selected=selected, show_unsupported=bool(
-                        self.store.preferences()["show_unsupported_rebase_targets"])).show()
+        wizard = ImageWizard(self, query_images=query_images, query_versions=query_versions,
+                             on_selected=selected, show_unsupported=bool(
+                                 self.store.preferences()["show_unsupported_rebase_targets"]),
+                             restore_target=self.channel_specific_row)
+        wizard.show()
 
     def _request_image_switch(self, selected):
         reason = self._image_switch_reason()

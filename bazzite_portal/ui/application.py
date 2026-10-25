@@ -361,7 +361,9 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             backend = SDLGamepad()
             self.controller = ControllerDriver(backend, self._controller_context, self._dispatch,
                                                on_connections_changed=self._controller_connections_changed,
-                                               on_activity=self._controller_activity, active=False)
+                                               on_activity=self._controller_activity, active=False,
+                                               has_focus=self._controller_has_focus,
+                                               release_delay_ms=100)
             self._schedule_controller_focus_sync()
         except Exception as error:
             self.toast(public_error(error, N_("Controller input is unavailable. Reconnect your controller and try again."), context="Controller initialization"))
@@ -3272,6 +3274,14 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         window = self.modal or self
         return (id(window), self.stack.get_visible_child_name()) if window.is_active() and window.get_visible() else None
 
+    def _controller_has_focus(self):
+        # Connection ownership follows the whole Portal window family. Input
+        # still goes only to the active current modal/view above.
+        application = self.get_application()
+        return (not self.closing and application is not None
+                and any(window.get_visible() and window.is_active()
+                        for window in application.get_windows()))
+
     def _schedule_controller_focus_sync(self):
         if self.closing or self._controller_focus_sync_source is not None:
             return
@@ -3282,7 +3292,7 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
     def _sync_controller_focus(self):
         self._controller_focus_sync_source = None
         if not self.closing and self.controller is not None:
-            self.controller.set_active(self._controller_context() is not None)
+            self.controller.set_active(self._controller_has_focus())
         return GLib.SOURCE_REMOVE
 
     def _set_controller_focus(self, widget):
