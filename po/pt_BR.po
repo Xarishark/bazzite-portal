@@ -4,10 +4,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Bazzite Portal / App\n"
-"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/"
-"app/\n"
+"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/app/"
+"\n"
 "POT-Creation-Date: 2026-10-25 10:14+0100\n"
-"PO-Revision-Date: 2026-10-22 08:40+0000\n"
+"PO-Revision-Date: 2026-10-25 15:57+0000\n"
 "Last-Translator: Crono <epochvoyager@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "bazzite-portal/app/pt_BR/>\n"
@@ -122,7 +122,7 @@ msgstr ""
 #: bazzite_portal/updates/model.py:402
 #, python-brace-format
 msgid "{current} of {total}"
-msgstr ""
+msgstr "{current} de {total}"
 
 #: bazzite_portal/input/prompts.py:119
 msgid "D-pad"
@@ -661,75 +661,81 @@ msgstr "Recolher registros do sistema"
 #: bazzite_portal/ui/application.py:820
 msgid "Save logs and hardware details for troubleshooting on your Desktop."
 msgstr ""
+"Salva registros do sistema e informações sobre o hardware no seu desktop, "
+"para auxiliar na solução de problemas."
 
 #: bazzite_portal/ui/application.py:827 bazzite_portal/ui/application.py:1006
 #, python-brace-format
 msgid "Reset {steam}"
-msgstr ""
+msgstr "Redefinir {steam}"
 
 #: bazzite_portal/ui/application.py:827
 #, python-brace-format
 msgid "Reset the {steam} client without removing your games."
-msgstr ""
+msgstr "Baixa o cliente {steam} novamente, mantendo seus jogos."
 
 #: bazzite_portal/ui/application.py:869 bazzite_portal/ui/application.py:987
 #: bazzite_portal/ui/application.py:1068 bazzite_portal/ui/application.py:1091
 #: bazzite_portal/ui/application.py:1147
 msgid "Close"
-msgstr ""
+msgstr "Fechar"
 
 #: bazzite_portal/ui/application.py:928
 msgid "Collecting system logs"
-msgstr ""
+msgstr "Recolhendo registros do sistema"
 
 #: bazzite_portal/ui/application.py:959
 msgid "Could not collect system logs. Open Logs for details."
 msgstr ""
+"Não foi possível obter seus registros do sistema. Para mais detalhes, "
+"visualize-os manualmente."
 
 #: bazzite_portal/ui/application.py:962
 #, python-brace-format
 msgid "System logs collected and saved to {directory}."
-msgstr ""
+msgstr "Registros do sistema foram salvos em {directory}."
 
 #: bazzite_portal/ui/application.py:968
 msgid "System logs ready"
-msgstr ""
+msgstr "Registros do sistema prontos"
 
 #: bazzite_portal/ui/application.py:971
 msgid "System logs are ready."
-msgstr ""
+msgstr "Os registros do sistema estão prontos."
 
 #: bazzite_portal/ui/application.py:972 bazzite_portal/ui/application.py:1123
 #, python-brace-format
 msgid "Location: {path}"
-msgstr ""
+msgstr "Local: {path}"
 
 #: bazzite_portal/ui/application.py:973 bazzite_portal/ui/application.py:1131
 msgid "No files were created."
-msgstr ""
+msgstr "Nenhum arquivo foi criado."
 
 #: bazzite_portal/ui/application.py:974 bazzite_portal/ui/application.py:1132
 msgid "Files collected"
-msgstr ""
+msgstr "Arquivos coletados"
 
 #: bazzite_portal/ui/application.py:980 bazzite_portal/ui/application.py:1139
 msgid "Warnings"
-msgstr ""
+msgstr "Avisos"
 
 #: bazzite_portal/ui/application.py:981 bazzite_portal/ui/application.py:1140
 msgid ""
 "Some diagnostic information could not be collected. See the collected logs "
 "for details."
 msgstr ""
+"Não foi possível obter parte das informações de diagnóstico. Para mais "
+"informações, verifique os registros do sistema."
 
 #: bazzite_portal/ui/application.py:988 bazzite_portal/ui/application.py:1148
 msgid "Open logs folder"
-msgstr ""
+msgstr "Abrir diretório de registros do sistema"
 
 #: bazzite_portal/ui/application.py:1001
 #, python-brace-format
 msgid "Reset {steam} Installation?"
-msgstr ""
+msgstr "Redefinir instalação do {steam}?"
 
 #: bazzite_portal/ui/application.py:1003
 #, python-brace-format
@@ -737,6 +743,8 @@ msgid ""
 "{steam} will stop and sign you out. This only cleans the steam installation "
 "folder."
 msgstr ""
+"O {steam} será fechado e sua sessão nele será encerrada. Apenas o diretório "
+"de instalação do cliente será limpo."
 
 #: bazzite_portal/ui/application.py:1004
 #, python-brace-format
@@ -744,6 +752,8 @@ msgid ""
 "Your games, Saves, Configuration, Music and {proton} files will stay "
 "untouched."
 msgstr ""
+"Seu progresso, jogos, configurações, músicas e instalações do {proton} não "
+"serão afetados."
 
 #: bazzite_portal/ui/application.py:1005 bazzite_portal/ui/application.py:2604
 #: bazzite_portal/ui/application.py:2607 bazzite_portal/ui/application.py:2614
@@ -755,7 +765,7 @@ msgstr "Cancelar"
 #: bazzite_portal/ui/application.py:1022
 #, python-brace-format
 msgid "Resetting {steam}"
-msgstr ""
+msgstr "Redefinindo o {steam}"
 
 #: bazzite_portal/ui/application.py:1051
 #, python-brace-format
