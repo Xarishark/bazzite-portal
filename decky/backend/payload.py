@@ -7,7 +7,21 @@ MANAGEMENT_FIELDS = {"known", "error", "summary", "cancel_target", "channel_stat
 
 
 def compact_state(state):
-    return dict(state)
+    """Keep raw worker data for validation, never send its histories to Decky."""
+    result = dict(state)
+    snapshot = state.get("snapshot")
+    if isinstance(snapshot, dict):
+        snapshot = {key: value for key, value in snapshot.items()
+                    if key != "logs" and not key.endswith("_logs")}
+        for key in ("modules", "module_plan"):
+            if isinstance(snapshot.get(key), list):
+                snapshot[key] = [{name: value for name, value in module.items() if name in MODULE_FIELDS}
+                                 for module in snapshot[key] if isinstance(module, dict)]
+        if isinstance(snapshot.get("management"), dict):
+            snapshot["management"] = {key: value for key, value in snapshot["management"].items()
+                                      if key in MANAGEMENT_FIELDS}
+        result["snapshot"] = snapshot
+    return result
 
 
 def _overlap(previous, current):
@@ -34,7 +48,7 @@ class LogReader:
     def read(self, snapshot, cursor):
         snapshot = snapshot or {}
         patches, sections = {}, {}
-        reset = True
+        reset = cursor is None or cursor != self.cursor
         for key in LOG_KEYS:
             kind = key.removesuffix("_logs")
             identity = ((snapshot.get("service"), snapshot.get("run")) if key == "logs" else
