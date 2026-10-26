@@ -63,7 +63,8 @@ export function Updates({state, action, sending, visible, onUpdate, onBack, show
   const completed = Boolean(run && !runningUpdate && ["success", "failed", "unknown"].includes(snapshot?.result || ""));
   const dismissed = false;
   const identity = bootedIdentity(snapshot);
-  const steps: Module[] = updateRun ? snapshot?.modules || [] : [];
+  const steps: Module[] = !updateRun || dismissed ? snapshot?.module_plan || (snapshot?.modules || []).map(step => ({id: step.id, name: step.name, status: "pending"}))
+    : snapshot?.modules?.length ? snapshot.modules : snapshot?.module_plan || [];
   return <Focusable {...{focusable: false}} flow-children="column" onCancelActionDescription={m.back}
     onCancel={event => {event.preventDefault(); event.stopPropagation(); onBack(); return true;}}>
     <PanelSection>
