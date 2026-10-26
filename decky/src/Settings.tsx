@@ -4,6 +4,7 @@ import { addToSteam, getAutoUpdates, setAutoUpdates, setPage, setShowLogs, usePa
 import type { AutoUpdateStatus } from "./panel-state";
 import { usePortalState } from "./state";
 import { format, messages as m } from "./messages";
+import { refreshArtwork } from "./steam-artwork";
 import { version } from "../package.json";
 
 export function Settings({visible = true}: {visible?: boolean}) {
@@ -49,6 +50,8 @@ export function Settings({visible = true}: {visible?: boolean}) {
         void addToSteam().then(async result => {
           if (!result.accepted) {setMessage(result.error || m.steamFailed); return;}
           let description = result.already_added ? m.steamExistingLibrary : result.artwork_ready ? m.steamLibrary : m.steamLibraryPending;
+          try {await refreshArtwork(result.artwork_targets || []);}
+          catch {description += "\n\n" + m.steamArtworkPending;}
           showModal(<ConfirmModal bAlertDialog strTitle={result.already_added ? m.steamAlreadyAdded : result.artwork_ready ? m.steamAdded : m.steamRequested}
             strDescription={description} strOKButtonText={m.ok} />);
         })
