@@ -9,6 +9,7 @@ from bazzite_portal import APP_ID
 from bazzite_portal.core.storage import Store
 from bazzite_portal.core.first_login import FirstLogin
 from bazzite_portal.integration import steam
+from bazzite_portal.maintenance import auto_updates
 from bazzite_portal.updates.monitor import (
     Monitor,
     maintenance_viewed_results,
@@ -42,6 +43,8 @@ AGENT_ID = APP_ID + ".Agent"
 AGENT_PATH = "/io/github/Xarishark/bazzite_portal/Agent"
 AGENT_XML = '''<node><interface name="io.github.Xarishark.bazzite_portal.Agent">
 <method name="GetSnapshot"><arg type="s" direction="out"/></method>
+<method name="GetAutoUpdateStatus"><arg type="s" direction="out"/></method>
+<method name="SetAutoUpdates"><arg type="b" direction="in"/><arg type="s" direction="out"/></method>
 <method name="Refresh"/>
 <method name="SessionStarted"/>
 <method name="MaintenanceViewed"><arg type="s" direction="in"/><arg type="s" direction="in"/><arg type="s" direction="in"/><arg type="x" direction="in"/></method>
@@ -506,7 +509,38 @@ class Agent:
             self._preferences_changed()
         self._publish_snapshot(snapshot)
 
+
+
+    def _auto_update_request(self, method, parameters, invocation):
+        setting = method == "SetAutoUpdates"
+        if setting and (self.busy or getattr(self, "_auto_updates_pending", False)):
+            invocation.return_dbus_error(AGENT_ID + ".Error", N_("Another operation request is pending."))
+            return
+        if setting:
+            self._auto_updates_pending = True
+        enabled = parameters.unpack()[0] if setting else None
+
+        def work():
+            try:
+                current = auto_updates.request(enabled) if setting else auto_updates.status()
+                result = {"accepted": True, **current}
+            except Exception as error:
+                log.exception("Could not %s automatic update scheduling", "change" if setting else "read")
+                result = {"accepted": False, "error": str(error) or "Automatic update scheduling is unavailable."}
+            GLib.idle_add(finish, result)
+
+        def finish(result):
+            if setting:
+                self._auto_updates_pending = False
+            invocation.return_value(GLib.Variant("(s)", (json.dumps(result),)))
+            return False
+
+        threading.Thread(target=work, daemon=True).start()
+
     def _method(self, connection, sender, path, interface, method, parameters, invocation):
+        if method in {"GetAutoUpdateStatus", "SetAutoUpdates"}:
+            self._auto_update_request(method, parameters, invocation)
+            return
         if method == "GetSnapshot":
             invocation.return_value(GLib.Variant("(s)", (json.dumps(self._snapshot_payload()),)))
         elif method == "Refresh":

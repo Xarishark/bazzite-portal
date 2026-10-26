@@ -175,9 +175,33 @@ class Plugin:
         # Cached worker output only; no journal query, operation or polling loop.
         return self.log_reader.read(self.state.get("snapshot"), cursor)
 
+    async def get_auto_updates(self):
+        return await self._auto_updates("GetAutoUpdateStatus")
 
 
+    async def set_auto_updates(self, enabled):
+        if type(enabled) is not bool:
+            return {"accepted": False, "error": text.AUTO_UPDATES_UNAVAILABLE}
+        return await self._auto_updates("SetAutoUpdates", enabled)
 
+    async def _auto_updates(self, method, enabled=None):
+        if not normal_user() or self.state["connection"] != "connected" or self.watch is None:
+            return {"accepted": False, "error": text.UNAVAILABLE}
+        watch, owner = self.watch, self.watch.owner
+        try:
+            reply = await watch.call(method, "b" if enabled is not None else None,
+                                     (enabled,) if enabled is not None else (), timeout=60)
+            result = decode_snapshot(reply[0])
+            if watch is not self.watch or owner != watch.owner:
+                raise RuntimeError(text.CONNECTION_LOST)
+            if result.get("accepted") is not True:
+                return {"accepted": False, "error": str(result.get("error") or text.AUTO_UPDATES_UNAVAILABLE)}
+            if any(type(result.get(key)) is not bool for key in ("visible", "known", "enabled")):
+                raise ValueError(text.MALFORMED_SNAPSHOT)
+            return result
+        except (DBusErrorResponse, OSError, RuntimeError, ValueError, asyncio.TimeoutError):
+            log.warning("Could not access Portal automatic update scheduling", exc_info=True)
+            return {"accepted": False, "error": text.AUTO_UPDATES_UNAVAILABLE}
 
     async def updates_viewed(self, run):
         snapshot = self.state.get("snapshot") or {}
