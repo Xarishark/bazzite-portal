@@ -11,9 +11,10 @@ jobs:
     container: fedora:44
     outputs:
       version: ${{ steps.metadata.outputs.version }}
+      plugin_version: ${{ steps.metadata.outputs.plugin_version }}
     steps:
       - name: Install build dependencies
-        run: dnf install -y rpm-build rpmdevtools python3 python3-gobject python3-pyyaml desktop-file-utils appstream gettext systemd-rpm-macros git
+        run: dnf install -y rpm-build rpmdevtools python3 python3-pip python3-gobject python3-pyyaml desktop-file-utils appstream gettext systemd-rpm-macros git cpio
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
@@ -25,18 +26,34 @@ jobs:
           echo "SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH" >> "$GITHUB_ENV"
           APP_VERSION=$(python3 packaging/metadata.py)
           echo "version=$APP_VERSION" >> "$GITHUB_OUTPUT"
+          PLUGIN_VERSION=$(python3 -c 'import json; print(json.load(open("decky/package.json"))["version"])')
+          echo "plugin_version=$PLUGIN_VERSION" >> "$GITHUB_OUTPUT"
       - name: Build source and binary RPMs
+        shell: bash
         run: |
           rpmdev-setuptree
           VERSION='${{ steps.metadata.outputs.version }}'
-          git -c safe.directory="$GITHUB_WORKSPACE" archive --format=tar.gz --prefix="bazzite-portal-${VERSION}/" --output="$HOME/rpmbuild/SOURCES/bazzite-portal-${VERSION}.tar.gz" HEAD
-          rpmbuild -ba build/packaging/bazzite-portal.spec
+          python3 packaging/prepare_sources.py --output "$HOME/rpmbuild" --revision "$GITHUB_SHA"
+          rpmbuild -ba "$HOME/rpmbuild/SPECS/bazzite-portal.spec"
           mkdir -p dist
           cp "$HOME"/rpmbuild/RPMS/noarch/*.rpm "$HOME"/rpmbuild/SRPMS/*.rpm dist/
+          shopt -s nullglob
+          rpms=(dist/*.noarch.rpm)
+          if (( ${#rpms[@]} != 1 )); then
+            echo 'Expected exactly one binary RPM.' >&2
+            exit 1
+          fi
+          rpm=$(realpath "${rpms[0]}")
+          extract=$(mktemp -d)
+          (cd "$extract" && rpm2cpio "$rpm" | cpio --extract --make-directories --quiet './usr/share/bazzite-portal/decky/bazzite-portal.zip')
+          bundled="$extract/usr/share/bazzite-portal/decky/bazzite-portal.zip"
+          cmp "$HOME/rpmbuild/SOURCES/bazzite-portal-decky-${VERSION}.zip" "$bundled"
+          python3 packaging/prepare_sources.py --verify-zip "$bundled" --expected-version '${{ steps.metadata.outputs.plugin_version }}' --expected-revision "$GITHUB_SHA" --require-clean
+          cp "$bundled" "dist/bazzite-portal-decky-${VERSION}.zip"
       - uses: actions/upload-artifact@v7
         with:
           name: bazzite-portal-fedora44-rpms
-          path: dist/*.rpm
+          path: dist/*
           if-no-files-found: error
 
   release:
@@ -118,6 +135,13 @@ jobs:
             exit 1
           fi
           mv -- "${rpms[0]}" dist/bazzite-portal.rpm
+          zips=(dist/bazzite-portal-decky-*.zip)
+          if (( ${#zips[@]} != 1 )) || [[ ! -f "${zips[0]}" || ! -s "${zips[0]}" ]]; then
+            echo 'Expected exactly one nonempty bundled Decky ZIP.' >&2
+            exit 1
+          fi
+          python3 packaging/prepare_sources.py --verify-zip "${zips[0]}" --expected-version '${{ needs.rpm.outputs.plugin_version }}' --expected-revision "$GITHUB_SHA" --require-clean
+          mv -- "${zips[0]}" dist/bazzite-portal.zip
           printf 'rpm=dist/bazzite-portal.rpm\n' >> "$GITHUB_OUTPUT"
       - name: Publish a new app version
         if: steps.release.outputs.publish == 'true'
@@ -128,7 +152,9 @@ jobs:
           name: Bazzite Portal ${{ needs.rpm.outputs.version }}
           previous_tag: ${{ steps.release.outputs.previous_tag }}
           generate_release_notes: true
-          files: ${{ steps.binary.outputs.rpm }}
+          files: |
+            ${{ steps.binary.outputs.rpm }}
+            dist/bazzite-portal.zip
           fail_on_unmatched_files: true
           prerelease: false
           make_latest: true
