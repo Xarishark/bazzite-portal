@@ -85,6 +85,7 @@ class Plugin:
                           rollback_cancel_target=rollback_cancel_target(None))
             else:
                 self._set(connection="connecting", error="")
+                self._schedule_installation_read()
         elif kind == "installation":
             self.installation_sequence = getattr(self, "installation_sequence", 0) + 1
             self._set(installation=value, installation_error="")
@@ -103,8 +104,35 @@ class Plugin:
             log.warning("Could not read Portal snapshot: %s", value)
             self._set(connection="unavailable", error=text.MALFORMED_SNAPSHOT)
 
+    def _schedule_installation_read(self):
+        if getattr(self, "installer_read", None) is not None and not self.installer_read.done():
+            self.installer_read.cancel()
+        self.installer_read = asyncio.create_task(self._read_installation(self.watch))
 
+    async def _read_installation(self, watch):
+        owner = getattr(watch, "owner", "")
+        sequence = getattr(self, "installation_sequence", 0)
+        try:
+            reply = await watch.call("GetDeckyStatus", timeout=45)
+            status = decode_snapshot(reply[0])
+            if (watch is self.watch and owner == getattr(watch, "owner", "") and not self.closing
+                    and sequence == getattr(self, "installation_sequence", 0)):
+                self._set(installation=status, installation_error="")
+        except asyncio.CancelledError:
+            raise
+        except Exception:
+            if (watch is self.watch and owner == getattr(watch, "owner", "") and not self.closing
+                    and sequence == getattr(self, "installation_sequence", 0)):
+                self._set(installation_error=text.INSTALLER_UNAVAILABLE)
 
+    async def refresh_installation(self):
+        if self.state["connection"] == "connected" and self.watch is not None:
+            task = getattr(self, "installer_read", None)
+            if task is None or task.done():
+                self._schedule_installation_read()
+                task = self.installer_read
+            await task
+        return compact_state(self.state)
 
 
     async def _disconnect(self):
