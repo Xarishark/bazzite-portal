@@ -4,10 +4,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Bazzite Portal / App\n"
-"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/"
-"app/\n"
+"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/app/"
+"\n"
 "POT-Creation-Date: 2026-10-26 19:33+0000\n"
-"PO-Revision-Date: 2026-10-25 15:57+0000\n"
+"PO-Revision-Date: 2026-10-26 19:42+0000\n"
 "Last-Translator: dani3690 <dani3690@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/bazzite-portal/"
 "app/it/>\n"
@@ -2187,7 +2187,7 @@ msgstr "Non è presente alcuna versione del sistema in attesa di annullamento"
 #: bazzite_portal/ui/maintenance.py:678 bazzite_portal/ui/maintenance.py:691
 #: bazzite_portal/ui/maintenance.py:973
 msgid "Cancel pending deployment"
-msgstr "Annullare la versione del sistema in attesa"
+msgstr "Annullare la modifica del sistema in attesa"
 
 #: bazzite_portal/ui/maintenance.py:679 bazzite_portal/ui/maintenance.py:691
 msgid "Cancel only the verified prepared deployment before it is activated."
@@ -2284,44 +2284,52 @@ msgstr ""
 #: bazzite_portal/ui/maintenance.py:851
 msgid "Download-cache cleanup is unavailable. Open Logs for details."
 msgstr ""
+"Non è possibile pulire la cache dei download. Aprire i registri per maggiori "
+"dettagli."
 
 #: bazzite_portal/ui/maintenance.py:853
 msgid ""
 "Could not check download-cache status. Refresh system information and try "
 "again."
 msgstr ""
+"Non è stato possibile verificare lo stato della cache dei download. "
+"Aggiornare le informazioni di sistema e riprovare."
 
 #: bazzite_portal/ui/maintenance.py:867
 msgid "Clearing download cache…"
-msgstr ""
+msgstr "Pulizia della cache dei download in corso…"
 
 #: bazzite_portal/ui/maintenance.py:869
 msgid "Download cache cleared"
-msgstr ""
+msgstr "La cache dei download è stata svuotata"
 
 #: bazzite_portal/ui/maintenance.py:869
 msgid "The cached data was removed. It can be downloaded again when needed."
 msgstr ""
+"I dati nella cache sono stati rimossi. Verranno scaricati di nuovo quando "
+"necessario."
 
 #: bazzite_portal/ui/maintenance.py:871 bazzite_portal/ui/maintenance.py:876
 msgid "Retry clearing download cache"
-msgstr ""
+msgstr "Riprovare a svuotare la cache dei download"
 
 #: bazzite_portal/ui/maintenance.py:871 bazzite_portal/ui/maintenance.py:875
 msgid "Could not clear download cache"
-msgstr ""
+msgstr "Non è stato possibile svuotare la cache dei download"
 
 #: bazzite_portal/ui/maintenance.py:872
 msgid "Download-cache cleanup failed. Open the operation log for details."
 msgstr ""
+"La pulizia della cache dei download non è riuscita. Aprire il registro "
+"dell'operazione per maggiori dettagli."
 
 #: bazzite_portal/ui/maintenance.py:880
 msgid "Download-cache clearing unavailable"
-msgstr ""
+msgstr "La pulizia della cache dei download non è disponibile"
 
 #: bazzite_portal/ui/maintenance.py:899
 msgid "Clear download cache?"
-msgstr ""
+msgstr "Svuotare la cache dei download?"
 
 #: bazzite_portal/ui/maintenance.py:900
 msgid ""
@@ -2330,28 +2338,35 @@ msgid ""
 "deployment; clearing the cache will not cancel it for you. No restart is "
 "needed."
 msgstr ""
+"Questa operazione elimina i dati degli aggiornamenti salvati nella cache, "
+"che potrebbero dover essere scaricati nuovamente. Se è presente una modifica "
+"di sistema in attesa, annullarla prima tramite l'opzione \"Annullare la "
+"modifica del sistema in attesa\", poiché lo svuotamento della cache non la "
+"annulla automaticamente. Non è necessario riavviare il computer."
 
 #: bazzite_portal/ui/maintenance.py:901
 msgid "Clear cache"
-msgstr ""
+msgstr "Svuotare la cache"
 
 #: bazzite_portal/ui/maintenance.py:917
 msgid ""
 "The download cache changed. Review the updated details and confirm again."
 msgstr ""
+"La cache dei download è cambiata. Verificare lo stato attuale e confermare "
+"di nuovo."
 
 #: bazzite_portal/ui/maintenance.py:945
 msgid "The cache cleanup request failed."
-msgstr ""
+msgstr "La richiesta di pulizia della cache non è andata a buon fine."
 
 #: bazzite_portal/ui/maintenance.py:975
 msgid "Rebase release channel"
-msgstr ""
+msgstr "Passare a un altro canale di rilascio"
 
 #: bazzite_portal/ui/maintenance.py:975
 #, python-brace-format
 msgid "Rebase {bazzite} image"
-msgstr ""
+msgstr "Cambio dell'immagine di {bazzite}"
 
 #: bazzite_portal/ui/maintenance.py:976
 msgid "Delete pinned deployment"

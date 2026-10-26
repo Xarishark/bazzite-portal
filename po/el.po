@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/"
-"app/\n"
+"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/app/"
+"\n"
 "POT-Creation-Date: 2026-10-26 19:33+0000\n"
-"PO-Revision-Date: 2026-10-20 13:07+0000\n"
+"PO-Revision-Date: 2026-10-26 19:42+0000\n"
 "Last-Translator: Zacharias Xenakis <xarishark@outlook.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/bazzite-portal/app/"
 "el/>\n"
@@ -179,60 +179,66 @@ msgstr "Φόρουμ κοινότητας του {universal_blue}"
 #: bazzite_portal/integration/decky.py:39
 msgid "Plugin installation must run as your normal desktop user."
 msgstr ""
+"Η εγκατάσταση του πρόσθετου πρέπει να εκτελείται από τον κανονικό χρήστη του "
+"περιβάλλοντος εργασίας."
 
 #: bazzite_portal/integration/decky.py:40
 msgid "This Portal installation does not include the Decky plugin."
 msgstr ""
+"Αυτή η εγκατάσταση του Bazzite Portal δεν περιλαμβάνει το πρόσθετο Decky."
 
 #: bazzite_portal/integration/decky.py:41
 msgid ""
 "The bundled Decky plugin could not be verified. Reinstall Bazzite Portal and "
 "try again."
 msgstr ""
+"Δεν ήταν δυνατή η επαλήθευση του πρόσθετου Decky που περιλαμβάνεται στην "
+"εφαρμογή. Επανεγκαταστήστε το Bazzite Portal και δοκιμάστε ξανά."
 
 #: bazzite_portal/integration/decky.py:42
 msgid "Decky Loader is not installed."
-msgstr ""
+msgstr "Το Decky Loader δεν είναι εγκατεστημένο."
 
 #: bazzite_portal/integration/decky.py:43
-#, fuzzy
-#| msgid "The download server is busy. Wait a little and try again."
 msgid "Decky Loader is not running. Start it and try again."
-msgstr ""
-"Ο διακομιστής λήψεων είναι απασχολημένος. Περιμένετε λίγο και δοκιμάστε ξανά."
+msgstr "Το Decky Loader δεν εκτελείται. Εκκινήστε το και δοκιμάστε ξανά."
 
 #: bazzite_portal/integration/decky.py:44
 msgid "Open Steam in Gaming Mode or Big Picture, then try again."
 msgstr ""
+"Ανοίξτε το Steam στη λειτουργία παιχνιδιού ή στη λειτουργία Big Picture και "
+"δοκιμάστε ξανά."
 
 #: bazzite_portal/integration/decky.py:45
-#, fuzzy
-#| msgid "Deployment deletion is already running or could not be verified."
 msgid "The installed Decky plugin version could not be verified."
 msgstr ""
-"Η διαγραφή της έκδοσης του συστήματος βρίσκεται ήδη σε εξέλιξη ή δεν ήταν "
-"δυνατή η επαλήθευσή της."
+"Δεν ήταν δυνατή η επαλήθευση της έκδοσης του εγκατεστημένου πρόσθετου Decky."
 
 #: bazzite_portal/integration/decky.py:46
 msgid "The installed Decky plugin is up to date."
-msgstr ""
+msgstr "Το εγκατεστημένο πρόσθετο Decky είναι ενημερωμένο."
 
 #: bazzite_portal/integration/decky.py:47
-#, fuzzy
-#| msgid "The deployment list changed. Review it again."
 msgid "The bundled plugin or installed version changed. Review it again."
-msgstr "Η λίστα εκδόσεων του συστήματος άλλαξε. Ελέγξτε την ξανά."
+msgstr ""
+"Το πρόσθετο που περιλαμβάνεται στην εφαρμογή ή η εγκατεστημένη έκδοσή του "
+"άλλαξε. Ελέγξτε το ξανά."
 
 #: bazzite_portal/integration/decky.py:48
 msgid ""
 "Confirm the installation in Decky Loader. No change is made if you cancel."
 msgstr ""
+"Επιβεβαιώστε την εγκατάσταση στο Decky Loader. Αν ακυρώσετε, δεν θα γίνει "
+"καμία αλλαγή."
 
 #: bazzite_portal/integration/decky.py:49
 msgid ""
 "Could not request plugin installation. Open Steam in Gaming Mode or Big "
 "Picture and try again."
 msgstr ""
+"Δεν ήταν δυνατή η υποβολή αιτήματος εγκατάστασης του πρόσθετου. Ανοίξτε το "
+"Steam στη λειτουργία παιχνιδιού ή στη λειτουργία Big Picture και δοκιμάστε "
+"ξανά."
 
 #: bazzite_portal/maintenance/cache_clear.py:68
 #, python-brace-format
@@ -415,18 +421,14 @@ msgid "Open Updates"
 msgstr "Άνοιγμα ενημερώσεων"
 
 #: bazzite_portal/services/agent.py:520
-#, fuzzy
-#| msgid "A channel rebase is already running."
 msgid "A Decky plugin installation request is already running."
-msgstr "Μια διαδικασία αλλαγής καναλιού μέσω rebase βρίσκεται ήδη σε εξέλιξη."
+msgstr "Ένα αίτημα εγκατάστασης πρόσθετου Decky βρίσκεται ήδη σε εξέλιξη."
 
 #: bazzite_portal/services/agent.py:533 bazzite_portal/ui/decky.py:155
-#, fuzzy
-#| msgid "Could not check layered apps. Open Logs for details."
 msgid "Could not manage the Decky plugin. Open Logs for details."
 msgstr ""
-"Δεν ήταν δυνατός ο έλεγχος των εφαρμογών που έχουν εγκατασταθεί μέσω "
-"layering. Ανοίξτε τα αρχεία καταγραφής για περισσότερες λεπτομέρειες."
+"Δεν ήταν δυνατή η διαχείριση του πρόσθετου Decky. Ανοίξτε τα αρχεία "
+"καταγραφής για περισσότερες λεπτομέρειες."
 
 #: bazzite_portal/services/agent.py:573 bazzite_portal/services/agent.py:646
 msgid "Another operation request is pending."
@@ -928,7 +930,7 @@ msgstr ""
 #: bazzite_portal/ui/application.py:1133
 #, python-brace-format
 msgid "Open {github} issue"
-msgstr ""
+msgstr "Άνοιγμα αναφοράς προβλήματος στο {github}"
 
 #: bazzite_portal/ui/application.py:1137
 msgid "The issue form could not be prepared. Open Logs for details."
@@ -1501,7 +1503,7 @@ msgstr ""
 #: bazzite_portal/ui/application.py:2993
 #, python-brace-format
 msgid "{app_name} is already in your {steam} library."
-msgstr ""
+msgstr "Το {app_name} βρίσκεται ήδη στη βιβλιοθήκη σας στο {steam}."
 
 #: bazzite_portal/ui/application.py:2995
 #, python-brace-format
@@ -1592,63 +1594,66 @@ msgid "Open a Portal tool"
 msgstr "Άνοιγμα εργαλείου Portal"
 
 #: bazzite_portal/ui/decky.py:77
-#, fuzzy
-#| msgid "Bazzite Portal Update Monitor"
 msgid "Bazzite Portal in Gaming Mode"
-msgstr "Παρακολούθηση ενημερώσεων του Bazzite Portal"
+msgstr "Το Bazzite Portal στη λειτουργία παιχνιδιού"
 
 #: bazzite_portal/ui/decky.py:78
 msgid ""
 "Install the Bazzite Portal plugin for Decky Loader to manage updates and "
 "rollbacks directly from Gaming Mode."
 msgstr ""
+"Εγκαταστήστε το πρόσθετο Bazzite Portal για το Decky Loader, ώστε να "
+"διαχειρίζεστε ενημερώσεις και επαναφορές σε προηγούμενες εκδόσεις απευθείας "
+"από τη λειτουργία παιχνιδιού."
 
 #: bazzite_portal/ui/decky.py:79
-#, fuzzy
-#| msgid "Installed version"
 msgid "Install Plugin"
-msgstr "Εγκατεστημένη έκδοση"
+msgstr "Εγκατάσταση πρόσθετου"
 
 #: bazzite_portal/ui/decky.py:79
 msgid "Not Now"
-msgstr ""
+msgstr "Όχι τώρα"
 
 #: bazzite_portal/ui/decky.py:80
 msgid "You can install the Bazzite Portal plugin at any time from Settings."
 msgstr ""
+"Μπορείτε να εγκαταστήσετε το πρόσθετο Bazzite Portal οποιαδήποτε στιγμή από "
+"τις Ρυθμίσεις."
 
 #: bazzite_portal/ui/decky.py:91 bazzite_portal/ui/decky.py:120
 #: bazzite_portal/ui/decky.py:125
 msgid "Install Bazzite Portal Decky plugin"
-msgstr ""
+msgstr "Εγκατάσταση πρόσθετου Bazzite Portal για το Decky Loader"
 
 #: bazzite_portal/ui/decky.py:92
 msgid "Use Bazzite Portal from Decky Loader in Gaming Mode."
 msgstr ""
+"Χρησιμοποιήστε το Bazzite Portal μέσω του Decky Loader στη λειτουργία "
+"παιχνιδιού."
 
 #: bazzite_portal/ui/decky.py:107
-#, fuzzy
-#| msgid "Checking pending deployment…"
 msgid "Checking Decky plugin…"
-msgstr "Έλεγχος εκκρεμούς έκδοσης του συστήματος…"
+msgstr "Έλεγχος πρόσθετου Decky…"
 
 #: bazzite_portal/ui/decky.py:107
 msgid "Waiting for Decky Loader…"
-msgstr ""
+msgstr "Αναμονή για το Decky Loader…"
 
 #: bazzite_portal/ui/decky.py:109
 msgid "Confirm in Decky Loader"
-msgstr ""
+msgstr "Επιβεβαίωση στο Decky Loader"
 
 #: bazzite_portal/ui/decky.py:109
 msgid ""
 "Confirm the installation in Decky Loader, then return to Settings to refresh "
 "its status."
 msgstr ""
+"Επιβεβαιώστε την εγκατάσταση στο Decky Loader και έπειτα επιστρέψτε στις "
+"Ρυθμίσεις για να ανανεώσετε την κατάστασή του."
 
 #: bazzite_portal/ui/decky.py:112
 msgid "Update Bazzite Portal Decky plugin"
-msgstr ""
+msgstr "Ενημέρωση πρόσθετου Bazzite Portal για το Decky Loader"
 
 #: bazzite_portal/ui/decky.py:113
 #, python-brace-format
@@ -1656,10 +1661,12 @@ msgid ""
 "Update the installed plugin from {installed} to {bundled}. Decky Loader "
 "preserves its settings."
 msgstr ""
+"Ενημερώστε το εγκατεστημένο πρόσθετο από την έκδοση {installed} στην έκδοση "
+"{bundled}. Το Decky Loader διατηρεί τις ρυθμίσεις του."
 
 #: bazzite_portal/ui/decky.py:116
 msgid "Downgrade Bazzite Portal Decky plugin"
-msgstr ""
+msgstr "Υποβάθμιση πρόσθετου Bazzite Portal για το Decky Loader"
 
 #: bazzite_portal/ui/decky.py:117
 #, python-brace-format
@@ -1667,29 +1674,29 @@ msgid ""
 "Downgrade the installed plugin from {installed} to the bundled version "
 "{bundled}. Decky Loader preserves its settings."
 msgstr ""
+"Υποβαθμίστε το εγκατεστημένο πρόσθετο από την έκδοση {installed} στην έκδοση "
+"{bundled} που περιλαμβάνεται στην εφαρμογή. Το Decky Loader διατηρεί τις "
+"ρυθμίσεις του."
 
 #: bazzite_portal/ui/decky.py:120
 msgid ""
 "Decky Loader will ask you to confirm installation of the bundled plugin."
 msgstr ""
+"Το Decky Loader θα σας ζητήσει να επιβεβαιώσετε την εγκατάσταση του "
+"πρόσθετου που περιλαμβάνεται στην εφαρμογή."
 
 #: bazzite_portal/ui/decky.py:122
-#, fuzzy
-#| msgid "Bazzite Portal Update Monitor"
 msgid "Bazzite Portal Decky plugin installed"
-msgstr "Παρακολούθηση ενημερώσεων του Bazzite Portal"
+msgstr "Το πρόσθετο Bazzite Portal για το Decky Loader είναι εγκατεστημένο"
 
 #: bazzite_portal/ui/decky.py:123
-#, fuzzy, python-brace-format
-#| msgid "Installed version"
+#, python-brace-format
 msgid "Installed version: {version}"
-msgstr "Εγκατεστημένη έκδοση"
+msgstr "Εγκατεστημένη έκδοση: {version}"
 
 #: bazzite_portal/ui/decky.py:126
-#, fuzzy
-#| msgid "Deployment cancellation is unavailable."
 msgid "Decky plugin installation is unavailable."
-msgstr "Η ακύρωση της έκδοσης του συστήματος δεν είναι διαθέσιμη."
+msgstr "Η εγκατάσταση του πρόσθετου Decky δεν είναι διαθέσιμη."
 
 #: bazzite_portal/ui/image_wizard.py:40
 msgid ""
