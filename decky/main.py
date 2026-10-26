@@ -10,6 +10,7 @@ sys.path[:0] = [str(PLUGIN_ROOT), str(PLUGIN_ROOT / "vendor")]
 
 import decky
 from backend import messages as text
+from backend import preferences
 from backend.payload import LogReader, compact_state
 from backend.presentation import TOKEN_PATTERN, rollback_cancel_target
 from backend.transport import AgentConnection, decode_snapshot
@@ -315,7 +316,15 @@ class Plugin:
                     # Status-only read after completion, never an operation retry.
                     await watch.snapshot()
 
+    async def get_preferences(self):
+        if not normal_user():
+            raise RuntimeError(text.NORMAL_USER)
+        return preferences.read()
 
+    async def set_show_logs(self, enabled):
+        if not normal_user():
+            raise RuntimeError(text.NORMAL_USER)
+        return preferences.set_show_logs(enabled)
 
 
     async def _unload(self):

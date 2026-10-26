@@ -6,6 +6,7 @@ import { actions, sameAction } from "./actions";
 import { currentState, reconnect, refreshInstallation, requestAction, updatePlugin, usePortalState } from "./state";
 import { messages as m } from "./messages";
 import { loadPreferences, setPage, usePanelState } from "./panel-state";
+import { Settings } from "./Settings";
 import { UpdateButton, Updates } from "./Updates";
 import { usePanelEntry } from "./panel-navigation";
 import { openOperation, showReason } from "./OperationModal";
@@ -29,7 +30,7 @@ export function Panel() {
   const root = usePanelEntry(visible, change || page, Boolean(change));
   const controls = actions(state);
   const connected = state.connection === "connected";
-  useEffect(() => {return () => setPage("main");}, []);
+  useEffect(() => {void loadPreferences().catch(() => {}); return () => setPage("main");}, []);
   useEffect(() => {if (visible && connected) void refreshInstallation().catch(() => {});}, [visible, connected]);
   useEffect(() => {
     if ((change || previousChange.current) && page !== "main") setPage("main");
@@ -87,7 +88,7 @@ export function Panel() {
       <PanelSectionRow><ButtonItem layout="below" onClick={() => {void reconnect().catch(() => setError(m.backendUnavailable));}}>{m.reconnect}</ButtonItem></PanelSectionRow>
     </PanelSection> : null}
     {!updatesOpen && (error || connected && state.error) ? <PanelSection><PanelSectionRow><div className="portal-panel-status" role="alert">{error || state.error}</div></PanelSectionRow></PanelSection> : null}
-    {updatesOpen ? <Updates state={state} action={controls[0]} sending={sending || awaitingUpdate} visible={visible}
+    {page === "settings" ? <Settings visible={visible} /> : updatesOpen ? <Updates state={state} action={controls[0]} sending={sending || awaitingUpdate} visible={visible}
       feedback={error || (connected ? state.error : "")}
       onUpdate={() => confirm(controls[0])} onBack={() => setPage("main")} showLogs={showLogs} navigate={navigate} /> : <>
     <PanelSection title={m.management}>
