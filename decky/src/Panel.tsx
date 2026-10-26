@@ -80,6 +80,7 @@ export function Panel() {
   return <div ref={root} className="portal-panel">
     <style>{styles}</style>
     {page === "main" ? <PanelSection><PanelSectionRow><UpdateButton label={m.update}
+      busy={awaitingUpdate || Boolean(state.snapshot?.operation === "update" && state.snapshot.running) || (state.request_pending && state.pending_action === "update")}
       onClick={() => setPage("updates")} /></PanelSectionRow></PanelSection> : null}
     {!connected ? <PanelSection title={m.app}>
       <PanelSectionRow><div className="portal-panel-status" role="status">{statusText}</div></PanelSectionRow>
