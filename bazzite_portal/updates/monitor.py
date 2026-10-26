@@ -1602,10 +1602,7 @@ class Monitor:
                 "error": event["error"], "fraction": None, "source": "journal",
             }
         elif kind == "command_error":
-            # RunLog warnings are unscoped in UUPD 1.5.0. They belong to the
-            # currently executing module; notification errors after completion
-            # have no active module and must not invalidate successful updates.
-            identity = identity or self._active_module
+            # Only explicitly scoped command failures belong to a module.
             current = self._modules.get(identity)
             if current and current.get("status") == "running":
                 current.update(status="failed", error=event["error"], fraction=None)
@@ -1634,18 +1631,17 @@ class Monitor:
                 current = {"id": identity, "name": event["name"], "status": "pending",
                            "detail": "", "error": "", "fraction": None, "source": "journal"}
                 self._modules[identity] = current
-            if current.get("status") == "failed":
-                return  # Later heartbeats or a second scope cannot erase failure.
+            if current.get("status") == "failed" or current.get("terminal_result"):
+                return  # Late heartbeats cannot undo a failure or explicit result.
             order = [key for key, _, _ in UUPD_MODULES]
             previous = self._modules.get(self._active_module)
             if identity != self._active_module and identity in order and self._active_module in order:
                 if order.index(identity) < order.index(self._active_module):
                     return  # A late bootc reader message must not reactivate a finished step.
                 if previous and previous["status"] == "running":
-                    # UUPD runs modules sequentially but aggregates module_fail
-                    # at the end. Keep the requested immediate completion check;
-                    # observed command errors and later failures override it.
-                    previous["status"] = "unknown" if self._unmapped_module_failure else "success"
+                    # Moving to another module is not a successful exit record.
+                    # Keep it awaiting final verification if that record was lost.
+                    previous["status"] = "finished"
                     previous["fraction"] = None
             self._stage = event["name"]
             current["status"] = "running"
@@ -1663,6 +1659,24 @@ class Monitor:
                 current["fraction"] = event["fraction"]
             if event["progress_percent"] is not None:
                 self._progress_percent = event["progress_percent"]
+        elif kind == "module_completed":
+            current = self._modules.get(identity)
+            if current is None:
+                if len(self._modules) >= MAX_MODULE_STEPS:
+                    return
+                name = next(name for key, name, _ in UUPD_MODULES if key == identity)
+                current = {"id": identity, "name": name, "status": "pending",
+                           "detail": "", "error": "", "fraction": None, "source": "journal"}
+                self._modules[identity] = current
+            current["terminal_result"] = True
+            if not event["success"]:
+                current.update(status="failed", error=current.get("error") or event["error"]
+                               or N_("This update module reported a failure."), fraction=None)
+                self._failures = list(dict.fromkeys(self._failures + [identity]))[-100:]
+            elif current["status"] != "failed":
+                current.update(status="success", fraction=None)
+            if self._active_module == identity:
+                self._active_module = ""
         elif kind == "failed":
             current = self._modules.get(identity)
             if current is not None:
