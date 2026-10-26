@@ -271,7 +271,7 @@ def system_summary(info):
 
 class Window(Adw.ApplicationWindow, SystemManagementUI):
     def __init__(self, app, config_path):
-        super().__init__(application=app, title='Bazzite Portal', default_width=1080, default_height=740)
+        super().__init__(application=app, title='Bazzite Portal', default_width=960, default_height=640)
         self.config_path = Path(config_path)
         self.status_received = False
         self.store = Store()
