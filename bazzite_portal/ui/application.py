@@ -1117,30 +1117,17 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         self._show_report_ready(report, issue_url, issue_error)
 
     def _show_report_ready(self, report, issue_url, issue_error=None):
-        dialog = self._report_modal(N_("Logs ready"), 800, 720)
+        dialog = self._report_modal(N_("Logs ready"), 640, 360)
         box = self._report_modal_box(dialog)
         review = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=14)
         review.append(label(N_("Logs are ready."), "title-3"))
-        review.append(label(_("Location: {path}").format(path=report.directory)))
-        hardware = label(str(report.hardware), "monospace", selectable=True, translate=False)
-        hardware.set_yalign(0)
-        hardware.controller_exclude_focus = True
-        hardware.set_max_width_chars(100)
-        dialog.report_hardware_selection = hardware
-        review.append(label(N_("Hardware summary"), "heading"))
-        review.append(hardware)
-        files = "\n".join(f"• {name}" for name in report.files) or _("No files were created.")
-        review.append(label(N_("Files collected"), "heading"))
-        files_label = label(files, translate=False)
-        files_label.set_selectable(True)
-        files_label.set_wrap(True)
-        files_label.controller_exclude_focus = True
-        review.append(files_label)
+        location = self._report_location_label(report.directory)
+        review.append(location)
         if report.warnings:
             review.append(label(N_("Warnings"), "heading"))
             review.append(label("\n".join(dict.fromkeys(public_error(warning, N_("Some diagnostic information could not be collected. See the collected logs for details."), context="Report collection") for warning in report.warnings)), translate=False))
         review.append(label(N_("Attach only the logs relevant to your problem. Then fill in the remaining fields and describe the issue.")))
-        review_scroll = Gtk.ScrolledWindow(min_content_height=300, vexpand=True,
+        review_scroll = Gtk.ScrolledWindow(min_content_height=120, vexpand=True,
             hscrollbar_policy=Gtk.PolicyType.NEVER)
         review_scroll.set_child(review)
         dialog.report_review_scroll = review_scroll
@@ -1154,8 +1141,7 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             issue_button.set_tooltip_text(public_error(issue_error, N_("The issue form could not be prepared. Open Logs for details."), context='Prepare issue form'))
         dialog.open_folder_button = folder_button
         dialog.open_issue_button = issue_button
-        dialog.hardware_summary = hardware
-        dialog.files_label = files_label
+        dialog.report_location = location
         dialog.issue_url = issue_url
         anchor = self._fixed_modal_actions(dialog, box, (
             ("back", close_button), ("context_action", folder_button), ("confirm", issue_button)))
@@ -1226,6 +1212,16 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
                 parent.insert_child_after(prompt, old.get_prev_sibling())
                 parent.remove(old)
             prompts[index] = (command, control, prompt)
+
+    def _report_location_label(self, directory):
+        location = label(translate=False)
+        location.set_markup(GLib.markup_escape_text(_("Location: {path}")).format(
+            path='<a href="' + GLib.markup_escape_text(directory.resolve().as_uri())
+                 + '">' + GLib.markup_escape_text(str(directory)) + '</a>'))
+        location.controller_exclude_focus = True
+        location.connect("activate-link", lambda *_: (
+            self._open_report_folder(directory), True)[1])
+        return location
 
     def _open_report_folder(self, directory):
         if self.closing:
@@ -1321,9 +1317,6 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
                 self._set_controller_focus(focus_widget)
             else:
                 focus_widget.grab_focus()
-            hardware = getattr(dialog, "report_hardware_selection", None)
-            if hardware is not None:
-                hardware.select_region(0, 0)
         return GLib.SOURCE_REMOVE
 
     def _close_report_modal(self, dialog, callback=None):
