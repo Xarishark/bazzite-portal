@@ -43,6 +43,7 @@ AGENT_ID = APP_ID + ".Agent"
 AGENT_PATH = "/io/github/Xarishark/bazzite_portal/Agent"
 AGENT_XML = '''<node><interface name="io.github.Xarishark.bazzite_portal.Agent">
 <method name="GetSnapshot"><arg type="s" direction="out"/></method>
+<method name="AddToSteam"><arg type="s" direction="out"/></method>
 <method name="GetAutoUpdateStatus"><arg type="s" direction="out"/></method>
 <method name="SetAutoUpdates"><arg type="b" direction="in"/><arg type="s" direction="out"/></method>
 <method name="Refresh"/>
@@ -510,6 +511,28 @@ class Agent:
         self._publish_snapshot(snapshot)
 
 
+    def _add_to_steam_request(self, invocation):
+        """Reuse desktop's native shortcut/artwork helper, off the agent main loop."""
+        if getattr(self, "_steam_adding", False):
+            invocation.return_dbus_error(AGENT_ID + ".Error", "An Add to Steam request is already running.")
+            return
+        self._steam_adding = True
+
+        def work():
+            try:
+                result = {"accepted": True, **steam.add_to_steam(),
+                          "artwork_targets": steam.bundled_artwork_targets()}
+            except Exception:
+                log.exception("Could not add Portal to Steam")
+                result = {"accepted": False, "error": "Could not add Bazzite Portal to Steam. Open Logs for details."}
+            GLib.idle_add(finish, result)
+
+        def finish(result):
+            self._steam_adding = False
+            invocation.return_value(GLib.Variant("(s)", (json.dumps(result),)))
+            return False
+
+        threading.Thread(target=work, daemon=True).start()
 
     def _auto_update_request(self, method, parameters, invocation):
         setting = method == "SetAutoUpdates"
@@ -540,6 +563,9 @@ class Agent:
     def _method(self, connection, sender, path, interface, method, parameters, invocation):
         if method in {"GetAutoUpdateStatus", "SetAutoUpdates"}:
             self._auto_update_request(method, parameters, invocation)
+            return
+        if method == "AddToSteam":
+            self._add_to_steam_request(invocation)
             return
         if method == "GetSnapshot":
             invocation.return_value(GLib.Variant("(s)", (json.dumps(self._snapshot_payload()),)))

@@ -44,6 +44,16 @@ export function Settings({visible = true}: {visible?: boolean}) {
       {schedulingError ? <PanelSectionRow><div className="portal-panel-status" role="alert">{schedulingError}</div></PanelSectionRow> : null}
       <PanelSectionRow><ToggleField label={m.showLogs} checked={showLogs} disabled={saving} bottomSeparator="none"
         onChange={enabled => {setSaving(true); void setShowLogs(enabled).catch(() => setMessage(m.settingsFailed)).finally(() => setSaving(false));}} /></PanelSectionRow>
+      <PanelSectionRow><DialogButton className="portal-panel-button" disabled={adding} onClick={() => {
+        setAdding(true); setMessage("");
+        void addToSteam().then(async result => {
+          if (!result.accepted) {setMessage(result.error || m.steamFailed); return;}
+          let description = result.already_added ? m.steamExistingLibrary : result.artwork_ready ? m.steamLibrary : m.steamLibraryPending;
+          showModal(<ConfirmModal bAlertDialog strTitle={result.already_added ? m.steamAlreadyAdded : result.artwork_ready ? m.steamAdded : m.steamRequested}
+            strDescription={description} strOKButtonText={m.ok} />);
+        })
+          .catch(() => setMessage(m.steamFailed)).finally(() => setAdding(false));
+      }}>{adding ? m.steamAdding : m.addToSteam}</DialogButton></PanelSectionRow>
       {message ? <PanelSectionRow><div role="status">{message}</div></PanelSectionRow> : null}
       <PanelSectionRow><div className="portal-settings-info">
         <div>{format(m.pluginVersion, {version})}</div>

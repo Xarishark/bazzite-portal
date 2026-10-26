@@ -455,6 +455,24 @@ def _copy_steam_artwork(root, account, appids):
                     temporary.unlink(missing_ok=True)
 
 
+def bundled_artwork_targets():
+    """Identify only our exact saved images for an optional native client refresh."""
+    root = _steam_root()
+    account = _steam_account(root)
+    targets = []
+    for appid in _portal_shortcuts(root, account):
+        grid = root / "userdata" / account / "config/grid"
+        images = []
+        for suffix, name in _ARTWORK.items():
+            image = grid / (str(appid) + suffix + ".png")
+            try:
+                if not image.is_symlink() and image.read_bytes() == (STEAM_ARTWORK / name).read_bytes():
+                    images.append(name)
+            except OSError:
+                continue
+        if images:
+            targets.append({"appid": appid, "images": images})
+    return targets
 
 
 def _apply_artwork(request):

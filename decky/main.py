@@ -365,6 +365,15 @@ class Plugin:
             raise RuntimeError(text.NORMAL_USER)
         return preferences.set_show_logs(enabled)
 
+    async def add_to_steam(self):
+        if not normal_user() or self.state["connection"] != "connected" or self.watch is None:
+            return {"accepted": False, "error": text.UNAVAILABLE}
+        try:
+            reply = await self.watch.call("AddToSteam", timeout=30)
+            return decode_snapshot(reply[0])
+        except (DBusErrorResponse, OSError, RuntimeError, asyncio.TimeoutError):
+            log.warning("Could not add Portal to Steam", exc_info=True)
+            return {"accepted": False, "error": text.STEAM_FAILED}
 
     async def _unload(self):
         # Decky 3.3.0 closes its IPC reader before awaiting this hook. Its child
