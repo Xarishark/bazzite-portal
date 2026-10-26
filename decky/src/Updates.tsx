@@ -40,6 +40,11 @@ function ComponentProgress({step, deploymentReady}: {step: Module; deploymentRea
       || (step.status === "failed" ? m.failed : step.status === "skipped" ? m.skipped : m.statusUnknown);
   const subtitle = step.error || detail;
   return <div className="portal-panel-component">
+    <span className="portal-step-indicator">
+      {running ? <Throbber /> : icon ? <span role="img" aria-label={success ? m.completed : failed ? m.failed : m.finished}
+        className={success ? "portal-result-icon-success" : failed ? "portal-result-icon-failed" : "portal-step-unverified"}
+        dangerouslySetInnerHTML={{__html: icon}} /> : null}
+    </span>
     <div className="portal-step-content">
       <strong title={name}>{name}</strong>
       <span className="portal-step-detail" role={step.error ? "alert" : undefined} title={subtitle}>{subtitle}</span>
