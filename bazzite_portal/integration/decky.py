@@ -277,3 +277,24 @@ def status() -> dict[str, Any]:
     return result
 
 
+def install(expected_bundle_token: str) -> dict[str, Any]:
+    """Request Loader's own confirmation for this exact fixed bundled ZIP.
+
+    The reply means a confirmation was requested, never that installation has
+    completed. Cancel leaves the plugin alone. A later inspect confirms version.
+    """
+    current = status()
+    current["prompt_requested"] = False
+    if (not isinstance(expected_bundle_token, str) or not TOKEN.fullmatch(expected_bundle_token)
+            or current["bundle_token"] != expected_bundle_token):
+        return {**current, "error": CHANGED}
+    if not (current["can_install"] or current["can_update"] or current["can_downgrade"]):
+        return {**current, "error": current["reason"] or REQUEST_FAILED}
+    try:
+        loader = Loader()
+        archive = _cached_bundle(expected_bundle_token)
+        loader.request_install(loader.frontend(), archive, current["bundled_version"], expected_bundle_token,
+                               current["can_update"] or current["can_downgrade"])
+    except (OSError, ValueError, KeyError, TypeError, UnicodeError, http.client.HTTPException):
+        return {**current, "error": REQUEST_FAILED}
+    return {**current, "prompt_requested": True, "reason": PROMPT, "error": ""}

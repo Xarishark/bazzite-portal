@@ -134,6 +134,32 @@ class Plugin:
             await task
         return compact_state(self.state)
 
+    async def update_plugin(self, expected_token):
+        status = self.state.get("installation") or {}
+        if (not normal_user() or self.state["connection"] != "connected" or self.watch is None
+                or self.state.get("installation_pending") or status.get("installing")
+                or not (status.get("can_update") is True or status.get("can_downgrade") is True)
+                or status.get("bundle_token") != expected_token
+                or not isinstance(expected_token, str) or not TOKEN_PATTERN.fullmatch(expected_token)):
+            return {"accepted": False, "error": text.INSTALLER_CHANGED}
+        self._set(installation_pending=True, installation_error="")
+        watch = self.watch
+        async def install():
+            try:
+                reply = await watch.call("InstallDecky", "s", (expected_token,), timeout=120)
+                result = decode_snapshot(reply[0])
+                if watch is self.watch and not self.closing:
+                    self._set(installation=result, installation_error=result.get("error", ""))
+            except asyncio.CancelledError:
+                raise
+            except Exception:
+                if watch is self.watch and not self.closing:
+                    self._set(installation_error=text.INSTALLER_UNAVAILABLE)
+            finally:
+                if watch is self.watch and not self.closing:
+                    self._set(installation_pending=False)
+        self.installer_request = asyncio.create_task(install())
+        return {"accepted": True, "error": ""}
 
     async def _disconnect(self):
         for task in (getattr(self, "installer_read", None), getattr(self, "installer_request", None)):

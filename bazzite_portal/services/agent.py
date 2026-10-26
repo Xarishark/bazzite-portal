@@ -47,6 +47,7 @@ AGENT_XML = '''<node><interface name="io.github.Xarishark.bazzite_portal.Agent">
 <method name="GetAutoUpdateStatus"><arg type="s" direction="out"/></method>
 <method name="SetAutoUpdates"><arg type="b" direction="in"/><arg type="s" direction="out"/></method>
 <method name="GetDeckyStatus"><arg type="s" direction="out"/></method>
+<method name="InstallDecky"><arg type="s" direction="in"/><arg type="s" direction="out"/></method>
 <method name="Refresh"/>
 <method name="SessionStarted"/>
 <method name="MaintenanceViewed"><arg type="s" direction="in"/><arg type="s" direction="in"/><arg type="s" direction="in"/><arg type="x" direction="in"/></method>
@@ -512,6 +513,36 @@ class Agent:
             self._preferences_changed()
         self._publish_snapshot(snapshot)
 
+    def _decky_request(self, method, parameters, invocation):
+        """On-demand plugin integration, independent of system management state."""
+        installing = method == "InstallDecky"
+        if installing and getattr(self, "_decky_installing", False):
+            invocation.return_dbus_error(AGENT_ID + ".Error", N_("A Decky plugin installation request is already running."))
+            return
+        if installing:
+            self._decky_installing = True
+        expected = parameters.unpack()[0] if installing else None
+
+        def work():
+            try:
+                from bazzite_portal.integration import decky
+                result = decky.install(expected) if installing else decky.status()
+            except Exception:
+                log.exception("Could not %s Decky plugin", "install" if installing else "inspect")
+                result = {"can_install": False, "can_update": False,
+                          "error": N_("Could not manage the Decky plugin. Open Logs for details.")}
+            GLib.idle_add(finish, result)
+
+        def finish(result):
+            if installing:
+                self._decky_installing = False
+            result = {**result, "installing": bool(getattr(self, "_decky_installing", False))}
+            payload = GLib.Variant("(s)", (json.dumps(result),))
+            invocation.return_value(payload)
+            self.connection.emit_signal(None, AGENT_PATH, AGENT_ID, "DeckyChanged", payload)
+            return False
+
+        threading.Thread(target=work, daemon=True).start()
 
     def _add_to_steam_request(self, invocation):
         """Reuse desktop's native shortcut/artwork helper, off the agent main loop."""
@@ -562,38 +593,6 @@ class Agent:
 
         threading.Thread(target=work, daemon=True).start()
 
-    def _decky_request(self, method, parameters, invocation):
-        """On-demand plugin integration, independent of system management state."""
-        installing = False
-        if installing and getattr(self, "_decky_installing", False):
-            invocation.return_dbus_error(AGENT_ID + ".Error", N_("A Decky plugin installation request is already running."))
-            return
-        if installing:
-            self._decky_installing = True
-        expected = parameters.unpack()[0] if installing else None
-
-        def work():
-            try:
-                from bazzite_portal.integration import decky
-                result = decky.install(expected) if installing else decky.status()
-            except Exception:
-                log.exception("Could not %s Decky plugin", "install" if installing else "inspect")
-                result = {"can_install": False, "can_update": False,
-                          "error": N_("Could not manage the Decky plugin. Open Logs for details.")}
-            GLib.idle_add(finish, result)
-
-        def finish(result):
-            if installing:
-                self._decky_installing = False
-            result = {**result, "installing": bool(getattr(self, "_decky_installing", False))}
-            payload = GLib.Variant("(s)", (json.dumps(result),))
-            invocation.return_value(payload)
-            self.connection.emit_signal(None, AGENT_PATH, AGENT_ID, "DeckyChanged", payload)
-            return False
-
-        threading.Thread(target=work, daemon=True).start()
-
-
     def _method(self, connection, sender, path, interface, method, parameters, invocation):
         if method in {"GetAutoUpdateStatus", "SetAutoUpdates"}:
             self._auto_update_request(method, parameters, invocation)
@@ -601,7 +600,7 @@ class Agent:
         if method == "AddToSteam":
             self._add_to_steam_request(invocation)
             return
-        if method == "GetDeckyStatus":
+        if method in {"GetDeckyStatus", "InstallDecky"}:
             self._decky_request(method, parameters, invocation)
             return
         if method == "GetSnapshot":
