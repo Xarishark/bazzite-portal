@@ -3,6 +3,7 @@ import { DialogButton, Focusable, PanelSection, PanelSectionRow, ProgressBar } f
 import { Action, Module, State } from "./types";
 import { bootedIdentity } from "./actions";
 import { messages as m } from "./messages";
+import { RELEASE_NOTES_ROUTE } from "./release-notes/ReleaseNotes";
 import { LOGS_ROUTE } from "./Logs";
 import { Throbber } from "./Throbber";
 import { BazziteIcon } from "./BazziteIcon";
@@ -84,6 +85,10 @@ export function Updates({state, action, sending, visible, onUpdate, onBack, show
         unavailable={Boolean(action.reason) || startingUpdate} busy={runningUpdate || startingUpdate}
         onClick={() => {if (runningUpdate || startingUpdate || blockedReason) return; onUpdate();}} /></PanelSectionRow>
       {notice ? <PanelSectionRow><div className="portal-panel-status" role="status">{notice}</div></PanelSectionRow> : null}
+      <PanelSectionRow><DialogButton className="portal-panel-button"
+        disabled={state.connection !== "connected" || !identity.bootedVersion || !identity.channel}
+        onClick={() => navigate(RELEASE_NOTES_ROUTE)}>{m.releaseNotes}</DialogButton>
+        {!identity.bootedVersion ? <div className="portal-panel-status">{m.notesIdentity}</div> : null}</PanelSectionRow>
       {steps.filter(step => !(step.status === "skipped" && step.source === "config")).map(step =>
         <PanelSectionRow key={step.id}><ComponentProgress step={step} deploymentReady={Boolean(snapshot?.deployment)} /></PanelSectionRow>)}
       {runningUpdate && !steps.length ? <PanelSectionRow><div className="portal-panel-activity"><Throbber /><span>{snapshot?.stage || m.updating}</span></div></PanelSectionRow> : null}
