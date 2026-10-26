@@ -966,17 +966,12 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             self._show_system_logs_ready(report)
 
     def _show_system_logs_ready(self, report):
-        dialog = self._report_modal(N_("System logs ready"), 560, 440)
+        dialog = self._report_modal(N_("System logs ready"), 640, 360)
         box = self._report_modal_box(dialog)
         review = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
         review.append(label(N_("System logs are ready."), "title-3"))
-        review.append(label(_("Location: {path}").format(path=report.directory)))
-        files = "\n".join(f"• {name}" for name in report.files) or _("No files were created.")
-        review.append(label(N_("Files collected"), "heading"))
-        files_label = label(files, translate=False)
-        files_label.set_selectable(True)
-        files_label.controller_exclude_focus = True
-        review.append(files_label)
+        location = self._report_location_label(report.directory)
+        review.append(location)
         if report.warnings:
             review.append(label(N_("Warnings"), "heading"))
             review.append(label("\n".join(dict.fromkeys(public_error(warning, N_("Some diagnostic information could not be collected. See the collected logs for details."), context="Report collection") for warning in report.warnings)), translate=False))
@@ -989,6 +984,7 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         folder_button = button(N_("Open logs folder"), lambda: self._open_report_folder(report.directory))
         anchor = self._fixed_modal_actions(dialog, box, (("back", close_button), ("confirm", folder_button)))
         dialog.open_folder_button = folder_button
+        dialog.report_location = location
         dialog.connect("close-request", lambda *_: self._report_modal_closed(dialog))
         self._present_report_modal(dialog, anchor)
 
