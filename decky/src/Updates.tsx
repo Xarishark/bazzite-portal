@@ -61,7 +61,14 @@ export function Updates({state, action, sending, visible, onUpdate, onBack, show
   const [visibleRun, setVisibleRun] = useState("");
   const run = updateRun ? snapshot?.run || "" : "";
   const completed = Boolean(run && !runningUpdate && ["success", "failed", "unknown"].includes(snapshot?.result || ""));
-  const dismissed = false;
+  useEffect(() => {
+    if (!visible) {setVisibleRun(""); return;}
+    if (!completed || snapshot?.result_viewed_run === run || (snapshot?.result === "unknown" && dismissedUnknownRun === run)) return;
+    setVisibleRun(run);
+    if (snapshot?.result === "unknown") return () => {dismissedUnknownRun = run;};
+    void updatesViewed(run).catch(() => {});
+  }, [visible, completed, run, snapshot?.result, snapshot?.result_viewed_run]);
+  const dismissed = completed && (snapshot?.result_viewed_run === run || (snapshot?.result === "unknown" && dismissedUnknownRun === run)) && visibleRun !== run;
   const identity = bootedIdentity(snapshot);
   const steps: Module[] = !updateRun || dismissed ? snapshot?.module_plan || (snapshot?.modules || []).map(step => ({id: step.id, name: step.name, status: "pending"}))
     : snapshot?.modules?.length ? snapshot.modules : snapshot?.module_plan || [];

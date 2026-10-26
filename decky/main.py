@@ -177,6 +177,18 @@ class Plugin:
 
 
 
+    async def updates_viewed(self, run):
+        snapshot = self.state.get("snapshot") or {}
+        if (not normal_user() or self.state["connection"] != "connected" or self.watch is None
+                or not isinstance(run, str) or not run or run != snapshot.get("run")
+                or snapshot.get("running") or snapshot.get("result") not in {"success", "failed"}):
+            return {"accepted": False}
+        try:
+            await self.watch.call("UpdatesViewed", "s", (run,))
+            return {"accepted": True}
+        except (DBusErrorResponse, OSError, RuntimeError, asyncio.TimeoutError):
+            log.debug("Could not mark Portal update results viewed", exc_info=True)
+            return {"accepted": False}
 
     async def maintenance_viewed(self, kind, unit, invocation, generation):
         snapshot = self.state.get("snapshot") or {}
