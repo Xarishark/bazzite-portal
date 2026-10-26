@@ -1,0 +1,10 @@
+{
+  "name": "Bazzite Portal",
+  "author": "Xarishark",
+  "flags": [],
+  "api_version": 1,
+  "publish": {
+    "tags": ["utility"],
+    "description": "System updates, recovery and release notes through Bazzite Portal."
+  }
+}

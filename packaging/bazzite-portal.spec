@@ -6,8 +6,9 @@ Version:        @VERSION@
 Release:        1
 Summary:        Bazzite tools and reconnectable system updates
 URL:            https://github.com/Xarishark/bazzite-portal
-License:        GPL-3.0-only AND LGPL-3.0-only AND LGPL-3.0-or-later AND Apache-2.0 AND CC0-1.0 AND ISC AND MIT
+License:        GPL-3.0-only AND LGPL-3.0-only AND LGPL-3.0-or-later AND Apache-2.0 AND CC0-1.0 AND ISC AND MIT AND BSD-3-Clause
 Source0:        %{name}-%{version}.tar.gz
+Source1:        %{name}-decky-%{version}.zip
 BuildArch:      noarch
 BuildRequires:  python3 >= 3.11
 BuildRequires:  desktop-file-utils
@@ -31,6 +32,7 @@ updates, rollback and system information.
 
 %build
 python3 packaging/translations.py build
+python3 packaging/prepare_sources.py --verify-zip %{SOURCE1} --source-info packaging/source.json
 
 %install
 mkdir -p %{buildroot}%{_datadir}/%{name}
@@ -40,6 +42,7 @@ find %{buildroot}%{_datadir}/%{name} -type f -name '*.py[co]' -delete
 find %{buildroot}%{_datadir}/%{name} -type d -exec chmod 755 {} +
 find %{buildroot}%{_datadir}/%{name} -type f -exec chmod 644 {} +
 install -m 644 pyproject.toml %{buildroot}%{_datadir}/%{name}/pyproject.toml
+install -Dm644 %{SOURCE1} %{buildroot}%{_datadir}/%{name}/decky/bazzite-portal.zip
 install -Dm755 packaging/bazzite-portal %{buildroot}%{_bindir}/bazzite-portal
 install -Dm755 packaging/bazzite-portal-maintenance %{buildroot}%{_libexecdir}/bazzite-portal-maintenance
 install -Dm644 build/packaging/%{appid}.desktop %{buildroot}%{_datadir}/applications/%{appid}.desktop
@@ -80,6 +83,7 @@ systemctl daemon-reload >/dev/null 2>&1 || :
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/bazzite_portal/
 %{_datadir}/%{name}/pyproject.toml
+%{_datadir}/%{name}/decky/
 %{_libexecdir}/bazzite-portal-maintenance
 %{_datadir}/applications/%{appid}.desktop
 %{_datadir}/metainfo/%{appid}.metainfo.xml

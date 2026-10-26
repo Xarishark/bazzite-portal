@@ -1,11 +1,8 @@
 """GTK window. System operations and the session agent outlive this window."""
 import concurrent.futures
-import json
 import logging
-import os
 from pathlib import Path
 import subprocess
-import sys
 import threading
 import gi
 gi.require_version("Gtk", "4.0")
@@ -14,9 +11,9 @@ gi.require_version("Adw", "1")
 from gi.repository import Adw, Gdk, Gio, GLib, Gtk
 from bazzite_portal import APP_ID
 from bazzite_portal import VERSION
-from bazzite_portal.ui.maintenance import STATE_LABELS, SystemManagementUI
+from bazzite_portal.ui.maintenance import SystemManagementUI
 from bazzite_portal.ui.widgets import (
-    button, content_page, group, label, ControllerLegend, ControllerPrompt,
+    button, content_page, group, label, ControllerLegend,
     make_button_prompt, make_context_prompt, set_window_content,
 )
 from bazzite_portal.integration import tools as portal
@@ -32,14 +29,12 @@ from bazzite_portal.input.controller import (
     SDLGamepad,
     ControllerDriver,
     ControllerPriority,
-    controller_button_glyph,
 )
 from bazzite_portal.core.storage import Store
 from bazzite_portal.core.i18n import C_, N_, _, channel_name, format_message
 from bazzite_portal.core.errors import error_text, public_error
 from bazzite_portal.input.prompts import set_prompt_visible
 from bazzite_portal.ui import system_info as system_presentation
-from bazzite_portal.updates import monitor as system
 from bazzite_portal.updates.model import Snapshot
 from bazzite_portal.updates.release_notes import fetch_release_notes
 
@@ -123,8 +118,9 @@ def install_controller_focus_style():
         b"box-shadow: inset 0 0 0 1px alpha(@accent_color, 0.55); } "
         b".bazzite-favorite { color: @warning_color; } "
         b"row.destructive-action .title { color: @error_color; } "
-        b"button.bazzite-update-cta { background-color: #8A2BE2; color: #ffffff; } "
-        b"button.bazzite-update-cta:hover { background-color: #7424C5; color: #ffffff; } "
+        b"button.bazzite-update-cta, row.bazzite-update-cta { background-color: #8A2BE2; color: #ffffff; } "
+        b"button.bazzite-update-cta:hover, row.bazzite-update-cta:hover { background-color: #7424C5; color: #ffffff; } "
+        b"row.bazzite-update-cta .subtitle { color: alpha(#ffffff, 0.8); } "
         b"box.controller-style-pill { min-height: 36px; padding: 2px 6px; "
         b"background-color: alpha(@theme_fg_color, 0.06); border: 1px solid alpha(@theme_fg_color, 0.16); border-radius: 9px; } "
         b".layer-selection-row { min-height: 36px; padding: 2px 8px; border-radius: 8px; } "
@@ -275,7 +271,7 @@ def system_summary(info):
 
 class Window(Adw.ApplicationWindow, SystemManagementUI):
     def __init__(self, app, config_path):
-        super().__init__(application=app, title='Bazzite Portal', default_width=1080, default_height=740)
+        super().__init__(application=app, title='Bazzite Portal', default_width=960, default_height=640)
         self.config_path = Path(config_path)
         self.status_received = False
         self.store = Store()
@@ -373,6 +369,8 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         set_prompt_visible(self.legend, self._prompts_visible())
         if self.store.errors:
             self.toast(public_error(self.store.errors[-1], N_("Could not save app preferences. Open Logs for details."), context='App preferences'))
+        from bazzite_portal.ui import decky as decky_settings
+        decky_settings.start_offer(self)
 
     def toast(self, message):
         if not self.closing:
@@ -678,6 +676,9 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             adjustment = self.catalog_scroll.get_vadjustment()
             adjustment.set_value(adjustment.get_lower())
         self.stack.set_visible_child_name(name)
+        if name == "Settings" and previous_page != "Settings":
+            from bazzite_portal.ui import decky as decky_settings
+            decky_settings.refresh(self)
         self.home_options_box.set_visible(name == N_("Home"))
         for prefix in ("system", "management"):
             controls = getattr(self, prefix + "_refresh_header", None)
@@ -965,17 +966,12 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             self._show_system_logs_ready(report)
 
     def _show_system_logs_ready(self, report):
-        dialog = self._report_modal(N_("System logs ready"), 560, 440)
+        dialog = self._report_modal(N_("System logs ready"), 640, 360)
         box = self._report_modal_box(dialog)
         review = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
         review.append(label(N_("System logs are ready."), "title-3"))
-        review.append(label(_("Location: {path}").format(path=report.directory)))
-        files = "\n".join(f"• {name}" for name in report.files) or _("No files were created.")
-        review.append(label(N_("Files collected"), "heading"))
-        files_label = label(files, translate=False)
-        files_label.set_selectable(True)
-        files_label.controller_exclude_focus = True
-        review.append(files_label)
+        location = self._report_location_label(report.directory)
+        review.append(location)
         if report.warnings:
             review.append(label(N_("Warnings"), "heading"))
             review.append(label("\n".join(dict.fromkeys(public_error(warning, N_("Some diagnostic information could not be collected. See the collected logs for details."), context="Report collection") for warning in report.warnings)), translate=False))
@@ -988,6 +984,7 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         folder_button = button(N_("Open logs folder"), lambda: self._open_report_folder(report.directory))
         anchor = self._fixed_modal_actions(dialog, box, (("back", close_button), ("confirm", folder_button)))
         dialog.open_folder_button = folder_button
+        dialog.report_location = location
         dialog.connect("close-request", lambda *_: self._report_modal_closed(dialog))
         self._present_report_modal(dialog, anchor)
 
@@ -1116,45 +1113,31 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         self._show_report_ready(report, issue_url, issue_error)
 
     def _show_report_ready(self, report, issue_url, issue_error=None):
-        dialog = self._report_modal(N_("Logs ready"), 800, 720)
+        dialog = self._report_modal(N_("Logs ready"), 640, 360)
         box = self._report_modal_box(dialog)
         review = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=14)
         review.append(label(N_("Logs are ready."), "title-3"))
-        review.append(label(_("Location: {path}").format(path=report.directory)))
-        hardware = label(str(report.hardware), "monospace", selectable=True, translate=False)
-        hardware.set_yalign(0)
-        hardware.controller_exclude_focus = True
-        hardware.set_max_width_chars(100)
-        dialog.report_hardware_selection = hardware
-        review.append(label(N_("Hardware summary"), "heading"))
-        review.append(hardware)
-        files = "\n".join(f"• {name}" for name in report.files) or _("No files were created.")
-        review.append(label(N_("Files collected"), "heading"))
-        files_label = label(files, translate=False)
-        files_label.set_selectable(True)
-        files_label.set_wrap(True)
-        files_label.controller_exclude_focus = True
-        review.append(files_label)
+        location = self._report_location_label(report.directory)
+        review.append(location)
         if report.warnings:
             review.append(label(N_("Warnings"), "heading"))
             review.append(label("\n".join(dict.fromkeys(public_error(warning, N_("Some diagnostic information could not be collected. See the collected logs for details."), context="Report collection") for warning in report.warnings)), translate=False))
         review.append(label(N_("Attach only the logs relevant to your problem. Then fill in the remaining fields and describe the issue.")))
-        review_scroll = Gtk.ScrolledWindow(min_content_height=300, vexpand=True,
+        review_scroll = Gtk.ScrolledWindow(min_content_height=120, vexpand=True,
             hscrollbar_policy=Gtk.PolicyType.NEVER)
         review_scroll.set_child(review)
         dialog.report_review_scroll = review_scroll
         box.append(review_scroll)
         close_button = button(N_("Close"), dialog.close)
         folder_button = button(N_("Open logs folder"), lambda: self._open_report_folder(report.directory))
-        issue_button = button("Open GitHub issue", lambda: self._open_report_issue(issue_url))
+        issue_button = button(C_("Open {github} issue", github="GitHub"), lambda: self._open_report_issue(issue_url))
         issue_button.add_css_class("suggested-action")
         issue_button.set_sensitive(bool(issue_url))
         if issue_error:
             issue_button.set_tooltip_text(public_error(issue_error, N_("The issue form could not be prepared. Open Logs for details."), context='Prepare issue form'))
         dialog.open_folder_button = folder_button
         dialog.open_issue_button = issue_button
-        dialog.hardware_summary = hardware
-        dialog.files_label = files_label
+        dialog.report_location = location
         dialog.issue_url = issue_url
         anchor = self._fixed_modal_actions(dialog, box, (
             ("back", close_button), ("context_action", folder_button), ("confirm", issue_button)))
@@ -1225,6 +1208,16 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
                 parent.insert_child_after(prompt, old.get_prev_sibling())
                 parent.remove(old)
             prompts[index] = (command, control, prompt)
+
+    def _report_location_label(self, directory):
+        location = label(translate=False)
+        location.set_markup(GLib.markup_escape_text(_("Location: {path}")).format(
+            path='<a href="' + GLib.markup_escape_text(directory.resolve().as_uri())
+                 + '">' + GLib.markup_escape_text(str(directory)) + '</a>'))
+        location.controller_exclude_focus = True
+        location.connect("activate-link", lambda *_: (
+            self._open_report_folder(directory), True)[1])
+        return location
 
     def _open_report_folder(self, directory):
         if self.closing:
@@ -1320,9 +1313,6 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
                 self._set_controller_focus(focus_widget)
             else:
                 focus_widget.grab_focus()
-            hardware = getattr(dialog, "report_hardware_selection", None)
-            if hardware is not None:
-                hardware.select_region(0, 0)
         return GLib.SOURCE_REMOVE
 
     def _close_report_modal(self, dialog, callback=None):
@@ -1790,12 +1780,24 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         def launched(process):
             if refresh:
                 refresh()
-            if item is None or not item["action"].get("status_script"):
+            from bazzite_portal.ui import decky as decky_settings
+            track_status = item is not None and bool(item["action"].get("status_script"))
+            if not track_status and not decky_settings.offer_pending(self):
                 return
-            self._dirty_tools[id(item)] = item
+            if track_status:
+                self._dirty_tools[id(item)] = item
+
+            def completed():
+                if self.closing:
+                    return GLib.SOURCE_REMOVE
+                if track_status:
+                    self._refresh_tool_status(item)
+                decky_settings.check_offer(self)
+                return GLib.SOURCE_REMOVE
+
             def finished():
                 process.wait()
-                GLib.idle_add(self._refresh_tool_status, item)
+                GLib.idle_add(completed)
             # Waiting for an interactive terminal must not occupy a work-pool
             # slot or keep Portal alive after its window closes.
             threading.Thread(target=finished, daemon=True).start()
@@ -2458,7 +2460,8 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         state = self.snapshot
         if (self.client is not None and self.get_mapped()
                 and self.stack.get_visible_child_name() == N_("Updates")
-                and not state.running and state.result in {"failed", "success"} and state.run):
+                and state.operation == "update" and not state.running
+                and state.result in {"failed", "success"} and state.run):
             if not self.is_active():
                 return
             if state.result_viewed_run == state.run or getattr(self, "_dismissed_result_run", None) == state.run:
@@ -2482,7 +2485,7 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         self.update_steps_group.set_title(format_message(""))
         previous_update = bool(state.module_plan and awaiting_run)
         modules = state.module_plan if previous_update else state.modules
-        if dismissed_result:
+        if state.operation != "update" or dismissed_result:
             modules = state.module_plan or [
                 {"id": row.get("id"), "name": row.get("name"), "status": "pending"}
                 for row in state.modules if isinstance(row, dict)
@@ -2557,7 +2560,8 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         self._sync_channel_ui()
         self._sync_delete_deployments_ui()
         self._sync_image_ui()
-        self._set_log_text("" if historical_run or awaiting_run or dismissed_result else "\n".join(state.logs), follow_tail=True)
+        self._set_log_text("" if state.operation != "update" or historical_run or awaiting_run or dismissed_result
+                           else "\n".join(state.logs), follow_tail=True)
         self._refresh_update_prompts()
         self._update_controller_legend()
         self._render_home_activity()
@@ -2581,7 +2585,9 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         elif self.client:
             self.client.call(method)
 
-    def confirm(self, title, body, action, callback, *, informational=False, documentation_url=None):
+    def confirm(self, title, body, action, callback, *, informational=False, documentation_url=None,
+                cancel_action=None, cancel_callback=None):
+        cancel_action = cancel_action or N_("Cancel")
         dialog = Adw.Window(transient_for=self, modal=True, title=format_message(title), default_width=480)
         dialog.set_application(self.get_application())
         toolbar = Adw.ToolbarView()
@@ -2601,17 +2607,17 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             box.append(documentation)
         labels = getattr(getattr(self.controller, "backend", None), "button_labels", {})
         self.confirmation_prompts = [
-            make_button_prompt(command, labels, action if command == "confirm" else N_("Cancel"), self._prompt_style())
+            make_button_prompt(command, labels, action if command == "confirm" else cancel_action, self._prompt_style())
             for command in (("confirm",) if informational else ("confirm", "back"))
         ]
-        self.confirmation_prompt_labels = (action,) if informational else (action, N_("Cancel"))
+        self.confirmation_prompt_labels = (action,) if informational else (action, cancel_action)
         for prompt in self.confirmation_prompts:
             set_prompt_visible(prompt, self._prompts_visible())
         choices = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12,
                           halign=Gtk.Align.CENTER)
         actions = [(action, callback, self.confirmation_prompts[0])]
         if not informational:
-            actions.append((N_("Cancel"), None, self.confirmation_prompts[1]))
+            actions.append((cancel_action, cancel_callback, self.confirmation_prompts[1]))
         for text, callback_fn, prompt in actions:
             choice = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
             choice.append(prompt)
@@ -2944,6 +2950,8 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         self.add_to_steam_row.set_activatable(True)
         self.add_to_steam_row.connect("activated", lambda *_: self._add_to_steam())
         steam_group.add(self.add_to_steam_row)
+        from bazzite_portal.ui import decky as decky_settings
+        decky_settings.add_row(self, steam_group)
         box.append(steam_group)
         data = group(N_("Local app data"), str(self.store.root))
         logs_row = Adw.ActionRow(title=_("Open app logs"), subtitle=_("Open the folder containing this app’s private logs."))
@@ -2981,8 +2989,10 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             if result.cancelled():
                 return
             try:
-                artwork_ready = result.result()
-                message = (C_('Added to {steam}.', steam='Steam') if artwork_ready else
+                shortcut = result.result()
+                message = (C_('{app_name} is already in your {steam} library.', app_name='Bazzite Portal', steam='Steam')
+                           if shortcut['already_added'] else
+                           C_('Added to {steam}.', steam='Steam') if shortcut['artwork_ready'] else
                            C_('Add to {steam} requested.', steam='Steam'))
             except Exception as error:
                 log.warning("Add to Steam failed: %s", error)

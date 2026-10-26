@@ -9,6 +9,7 @@ from bazzite_portal import APP_ID
 from bazzite_portal.core.storage import Store
 from bazzite_portal.core.first_login import FirstLogin
 from bazzite_portal.integration import steam
+from bazzite_portal.maintenance import auto_updates
 from bazzite_portal.updates.monitor import (
     Monitor,
     maintenance_viewed_results,
@@ -42,6 +43,11 @@ AGENT_ID = APP_ID + ".Agent"
 AGENT_PATH = "/io/github/Xarishark/bazzite_portal/Agent"
 AGENT_XML = '''<node><interface name="io.github.Xarishark.bazzite_portal.Agent">
 <method name="GetSnapshot"><arg type="s" direction="out"/></method>
+<method name="AddToSteam"><arg type="s" direction="out"/></method>
+<method name="GetAutoUpdateStatus"><arg type="s" direction="out"/></method>
+<method name="SetAutoUpdates"><arg type="b" direction="in"/><arg type="s" direction="out"/></method>
+<method name="GetDeckyStatus"><arg type="s" direction="out"/></method>
+<method name="InstallDecky"><arg type="s" direction="in"/><arg type="s" direction="out"/></method>
 <method name="Refresh"/>
 <method name="SessionStarted"/>
 <method name="MaintenanceViewed"><arg type="s" direction="in"/><arg type="s" direction="in"/><arg type="s" direction="in"/><arg type="x" direction="in"/></method>
@@ -58,6 +64,7 @@ AGENT_XML = '''<node><interface name="io.github.Xarishark.bazzite_portal.Agent">
 <method name="StartChannelSwitch"><arg type="s" direction="in"/></method>
 <method name="ReloadPreferences"/><method name="ResetPreferences"/>
 <signal name="Changed"><arg type="s"/></signal>
+<signal name="DeckyChanged"><arg type="s"/></signal>
 </interface></node>'''
 
 
@@ -506,7 +513,96 @@ class Agent:
             self._preferences_changed()
         self._publish_snapshot(snapshot)
 
+    def _decky_request(self, method, parameters, invocation):
+        """On-demand plugin integration, independent of system management state."""
+        installing = method == "InstallDecky"
+        if installing and getattr(self, "_decky_installing", False):
+            invocation.return_dbus_error(AGENT_ID + ".Error", N_("A Decky plugin installation request is already running."))
+            return
+        if installing:
+            self._decky_installing = True
+        expected = parameters.unpack()[0] if installing else None
+
+        def work():
+            try:
+                from bazzite_portal.integration import decky
+                result = decky.install(expected) if installing else decky.status()
+            except Exception:
+                log.exception("Could not %s Decky plugin", "install" if installing else "inspect")
+                result = {"can_install": False, "can_update": False,
+                          "error": N_("Could not manage the Decky plugin. Open Logs for details.")}
+            GLib.idle_add(finish, result)
+
+        def finish(result):
+            if installing:
+                self._decky_installing = False
+            result = {**result, "installing": bool(getattr(self, "_decky_installing", False))}
+            payload = GLib.Variant("(s)", (json.dumps(result),))
+            invocation.return_value(payload)
+            self.connection.emit_signal(None, AGENT_PATH, AGENT_ID, "DeckyChanged", payload)
+            return False
+
+        threading.Thread(target=work, daemon=True).start()
+
+    def _add_to_steam_request(self, invocation):
+        """Reuse desktop's native shortcut/artwork helper, off the agent main loop."""
+        if getattr(self, "_steam_adding", False):
+            invocation.return_dbus_error(AGENT_ID + ".Error", "An Add to Steam request is already running.")
+            return
+        self._steam_adding = True
+
+        def work():
+            try:
+                result = {"accepted": True, **steam.add_to_steam(),
+                          "artwork_targets": steam.bundled_artwork_targets()}
+            except Exception:
+                log.exception("Could not add Portal to Steam")
+                result = {"accepted": False, "error": "Could not add Bazzite Portal to Steam. Open Logs for details."}
+            GLib.idle_add(finish, result)
+
+        def finish(result):
+            self._steam_adding = False
+            invocation.return_value(GLib.Variant("(s)", (json.dumps(result),)))
+            return False
+
+        threading.Thread(target=work, daemon=True).start()
+
+    def _auto_update_request(self, method, parameters, invocation):
+        setting = method == "SetAutoUpdates"
+        if setting and (self.busy or getattr(self, "_auto_updates_pending", False)):
+            invocation.return_dbus_error(AGENT_ID + ".Error", N_("Another operation request is pending."))
+            return
+        if setting:
+            self._auto_updates_pending = True
+        enabled = parameters.unpack()[0] if setting else None
+
+        def work():
+            try:
+                current = auto_updates.request(enabled) if setting else auto_updates.status()
+                result = {"accepted": True, **current}
+            except Exception as error:
+                log.exception("Could not %s automatic update scheduling", "change" if setting else "read")
+                result = {"accepted": False, "error": str(error) or "Automatic update scheduling is unavailable."}
+            GLib.idle_add(finish, result)
+
+        def finish(result):
+            if setting:
+                self._auto_updates_pending = False
+            invocation.return_value(GLib.Variant("(s)", (json.dumps(result),)))
+            return False
+
+        threading.Thread(target=work, daemon=True).start()
+
     def _method(self, connection, sender, path, interface, method, parameters, invocation):
+        if method in {"GetAutoUpdateStatus", "SetAutoUpdates"}:
+            self._auto_update_request(method, parameters, invocation)
+            return
+        if method == "AddToSteam":
+            self._add_to_steam_request(invocation)
+            return
+        if method in {"GetDeckyStatus", "InstallDecky"}:
+            self._decky_request(method, parameters, invocation)
+            return
         if method == "GetSnapshot":
             invocation.return_value(GLib.Variant("(s)", (json.dumps(self._snapshot_payload()),)))
         elif method == "Refresh":

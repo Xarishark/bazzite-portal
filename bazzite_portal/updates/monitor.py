@@ -949,6 +949,7 @@ class Monitor:
         self._history_checked_at = 0.0
         self._journal_failed = ""
         self._finish_run = ""
+        self._final_module_evidence = None
         self._journal_finished = set()
         self._lines = deque()
         self._line_bytes = 0
@@ -1488,6 +1489,7 @@ class Monitor:
         if self._journal:
             self._journal.terminate()
         with self._lock:
+            self._final_module_evidence = None
             self._journal_generation += 1
             generation = self._journal_generation
             self._journal_run = run
@@ -1503,6 +1505,7 @@ class Monitor:
 
     def _load_historical_journal(self, unit, run):
         with self._lock:
+            self._final_module_evidence = None
             follower = self._journal
             self._journal = None
             self._journal_generation += 1
@@ -1624,9 +1627,13 @@ class Monitor:
         elif kind == "updating":
             current = self._modules.get(identity)
             if current is None:
-                # A progress line without its configuration record does not
-                # establish configured-module coverage.
-                return
+                # A real module progress event establishes observed activity
+                # even when journal rotation removed its opening configuration.
+                if identity not in {key for key, _, _ in UUPD_MODULES} or len(self._modules) >= MAX_MODULE_STEPS:
+                    return
+                current = {"id": identity, "name": event["name"], "status": "pending",
+                           "detail": "", "error": "", "fraction": None, "source": "journal"}
+                self._modules[identity] = current
             if current.get("status") == "failed":
                 return  # Later heartbeats or a second scope cannot erase failure.
             order = [key for key, _, _ in UUPD_MODULES]
@@ -1739,33 +1746,72 @@ class Monitor:
             if not follow:
                 with self._lock:
                     if run == self._journal_run and generation == self._journal_generation:
+                        self._merge_final_module_evidence(run, generation)
                         self._journal_finished.add(run)
         except (OSError, RuntimeError, subprocess.TimeoutExpired) as error:
             with self._lock:
                 if run == self._journal_run and generation == self._journal_generation:
                     self._journal_failed = str(error)
                     if not follow:
+                        self._merge_final_module_evidence(run, generation)
                         self._journal_finished.add(run)
         finally:
             if process and process.poll() is None:
                 process.terminate()
 
+    def _merge_final_module_evidence(self, run, generation):
+        """Reconcile this invocation before making its replay visible. Lock held."""
+        evidence = self._final_module_evidence
+        if (evidence is None or self._closed or run != self._journal_run
+                or generation != self._journal_generation
+                or (run, generation) != evidence["identity"]):
+            return
+        for identity, observed in evidence["modules"].items():
+            replayed = self._modules.get(identity)
+            if replayed is None or (observed["status"] == "failed" and replayed["status"] != "failed"):
+                self._modules[identity] = observed
+        self._failures = list(dict.fromkeys(evidence["failures"] + self._failures))[-100:]
+        self._unmapped_module_failure |= evidence["unmapped_failure"]
+        if "failed" in (evidence["terminal"], self._uupd_terminal):
+            self._uupd_terminal = "failed"
+        elif self._uupd_terminal is None:
+            self._uupd_terminal = evidence["terminal"]
+        self._final_module_evidence = None
+
     def _finish_journal(self, run):
         # A finite replay catches final messages after systemd announces completion.
         with self._lock:
-            if run != self._journal_run:
+            if self._closed or run != self._journal_run:
                 return
             # Invalidate the follower before stopping it. Its reader may not
             # have created the process yet, or may already hold buffered lines.
             # Generation checks prevent either case from touching replay state.
             self._journal_generation += 1
             generation = self._journal_generation
+            # Journald may evict early records during a long run. Preserve only
+            # evidence actually observed for this invocation, never its plan.
+            self._final_module_evidence = {
+                "identity": (run, generation),
+                "modules": {key: dict(module) for key, module in self._modules.items()},
+                "failures": list(self._failures),
+                "unmapped_failure": self._unmapped_module_failure,
+                "terminal": self._uupd_terminal,
+            }
             follower = self._journal
             self._journal = None
             self._lines, self._line_bytes = deque(), 0
             self._failures, self._stage = [], ""
             self._journal_failed = ""
-            self._modules, self._active_module = {}, ""
+            # Retain observed coverage so replayed progress/failures can still
+            # be attributed when their opening configuration record was evicted.
+            self._modules = {
+                key: {"id": key, "name": module["name"],
+                      "status": "skipped" if module["status"] == "skipped" else "pending",
+                      "detail": module.get("detail", ""), "error": "",
+                      "fraction": None, "source": "journal"}
+                for key, module in self._final_module_evidence["modules"].items()
+            }
+            self._active_module = ""
             self._progress_percent, self._uupd_terminal = None, None
             self._unmapped_module_failure = False
         if follower and follower.poll() is None:

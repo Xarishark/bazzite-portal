@@ -455,6 +455,26 @@ def _copy_steam_artwork(root, account, appids):
                     temporary.unlink(missing_ok=True)
 
 
+def bundled_artwork_targets():
+    """Identify only our exact saved images for an optional native client refresh."""
+    root = _steam_root()
+    account = _steam_account(root)
+    targets = []
+    for appid in _portal_shortcuts(root, account):
+        grid = root / "userdata" / account / "config/grid"
+        images = []
+        for suffix, name in _ARTWORK.items():
+            image = grid / (str(appid) + suffix + ".png")
+            try:
+                if not image.is_symlink() and image.read_bytes() == (STEAM_ARTWORK / name).read_bytes():
+                    images.append(name)
+            except OSError:
+                continue
+        if images:
+            targets.append({"appid": appid, "images": images})
+    return targets
+
+
 def _apply_artwork(request):
     root = _steam_root()
     account = request.get("account") or _steam_account(root)
@@ -499,7 +519,7 @@ def artwork_watch_paths():
 
 
 def add_to_steam():
-    """Request a native Steam shortcut; return True when artwork is ready."""
+    """Request a native Steam shortcut and report existing shortcuts and artwork."""
     if not Path(HELPER).is_file():
         raise RuntimeError("Bazzite’s Add to Steam helper is unavailable.")
     if not Path(LAUNCHER).is_file() or not Path(DESKTOP).is_file():
@@ -510,12 +530,13 @@ def add_to_steam():
         request = _pending_artwork()
         root = _steam_root()
         account = _steam_account(root)
+        already_added = bool(_portal_shortcuts(root, account))
         if request and time.time() - request["created"] < 15:
-            return not _apply_artwork(request)
+            return {"already_added": already_added, "artwork_ready": not _apply_artwork(request)}
         request = {"version": 1, "id": uuid.uuid4().hex, "account": account, "created": time.time()}
         _save_artwork_request(request)
-        if _portal_shortcuts(root, account):
-            return not _apply_artwork(request)
+        if already_added:
+            return {"already_added": True, "artwork_ready": not _apply_artwork(request)}
         try:
             process = subprocess.Popen([HELPER, DESKTOP], stdout=subprocess.DEVNULL,
                                        stderr=subprocess.DEVNULL)
@@ -533,6 +554,6 @@ def add_to_steam():
     # agent watches for a later save instead of polling throughout the session.
     for _attempt in range(8):
         if not apply_pending_artwork():
-            return True
+            return {"already_added": False, "artwork_ready": True}
         time.sleep(0.25)
-    return False
+    return {"already_added": False, "artwork_ready": False}

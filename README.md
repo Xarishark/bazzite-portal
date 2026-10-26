@@ -1,5 +1,7 @@
 # Bazzite Portal
 
+[![Translation status](https://hosted.weblate.org/widget/bazzite-portal/app/svg-badge.svg?capitalize=1)](https://hosted.weblate.org/engage/bazzite-portal/)
+
 A desktop app for Bazzite updates, tools, system management and troubleshooting.
 Currently under development.
 
@@ -59,9 +61,10 @@ Tool and announcement content, operation logs and command output are not transla
 
 ## Development
 
-Bump the app version ONLY in pyproject.toml under [project].version. Packaging derives
-the other version fields automatically. Pushing a higher version to main creates
-a GitHub release after a successful RPM build.
+Bump the desktop app version in pyproject.toml under [project].version. Bump the
+Decky plugin version separately in decky/package.json only when releasing plugin
+changes. Packaging derives the other version fields automatically. Pushing a
+higher app version to main creates a GitHub release after a successful RPM build.
 
 The RPM keeps application code in /usr/share/bazzite-portal and runs it with the
 system Python (3.11 or newer). Python libraries, GTK, libadwaita and SDL3 remain
@@ -69,36 +72,26 @@ system package dependencies; the app is not tied to a Python minor-version direc
 
 ## Temporary trial installation
 
-### Bazzite for up to  Fedora 44
+### Bazzite on Fedora 45 and later
 
 ```sh
 curl -fLO https://github.com/Xarishark/bazzite-portal/releases/latest/download/bazzite-portal.rpm
 curl -fL https://raw.githubusercontent.com/Xarishark/bazzite-portal/main/templates/announcements.yml -o announcements.yml
 sudo rpm-ostree usroverlay
-sudo rpm -Uvh ./bazzite-portal.rpm
+sudo rpm --define '_pkgverify_level digest' -Uvh --replacepkgs ./bazzite-portal.rpm
 sudo rpm -e bazzite-updater
 sudo install -d -m 755 /usr/share/bazzite-portal
 sudo install -m 644 /usr/share/yafti/yafti.yml /usr/share/bazzite-portal/tools.yml
 sudo install -m 644 announcements.yml /usr/share/bazzite-portal/announcements.yml
 sudo systemctl daemon-reload
+sudo systemctl restart polkit.service
 systemctl --user daemon-reload
-systemctl --user start bazzite-portal-agent.service
+gdbus call --session --dest org.freedesktop.DBus \
+  --object-path /org/freedesktop/DBus --method org.freedesktop.DBus.ReloadConfig
+systemctl --user restart bazzite-portal-agent.service
 bazzite-portal
 ```
 
-### Bazzite on Fedora 45 and after (Packages need to be signed)
-
-```sh
-curl -fLO https://github.com/Xarishark/bazzite-portal/releases/latest/download/bazzite-portal.rpm
-curl -fL https://raw.githubusercontent.com/Xarishark/bazzite-portal/main/templates/announcements.yml -o announcements.yml
-sudo rpm-ostree usroverlay
-sudo rpm --define '_pkgverify_level digest' -Uvh ./bazzite-portal.rpm
-sudo rpm -e bazzite-updater
-sudo install -d -m 755 /usr/share/bazzite-portal
-sudo install -m 644 /usr/share/yafti/yafti.yml /usr/share/bazzite-portal/tools.yml
-sudo install -m 644 announcements.yml /usr/share/bazzite-portal/announcements.yml
-sudo systemctl daemon-reload
-systemctl --user daemon-reload
-systemctl --user start bazzite-portal-agent.service
-bazzite-portal
-```
+Restarting Polkit and refreshing the session bus lets the running desktop pick up
+the authorization rules and launcher installed through the temporary overlay.
+This trial installation is discarded when you reboot.
