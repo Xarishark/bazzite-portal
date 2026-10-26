@@ -2460,7 +2460,8 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         state = self.snapshot
         if (self.client is not None and self.get_mapped()
                 and self.stack.get_visible_child_name() == N_("Updates")
-                and not state.running and state.result in {"failed", "success"} and state.run):
+                and state.operation == "update" and not state.running
+                and state.result in {"failed", "success"} and state.run):
             if not self.is_active():
                 return
             if state.result_viewed_run == state.run or getattr(self, "_dismissed_result_run", None) == state.run:
@@ -2484,7 +2485,7 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         self.update_steps_group.set_title(format_message(""))
         previous_update = bool(state.module_plan and awaiting_run)
         modules = state.module_plan if previous_update else state.modules
-        if dismissed_result:
+        if state.operation != "update" or dismissed_result:
             modules = state.module_plan or [
                 {"id": row.get("id"), "name": row.get("name"), "status": "pending"}
                 for row in state.modules if isinstance(row, dict)
@@ -2559,7 +2560,8 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         self._sync_channel_ui()
         self._sync_delete_deployments_ui()
         self._sync_image_ui()
-        self._set_log_text("" if historical_run or awaiting_run or dismissed_result else "\n".join(state.logs), follow_tail=True)
+        self._set_log_text("" if state.operation != "update" or historical_run or awaiting_run or dismissed_result
+                           else "\n".join(state.logs), follow_tail=True)
         self._refresh_update_prompts()
         self._update_controller_legend()
         self._render_home_activity()
