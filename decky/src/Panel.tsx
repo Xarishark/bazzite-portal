@@ -13,6 +13,7 @@ import { openOperation, showReason } from "./OperationModal";
 import { rowOperation } from "./operations";
 import { Throbber } from "./Throbber";
 import { styles } from "./styles";
+import { pluginChange } from "./plugin-installation";
 
 function navigate(path: string) {Navigation.CloseSideMenus(); Navigation.Navigate(path);}
 export function Panel() {
@@ -25,7 +26,7 @@ export function Panel() {
   const {page, showLogs} = usePanelState();
   const updatesOpen = page === "updates";
   const visible = useQuickAccessVisible();
-  const change = "";
+  const change = pluginChange(state);
   const previousChange = useRef(change);
   const root = usePanelEntry(visible, change || page, Boolean(change));
   const controls = actions(state);
@@ -46,6 +47,7 @@ export function Panel() {
   }, [state]);
   const installation = state.installation;
   async function execute(action: Action) {
+    if (pluginChange(currentState())) return;
     if (requestInFlight.current || (action.id === "update" && expectedUpdate.current)) return;
     const current = actions(currentState()).find(candidate => candidate.id === action.id);
     if (!sameAction(action, current)) {
@@ -78,6 +80,20 @@ export function Panel() {
   }
   const statusText = state.connection === "not_installed" ? m.notInstalled : state.connection === "connecting" ? m.connecting
     : state.connection === "reconnecting" ? m.reconnecting : state.error || m.backendUnavailable;
+  if (change) return <div ref={root} className="portal-panel portal-plugin-gate">
+    <style>{styles}</style>
+    <div className="portal-plugin-gate-content"><UpdateButton
+      label={change === "downgrade" ? m.pluginDowngrade : m.pluginUpdate}
+      disabled={!connected || state.installation_pending || installation?.installing}
+      busy={state.installation_pending}
+      onClick={() => {void updatePlugin(installation?.bundle_token || "").then(result => {
+        if (!result.accepted) setError(result.error || m.requestFailed);
+      }).catch(() => setError(m.requestFailed));}} />
+      <p className="portal-plugin-gate-description">{change === "downgrade" ? m.pluginDowngradeRequired : m.pluginUpgradeRequired}</p>
+      {installation?.prompt_requested ? <div className="portal-panel-status" role="status">{m.confirmLoader}</div> : null}
+      {error || state.installation_error ? <div role="alert" className="portal-panel-status">{error || state.installation_error}</div> : null}
+    </div>
+  </div>;
   return <div ref={root} className="portal-panel">
     <style>{styles}</style>
     {page === "main" ? <PanelSection><PanelSectionRow><UpdateButton label={m.update}

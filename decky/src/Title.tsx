@@ -3,10 +3,11 @@ import { DialogButton, Focusable } from "@decky/ui";
 import { currentPage, setPage, usePanelState } from "./panel-state";
 import { messages as m } from "./messages";
 import { usePortalState } from "./state";
+import { pluginChange } from "./plugin-installation";
 
 export function Title() {
   const {page} = usePanelState();
-  const change = "";
+  const change = pluginChange(usePortalState());
   const root = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
     // Loader owns the Back button immediately before its titleView slot. Capture
