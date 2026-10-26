@@ -1,5 +1,7 @@
 # Bazzite Portal
 
+[![Translation status](https://hosted.weblate.org/widget/bazzite-portal/app/svg-badge.svg?capitalize=1)](https://hosted.weblate.org/engage/bazzite-portal/)
+
 A desktop app for Bazzite updates, tools, system management and troubleshooting.
 Currently under development.
 
@@ -59,9 +61,10 @@ Tool and announcement content, operation logs and command output are not transla
 
 ## Development
 
-Bump the app version ONLY in pyproject.toml under [project].version. Packaging derives
-the other version fields automatically. Pushing a higher version to main creates
-a GitHub release after a successful RPM build.
+Bump the desktop app version in pyproject.toml under [project].version. Bump the
+Decky plugin version separately in decky/package.json only when releasing plugin
+changes. Packaging derives the other version fields automatically. Pushing a
+higher app version to main creates a GitHub release after a successful RPM build.
 
 The RPM keeps application code in /usr/share/bazzite-portal and runs it with the
 system Python (3.11 or newer). Python libraries, GTK, libadwaita and SDL3 remain

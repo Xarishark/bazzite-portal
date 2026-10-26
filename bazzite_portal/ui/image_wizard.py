@@ -6,7 +6,7 @@ from datetime import datetime
 import re
 from typing import Any, Callable
 
-from bazzite_portal.core.i18n import C_, _, N_, channel_name
+from bazzite_portal.core.i18n import C_, _, channel_name
 from bazzite_portal.core.errors import public_error
 
 

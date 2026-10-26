@@ -1,11 +1,8 @@
 """GTK window. System operations and the session agent outlive this window."""
 import concurrent.futures
-import json
 import logging
-import os
 from pathlib import Path
 import subprocess
-import sys
 import threading
 import gi
 gi.require_version("Gtk", "4.0")
@@ -14,9 +11,9 @@ gi.require_version("Adw", "1")
 from gi.repository import Adw, Gdk, Gio, GLib, Gtk
 from bazzite_portal import APP_ID
 from bazzite_portal import VERSION
-from bazzite_portal.ui.maintenance import STATE_LABELS, SystemManagementUI
+from bazzite_portal.ui.maintenance import SystemManagementUI
 from bazzite_portal.ui.widgets import (
-    button, content_page, group, label, ControllerLegend, ControllerPrompt,
+    button, content_page, group, label, ControllerLegend,
     make_button_prompt, make_context_prompt, set_window_content,
 )
 from bazzite_portal.integration import tools as portal
@@ -32,14 +29,12 @@ from bazzite_portal.input.controller import (
     SDLGamepad,
     ControllerDriver,
     ControllerPriority,
-    controller_button_glyph,
 )
 from bazzite_portal.core.storage import Store
 from bazzite_portal.core.i18n import C_, N_, _, channel_name, format_message
 from bazzite_portal.core.errors import error_text, public_error
 from bazzite_portal.input.prompts import set_prompt_visible
 from bazzite_portal.ui import system_info as system_presentation
-from bazzite_portal.updates import monitor as system
 from bazzite_portal.updates.model import Snapshot
 from bazzite_portal.updates.release_notes import fetch_release_notes
 
