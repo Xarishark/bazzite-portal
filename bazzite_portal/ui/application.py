@@ -1130,7 +1130,7 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         box.append(review_scroll)
         close_button = button(N_("Close"), dialog.close)
         folder_button = button(N_("Open logs folder"), lambda: self._open_report_folder(report.directory))
-        issue_button = button("Open GitHub issue", lambda: self._open_report_issue(issue_url))
+        issue_button = button(C_("Open {github} issue", github="GitHub"), lambda: self._open_report_issue(issue_url))
         issue_button.add_css_class("suggested-action")
         issue_button.set_sensitive(bool(issue_url))
         if issue_error:
