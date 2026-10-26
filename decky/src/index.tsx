@@ -9,6 +9,7 @@ import { bootedIdentity } from "./actions";
 import { startState, usePortalState } from "./state";
 import { messages as m } from "./messages";
 import { closeOperationModals } from "./OperationModal";
+import { startNotifications } from "./notifications";
 
 function BootedReleaseNotes() {
   const state = usePortalState();
@@ -17,12 +18,14 @@ function BootedReleaseNotes() {
 }
 export default definePlugin(() => {
   const stopState = startState();
+  const stopNotifications = startNotifications();
   routerHook.addRoute(RELEASE_NOTES_ROUTE, BootedReleaseNotes);
   routerHook.addRoute(LOGS_ROUTE, Logs);
   return {
     name: m.app, titleView: <Title />, icon: <BazziteIcon />, content: <Panel />,
     onDismount() {
       closeOperationModals();
+      stopNotifications();
       stopState();
       routerHook.removeRoute(RELEASE_NOTES_ROUTE);
       routerHook.removeRoute(LOGS_ROUTE);

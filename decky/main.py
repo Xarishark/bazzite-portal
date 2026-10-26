@@ -11,6 +11,7 @@ sys.path[:0] = [str(PLUGIN_ROOT), str(PLUGIN_ROOT / "vendor")]
 import decky
 from backend import messages as text
 from backend import preferences
+from backend import notifications
 from backend.payload import LogReader, compact_state
 from backend.presentation import TOKEN_PATTERN, rollback_cancel_target
 from backend.transport import AgentConnection, decode_snapshot
@@ -178,6 +179,20 @@ class Plugin:
     async def get_auto_updates(self):
         return await self._auto_updates("GetAutoUpdateStatus")
 
+    async def claim_update_notification(self, run):
+        snapshot = self.state.get("snapshot") or {}
+        if (not normal_user() or self.state["connection"] != "connected"
+                or snapshot.get("operation") != "update" or snapshot.get("running") is not True
+                or snapshot.get("service") != "uupd.service" or snapshot.get("run") != run
+                or not any(isinstance(step, dict) and step.get("source") == "journal"
+                           and step.get("status") in {"running", "finished", "success"}
+                           for step in snapshot.get("modules") or [])):
+            return {"notify": False}
+        try:
+            return {"notify": notifications.claim(run)}
+        except OSError:
+            log.warning("Could not save the automatic update notification receipt", exc_info=True)
+            return {"notify": False}
 
     async def set_auto_updates(self, enabled):
         if type(enabled) is not bool:
