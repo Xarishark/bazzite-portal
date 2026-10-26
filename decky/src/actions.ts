@@ -55,7 +55,7 @@ export function actions(state: State): Action[] {
     else if (!token(channel)) channelReason = m.verify;
   }
   const returning = channel?.current_track === targetTrack;
-  const restartReady = false;
+  const restartReady = Boolean(s.deployment && s.deployment_known);
   return [
     {id: restartReady ? "restart" : "update", label: s.running && s.operation === "update" ? m.updating : base ? m.busy : restartReady ? m.restart : m.update,
       reason: base || (!s.available ? m.unavailable : s.deployment && !s.deployment_known ? m.verify : ""),
