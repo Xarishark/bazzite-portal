@@ -123,8 +123,9 @@ def install_controller_focus_style():
         b"box-shadow: inset 0 0 0 1px alpha(@accent_color, 0.55); } "
         b".bazzite-favorite { color: @warning_color; } "
         b"row.destructive-action .title { color: @error_color; } "
-        b"button.bazzite-update-cta { background-color: #8A2BE2; color: #ffffff; } "
-        b"button.bazzite-update-cta:hover { background-color: #7424C5; color: #ffffff; } "
+        b"button.bazzite-update-cta, row.bazzite-update-cta { background-color: #8A2BE2; color: #ffffff; } "
+        b"button.bazzite-update-cta:hover, row.bazzite-update-cta:hover { background-color: #7424C5; color: #ffffff; } "
+        b"row.bazzite-update-cta .subtitle { color: alpha(#ffffff, 0.8); } "
         b"box.controller-style-pill { min-height: 36px; padding: 2px 6px; "
         b"background-color: alpha(@theme_fg_color, 0.06); border: 1px solid alpha(@theme_fg_color, 0.16); border-radius: 9px; } "
         b".layer-selection-row { min-height: 36px; padding: 2px 8px; border-radius: 8px; } "
@@ -678,6 +679,9 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             adjustment = self.catalog_scroll.get_vadjustment()
             adjustment.set_value(adjustment.get_lower())
         self.stack.set_visible_child_name(name)
+        if name == "Settings" and previous_page != "Settings":
+            from bazzite_portal.ui import decky as decky_settings
+            decky_settings.refresh(self)
         self.home_options_box.set_visible(name == N_("Home"))
         for prefix in ("system", "management"):
             controls = getattr(self, prefix + "_refresh_header", None)
@@ -2944,6 +2948,8 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         self.add_to_steam_row.set_activatable(True)
         self.add_to_steam_row.connect("activated", lambda *_: self._add_to_steam())
         steam_group.add(self.add_to_steam_row)
+        from bazzite_portal.ui import decky as decky_settings
+        decky_settings.add_row(self, steam_group)
         box.append(steam_group)
         data = group(N_("Local app data"), str(self.store.root))
         logs_row = Adw.ActionRow(title=_("Open app logs"), subtitle=_("Open the folder containing this app’s private logs."))
