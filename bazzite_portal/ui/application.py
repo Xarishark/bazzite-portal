@@ -374,6 +374,8 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         set_prompt_visible(self.legend, self._prompts_visible())
         if self.store.errors:
             self.toast(public_error(self.store.errors[-1], N_("Could not save app preferences. Open Logs for details."), context='App preferences'))
+        from bazzite_portal.ui import decky as decky_settings
+        decky_settings.start_offer(self)
 
     def toast(self, message):
         if not self.closing:
@@ -1794,12 +1796,24 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         def launched(process):
             if refresh:
                 refresh()
-            if item is None or not item["action"].get("status_script"):
+            from bazzite_portal.ui import decky as decky_settings
+            track_status = item is not None and bool(item["action"].get("status_script"))
+            if not track_status and not decky_settings.offer_pending(self):
                 return
-            self._dirty_tools[id(item)] = item
+            if track_status:
+                self._dirty_tools[id(item)] = item
+
+            def completed():
+                if self.closing:
+                    return GLib.SOURCE_REMOVE
+                if track_status:
+                    self._refresh_tool_status(item)
+                decky_settings.check_offer(self)
+                return GLib.SOURCE_REMOVE
+
             def finished():
                 process.wait()
-                GLib.idle_add(self._refresh_tool_status, item)
+                GLib.idle_add(completed)
             # Waiting for an interactive terminal must not occupy a work-pool
             # slot or keep Portal alive after its window closes.
             threading.Thread(target=finished, daemon=True).start()
@@ -2585,7 +2599,9 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         elif self.client:
             self.client.call(method)
 
-    def confirm(self, title, body, action, callback, *, informational=False, documentation_url=None):
+    def confirm(self, title, body, action, callback, *, informational=False, documentation_url=None,
+                cancel_action=None, cancel_callback=None):
+        cancel_action = cancel_action or N_("Cancel")
         dialog = Adw.Window(transient_for=self, modal=True, title=format_message(title), default_width=480)
         dialog.set_application(self.get_application())
         toolbar = Adw.ToolbarView()
@@ -2605,17 +2621,17 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             box.append(documentation)
         labels = getattr(getattr(self.controller, "backend", None), "button_labels", {})
         self.confirmation_prompts = [
-            make_button_prompt(command, labels, action if command == "confirm" else N_("Cancel"), self._prompt_style())
+            make_button_prompt(command, labels, action if command == "confirm" else cancel_action, self._prompt_style())
             for command in (("confirm",) if informational else ("confirm", "back"))
         ]
-        self.confirmation_prompt_labels = (action,) if informational else (action, N_("Cancel"))
+        self.confirmation_prompt_labels = (action,) if informational else (action, cancel_action)
         for prompt in self.confirmation_prompts:
             set_prompt_visible(prompt, self._prompts_visible())
         choices = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12,
                           halign=Gtk.Align.CENTER)
         actions = [(action, callback, self.confirmation_prompts[0])]
         if not informational:
-            actions.append((N_("Cancel"), None, self.confirmation_prompts[1]))
+            actions.append((cancel_action, cancel_callback, self.confirmation_prompts[1]))
         for text, callback_fn, prompt in actions:
             choice = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
             choice.append(prompt)
