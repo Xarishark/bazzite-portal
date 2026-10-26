@@ -74,13 +74,9 @@ def _consider_offer(owner):
             or owner.snapshot.running):
         return
 
-    def accept():
-        install(owner)
-        owner.show_page("Settings")
-
     owner.confirm(N_("Bazzite Portal in Gaming Mode"),
                   N_("Install the Bazzite Portal plugin for Decky Loader to manage updates and rollbacks directly from Gaming Mode."),
-                  N_("Install Plugin"), accept, cancel_action=N_("Not Now"),
+                  N_("Install Plugin"), lambda: install(owner), cancel_action=N_("Not Now"),
                   cancel_callback=lambda: owner.toast(N_("You can install the Bazzite Portal plugin at any time from Settings.")))
     dialog = owner.modal
     dialog.confirm_yes_button.remove_css_class("destructive-action")
