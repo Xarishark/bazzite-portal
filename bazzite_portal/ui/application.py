@@ -1440,13 +1440,6 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             self._save_pins(pins)
 
     def _build_tools(self):
-        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
-        box.set_margin_start(24)
-        box.set_margin_end(24)
-        box.set_vexpand(True)
-        page = Adw.Clamp(maximum_size=760, tightening_threshold=640)
-        page.set_child(box)
-        page.set_vexpand(True)
         self.tools_search_active = False
         self.tools_view = Gtk.Stack(transition_type=Gtk.StackTransitionType.CROSSFADE)
         search_header = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
@@ -1465,37 +1458,24 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         self.tools_titlebar_search = self.tools_search_header
         self.header.pack_start(self.tools_titlebar_search)
 
-        catalog = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=16)
-        catalog_scroll = Gtk.ScrolledWindow(hscrollbar_policy=Gtk.PolicyType.NEVER, vexpand=True)
-        self.tools_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=20)
-        self.tools_box.set_margin_top(8)
-        self.tools_box.set_margin_bottom(8)
-        catalog_scroll.set_child(self.tools_box)
-        catalog.append(catalog_scroll)
+        catalog_scroll, self.tools_box = content_page()
         self.catalog_scroll = catalog_scroll
 
-        search_page = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=16)
         self.search = Gtk.SearchEntry(placeholder_text=_(N_("Search tools")), hexpand=True)
         self.search.set_size_request(240, -1)
         self.search.update_property([Gtk.AccessibleProperty.LABEL], [N_("Search tools")])
         self.search.connect("search-changed", lambda *_: self._render_tools() if self.tools_search_active else None)
         self.tools_search_header.add_named(self.search, "search")
-        search_results_scroll = Gtk.ScrolledWindow(hscrollbar_policy=Gtk.PolicyType.NEVER, vexpand=True)
-        self.search_results_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=20)
-        self.search_results_box.set_margin_top(8)
-        self.search_results_box.set_margin_bottom(8)
+        search_results_scroll, self.search_results_box = content_page()
         self.search_results_box.set_vexpand(True)
-        search_results_scroll.set_child(self.search_results_box)
-        search_page.append(search_results_scroll)
         self.search_results_scroll = search_results_scroll
-        self.tools_view.add_named(catalog, "catalog")
-        self.tools_view.add_named(search_page, "search")
+        self.tools_view.add_named(catalog_scroll, "catalog")
+        self.tools_view.add_named(search_results_scroll, "search")
         self.tools_view.connect("notify::visible-child-name", lambda *_:
             self.tools_search_header.set_visible_child_name(self.tools_view.get_visible_child_name()))
         self.tools_view.set_vexpand(True)
-        box.append(self.tools_view)
         self._render_tools()
-        self.stack.add_named(page, N_("Tools"))
+        self.stack.add_named(self.tools_view, N_("Tools"))
 
     def open_tools_search(self):
         if self.stack.get_visible_child_name() != N_("Tools"):
