@@ -7,7 +7,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/app/"
 "\n"
 "POT-Creation-Date: 2026-10-27 10:08+0100\n"
-"PO-Revision-Date: 2026-10-27 19:51+0000\n"
+"PO-Revision-Date: 2026-10-28 21:51+0000\n"
 "Last-Translator: dani3690 <dani3690@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/bazzite-portal/"
 "app/it/>\n"
@@ -187,40 +187,45 @@ msgstr ""
 
 #: bazzite_portal/integration/decky.py:42
 msgid "Decky Loader is not installed."
-msgstr ""
+msgstr "Decky Loader non è installato."
 
 #: bazzite_portal/integration/decky.py:43
-#, fuzzy
-#| msgid "The download server is busy. Wait a little and try again."
 msgid "Decky Loader is not running. Start it and try again."
-msgstr "Il server di download è occupato. Riprova più tardi."
+msgstr "Decky Loader non è in esecuzione. Avviare il servizio e riprovare."
 
 #: bazzite_portal/integration/decky.py:44
 msgid "Open Steam in Gaming Mode or Big Picture, then try again."
-msgstr ""
+msgstr "Avviare Steam in modalità gioco o Big Picture prima di riprovare."
 
 #: bazzite_portal/integration/decky.py:45
 msgid "The installed Decky plugin version could not be verified."
 msgstr ""
+"Non è stato possibile verificare la versione installata del plugin Decky."
 
 #: bazzite_portal/integration/decky.py:46
 msgid "The installed Decky plugin is up to date."
-msgstr ""
+msgstr "Il plugin Decky è già aggiornato all'ultima versione disponibile."
 
 #: bazzite_portal/integration/decky.py:47
 msgid "The bundled plugin or installed version changed. Review it again."
 msgstr ""
+"È stata rilevata una modifica al plugin incluso o alla versione installata. "
+"Ripetere la verifica."
 
 #: bazzite_portal/integration/decky.py:48
 msgid ""
 "Confirm the installation in Decky Loader. No change is made if you cancel."
 msgstr ""
+"Confermare l'installazione in Decky Loader. Annullando l'operazione, non "
+"verrà apportata alcuna modifica."
 
 #: bazzite_portal/integration/decky.py:49
 msgid ""
 "Could not request plugin installation. Open Steam in Gaming Mode or Big "
 "Picture and try again."
 msgstr ""
+"Non è stato possibile richiedere l'installazione del plugin. Aprire Steam in "
+"modalità gioco o Big Picture e riprovare."
 
 #: bazzite_portal/maintenance/cache_clear.py:68
 #, python-brace-format
@@ -400,7 +405,7 @@ msgstr "Apri Aggiornamenti"
 
 #: bazzite_portal/services/agent.py:520
 msgid "A Decky plugin installation request is already running."
-msgstr ""
+msgstr "Una richiesta di installazione del plugin Decky è già in corso."
 
 #: bazzite_portal/services/agent.py:533 bazzite_portal/ui/decky.py:155
 #, fuzzy
@@ -902,7 +907,7 @@ msgstr ""
 #: bazzite_portal/ui/application.py:1133
 #, python-brace-format
 msgid "Open {github} issue"
-msgstr ""
+msgstr "Invia una segnalazione su {github}"
 
 #: bazzite_portal/ui/application.py:1137
 msgid "The issue form could not be prepared. Open Logs for details."
@@ -1463,7 +1468,7 @@ msgstr ""
 #: bazzite_portal/ui/application.py:2973
 #, python-brace-format
 msgid "{app_name} is already in your {steam} library."
-msgstr ""
+msgstr "{app_name} è già presente nella libreria di {steam}."
 
 #: bazzite_portal/ui/application.py:2975
 #, python-brace-format
@@ -1553,13 +1558,16 @@ msgstr "Apri uno strumento del portale"
 
 #: bazzite_portal/ui/decky.py:77
 msgid "Bazzite Portal in Gaming Mode"
-msgstr ""
+msgstr "Bazzite Portal in modalità gioco"
 
 #: bazzite_portal/ui/decky.py:78
 msgid ""
 "Install the Bazzite Portal plugin for Decky Loader to manage updates and "
 "rollbacks directly from Gaming Mode."
 msgstr ""
+"Installare il plugin Bazzite Portal per Decky Loader per gestire gli "
+"aggiornamenti e il ripristino alle versioni precedenti direttamente dalla "
+"modalità gioco."
 
 #: bazzite_portal/ui/decky.py:79
 #, fuzzy
@@ -1569,20 +1577,22 @@ msgstr "Versione installata"
 
 #: bazzite_portal/ui/decky.py:79
 msgid "Not Now"
-msgstr ""
+msgstr "Non adesso"
 
 #: bazzite_portal/ui/decky.py:80
 msgid "You can install the Bazzite Portal plugin at any time from Settings."
 msgstr ""
+"Il plugin Bazzite Portal può essere installato in qualsiasi momento dalle "
+"impostazioni."
 
 #: bazzite_portal/ui/decky.py:91 bazzite_portal/ui/decky.py:120
 #: bazzite_portal/ui/decky.py:125
 msgid "Install Bazzite Portal Decky plugin"
-msgstr ""
+msgstr "Installa il plugin Decky di Bazzite Portal"
 
 #: bazzite_portal/ui/decky.py:92
 msgid "Use Bazzite Portal from Decky Loader in Gaming Mode."
-msgstr ""
+msgstr "Utilizza Bazzite Portal tramite Decky Loader in modalità gioco."
 
 #: bazzite_portal/ui/decky.py:107
 #, fuzzy
@@ -1592,21 +1602,23 @@ msgstr "Verifica della distribuzione in attesa…"
 
 #: bazzite_portal/ui/decky.py:107
 msgid "Waiting for Decky Loader…"
-msgstr ""
+msgstr "In attesa di Decky Loader…"
 
 #: bazzite_portal/ui/decky.py:109
 msgid "Confirm in Decky Loader"
-msgstr ""
+msgstr "Conferma in Decky Loader"
 
 #: bazzite_portal/ui/decky.py:109
 msgid ""
 "Confirm the installation in Decky Loader, then return to Settings to refresh "
 "its status."
 msgstr ""
+"Conferma l'installazione in Decky Loader, poi torna alle Impostazioni per "
+"aggiornare lo stato."
 
 #: bazzite_portal/ui/decky.py:112
 msgid "Update Bazzite Portal Decky plugin"
-msgstr ""
+msgstr "Aggiorna il plugin Decky di Bazzite Portal"
 
 #: bazzite_portal/ui/decky.py:113
 #, python-brace-format
@@ -1614,10 +1626,12 @@ msgid ""
 "Update the installed plugin from {installed} to {bundled}. Decky Loader "
 "preserves its settings."
 msgstr ""
+"Aggiorna il plugin installato dalla versione {installed} alla versione "
+"{bundled}. Decky Loader conserva le impostazioni attuali."
 
 #: bazzite_portal/ui/decky.py:116
 msgid "Downgrade Bazzite Portal Decky plugin"
-msgstr ""
+msgstr "Ripristina una versione precedente del plugin Decky di Bazzite Portal"
 
 #: bazzite_portal/ui/decky.py:117
 #, python-brace-format
@@ -1625,15 +1639,17 @@ msgid ""
 "Downgrade the installed plugin from {installed} to the bundled version "
 "{bundled}. Decky Loader preserves its settings."
 msgstr ""
+"Ripristina la versione precedente del plugin da {installed} alla versione "
+"{bundled}. Le impostazioni esistenti restano invariate."
 
 #: bazzite_portal/ui/decky.py:120
 msgid ""
 "Decky Loader will ask you to confirm installation of the bundled plugin."
-msgstr ""
+msgstr "Decky Loader ti chiederà di confermare l'installazione del plugin."
 
 #: bazzite_portal/ui/decky.py:122
 msgid "Bazzite Portal Decky plugin installed"
-msgstr ""
+msgstr "Il plugin Decky di Bazzite Portal è stato installato"
 
 #: bazzite_portal/ui/decky.py:123
 #, python-brace-format
@@ -2397,35 +2413,36 @@ msgstr "Preparazione del cambio del canale di rilascio…"
 
 #: bazzite_portal/ui/maintenance.py:1126
 msgid "Preparing image rebase…"
-msgstr ""
+msgstr "Preparazione del cambio dell'immagine…"
 
 #: bazzite_portal/ui/maintenance.py:1127
 msgid "Preparing rollback cancellation…"
-msgstr ""
+msgstr "Preparazione all'annullamento del ripristino della versione precedente…"
 
 #: bazzite_portal/ui/maintenance.py:1129
 msgid "Preparing rollback…"
-msgstr ""
+msgstr "Preparazione al ripristino della versione precedente…"
 
 #: bazzite_portal/ui/maintenance.py:1130
 msgid "Preparing layer removal…"
-msgstr ""
+msgstr "Preparazione alla rimozione dei layer…"
 
 #: bazzite_portal/ui/maintenance.py:1131
 msgid "Preparing deployment deletion…"
-msgstr ""
+msgstr "Preparazione all'eliminazione della versione del sistema…"
 
 #: bazzite_portal/ui/maintenance.py:1132
 msgid "Preparing operation…"
-msgstr ""
+msgstr "Preparazione in corso…"
 
 #: bazzite_portal/ui/maintenance.py:1151
 msgid "A newer operation is available. Reopen this action to view it."
 msgstr ""
+"È disponibile una nuova operazione. Riapri questa azione per visualizzarla."
 
 #: bazzite_portal/ui/maintenance.py:1208
 msgid "Remove all layered apps?"
-msgstr ""
+msgstr "Rimuovere tutte le applicazioni aggiunte tramite layering?"
 
 #: bazzite_portal/ui/maintenance.py:1209
 #, python-brace-format
