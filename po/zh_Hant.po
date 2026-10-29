@@ -7,7 +7,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/app/"
 "\n"
 "POT-Creation-Date: 2026-10-27 10:08+0100\n"
-"PO-Revision-Date: 2026-10-27 19:51+0000\n"
+"PO-Revision-Date: 2026-10-29 12:12+0000\n"
 "Last-Translator: Yun Kwan Shek "
 "<starfish7c0b917ee1024be8@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
@@ -2479,237 +2479,237 @@ msgstr ""
 #: bazzite_portal/ui/maintenance.py:1817
 #, python-brace-format
 msgid "Return to the latest {target_name} release?"
-msgstr ""
+msgstr "將系統設置至最新的 {target_name} 版本？"
 
 #: bazzite_portal/ui/maintenance.py:1817
 #, python-brace-format
 msgid "Rebase to {target_name}?"
-msgstr ""
+msgstr "切換至 {target_name} ？"
 
 #: bazzite_portal/ui/maintenance.py:1826
 msgid "The release channel status changed. Refresh and confirm again."
-msgstr ""
+msgstr "更新頻道狀態已變更。請重新整理後再確認。"
 
 #: bazzite_portal/ui/maintenance.py:1853
 msgid "The release channel request failed."
-msgstr ""
+msgstr "更新頻道請求失敗。"
 
 #: bazzite_portal/ui/system_info.py:45
 #, python-brace-format
 msgid "Pinned {bazzite} version"
-msgstr ""
+msgstr "釘選的 {bazzite} 版本"
 
 #: bazzite_portal/ui/system_info.py:50
 #, python-brace-format
 msgid "Pinned version · {tag}"
-msgstr ""
+msgstr "釘選的版本 · {tag}"
 
 #: bazzite_portal/ui/system_info.py:71
 #, python-brace-format
 msgid "Unknown · exceeds display limit ({count} packages)"
-msgstr ""
+msgstr "未知 · 超出最大顯示數量（{count} 個軟件包）"
 
 #: bazzite_portal/ui/system_info.py:73
 msgid "No packages layered"
-msgstr ""
+msgstr "無系統疊加套件"
 
 #: bazzite_portal/ui/system_info.py:81
 msgid "Unknown · package list exceeds display limit"
-msgstr ""
+msgstr "未知 · 超出最大顯示數量"
 
 #: bazzite_portal/ui/widgets.py:109
 #, python-brace-format
 msgid "{title} · controller button"
-msgstr ""
+msgstr "{title} · 控制器/搖桿按鈕"
 
 #: bazzite_portal/updates/model.py:16 bazzite_portal/updates/model.py:454
 msgid "Operating system"
-msgstr ""
+msgstr "操作系統"
 
 #: bazzite_portal/updates/model.py:17
 msgid "CLI Apps"
-msgstr ""
+msgstr "命令行應用程式"
 
 #: bazzite_portal/updates/model.py:18
 msgid "System Apps"
-msgstr ""
+msgstr "系統應用程式"
 
 #: bazzite_portal/updates/model.py:19
 #, python-brace-format
 msgid "Rootful {distrobox} containers"
-msgstr ""
+msgstr "有 Root 權限的 {distrobox} 容器"
 
 #: bazzite_portal/updates/model.py:127 bazzite_portal/updates/model.py:512
 msgid "An update module failed"
-msgstr ""
+msgstr "更新組件失敗"
 
 #: bazzite_portal/updates/model.py:193 bazzite_portal/updates/model.py:307
 #: bazzite_portal/updates/model.py:323
 msgid "Downloading"
-msgstr ""
+msgstr "下載中"
 
 #: bazzite_portal/updates/model.py:193
 msgid "Importing"
-msgstr ""
+msgstr "正在載入"
 
 #: bazzite_portal/updates/model.py:193
 msgid "Deploying"
-msgstr ""
+msgstr "正在準備系統"
 
 #: bazzite_portal/updates/model.py:198
 msgid "Downloading layers"
-msgstr ""
+msgstr "正在下載系統切片"
 
 #: bazzite_portal/updates/model.py:202 bazzite_portal/updates/model.py:220
 #, python-brace-format
 msgid "Downloading layers · {current} of {total}"
-msgstr ""
+msgstr "正在下載系統切片 · 已下載 {current} | 共{total}"
 
 #: bazzite_portal/updates/model.py:223
 msgid "Checking out system tree"
-msgstr ""
+msgstr "正在檢查系統樹"
 
 #: bazzite_portal/updates/model.py:224
 msgid "Importing package metadata"
-msgstr ""
+msgstr "正在載入軟件包數據"
 
 #: bazzite_portal/updates/model.py:225
 msgid "Resolving dependencies"
-msgstr ""
+msgstr "正在處理依賴包"
 
 #: bazzite_portal/updates/model.py:226
 msgid "Checking out packages"
-msgstr ""
+msgstr "正在處理軟件包"
 
 #: bazzite_portal/updates/model.py:227
 msgid "Running system user setup"
-msgstr ""
+msgstr "正在設置系統用戶"
 
 #: bazzite_portal/updates/model.py:228
 msgid "Running pre-install scripts"
-msgstr ""
+msgstr "正在運行預安裝腳本"
 
 #: bazzite_portal/updates/model.py:229
 msgid "Running post-install scripts"
-msgstr ""
+msgstr "正在運行安裝後腳本"
 
 #: bazzite_portal/updates/model.py:230
 msgid "Running post-transaction scripts"
-msgstr ""
+msgstr "正在運行系統變更後腳本"
 
 #: bazzite_portal/updates/model.py:231
 msgid "Writing package database"
-msgstr ""
+msgstr "正在寫入軟件包數據庫"
 
 #: bazzite_portal/updates/model.py:232
 msgid "Finalizing system deployment"
-msgstr ""
+msgstr "正在完成系統部署"
 
 #: bazzite_portal/updates/model.py:233
 msgid "Generating boot image"
-msgstr ""
+msgstr "正在生成啟動映像"
 
 #: bazzite_portal/updates/model.py:234
 msgid "Preparing deployment for restart"
-msgstr ""
+msgstr "正在部署映像"
 
 #: bazzite_portal/updates/model.py:235
 msgid "Migrating package cache"
-msgstr ""
+msgstr "正在處理軟件包快取"
 
 #: bazzite_portal/updates/model.py:245
 msgid "Downloading system changes"
-msgstr ""
+msgstr "正在下載系統變更"
 
 #: bazzite_portal/updates/model.py:246
 msgid "Downloading system metadata"
-msgstr ""
+msgstr "正在下載系統元數據"
 
 #: bazzite_portal/updates/model.py:247
 msgid "Downloading system objects"
-msgstr ""
+msgstr "正在下載系統物件"
 
 #: bazzite_portal/updates/model.py:248
 msgid "Writing system objects"
-msgstr ""
+msgstr "正在寫入系統物件"
 
 #: bazzite_portal/updates/model.py:249
 msgid "Scanning system metadata"
-msgstr ""
+msgstr "正在掃描系統元數據"
 
 #: bazzite_portal/updates/model.py:277
 #, python-brace-format
 msgid "Updating {homebrew} dependencies"
-msgstr ""
+msgstr "正在更新 {homebrew} 依賴包"
 
 #: bazzite_portal/updates/model.py:330
 #, python-brace-format
 msgid "Upgrading {package}"
-msgstr ""
+msgstr "正在更新 {package}"
 
 #: bazzite_portal/updates/model.py:362
 #, python-brace-format
 msgid "Updating {homebrew}"
-msgstr ""
+msgstr "正在更新 {homebrew}"
 
 #: bazzite_portal/updates/model.py:441
 #, python-brace-format
 msgid "{uupd} could not check for system updates."
-msgstr ""
+msgstr "{uupd} 無法檢查系統更新。"
 
 #: bazzite_portal/updates/model.py:477
 msgid "Preparing system update"
-msgstr ""
+msgstr "正在準備系統更新"
 
 #: bazzite_portal/updates/model.py:555
 #, python-brace-format
 msgid "Disabled in {uupd} configuration."
-msgstr ""
+msgstr "此項已於 {uupd} 設置中禁用。"
 
 #: bazzite_portal/updates/model.py:558
 #, python-brace-format
 msgid "Enabled by {uupd} configuration; runtime eligibility is not checked."
-msgstr ""
+msgstr "此項已於 {uupd} 設置中啟用； 未檢查執行階段的可行性。"
 
 #: bazzite_portal/updates/model.py:581
 #, python-brace-format
 msgid "{uupd} has not reported a result for this step."
-msgstr ""
+msgstr "{uupd} 未為此步驟回報結果。"
 
 #: bazzite_portal/updates/monitor.py:720
 msgid "Deployment operation failed."
-msgstr ""
+msgstr "映像部署失敗。"
 
 #: bazzite_portal/updates/monitor.py:847 bazzite_portal/updates/monitor.py:2025
 msgid "Saved-deployment deletion is running. Wait for it to finish."
-msgstr ""
+msgstr "正在清理部署映像，請稍候。"
 
 #: bazzite_portal/updates/monitor.py:849 bazzite_portal/updates/monitor.py:2027
 #, python-brace-format
 msgid "{bazzite} is changing images. Wait for it to finish."
-msgstr ""
+msgstr "{bazzite} 正在處理映像變更，請稍候。"
 
 #: bazzite_portal/updates/monitor.py:1107
 msgid ""
 "Previous request could not be confirmed. No operation is currently running. "
 "Try again."
-msgstr ""
+msgstr "無法確認先前的請求。目前暫未有正在運行的操作。請重試。"
 
 #: bazzite_portal/updates/monitor.py:1358
 msgid "Another system operation is running or its state could not be verified."
-msgstr ""
+msgstr "尚有系統操作進行中，或其狀態無法被驗證。"
 
 #: bazzite_portal/updates/monitor.py:1433
 msgid "Management status could not be refreshed."
-msgstr ""
+msgstr "無法重新整理系統管理狀態。"
 
 #: bazzite_portal/updates/monitor.py:1601
 msgid "Could not check for system updates; attempting the update."
-msgstr ""
+msgstr "無法檢查系統更新；正在嘗試更新。"
 
 #: bazzite_portal/updates/monitor.py:1670
 msgid "This update module reported a failure."
-msgstr ""
+msgstr "此更新模組回報失敗。"
 
 #: bazzite_portal/updates/monitor.py:1835
 #: bazzite_portal/updates/monitor.py:1915
@@ -2719,33 +2719,33 @@ msgstr ""
 #: bazzite_portal/updates/monitor.py:2099
 #, python-brace-format
 msgid "{bazzite} is changing update channels. Wait for it to finish."
-msgstr ""
+msgstr "{bazzite} 正在切換更新頻道。請稍候。"
 
 #: bazzite_portal/updates/monitor.py:1837
 #: bazzite_portal/updates/monitor.py:2101
 msgid "Pending-deployment cancellation is running. Wait for it to finish."
-msgstr ""
+msgstr "正在取消待部署映像。請稍候。"
 
 #: bazzite_portal/updates/monitor.py:1839
 #: bazzite_portal/updates/monitor.py:2103
 msgid "Package-layer removal is running. Wait for it to finish."
-msgstr ""
+msgstr "正在移除系統疊加套件。請稍候。"
 
 #: bazzite_portal/updates/monitor.py:1841
 #: bazzite_portal/updates/monitor.py:2111
 msgid "Download-cache cleanup is running. Wait for it to finish."
-msgstr ""
+msgstr "正在清理下載快取。請稍候。"
 
 #: bazzite_portal/updates/monitor.py:1843
 #: bazzite_portal/updates/monitor.py:2113
 msgid ""
 "Another deployment-management operation is running. Wait for it to finish."
-msgstr ""
+msgstr "正在處理一個待部署的映像。請稍候。"
 
 #: bazzite_portal/updates/monitor.py:1872
 #, python-brace-format
 msgid "An {rpm_ostree} transaction is active. Wait for it to finish."
-msgstr ""
+msgstr "有一個 {rpm_ostree} 的系統變更正在進行中。請稍候。"
 
 #: bazzite_portal/updates/monitor.py:1897
 #: bazzite_portal/updates/monitor.py:2001
@@ -2753,81 +2753,81 @@ msgstr ""
 #: bazzite_portal/updates/monitor.py:2070
 #: bazzite_portal/updates/monitor.py:2089
 msgid "Another maintenance operation is running."
-msgstr ""
+msgstr "尚有另一系統維護工作進行中。"
 
 #: bazzite_portal/updates/monitor.py:1913
 msgid "The pending deployment changed after confirmation."
-msgstr ""
+msgstr "待部署映像在確認後已更改。"
 
 #: bazzite_portal/updates/monitor.py:1917
 msgid "Pending-deployment cancellation is already running."
-msgstr ""
+msgstr "待取消的映像部署已進行中。"
 
 #: bazzite_portal/updates/monitor.py:1919
 msgid "Package-layer removal is already running."
-msgstr ""
+msgstr "系統套件已在移除中。"
 
 #: bazzite_portal/updates/monitor.py:1921
 #: bazzite_portal/updates/monitor.py:1951
 #: bazzite_portal/updates/monitor.py:1979
 msgid "Download-cache cleanup is already running."
-msgstr ""
+msgstr "下載快取已清理中。"
 
 #: bazzite_portal/updates/monitor.py:1945
 #: bazzite_portal/updates/monitor.py:1971
 msgid "The requested package list changed after confirmation."
-msgstr ""
+msgstr "軟件包列表在確認後已更改。"
 
 #: bazzite_portal/updates/monitor.py:1949
 #: bazzite_portal/updates/monitor.py:1977
 msgid "A package-layer or pending-deployment operation is already running."
-msgstr ""
+msgstr "系統套件變更或映像部署操作已在進行中。"
 
 #: bazzite_portal/updates/monitor.py:1962
 msgid "Choose one or more requested packages to remove."
-msgstr ""
+msgstr "選取一個或更多要移除的軟件包。"
 
 #: bazzite_portal/updates/monitor.py:1997
 msgid ""
 "The deployments or imported image references changed after confirmation."
-msgstr ""
+msgstr "目前映像或已載入的映像數據在確認後已更改。"
 
 #: bazzite_portal/updates/monitor.py:2036
 #: bazzite_portal/updates/monitor.py:2066
 msgid "The running deployment changed after confirmation."
-msgstr ""
+msgstr "已部署的映像在確認後已更改。"
 
 #: bazzite_portal/updates/monitor.py:2053
 msgid "An image rebase is already running."
-msgstr ""
+msgstr "映像變更已運行中。"
 
 #: bazzite_portal/updates/monitor.py:2068
 msgid "Another deployment operation is already running."
-msgstr ""
+msgstr "尚有映像部署操作運行中。"
 
 #: bazzite_portal/updates/monitor.py:2084
 msgid "Deployment deletion is already running or could not be verified."
-msgstr ""
+msgstr "映像清除已在進行中或未能被驗證。"
 
 #: bazzite_portal/updates/monitor.py:2086
 msgid "The deployment list changed after confirmation."
-msgstr ""
+msgstr "映像列表在確認後已更改。"
 
 #: bazzite_portal/updates/monitor.py:2109
 msgid "There is no pending deployment to restart into."
-msgstr ""
+msgstr "未有待部署的映像。"
 
 #: bazzite_portal/updates/release_notes.py:93
 msgid "Version or release channel is unknown."
-msgstr ""
+msgstr "版本或更新頻道未知。"
 
 #: bazzite_portal/updates/release_notes.py:112
 msgid "No release notes match this version and channel."
-msgstr ""
+msgstr "此版本及更新頻道未有對應的版本更新說明。"
 
 #: packaging/bazzite-portal-agent.desktop:2
 msgid "Update Monitor"
-msgstr ""
+msgstr "更新總覽"
 
 #: packaging/io.github.Xarishark.bazzite_portal.desktop:2
 msgid "Bazzite Portal"
@@ -2836,27 +2836,27 @@ msgstr ""
 #: packaging/io.github.Xarishark.bazzite_portal.desktop:3
 #: packaging/io.github.Xarishark.bazzite_portal.metainfo.xml:5
 msgid "Manage {bazzite} tools and system updates"
-msgstr ""
+msgstr "管理 {bazzite} 工具與系統更新"
 
 #: packaging/io.github.Xarishark.bazzite_portal.desktop:9
 msgid "setup;configuration;updates;"
-msgstr ""
+msgstr "設置；更新；"
 
 #: packaging/io.github.Xarishark.bazzite_portal.metainfo.xml:6
 msgid "{bazzite} contributors"
-msgstr ""
+msgstr "{bazzite} 社區貢獻者"
 
 #: packaging/io.github.Xarishark.bazzite_portal.metainfo.xml:9
 msgid ""
 "A desktop utility for {bazzite} setup tools, pinned actions, system updates, "
 "rollback, and system information."
-msgstr ""
+msgstr "一個為 {bazzite} 而設，集系統管理、資訊總覽、個人化於一身的桌面工具。"
 
 #: packaging/io.github.Xarishark.bazzite_portal.metainfo.xml:9
 msgid ""
 "Reconnect to automatic or manually started {uupd} updates and see when a new "
 "system deployment is ready for restart."
-msgstr ""
+msgstr "重新連接至 {uupd} ，並檢視待部署映像是否就緒。"
 
 #~ msgid "No files were created."
 #~ msgstr "未有新創建的檔案。"
