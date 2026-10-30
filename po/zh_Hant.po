@@ -4,9 +4,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Bazzite Portal / App\n"
-"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/app/"
-"\n"
-"POT-Creation-Date: 2026-10-27 10:08+0100\n"
+"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/"
+"app/\n"
+"POT-Creation-Date: 2026-10-30 12:01+0100\n"
 "PO-Revision-Date: 2026-10-29 12:12+0000\n"
 "Last-Translator: Yun Kwan Shek "
 "<starfish7c0b917ee1024be8@users.noreply.hosted.weblate.org>\n"
@@ -100,8 +100,8 @@ msgstr "獲取權限失敗，請重試或取消。"
 #: bazzite_portal/ui/maintenance.py:230 bazzite_portal/ui/maintenance.py:1093
 #: bazzite_portal/ui/maintenance.py:1103 bazzite_portal/ui/maintenance.py:1147
 #: bazzite_portal/ui/maintenance.py:1155 bazzite_portal/ui/maintenance.py:1157
-#: bazzite_portal/ui/maintenance.py:1384 bazzite_portal/ui/maintenance.py:1413
-#: bazzite_portal/ui/maintenance.py:1421 bazzite_portal/ui/maintenance.py:1647
+#: bazzite_portal/ui/maintenance.py:1385 bazzite_portal/ui/maintenance.py:1414
+#: bazzite_portal/ui/maintenance.py:1422 bazzite_portal/ui/maintenance.py:1648
 msgid "Details are unavailable. Open Logs for more information."
 msgstr "無法獲取更多資訊，請查看系統日誌。"
 
@@ -206,7 +206,8 @@ msgstr "在 Decky Loader 中確認安裝。若你取消，將不會有任何更�
 msgid ""
 "Could not request plugin installation. Open Steam in Gaming Mode or Big "
 "Picture and try again."
-msgstr "無法請求安裝插件。於遊戲模式或 Big Picture 模式中打開 Steam，然後再試。"
+msgstr ""
+"無法請求安裝插件。於遊戲模式或 Big Picture 模式中打開 Steam，然後再試。"
 
 #: bazzite_portal/maintenance/cache_clear.py:68
 #, python-brace-format
@@ -270,7 +271,7 @@ msgid "Resolve the next-boot deployment before deleting saved deployments."
 msgstr "處理待部署的鏡像後，方可刪除已儲存的鏡像。"
 
 #: bazzite_portal/maintenance/delete_deployments.py:94
-#: bazzite_portal/ui/maintenance.py:1462
+#: bazzite_portal/ui/maintenance.py:1463
 msgid "No saved, pinned deployments can be deleted."
 msgstr "沒有已儲存或已固定的鏡像可供刪除。"
 
@@ -279,7 +280,7 @@ msgstr "沒有已儲存或已固定的鏡像可供刪除。"
 #: bazzite_portal/ui/application.py:210 bazzite_portal/ui/application.py:2318
 #: bazzite_portal/ui/application.py:2319 bazzite_portal/ui/maintenance.py:23
 #: bazzite_portal/ui/maintenance.py:1004 bazzite_portal/ui/maintenance.py:1165
-#: bazzite_portal/ui/maintenance.py:1420 bazzite_portal/ui/system_info.py:19
+#: bazzite_portal/ui/maintenance.py:1421 bazzite_portal/ui/system_info.py:19
 #: bazzite_portal/ui/system_info.py:32 bazzite_portal/ui/system_info.py:43
 #: bazzite_portal/ui/system_info.py:51 bazzite_portal/ui/system_info.py:58
 #: bazzite_portal/ui/system_info.py:60 bazzite_portal/ui/system_info.py:63
@@ -539,7 +540,7 @@ msgstr "未有任何記錄"
 #: bazzite_portal/ui/application.py:3601 bazzite_portal/ui/application.py:3609
 #: bazzite_portal/ui/application.py:3612 bazzite_portal/ui/image_wizard.py:168
 #: bazzite_portal/ui/image_wizard.py:169 bazzite_portal/ui/image_wizard.py:173
-#: bazzite_portal/ui/maintenance.py:1085 bazzite_portal/ui/maintenance.py:1269
+#: bazzite_portal/ui/maintenance.py:1085 bazzite_portal/ui/maintenance.py:1270
 msgid "Back"
 msgstr "返回"
 
@@ -569,7 +570,7 @@ msgstr "否"
 #: bazzite_portal/ui/application.py:551 bazzite_portal/ui/application.py:1176
 #: bazzite_portal/ui/application.py:1901 bazzite_portal/ui/application.py:3589
 #: bazzite_portal/ui/application.py:3609 bazzite_portal/ui/image_wizard.py:253
-#: bazzite_portal/ui/maintenance.py:1248
+#: bazzite_portal/ui/maintenance.py:1249
 msgid "Select"
 msgstr "選取"
 
@@ -591,7 +592,7 @@ msgstr "重新整理系統資訊"
 msgid "Search for a tool"
 msgstr "搜索工具"
 
-#: bazzite_portal/ui/application.py:634 bazzite_portal/ui/maintenance.py:1587
+#: bazzite_portal/ui/application.py:634 bazzite_portal/ui/maintenance.py:1588
 msgid "The request failed. Open Logs for details."
 msgstr "請求失敗，打開日誌以查看更多資訊。"
 
@@ -742,8 +743,8 @@ msgid ""
 msgstr "已安裝的遊戲、存檔、設置檔、與 {proton} 文檔不會被更改。"
 
 #: bazzite_portal/ui/application.py:1002 bazzite_portal/ui/application.py:2570
-#: bazzite_portal/ui/image_wizard.py:177 bazzite_portal/ui/maintenance.py:1525
-#: bazzite_portal/ui/maintenance.py:1544
+#: bazzite_portal/ui/image_wizard.py:177 bazzite_portal/ui/maintenance.py:1526
+#: bazzite_portal/ui/maintenance.py:1545
 msgid "Cancel"
 msgstr "取消"
 
@@ -827,7 +828,7 @@ msgid "The issue form could not be prepared. Open Logs for details."
 msgstr "無法顯示 issue 表格，詳情請查看日誌。"
 
 #: bazzite_portal/ui/application.py:1176 bazzite_portal/ui/application.py:1180
-#: bazzite_portal/ui/application.py:3607 bazzite_portal/ui/maintenance.py:1269
+#: bazzite_portal/ui/application.py:3607 bazzite_portal/ui/maintenance.py:1270
 #: bazzite_portal/ui/widgets.py:101 bazzite_portal/ui/widgets.py:140
 msgid "D-pad Move"
 msgstr "D-pad 移動"
@@ -1167,8 +1168,8 @@ msgstr "無法發送更新請求。詳情請查看日誌。"
 
 #: bazzite_portal/ui/application.py:2560 bazzite_portal/ui/maintenance.py:313
 #: bazzite_portal/ui/maintenance.py:523 bazzite_portal/ui/maintenance.py:603
-#: bazzite_portal/ui/maintenance.py:1451 bazzite_portal/ui/maintenance.py:1598
-#: bazzite_portal/ui/maintenance.py:1712
+#: bazzite_portal/ui/maintenance.py:1452 bazzite_portal/ui/maintenance.py:1599
+#: bazzite_portal/ui/maintenance.py:1713
 msgid "System status is unavailable. Open Logs for details."
 msgstr "無法獲取可用的系統狀態。詳情請查看日誌。"
 
@@ -1436,7 +1437,8 @@ msgstr "Bazzite Portal （遊戲模式）"
 msgid ""
 "Install the Bazzite Portal plugin for Decky Loader to manage updates and "
 "rollbacks directly from Gaming Mode."
-msgstr "安裝 Bazzite Portal 插件以使用 Decky Loader 在遊戲模式中管理更新與回退。"
+msgstr ""
+"安裝 Bazzite Portal 插件以使用 Decky Loader 在遊戲模式中管理更新與回退。"
 
 #: bazzite_portal/ui/decky.py:79
 msgid "Install Plugin"
@@ -1486,7 +1488,8 @@ msgstr "更新 Bazzite Portal Decky 插件"
 msgid ""
 "Update the installed plugin from {installed} to {bundled}. Decky Loader "
 "preserves its settings."
-msgstr "將安裝的插件版本由 {installed} 更新至 {bundled} 。Decky Loader 將保存其設置。"
+msgstr ""
+"將安裝的插件版本由 {installed} 更新至 {bundled} 。Decky Loader 將保存其設置。"
 
 #: bazzite_portal/ui/decky.py:116
 msgid "Downgrade Bazzite Portal Decky plugin"
@@ -1497,7 +1500,8 @@ msgstr "降級 Bazzite Portal Decky 插件"
 msgid ""
 "Downgrade the installed plugin from {installed} to the bundled version "
 "{bundled}. Decky Loader preserves its settings."
-msgstr "將安裝的插件版本由 {installed} 降級至 {bundled} 。Decky Loader 將保存其設置。"
+msgstr ""
+"將安裝的插件版本由 {installed} 降級至 {bundled} 。Decky Loader 將保存其設置。"
 
 #: bazzite_portal/ui/decky.py:120
 msgid ""
@@ -1575,7 +1579,7 @@ msgstr "正在加載版本…"
 msgid "Could not load {bazzite} versions. Try again."
 msgstr "無法加載 {bazzite} 版本。請稍候再試。"
 
-#: bazzite_portal/ui/image_wizard.py:382 bazzite_portal/ui/maintenance.py:1653
+#: bazzite_portal/ui/image_wizard.py:382 bazzite_portal/ui/maintenance.py:1654
 #, python-brace-format
 msgid "Latest {track}"
 msgstr "最新 {track}"
@@ -1592,7 +1596,7 @@ msgstr "運行中"
 msgid "Succeeded"
 msgstr "成功"
 
-#: bazzite_portal/ui/maintenance.py:36 bazzite_portal/ui/maintenance.py:1444
+#: bazzite_portal/ui/maintenance.py:36 bazzite_portal/ui/maintenance.py:1445
 msgid "Refresh"
 msgstr "重新整理"
 
@@ -1677,12 +1681,12 @@ msgstr "清理下載快取"
 msgid "Remove cached update data. Future updates may download it again."
 msgstr "移除更新資料的快取數據。未來的更新或會將其重新獲取。"
 
-#: bazzite_portal/ui/maintenance.py:155 bazzite_portal/ui/maintenance.py:1481
-#: bazzite_portal/ui/maintenance.py:1495
+#: bazzite_portal/ui/maintenance.py:155 bazzite_portal/ui/maintenance.py:1482
+#: bazzite_portal/ui/maintenance.py:1496
 msgid "Delete pinned deployments"
 msgstr "刪除已釘選的鏡像"
 
-#: bazzite_portal/ui/maintenance.py:156 bazzite_portal/ui/maintenance.py:1482
+#: bazzite_portal/ui/maintenance.py:156 bazzite_portal/ui/maintenance.py:1483
 msgid "Choose a saved, pinned system version to delete."
 msgstr "選取要刪除的已釘選系統鏡像。"
 
@@ -1704,7 +1708,7 @@ msgstr "重新整理系統資訊以檢查可用的數據。"
 msgid "Rebase to specific image"
 msgstr "切換更新頻道至單一映像"
 
-#: bazzite_portal/ui/maintenance.py:180 bazzite_portal/ui/maintenance.py:1620
+#: bazzite_portal/ui/maintenance.py:180 bazzite_portal/ui/maintenance.py:1621
 #, python-brace-format
 msgid "Choose a {bazzite} image, release channel and version."
 msgstr "選取 {bazzite} 映像、更新頻道、與版本。"
@@ -1800,7 +1804,7 @@ msgstr "無可用的上一映像。"
 
 #: bazzite_portal/ui/maintenance.py:309 bazzite_portal/ui/maintenance.py:620
 #: bazzite_portal/ui/maintenance.py:623 bazzite_portal/ui/maintenance.py:626
-#: bazzite_portal/ui/maintenance.py:857 bazzite_portal/ui/maintenance.py:1734
+#: bazzite_portal/ui/maintenance.py:857 bazzite_portal/ui/maintenance.py:1735
 msgid "Could not verify this action. Refresh system information and try again."
 msgstr "無法驗證此操作。請重新整理系統資訊，然後重試。"
 
@@ -1817,7 +1821,7 @@ msgstr "無法檢查回退狀態。詳情請查看日誌。"
 #: bazzite_portal/ui/maintenance.py:638 bazzite_portal/ui/maintenance.py:640
 #: bazzite_portal/ui/maintenance.py:649 bazzite_portal/ui/maintenance.py:673
 #: bazzite_portal/ui/maintenance.py:701 bazzite_portal/ui/maintenance.py:829
-#: bazzite_portal/ui/maintenance.py:867 bazzite_portal/ui/maintenance.py:1472
+#: bazzite_portal/ui/maintenance.py:867 bazzite_portal/ui/maintenance.py:1473
 msgid "Open to view operation progress and logs."
 msgstr "打開以查看操作進度與日誌。"
 
@@ -1898,7 +1902,8 @@ msgstr "取消回退？"
 msgid ""
 "Keep your current system for the next restart. The saved deployment, version "
 "{version}, will remain available."
-msgstr "於下一次啓動依舊保存目前的系統版本。釘選的映像（{version} 版本）將依舊可用。"
+msgstr ""
+"於下一次啓動依舊保存目前的系統版本。釘選的映像（{version} 版本）將依舊可用。"
 
 #: bazzite_portal/ui/maintenance.py:592
 #, python-brace-format
@@ -1975,7 +1980,7 @@ msgstr "目前運行與已釘選的映像未更改。"
 msgid "Deployment cancellation failed"
 msgstr "取消待部署映像失敗"
 
-#: bazzite_portal/ui/maintenance.py:647 bazzite_portal/ui/maintenance.py:1760
+#: bazzite_portal/ui/maintenance.py:647 bazzite_portal/ui/maintenance.py:1761
 msgid ""
 "The operation failed. Refresh system information to check the current state."
 msgstr "操作失敗。重新整理系統資訊以檢查目前狀態。"
@@ -2023,8 +2028,8 @@ msgid ""
 "the computer."
 msgstr ""
 "取消待部署的 {bazzite} 映像（版本：{version} {image}）？此操作僅移除待部署的"
-"映像。現時運行的映像、已釘選的映像、與個人文件將不受影響。此操作不會重啟本機"
-"。"
+"映像。現時運行的映像、已釘選的映像、與個人文件將不受影響。此操作不會重啟本"
+"機。"
 
 #: bazzite_portal/ui/maintenance.py:724
 msgid "Cancel pending deployment?"
@@ -2215,12 +2220,12 @@ msgid ""
 "app store ({flatpak} apps), {homebrew} apps, {appimages}, or your personal "
 "files. Restart manually when you are ready to apply the change."
 msgstr ""
-"此操作將移除所有系統疊加套件。你的個人文件、{bazzite} 商店應用程式（"
-"{flatpak} 應用程式）、{homebrew} 應用程式和 {appimages} 應用程式不會受影響。"
-"在準備好之後，你可以重新啟動。"
+"此操作將移除所有系統疊加套件。你的個人文件、{bazzite} 商店應用程式"
+"（{flatpak} 應用程式）、{homebrew} 應用程式和 {appimages} 應用程式不會受影"
+"響。在準備好之後，你可以重新啟動。"
 
-#: bazzite_portal/ui/maintenance.py:1218 bazzite_portal/ui/maintenance.py:1306
-#: bazzite_portal/ui/maintenance.py:1313 bazzite_portal/ui/maintenance.py:1347
+#: bazzite_portal/ui/maintenance.py:1218 bazzite_portal/ui/maintenance.py:1307
+#: bazzite_portal/ui/maintenance.py:1314 bazzite_portal/ui/maintenance.py:1348
 msgid "The package list changed. Review it again before confirming."
 msgstr "軟件包列表已變更。請查看列表，然後重新確認。"
 
@@ -2230,82 +2235,82 @@ msgid ""
 "Select the packages to remove. Apps included with {bazzite} stay installed."
 msgstr "選取要移除的軟件。跟隨 {bazzite} 預安裝的應用程式將不受影響。"
 
-#: bazzite_portal/ui/maintenance.py:1286 bazzite_portal/ui/maintenance.py:1287
+#: bazzite_portal/ui/maintenance.py:1287 bazzite_portal/ui/maintenance.py:1288
 msgid "Remove"
 msgstr "移除"
 
-#: bazzite_portal/ui/maintenance.py:1290
+#: bazzite_portal/ui/maintenance.py:1291
 msgid "Review the selected packages before removal"
 msgstr "在移除前檢視已選取的軟件包"
 
-#: bazzite_portal/ui/maintenance.py:1301
+#: bazzite_portal/ui/maintenance.py:1302
 msgid "Select at least one layered app to remove."
 msgstr "請至少選取一個要移除的疊加套件。"
 
-#: bazzite_portal/ui/maintenance.py:1317
+#: bazzite_portal/ui/maintenance.py:1318
 msgid "Remove selected layered packages?"
 msgstr "移除已選取的系統疊加套件（軟件包）？"
 
-#: bazzite_portal/ui/maintenance.py:1318
+#: bazzite_portal/ui/maintenance.py:1319
 msgid "The following packages will be removed:\n"
 msgstr "以下軟件包將被移除：\n"
 
-#: bazzite_portal/ui/maintenance.py:1319
+#: bazzite_portal/ui/maintenance.py:1320
 msgid "Remove selected packages"
 msgstr "移除已選取的系統疊加套件（軟件包）"
 
-#: bazzite_portal/ui/maintenance.py:1323
+#: bazzite_portal/ui/maintenance.py:1324
 msgid "Remove · controller button"
 msgstr "移除 · 控制器/搖桿按鈕"
 
-#: bazzite_portal/ui/maintenance.py:1421
+#: bazzite_portal/ui/maintenance.py:1422
 msgid "Layered package information is unavailable."
 msgstr "系統疊加套件（軟件包）資訊不可用。"
 
-#: bazzite_portal/ui/maintenance.py:1422
+#: bazzite_portal/ui/maintenance.py:1423
 msgid "Layered packages"
 msgstr "系統疊加套件（軟件包）"
 
-#: bazzite_portal/ui/maintenance.py:1441
+#: bazzite_portal/ui/maintenance.py:1442
 msgid "Could not refresh system information. Open Logs for details."
 msgstr "無法重新整理系統資訊。詳情請查看日誌。"
 
-#: bazzite_portal/ui/maintenance.py:1453
+#: bazzite_portal/ui/maintenance.py:1454
 msgid "Refresh system information before deleting deployments."
 msgstr "請重新整理系統資訊，然後再移除映像。"
 
-#: bazzite_portal/ui/maintenance.py:1455
+#: bazzite_portal/ui/maintenance.py:1456
 msgid "A deployment is being deleted."
 msgstr "目前有待部署映像正在被移除。"
 
-#: bazzite_portal/ui/maintenance.py:1457 bazzite_portal/ui/maintenance.py:1462
-#: bazzite_portal/ui/maintenance.py:1474 bazzite_portal/ui/maintenance.py:1476
-#: bazzite_portal/ui/maintenance.py:1479
+#: bazzite_portal/ui/maintenance.py:1458 bazzite_portal/ui/maintenance.py:1463
+#: bazzite_portal/ui/maintenance.py:1475 bazzite_portal/ui/maintenance.py:1477
+#: bazzite_portal/ui/maintenance.py:1480
 #, python-brace-format
 msgid "Could not check saved {bazzite} versions. Open Logs for details."
 msgstr "無法檢查已釘選的 {bazzite} 版本。詳情請查看日誌。"
 
-#: bazzite_portal/ui/maintenance.py:1457
+#: bazzite_portal/ui/maintenance.py:1458
 msgid "Deployment deletion status could not be verified."
 msgstr "無法驗證待部署映像的清除狀態。"
 
-#: bazzite_portal/ui/maintenance.py:1471
+#: bazzite_portal/ui/maintenance.py:1472
 msgid "Deleting pinned deployment…"
 msgstr "正在移除釘選的映像…"
 
-#: bazzite_portal/ui/maintenance.py:1474 bazzite_portal/updates/monitor.py:2094
+#: bazzite_portal/ui/maintenance.py:1475 bazzite_portal/updates/monitor.py:2094
 msgid "Pinned deployment deleted"
 msgstr "釘選的映像已刪除"
 
-#: bazzite_portal/ui/maintenance.py:1476
+#: bazzite_portal/ui/maintenance.py:1477
 msgid "Deployment deletion failed"
 msgstr "映像刪除失敗"
 
-#: bazzite_portal/ui/maintenance.py:1478
+#: bazzite_portal/ui/maintenance.py:1479
 msgid "Deployment deletion status unknown"
 msgstr "映像刪除狀態未知"
 
-#: bazzite_portal/ui/maintenance.py:1503
+#: bazzite_portal/ui/maintenance.py:1504
 msgid ""
 "Choose a pinned system version to delete. Your running system and next "
 "restart are protected. Personal files stay."
@@ -2313,34 +2318,34 @@ msgstr ""
 "移除釘選的映像。你的個人文件、{bazzite} 商店應用程式、{homebrew} 應用程式和 "
 "{appimages} 應用程式不會受影響。"
 
-#: bazzite_portal/ui/maintenance.py:1526 bazzite_portal/ui/maintenance.py:1544
+#: bazzite_portal/ui/maintenance.py:1527 bazzite_portal/ui/maintenance.py:1545
 msgid "Delete"
 msgstr "刪除"
 
-#: bazzite_portal/ui/maintenance.py:1539 bazzite_portal/ui/maintenance.py:1569
+#: bazzite_portal/ui/maintenance.py:1540 bazzite_portal/ui/maintenance.py:1570
 msgid "The deployment list changed. Review it again."
 msgstr "待部署映像的列表已變更。"
 
-#: bazzite_portal/ui/maintenance.py:1605
+#: bazzite_portal/ui/maintenance.py:1606
 msgid "Apply or cancel the pending deployment before changing images."
 msgstr "在切換映像前，請重啟或取消待部署的映像。"
 
-#: bazzite_portal/ui/maintenance.py:1608 bazzite_portal/ui/maintenance.py:1610
-#: bazzite_portal/ui/maintenance.py:1677
+#: bazzite_portal/ui/maintenance.py:1609 bazzite_portal/ui/maintenance.py:1611
+#: bazzite_portal/ui/maintenance.py:1678
 #, python-brace-format
 msgid "Could not check {bazzite} images. Open Logs for details."
 msgstr "無法檢查 {bazzite} 映像。詳情請查看日誌。"
 
-#: bazzite_portal/ui/maintenance.py:1608
+#: bazzite_portal/ui/maintenance.py:1609
 #, python-brace-format
 msgid "Changing {bazzite} images is unavailable. Open Logs for details."
 msgstr "{bazzite} 映像變更不可用。詳情請查看日誌。"
 
-#: bazzite_portal/ui/maintenance.py:1610
+#: bazzite_portal/ui/maintenance.py:1611
 msgid "Image-rebase status could not be verified."
 msgstr "無法驗證切換映像的狀態。"
 
-#: bazzite_portal/ui/maintenance.py:1654
+#: bazzite_portal/ui/maintenance.py:1655
 #, python-brace-format
 msgid ""
 "Prepare {image}, {version}, for your next restart? Your personal files stay. "
@@ -2350,123 +2355,124 @@ msgstr ""
 "在下次重啟中，啟動至 {image} ， {version} ？你的個人文件將不受影響。此操作需"
 "要 sudo 權限；而不會重啟本機。"
 
-#: bazzite_portal/ui/maintenance.py:1655
+#: bazzite_portal/ui/maintenance.py:1656
 #, python-brace-format
 msgid "Rebase {bazzite} image?"
 msgstr "切換到 {bazzite} 映像？"
 
-#: bazzite_portal/ui/maintenance.py:1658 bazzite_portal/ui/maintenance.py:1674
+#: bazzite_portal/ui/maintenance.py:1659 bazzite_portal/ui/maintenance.py:1675
 msgid ""
 "Enable unsupported rebase targets in Settings to choose this image or "
 "channel."
 msgstr "在設定中啟用「不支持的更新頻道目標」以選取此映像或更新頻道。"
 
-#: bazzite_portal/ui/maintenance.py:1660 bazzite_portal/ui/maintenance.py:1818
+#: bazzite_portal/ui/maintenance.py:1661 bazzite_portal/ui/maintenance.py:1819
 msgid "Rebase"
 msgstr "切換更新頻道"
 
-#: bazzite_portal/ui/maintenance.py:1677
+#: bazzite_portal/ui/maintenance.py:1678
 msgid "Deployment information changed. Review it again."
 msgstr "映像資訊已變更。"
 
-#: bazzite_portal/ui/maintenance.py:1710
+#: bazzite_portal/ui/maintenance.py:1711
 msgid "The application is closing."
 msgstr "正在關閉應用程式。"
 
-#: bazzite_portal/ui/maintenance.py:1714
+#: bazzite_portal/ui/maintenance.py:1715
 msgid "Refresh system information before rebasing release channels."
 msgstr "在切換更新頻道前，請重新整理系統資訊。"
 
-#: bazzite_portal/ui/maintenance.py:1716
+#: bazzite_portal/ui/maintenance.py:1717
 msgid "Release channel status is unavailable."
 msgstr "更新頻道狀態不可用。"
 
-#: bazzite_portal/ui/maintenance.py:1718
+#: bazzite_portal/ui/maintenance.py:1719
 msgid "A release channel rebase request is already in progress."
 msgstr "已有正在處理的更新頻道變更請求。"
 
-#: bazzite_portal/ui/maintenance.py:1720 bazzite_portal/updates/monitor.py:2034
+#: bazzite_portal/ui/maintenance.py:1721 bazzite_portal/updates/monitor.py:2034
 msgid "A release channel rebase is already running."
 msgstr "已有正在處理的更新頻道變更。"
 
-#: bazzite_portal/ui/maintenance.py:1722 bazzite_portal/ui/maintenance.py:1727
-#: bazzite_portal/ui/maintenance.py:1749 bazzite_portal/ui/maintenance.py:1759
+#: bazzite_portal/ui/maintenance.py:1723 bazzite_portal/ui/maintenance.py:1728
+#: bazzite_portal/ui/maintenance.py:1750 bazzite_portal/ui/maintenance.py:1760
 msgid "Could not check the release channel. Open Logs for details."
 msgstr "無法檢查更新頻道。詳情請查看日誌。"
 
-#: bazzite_portal/ui/maintenance.py:1722
+#: bazzite_portal/ui/maintenance.py:1723
 msgid "Release channel status could not be verified. Refresh to check again."
 msgstr "無法驗證更新頻道狀態。請重新整理後再試。"
 
-#: bazzite_portal/ui/maintenance.py:1727 bazzite_portal/ui/maintenance.py:1765
+#: bazzite_portal/ui/maintenance.py:1728 bazzite_portal/ui/maintenance.py:1766
 msgid "Release channel rebasing is unavailable."
 msgstr "切換更新頻道不可用。"
 
-#: bazzite_portal/ui/maintenance.py:1729
+#: bazzite_portal/ui/maintenance.py:1730
 msgid "The current release channel is not verified."
 msgstr "目前的更新頻道目標未被驗證。"
 
-#: bazzite_portal/ui/maintenance.py:1731
+#: bazzite_portal/ui/maintenance.py:1732
 msgid "The target release channel is not verified."
 msgstr "更新頻道目標未驗證。"
 
-#: bazzite_portal/ui/maintenance.py:1748
+#: bazzite_portal/ui/maintenance.py:1749
 #, python-brace-format
 msgid "Rebasing to {bazzite} {track}…"
 msgstr "正在切換更新頻道至 {bazzite} {track}…"
 
-#: bazzite_portal/ui/maintenance.py:1749
+#: bazzite_portal/ui/maintenance.py:1750
 msgid "The image is being prepared. You can keep using the computer."
 msgstr "正在處理映像。你可以繼續使用本機。"
 
-#: bazzite_portal/ui/maintenance.py:1751
+#: bazzite_portal/ui/maintenance.py:1752
 msgid "Rebasing release channel…"
 msgstr "正在切換更新頻道…"
 
-#: bazzite_portal/ui/maintenance.py:1755
+#: bazzite_portal/ui/maintenance.py:1756
 #, python-brace-format
 msgid "{bazzite} {track} is ready"
 msgstr "{bazzite} {track} 已就緒"
 
-#: bazzite_portal/ui/maintenance.py:1756
+#: bazzite_portal/ui/maintenance.py:1757
 msgid "Restart manually to start the new release channel."
 msgstr "請重新啟動已啟用新的更新頻道。"
 
-#: bazzite_portal/ui/maintenance.py:1758
+#: bazzite_portal/ui/maintenance.py:1759
 msgid "Release channel rebase failed"
 msgstr "切換更新頻道失敗"
 
-#: bazzite_portal/ui/maintenance.py:1763 bazzite_portal/ui/maintenance.py:1772
+#: bazzite_portal/ui/maintenance.py:1764 bazzite_portal/ui/maintenance.py:1773
 #, python-brace-format
 msgid "Rebase to {bazzite} {track}"
 msgstr "切換更新頻道至 {bazzite} {track}"
 
-#: bazzite_portal/ui/maintenance.py:1770
+#: bazzite_portal/ui/maintenance.py:1771
 #, python-brace-format
 msgid "Return to the latest {track} release"
 msgstr "將更新頻道切換回最新的 {track} 版本"
 
-#: bazzite_portal/ui/maintenance.py:1773
+#: bazzite_portal/ui/maintenance.py:1774
 msgid "Download newer changes to try after restarting."
 msgstr "在重啟後下載並嘗試新的變更。"
 
-#: bazzite_portal/ui/maintenance.py:1775
+#: bazzite_portal/ui/maintenance.py:1776
 #, python-brace-format
 msgid "Return to the {track} release after restarting."
 msgstr "在重啟後切換更新頻道至 {track} 版本。"
 
-#: bazzite_portal/ui/maintenance.py:1810
+#: bazzite_portal/ui/maintenance.py:1811
 #, python-brace-format
 msgid "Return this installation to the latest {target_name} release? "
 msgstr "切換更新頻道回 {target_name} 版本？ "
 
-#: bazzite_portal/ui/maintenance.py:1812
+#: bazzite_portal/ui/maintenance.py:1813
 #, python-brace-format
 msgid ""
 "Rebase this {bazzite} installation from {current_track} to {target_name}? "
-msgstr "在此 {bazzite} 版本中由 {current_track} 切換更新頻道至 {target_name} 版本？ "
+msgstr ""
+"在此 {bazzite} 版本中由 {current_track} 切換更新頻道至 {target_name} 版本？ "
 
-#: bazzite_portal/ui/maintenance.py:1815
+#: bazzite_portal/ui/maintenance.py:1816
 #, python-brace-format
 msgid ""
 "The running image is {version} ({image}). This downloads and prepares the "
@@ -2476,21 +2482,21 @@ msgstr ""
 "正在運行的映像為 {version} （{image}）。此操作將下載並準備已選取的更新頻道。"
 "此操作需要 sudo 權限；而不會重啟本機。在更新頻道切換就緒後，請重新啟動。"
 
-#: bazzite_portal/ui/maintenance.py:1817
+#: bazzite_portal/ui/maintenance.py:1818
 #, python-brace-format
 msgid "Return to the latest {target_name} release?"
 msgstr "將系統設置至最新的 {target_name} 版本？"
 
-#: bazzite_portal/ui/maintenance.py:1817
+#: bazzite_portal/ui/maintenance.py:1818
 #, python-brace-format
 msgid "Rebase to {target_name}?"
 msgstr "切換至 {target_name} ？"
 
-#: bazzite_portal/ui/maintenance.py:1826
+#: bazzite_portal/ui/maintenance.py:1827
 msgid "The release channel status changed. Refresh and confirm again."
 msgstr "更新頻道狀態已變更。請重新整理後再確認。"
 
-#: bazzite_portal/ui/maintenance.py:1853
+#: bazzite_portal/ui/maintenance.py:1854
 msgid "The release channel request failed."
 msgstr "更新頻道請求失敗。"
 
