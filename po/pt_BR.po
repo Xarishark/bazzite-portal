@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: Bazzite Portal / App\n"
 "Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/"
 "app/\n"
-"POT-Creation-Date: 2026-10-27 10:08+0100\n"
+"POT-Creation-Date: 2026-10-30 12:01+0100\n"
 "PO-Revision-Date: 2026-10-25 15:57+0000\n"
 "Last-Translator: Crono <epochvoyager@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
@@ -110,8 +110,8 @@ msgstr ""
 #: bazzite_portal/ui/maintenance.py:230 bazzite_portal/ui/maintenance.py:1093
 #: bazzite_portal/ui/maintenance.py:1103 bazzite_portal/ui/maintenance.py:1147
 #: bazzite_portal/ui/maintenance.py:1155 bazzite_portal/ui/maintenance.py:1157
-#: bazzite_portal/ui/maintenance.py:1384 bazzite_portal/ui/maintenance.py:1413
-#: bazzite_portal/ui/maintenance.py:1421 bazzite_portal/ui/maintenance.py:1647
+#: bazzite_portal/ui/maintenance.py:1385 bazzite_portal/ui/maintenance.py:1414
+#: bazzite_portal/ui/maintenance.py:1422 bazzite_portal/ui/maintenance.py:1648
 msgid "Details are unavailable. Open Logs for more information."
 msgstr ""
 "Detalhes indisponíveis. Verifique seus registros do sistema para mais "
@@ -303,7 +303,7 @@ msgstr ""
 "pendente ou conclua sua atualização."
 
 #: bazzite_portal/maintenance/delete_deployments.py:94
-#: bazzite_portal/ui/maintenance.py:1462
+#: bazzite_portal/ui/maintenance.py:1463
 msgid "No saved, pinned deployments can be deleted."
 msgstr "Implantações do sistema fixadas não podem ser excluídas."
 
@@ -312,7 +312,7 @@ msgstr "Implantações do sistema fixadas não podem ser excluídas."
 #: bazzite_portal/ui/application.py:210 bazzite_portal/ui/application.py:2318
 #: bazzite_portal/ui/application.py:2319 bazzite_portal/ui/maintenance.py:23
 #: bazzite_portal/ui/maintenance.py:1004 bazzite_portal/ui/maintenance.py:1165
-#: bazzite_portal/ui/maintenance.py:1420 bazzite_portal/ui/system_info.py:19
+#: bazzite_portal/ui/maintenance.py:1421 bazzite_portal/ui/system_info.py:19
 #: bazzite_portal/ui/system_info.py:32 bazzite_portal/ui/system_info.py:43
 #: bazzite_portal/ui/system_info.py:51 bazzite_portal/ui/system_info.py:58
 #: bazzite_portal/ui/system_info.py:60 bazzite_portal/ui/system_info.py:63
@@ -583,7 +583,7 @@ msgstr "Nenhum registro"
 #: bazzite_portal/ui/application.py:3601 bazzite_portal/ui/application.py:3609
 #: bazzite_portal/ui/application.py:3612 bazzite_portal/ui/image_wizard.py:168
 #: bazzite_portal/ui/image_wizard.py:169 bazzite_portal/ui/image_wizard.py:173
-#: bazzite_portal/ui/maintenance.py:1085 bazzite_portal/ui/maintenance.py:1269
+#: bazzite_portal/ui/maintenance.py:1085 bazzite_portal/ui/maintenance.py:1270
 msgid "Back"
 msgstr "Voltar"
 
@@ -616,7 +616,7 @@ msgstr "Não"
 #: bazzite_portal/ui/application.py:551 bazzite_portal/ui/application.py:1176
 #: bazzite_portal/ui/application.py:1901 bazzite_portal/ui/application.py:3589
 #: bazzite_portal/ui/application.py:3609 bazzite_portal/ui/image_wizard.py:253
-#: bazzite_portal/ui/maintenance.py:1248
+#: bazzite_portal/ui/maintenance.py:1249
 msgid "Select"
 msgstr "Selecionar"
 
@@ -638,7 +638,7 @@ msgstr "Atualizar informações do sistema"
 msgid "Search for a tool"
 msgstr "Procurar ferramenta"
 
-#: bazzite_portal/ui/application.py:634 bazzite_portal/ui/maintenance.py:1587
+#: bazzite_portal/ui/application.py:634 bazzite_portal/ui/maintenance.py:1588
 msgid "The request failed. Open Logs for details."
 msgstr ""
 "Falha no pedido. Para mais detalhes, verifique seus registros do sistema."
@@ -808,8 +808,8 @@ msgstr ""
 "serão afetados."
 
 #: bazzite_portal/ui/application.py:1002 bazzite_portal/ui/application.py:2570
-#: bazzite_portal/ui/image_wizard.py:177 bazzite_portal/ui/maintenance.py:1525
-#: bazzite_portal/ui/maintenance.py:1544
+#: bazzite_portal/ui/image_wizard.py:177 bazzite_portal/ui/maintenance.py:1526
+#: bazzite_portal/ui/maintenance.py:1545
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -891,7 +891,7 @@ msgid "The issue form could not be prepared. Open Logs for details."
 msgstr ""
 
 #: bazzite_portal/ui/application.py:1176 bazzite_portal/ui/application.py:1180
-#: bazzite_portal/ui/application.py:3607 bazzite_portal/ui/maintenance.py:1269
+#: bazzite_portal/ui/application.py:3607 bazzite_portal/ui/maintenance.py:1270
 #: bazzite_portal/ui/widgets.py:101 bazzite_portal/ui/widgets.py:140
 msgid "D-pad Move"
 msgstr ""
@@ -1227,8 +1227,8 @@ msgstr ""
 
 #: bazzite_portal/ui/application.py:2560 bazzite_portal/ui/maintenance.py:313
 #: bazzite_portal/ui/maintenance.py:523 bazzite_portal/ui/maintenance.py:603
-#: bazzite_portal/ui/maintenance.py:1451 bazzite_portal/ui/maintenance.py:1598
-#: bazzite_portal/ui/maintenance.py:1712
+#: bazzite_portal/ui/maintenance.py:1452 bazzite_portal/ui/maintenance.py:1599
+#: bazzite_portal/ui/maintenance.py:1713
 msgid "System status is unavailable. Open Logs for details."
 msgstr ""
 
@@ -1634,7 +1634,7 @@ msgstr ""
 msgid "Could not load {bazzite} versions. Try again."
 msgstr ""
 
-#: bazzite_portal/ui/image_wizard.py:382 bazzite_portal/ui/maintenance.py:1653
+#: bazzite_portal/ui/image_wizard.py:382 bazzite_portal/ui/maintenance.py:1654
 #, python-brace-format
 msgid "Latest {track}"
 msgstr ""
@@ -1651,7 +1651,7 @@ msgstr ""
 msgid "Succeeded"
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:36 bazzite_portal/ui/maintenance.py:1444
+#: bazzite_portal/ui/maintenance.py:36 bazzite_portal/ui/maintenance.py:1445
 msgid "Refresh"
 msgstr ""
 
@@ -1735,12 +1735,12 @@ msgstr ""
 msgid "Remove cached update data. Future updates may download it again."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:155 bazzite_portal/ui/maintenance.py:1481
-#: bazzite_portal/ui/maintenance.py:1495
+#: bazzite_portal/ui/maintenance.py:155 bazzite_portal/ui/maintenance.py:1482
+#: bazzite_portal/ui/maintenance.py:1496
 msgid "Delete pinned deployments"
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:156 bazzite_portal/ui/maintenance.py:1482
+#: bazzite_portal/ui/maintenance.py:156 bazzite_portal/ui/maintenance.py:1483
 msgid "Choose a saved, pinned system version to delete."
 msgstr ""
 
@@ -1762,7 +1762,7 @@ msgstr ""
 msgid "Rebase to specific image"
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:180 bazzite_portal/ui/maintenance.py:1620
+#: bazzite_portal/ui/maintenance.py:180 bazzite_portal/ui/maintenance.py:1621
 #, python-brace-format
 msgid "Choose a {bazzite} image, release channel and version."
 msgstr ""
@@ -1856,7 +1856,7 @@ msgstr ""
 
 #: bazzite_portal/ui/maintenance.py:309 bazzite_portal/ui/maintenance.py:620
 #: bazzite_portal/ui/maintenance.py:623 bazzite_portal/ui/maintenance.py:626
-#: bazzite_portal/ui/maintenance.py:857 bazzite_portal/ui/maintenance.py:1734
+#: bazzite_portal/ui/maintenance.py:857 bazzite_portal/ui/maintenance.py:1735
 msgid "Could not verify this action. Refresh system information and try again."
 msgstr ""
 
@@ -1873,7 +1873,7 @@ msgstr ""
 #: bazzite_portal/ui/maintenance.py:638 bazzite_portal/ui/maintenance.py:640
 #: bazzite_portal/ui/maintenance.py:649 bazzite_portal/ui/maintenance.py:673
 #: bazzite_portal/ui/maintenance.py:701 bazzite_portal/ui/maintenance.py:829
-#: bazzite_portal/ui/maintenance.py:867 bazzite_portal/ui/maintenance.py:1472
+#: bazzite_portal/ui/maintenance.py:867 bazzite_portal/ui/maintenance.py:1473
 msgid "Open to view operation progress and logs."
 msgstr ""
 
@@ -2031,7 +2031,7 @@ msgstr ""
 msgid "Deployment cancellation failed"
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:647 bazzite_portal/ui/maintenance.py:1760
+#: bazzite_portal/ui/maintenance.py:647 bazzite_portal/ui/maintenance.py:1761
 msgid ""
 "The operation failed. Refresh system information to check the current state."
 msgstr ""
@@ -2267,8 +2267,8 @@ msgid ""
 "files. Restart manually when you are ready to apply the change."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1218 bazzite_portal/ui/maintenance.py:1306
-#: bazzite_portal/ui/maintenance.py:1313 bazzite_portal/ui/maintenance.py:1347
+#: bazzite_portal/ui/maintenance.py:1218 bazzite_portal/ui/maintenance.py:1307
+#: bazzite_portal/ui/maintenance.py:1314 bazzite_portal/ui/maintenance.py:1348
 msgid "The package list changed. Review it again before confirming."
 msgstr ""
 
@@ -2278,115 +2278,115 @@ msgid ""
 "Select the packages to remove. Apps included with {bazzite} stay installed."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1286 bazzite_portal/ui/maintenance.py:1287
+#: bazzite_portal/ui/maintenance.py:1287 bazzite_portal/ui/maintenance.py:1288
 msgid "Remove"
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1290
+#: bazzite_portal/ui/maintenance.py:1291
 msgid "Review the selected packages before removal"
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1301
+#: bazzite_portal/ui/maintenance.py:1302
 msgid "Select at least one layered app to remove."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1317
+#: bazzite_portal/ui/maintenance.py:1318
 msgid "Remove selected layered packages?"
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1318
+#: bazzite_portal/ui/maintenance.py:1319
 msgid "The following packages will be removed:\n"
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1319
+#: bazzite_portal/ui/maintenance.py:1320
 msgid "Remove selected packages"
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1323
+#: bazzite_portal/ui/maintenance.py:1324
 msgid "Remove · controller button"
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1421
+#: bazzite_portal/ui/maintenance.py:1422
 msgid "Layered package information is unavailable."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1422
+#: bazzite_portal/ui/maintenance.py:1423
 msgid "Layered packages"
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1441
+#: bazzite_portal/ui/maintenance.py:1442
 msgid "Could not refresh system information. Open Logs for details."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1453
+#: bazzite_portal/ui/maintenance.py:1454
 msgid "Refresh system information before deleting deployments."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1455
+#: bazzite_portal/ui/maintenance.py:1456
 msgid "A deployment is being deleted."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1457 bazzite_portal/ui/maintenance.py:1462
-#: bazzite_portal/ui/maintenance.py:1474 bazzite_portal/ui/maintenance.py:1476
-#: bazzite_portal/ui/maintenance.py:1479
+#: bazzite_portal/ui/maintenance.py:1458 bazzite_portal/ui/maintenance.py:1463
+#: bazzite_portal/ui/maintenance.py:1475 bazzite_portal/ui/maintenance.py:1477
+#: bazzite_portal/ui/maintenance.py:1480
 #, python-brace-format
 msgid "Could not check saved {bazzite} versions. Open Logs for details."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1457
+#: bazzite_portal/ui/maintenance.py:1458
 msgid "Deployment deletion status could not be verified."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1471
+#: bazzite_portal/ui/maintenance.py:1472
 msgid "Deleting pinned deployment…"
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1474 bazzite_portal/updates/monitor.py:2094
+#: bazzite_portal/ui/maintenance.py:1475 bazzite_portal/updates/monitor.py:2094
 msgid "Pinned deployment deleted"
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1476
+#: bazzite_portal/ui/maintenance.py:1477
 msgid "Deployment deletion failed"
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1478
+#: bazzite_portal/ui/maintenance.py:1479
 msgid "Deployment deletion status unknown"
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1503
+#: bazzite_portal/ui/maintenance.py:1504
 msgid ""
 "Choose a pinned system version to delete. Your running system and next "
 "restart are protected. Personal files stay."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1526 bazzite_portal/ui/maintenance.py:1544
+#: bazzite_portal/ui/maintenance.py:1527 bazzite_portal/ui/maintenance.py:1545
 msgid "Delete"
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1539 bazzite_portal/ui/maintenance.py:1569
+#: bazzite_portal/ui/maintenance.py:1540 bazzite_portal/ui/maintenance.py:1570
 msgid "The deployment list changed. Review it again."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1605
+#: bazzite_portal/ui/maintenance.py:1606
 msgid "Apply or cancel the pending deployment before changing images."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1608 bazzite_portal/ui/maintenance.py:1610
-#: bazzite_portal/ui/maintenance.py:1677
+#: bazzite_portal/ui/maintenance.py:1609 bazzite_portal/ui/maintenance.py:1611
+#: bazzite_portal/ui/maintenance.py:1678
 #, python-brace-format
 msgid "Could not check {bazzite} images. Open Logs for details."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1608
+#: bazzite_portal/ui/maintenance.py:1609
 #, python-brace-format
 msgid "Changing {bazzite} images is unavailable. Open Logs for details."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1610
+#: bazzite_portal/ui/maintenance.py:1611
 msgid "Image-rebase status could not be verified."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1654
+#: bazzite_portal/ui/maintenance.py:1655
 #, python-brace-format
 msgid ""
 "Prepare {image}, {version}, for your next restart? Your personal files stay. "
@@ -2394,123 +2394,123 @@ msgid ""
 "automatically."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1655
+#: bazzite_portal/ui/maintenance.py:1656
 #, python-brace-format
 msgid "Rebase {bazzite} image?"
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1658 bazzite_portal/ui/maintenance.py:1674
+#: bazzite_portal/ui/maintenance.py:1659 bazzite_portal/ui/maintenance.py:1675
 msgid ""
 "Enable unsupported rebase targets in Settings to choose this image or "
 "channel."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1660 bazzite_portal/ui/maintenance.py:1818
+#: bazzite_portal/ui/maintenance.py:1661 bazzite_portal/ui/maintenance.py:1819
 msgid "Rebase"
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1677
+#: bazzite_portal/ui/maintenance.py:1678
 msgid "Deployment information changed. Review it again."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1710
+#: bazzite_portal/ui/maintenance.py:1711
 msgid "The application is closing."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1714
+#: bazzite_portal/ui/maintenance.py:1715
 msgid "Refresh system information before rebasing release channels."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1716
+#: bazzite_portal/ui/maintenance.py:1717
 msgid "Release channel status is unavailable."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1718
+#: bazzite_portal/ui/maintenance.py:1719
 msgid "A release channel rebase request is already in progress."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1720 bazzite_portal/updates/monitor.py:2034
+#: bazzite_portal/ui/maintenance.py:1721 bazzite_portal/updates/monitor.py:2034
 msgid "A release channel rebase is already running."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1722 bazzite_portal/ui/maintenance.py:1727
-#: bazzite_portal/ui/maintenance.py:1749 bazzite_portal/ui/maintenance.py:1759
+#: bazzite_portal/ui/maintenance.py:1723 bazzite_portal/ui/maintenance.py:1728
+#: bazzite_portal/ui/maintenance.py:1750 bazzite_portal/ui/maintenance.py:1760
 msgid "Could not check the release channel. Open Logs for details."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1722
+#: bazzite_portal/ui/maintenance.py:1723
 msgid "Release channel status could not be verified. Refresh to check again."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1727 bazzite_portal/ui/maintenance.py:1765
+#: bazzite_portal/ui/maintenance.py:1728 bazzite_portal/ui/maintenance.py:1766
 msgid "Release channel rebasing is unavailable."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1729
+#: bazzite_portal/ui/maintenance.py:1730
 msgid "The current release channel is not verified."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1731
+#: bazzite_portal/ui/maintenance.py:1732
 msgid "The target release channel is not verified."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1748
+#: bazzite_portal/ui/maintenance.py:1749
 #, python-brace-format
 msgid "Rebasing to {bazzite} {track}…"
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1749
+#: bazzite_portal/ui/maintenance.py:1750
 msgid "The image is being prepared. You can keep using the computer."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1751
+#: bazzite_portal/ui/maintenance.py:1752
 msgid "Rebasing release channel…"
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1755
+#: bazzite_portal/ui/maintenance.py:1756
 #, python-brace-format
 msgid "{bazzite} {track} is ready"
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1756
+#: bazzite_portal/ui/maintenance.py:1757
 msgid "Restart manually to start the new release channel."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1758
+#: bazzite_portal/ui/maintenance.py:1759
 msgid "Release channel rebase failed"
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1763 bazzite_portal/ui/maintenance.py:1772
+#: bazzite_portal/ui/maintenance.py:1764 bazzite_portal/ui/maintenance.py:1773
 #, python-brace-format
 msgid "Rebase to {bazzite} {track}"
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1770
+#: bazzite_portal/ui/maintenance.py:1771
 #, python-brace-format
 msgid "Return to the latest {track} release"
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1773
+#: bazzite_portal/ui/maintenance.py:1774
 msgid "Download newer changes to try after restarting."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1775
+#: bazzite_portal/ui/maintenance.py:1776
 #, python-brace-format
 msgid "Return to the {track} release after restarting."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1810
+#: bazzite_portal/ui/maintenance.py:1811
 #, python-brace-format
 msgid "Return this installation to the latest {target_name} release? "
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1812
+#: bazzite_portal/ui/maintenance.py:1813
 #, python-brace-format
 msgid ""
 "Rebase this {bazzite} installation from {current_track} to {target_name}? "
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1815
+#: bazzite_portal/ui/maintenance.py:1816
 #, python-brace-format
 msgid ""
 "The running image is {version} ({image}). This downloads and prepares the "
@@ -2518,21 +2518,21 @@ msgid ""
 "will not restart automatically; restart manually after the rebase completes."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1817
+#: bazzite_portal/ui/maintenance.py:1818
 #, python-brace-format
 msgid "Return to the latest {target_name} release?"
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1817
+#: bazzite_portal/ui/maintenance.py:1818
 #, python-brace-format
 msgid "Rebase to {target_name}?"
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1826
+#: bazzite_portal/ui/maintenance.py:1827
 msgid "The release channel status changed. Refresh and confirm again."
 msgstr ""
 
-#: bazzite_portal/ui/maintenance.py:1853
+#: bazzite_portal/ui/maintenance.py:1854
 msgid "The release channel request failed."
 msgstr ""
 
