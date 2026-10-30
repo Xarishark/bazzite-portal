@@ -1238,6 +1238,7 @@ class SystemManagementUI:
         for package in target["packages"]:
             check = Gtk.CheckButton()
             package_label = label(package, translate=False)
+            package_label.set_hexpand(True)
             package_label.set_margin_end(40)
             check.set_child(package_label)
             check.add_css_class("layer-selection-row")
