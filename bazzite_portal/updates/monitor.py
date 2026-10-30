@@ -10,6 +10,7 @@ from collections import deque
 from bazzite_portal.updates.model import (
     SERVICES,
     UUPD_MODULES,
+    METERED_SKIP_REASON,
     Snapshot,
     interpret,
     update_event,
@@ -1331,20 +1332,20 @@ class Monitor:
                     if self._journal_historical:
                         if self._uupd_terminal == "failed" or failures:
                             result = "failed"
-                        elif self._uupd_terminal == "success" and not self._journal_failed:
-                            result = "success"
+                        elif self._uupd_terminal in {"success", "skipped"} and not self._journal_failed:
+                            result = self._uupd_terminal
                         else:
                             result = "unknown"
                     else:
                         if (state.get("ExecMainStatus") != "0" or state.get("Result") != "success" or failures
                                 or self._uupd_terminal == "failed"):
                             result = "failed"
-                        elif self._journal_failed or (unit.startswith("uupd") and self._uupd_terminal != "success"):
+                        elif self._journal_failed or (unit.startswith("uupd") and self._uupd_terminal not in {"success", "skipped"}):
                             # Systemd reports success, but unreadable final logs mean
                             # we cannot rule out a module-level partial failure.
                             result = "unknown"
                         else:
-                            result = "success"
+                            result = "skipped" if self._uupd_terminal == "skipped" else "success"
                 self._finish_module_steps(result)
                 if self._journal_failed:
                     error = (error + "\n" + self._journal_failed).strip()
@@ -1593,14 +1594,14 @@ class Monitor:
         """Track only configured modules and state transitions present in UUPD."""
         kind = event["kind"]
         identity = event.get("id", "")
-        if kind == "check_failed":
-            # UUPD deliberately attempts the update after a failed check. Do
-            # not label it up-to-date or permanently fail a possible recovery.
-            self._modules["system"] = {
-                "id": "system", "name": "System", "status": "pending",
-                "detail": N_("Could not check for system updates; attempting the update."),
-                "error": event["error"], "fraction": None, "source": "journal",
-            }
+        if self._uupd_terminal == "skipped" and kind in {
+                "configured", "updating", "module_completed", "failed", "command_error"}:
+            # Actual module activity takes precedence over a contradictory skip.
+            self._uupd_terminal, self._stage = None, ""
+        if kind == "skipped":
+            if not self._modules and not self._failures and self._uupd_terminal is None:
+                self._uupd_terminal, self._stage = "skipped", event["detail"]
+                self._progress_percent = None
         elif kind == "command_error":
             # Only explicitly scoped command failures belong to a module.
             current = self._modules.get(identity)
@@ -1790,6 +1791,11 @@ class Monitor:
             self._uupd_terminal = "failed"
         elif self._uupd_terminal is None:
             self._uupd_terminal = evidence["terminal"]
+        if self._uupd_terminal == "skipped":
+            # Preserve a witnessed preflight skip if its record rotated out,
+            # but never let it override evidence of actual module execution.
+            self._uupd_terminal = None if self._modules or self._failures else "skipped"
+            self._stage = METERED_SKIP_REASON if self._uupd_terminal else ""
         self._final_module_evidence = None
 
     def _finish_journal(self, run):

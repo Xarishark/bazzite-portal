@@ -12,6 +12,7 @@ MAX_LOG_LINES = 1500
 MAX_LOG_BYTES = 256 * 1024
 MAX_MODULE_STEPS = 64
 MAX_PACKAGE_ITEMS = 1024
+METERED_SKIP_REASON = N_("Updates skipped because the network connection is metered.")
 UUPD_MODULES = (
     ("system", N_("System"), N_("Operating system")),
     ("brew", "Brew", N_("CLI Apps")),
@@ -435,12 +436,8 @@ def update_event(line):
         return None
 
     msg = data.get("msg")
-    if msg == "Failed checking for updates":
-        return {
-            "kind": "check_failed",
-            "id": "system",
-            "error": _event_error(data.get("error")) or C_('{uupd} could not check for system updates.', uupd='UUPD'),
-        }
+    if msg == "Skipping updates, network is metered" and data.get("module") is None:
+        return {"kind": "skipped", "detail": METERED_SKIP_REASON}
     if msg in ("Error occurred starting external command", "Error occurred while waiting for external command"):
         module = data.get("module")
         if not isinstance(module, str) or module not in {key for key, _, _ in UUPD_MODULES}:
@@ -450,11 +447,6 @@ def update_event(line):
             "id": module_id(module) if isinstance(module, str) else "",
             "error": _event_error(data.get("error")) or msg,
         }
-    if (msg in ("Executed update check", "Executed skopeo fallback check") and data.get("module") == "system"
-            and isinstance(data.get("update"), bool)):
-        return {"kind": "configured", "id": "system", "name": "System",
-                "enabled": data["update"],
-                "detail": N_("Operating system") if data["update"] else N_("No system update is available.")}
     module_name = data.get("module")
     configuration = data.get("module_configuration")
     if isinstance(configuration, dict) and isinstance(module_name, str) and module_name:
@@ -579,7 +571,9 @@ def module_steps(plan, observed, result):
         row = remaining.pop(planned["id"], None)
         if row is None:
             row = dict(planned)
-            if result in ("success", "failed", "unknown") and row["status"] == "pending":
+            if result == "skipped" and row["status"] == "pending":
+                row.update(status="skipped", detail=METERED_SKIP_REASON, source="journal")
+            elif result in ("success", "failed", "unknown") and row["status"] == "pending":
                 row["status"] = "unknown"
                 row["detail"] = C_('{uupd} has not reported a result for this step.', uupd='UUPD')
         rows.append(row)
