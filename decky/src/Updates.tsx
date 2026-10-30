@@ -66,7 +66,7 @@ export function Updates({state, action, sending, visible, onUpdate, onBack, show
   const notice = !runningUpdate && !startingUpdate ? feedback || blockedReason : "";
   const [visibleRun, setVisibleRun] = useState("");
   const run = updateRun ? snapshot?.run || "" : "";
-  const completed = Boolean(run && !runningUpdate && ["success", "failed", "unknown"].includes(snapshot?.result || ""));
+  const completed = Boolean(run && !runningUpdate && ["success", "failed", "skipped", "unknown"].includes(snapshot?.result || ""));
   useEffect(() => {
     if (!visible) {setVisibleRun(""); return;}
     if (!completed || snapshot?.result_viewed_run === run || (snapshot?.result === "unknown" && dismissedUnknownRun === run)) return;
@@ -92,7 +92,7 @@ export function Updates({state, action, sending, visible, onUpdate, onBack, show
       {steps.filter(step => !(step.status === "skipped" && step.source === "config")).map(step =>
         <PanelSectionRow key={step.id}><ComponentProgress step={step} deploymentReady={Boolean(snapshot?.deployment)} /></PanelSectionRow>)}
       {runningUpdate && !steps.length ? <PanelSectionRow><div className="portal-panel-activity"><Throbber /><span>{snapshot?.stage || m.updating}</span></div></PanelSectionRow> : null}
-      {snapshot && completed && !dismissed ? <PanelSectionRow><div className="portal-panel-status">{snapshot.result === "success" ? m.succeeded : snapshot.result === "unknown" ? m.statusUnknown : m.operationFailed}</div></PanelSectionRow> : null}
+      {snapshot && completed && !dismissed ? <PanelSectionRow><div className="portal-panel-status">{snapshot.result === "success" ? m.succeeded : snapshot.result === "skipped" ? snapshot.stage || m.skipped : snapshot.result === "unknown" ? m.statusUnknown : m.operationFailed}</div></PanelSectionRow> : null}
       {showLogs ? <PanelSectionRow><DialogButton className="portal-panel-button" disabled={!snapshot} onClick={() => navigate(LOGS_ROUTE)}>{m.logs}</DialogButton></PanelSectionRow> : null}
     </PanelSection>
   </Focusable>;

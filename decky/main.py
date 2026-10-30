@@ -276,7 +276,7 @@ class Plugin:
         snapshot = self.state.get("snapshot") or {}
         if (not normal_user() or self.state["connection"] != "connected" or self.watch is None
                 or not isinstance(run, str) or not run or run != snapshot.get("run")
-                or snapshot.get("running") or snapshot.get("result") not in {"success", "failed"}):
+                or snapshot.get("running") or snapshot.get("result") not in {"success", "failed", "skipped"}):
             return {"accepted": False}
         try:
             await self.watch.call("UpdatesViewed", "s", (run,))
