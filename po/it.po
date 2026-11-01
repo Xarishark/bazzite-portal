@@ -7,7 +7,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/app/"
 "\n"
 "POT-Creation-Date: 2026-10-30 12:01+0100\n"
-"PO-Revision-Date: 2026-10-31 09:28+0000\n"
+"PO-Revision-Date: 2026-11-01 11:51+0000\n"
 "Last-Translator: dani3690 <dani3690@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/bazzite-portal/"
 "app/it/>\n"
@@ -54,7 +54,7 @@ msgid ""
 "problem continues, open Logs for details."
 msgstr ""
 "Non è stato possibile verificare la firma del download. Riprova più tardi. "
-"Se il problema persiste, apri i log per maggiori dettagli."
+"Se il problema persiste, apri i registri per maggiori dettagli."
 
 #: bazzite_portal/core/errors.py:70
 msgid ""
@@ -62,7 +62,7 @@ msgid ""
 "the operation log if the problem continues."
 msgstr ""
 "La verifica del checksum di un file scaricato non è riuscita. Riprova più "
-"tardi e, se il problema persiste, consulta i log delle operazioni."
+"tardi e, se il problema persiste, consulta il registro delle operazioni."
 
 #: bazzite_portal/core/errors.py:72
 msgid ""
@@ -92,7 +92,7 @@ msgid ""
 msgstr ""
 "Impossibile scaricare le informazioni sul repository del software. Riprova "
 "più tardi. Se il problema persiste, controlla le impostazioni del repository "
-"oppure apri log."
+"oppure apri registri."
 
 #: bazzite_portal/core/errors.py:121 bazzite_portal/ui/application.py:2230
 #: bazzite_portal/ui/application.py:2233 bazzite_portal/ui/application.py:2506
@@ -112,7 +112,7 @@ msgstr "L'autorizzazione non è stata concessa. Riprova oppure annulla."
 #: bazzite_portal/ui/maintenance.py:1422 bazzite_portal/ui/maintenance.py:1648
 msgid "Details are unavailable. Open Logs for more information."
 msgstr ""
-"I dettagli non sono disponibili. Apri i log per ulteriori informazioni."
+"I dettagli non sono disponibili. Apri i registri per ulteriori informazioni."
 
 #: bazzite_portal/core/i18n.py:104 bazzite_portal/updates/model.py:306
 #: bazzite_portal/updates/model.py:322 bazzite_portal/updates/model.py:358
@@ -128,12 +128,12 @@ msgstr "Croce direzionale"
 #: bazzite_portal/integration/community.py:13
 #, python-brace-format
 msgid "{bazzite} website"
-msgstr "Sito ufficiale {bazzite}"
+msgstr "Sito ufficiale di {bazzite}"
 
 #: bazzite_portal/integration/community.py:13
 #, python-brace-format
 msgid "The {bazzite} project website"
-msgstr "Il sito web del progetto {bazzite}"
+msgstr "Sito web del progetto {bazzite}"
 
 #: bazzite_portal/integration/community.py:14
 msgid "Documentations"
@@ -147,7 +147,7 @@ msgstr "Documentazione di {bazzite}"
 #: bazzite_portal/integration/community.py:15
 #, python-brace-format
 msgid "{bazzite} community and support"
-msgstr "Comunità e assistenza di {bazzite}"
+msgstr "Comunità e supporto di {bazzite}"
 
 #: bazzite_portal/integration/community.py:16
 #, python-brace-format
@@ -157,7 +157,7 @@ msgstr "Repository del codice sorgente di {bazzite}"
 #: bazzite_portal/integration/community.py:17
 #, python-brace-format
 msgid "The {bazzite} subreddit"
-msgstr "Il subreddit di {bazzite}"
+msgstr "Subreddit di {bazzite}"
 
 #: bazzite_portal/integration/community.py:18
 msgid "Forums"
@@ -171,11 +171,12 @@ msgstr "Forum della comunità di {universal_blue}"
 #: bazzite_portal/integration/decky.py:39
 msgid "Plugin installation must run as your normal desktop user."
 msgstr ""
-"L'installazione dei plugin deve essere eseguita come normale utente desktop."
+"L'installazione dei plugin deve essere eseguita con il normale account "
+"utente del desktop."
 
 #: bazzite_portal/integration/decky.py:40
 msgid "This Portal installation does not include the Decky plugin."
-msgstr "Questa installazione del Portale non include il plugin Decky."
+msgstr "Questa installazione di Bazzite Portal non include il plugin Decky."
 
 #: bazzite_portal/integration/decky.py:41
 msgid ""
@@ -195,7 +196,7 @@ msgstr "Decky Loader non è in esecuzione. Avviare il servizio e riprovare."
 
 #: bazzite_portal/integration/decky.py:44
 msgid "Open Steam in Gaming Mode or Big Picture, then try again."
-msgstr "Avviare Steam in modalità gioco o Big Picture prima di riprovare."
+msgstr "Apri Steam in Modalità Gioco o in Big Picture, quindi riprova."
 
 #: bazzite_portal/integration/decky.py:45
 msgid "The installed Decky plugin version could not be verified."
@@ -224,14 +225,14 @@ msgid ""
 "Could not request plugin installation. Open Steam in Gaming Mode or Big "
 "Picture and try again."
 msgstr ""
-"Non è stato possibile richiedere l'installazione del plugin. Aprire Steam in "
-"modalità gioco o Big Picture e riprovare."
+"Non è stato possibile richiedere l'installazione del plugin. Apri Steam in "
+"Modalità Gioco o Big Picture e riprova."
 
 #: bazzite_portal/maintenance/cache_clear.py:68
 #, python-brace-format
 msgid "An {rpm_ostree} transaction is active or status is unavailable."
 msgstr ""
-"È in corso una operazione di {rpm_ostree} oppure il suo stato non è "
+"È in corso una transazione di {rpm_ostree} oppure il suo stato non è "
 "disponibile."
 
 #: bazzite_portal/maintenance/cache_clear.py:75
@@ -244,15 +245,15 @@ msgstr ""
 msgid ""
 "Resolve the selected next-boot deployment before clearing the download cache."
 msgstr ""
-"Prima di svuotare la cache dei download, risolvi il problema con la versione "
-"del sistema selezionata per il prossimo avvio."
+"Prima di svuotare la cache dei download, completa o annulla la modifica di "
+"sistema selezionata per il prossimo avvio."
 
 #: bazzite_portal/maintenance/cancel_pending.py:41
 #, python-brace-format
 msgid "{bootc} deployments cannot be canceled by this workflow."
 msgstr ""
-"Le versioni del sistema {bootc} non possono essere annullate tramite questa "
-"procedura."
+"Questa procedura non consente di annullare le versioni del sistema gestite "
+"da {bootc}."
 
 #: bazzite_portal/maintenance/cancel_pending.py:51
 #: bazzite_portal/maintenance/channel_switch.py:52
@@ -261,23 +262,23 @@ msgstr ""
 #: bazzite_portal/maintenance/reset_layers.py:49
 #, python-brace-format
 msgid "An {rpm_ostree} transaction is active."
-msgstr "È in corso una operazione di {rpm_ostree}."
+msgstr "È in corso una transazione di {rpm_ostree}."
 
 #: bazzite_portal/maintenance/cancel_pending.py:64
 msgid "There is no pending deployment."
-msgstr "Non è presente alcuna operazione di sistema in sospeso."
+msgstr "Non è presente alcuna operazione di sistema in attesa."
 
 #: bazzite_portal/maintenance/cancel_pending.py:66
 msgid "The next boot is a scheduled rollback or other non-staged deployment."
 msgstr ""
-"Al prossimo avvio è previsto il ripristino a una versione precedente del "
-"sistema oppure l'avvio di un'altra versione non predisposta come "
-"aggiornamento in sospeso."
+"Al prossimo avvio è programmato il ripristino a una versione precedente "
+"oppure è stata selezionata una versione del sistema diversa "
+"dall'aggiornamento in attesa."
 
 #: bazzite_portal/maintenance/cancel_pending.py:68
 msgid "The pending deployment is pinned or its pin state is unknown."
 msgstr ""
-"La versione del sistema in sospeso è contrassegnata per impedirne la "
+"La versione del sistema in attesa è contrassegnata per impedirne la "
 "rimozione oppure non è possibile determinarne lo stato."
 
 #: bazzite_portal/maintenance/channel_switch.py:63
@@ -291,15 +292,15 @@ msgstr ""
 #: bazzite_portal/maintenance/channel_switch.py:91
 msgid "Resolve the pending deployment before changing update channels."
 msgstr ""
-"Completa l'operazione di sistema in sospeso prima di cambiare il canale "
-"degli aggiornamenti."
+"Completa l'operazione di sistema in attesa prima di cambiare il canale degli "
+"aggiornamenti."
 
 #: bazzite_portal/maintenance/channel_switch.py:159
 msgid ""
 "You’re already using this image and channel. Use Update to get the latest "
 "version."
 msgstr ""
-"Stai già utilizzando questa immagine e questo canale. Usa Aggiorna per "
+"Stai già utilizzando questa immagine e questo canale. Seleziona Aggiorna per "
 "ottenere la versione più recente."
 
 #: bazzite_portal/maintenance/delete_deployments.py:64
@@ -312,8 +313,8 @@ msgstr ""
 #: bazzite_portal/ui/maintenance.py:1463
 msgid "No saved, pinned deployments can be deleted."
 msgstr ""
-"Le versioni del sistema salvate e contrassegnate per la conservazione non "
-"possono essere eliminate."
+"Non è possibile eliminare versioni del sistema salvate e contrassegnate per "
+"la conservazione."
 
 #: bazzite_portal/maintenance/delete_deployments.py:100
 #: bazzite_portal/maintenance/deployments.py:12
@@ -331,14 +332,12 @@ msgstr "Sconosciuto"
 
 #: bazzite_portal/maintenance/image_switch.py:111
 msgid "Resolve the pending deployment before changing images."
-msgstr ""
-"Prima di cambiare immagine, completa l'operazione di sistema in sospeso."
+msgstr "Prima di cambiare immagine, completa l'operazione di sistema in attesa."
 
 #: bazzite_portal/maintenance/image_switch.py:118
 #, python-brace-format
 msgid "Only supported official {bazzite} image references can be changed."
-msgstr ""
-"Puoi passare solo a un'immagine di sistema ufficiale supportata di {bazzite}."
+msgstr "Puoi passare solo a immagini ufficiali e supportate di {bazzite}."
 
 #: bazzite_portal/maintenance/image_switch.py:166
 #, python-brace-format
@@ -365,8 +364,8 @@ msgid ""
 "This image and version are already running. Use Update to check for a newer "
 "version."
 msgstr ""
-"Questa immagine e questa versione sono già in uso. Usa Aggiorna per "
-"verificare se è disponibile una versione più recente."
+"Questa immagine e questa versione sono già in uso. Seleziona Aggiorna per "
+"verificare la disponibilità di una versione più recente."
 
 #: bazzite_portal/maintenance/logs.py:147
 msgid "Some operation output was unavailable or omitted."
@@ -381,7 +380,7 @@ msgstr "Per il prossimo avvio è selezionata una versione diversa del sistema."
 #: bazzite_portal/maintenance/reset_layers.py:86
 #: bazzite_portal/ui/maintenance.py:816
 msgid "No requested package layers are present."
-msgstr "Non sono presenti i package layer richiesti."
+msgstr "Nessuno dei pacchetti richiesti risulta aggiunto tramite layering."
 
 #: bazzite_portal/services/agent.py:424
 #, python-brace-format
@@ -395,7 +394,7 @@ msgstr "Impossibile tornare alla versione precedente di {bazzite}"
 
 #: bazzite_portal/services/agent.py:424
 msgid "Open Updates to inspect the operation log."
-msgstr "Apri Aggiornamenti per consultare i log delle operazioni."
+msgstr "Apri Aggiornamenti per consultare il registro delle operazioni."
 
 #: bazzite_portal/services/agent.py:474 bazzite_portal/ui/application.py:580
 #: bazzite_portal/ui/application.py:763 bazzite_portal/ui/application.py:3685
@@ -418,13 +417,13 @@ msgstr "C'è un'altra operazione in attesa."
 
 #: bazzite_portal/services/agent.py:682
 msgid "Operation request failed."
-msgstr "Si è verificato un errore durante l'operazione."
+msgstr "La richiesta dell’operazione non è riuscita."
 
 #: bazzite_portal/services/agent.py:770 bazzite_portal/ui/application.py:2521
 msgid "Could not read update status. Open Logs for details."
 msgstr ""
-"Non è stato possibile leggere lo stato dell'aggiornamento. Apri i log per "
-"maggiori dettagli."
+"Non è stato possibile leggere lo stato dell'aggiornamento. Apri i registri "
+"per maggiori dettagli."
 
 #: bazzite_portal/services/tray.py:288 bazzite_portal/updates/model.py:360
 msgid "Updating"
@@ -439,7 +438,7 @@ msgstr ""
 
 #: bazzite_portal/services/tray.py:289
 msgid "Restart pending"
-msgstr "Riavvio in sospeso"
+msgstr "Riavvio in attesa"
 
 #: bazzite_portal/services/tray.py:289
 #, python-brace-format
@@ -605,8 +604,8 @@ msgstr "Il controller non è disponibile. Ricollegalo e riprova."
 #: bazzite_portal/ui/application.py:3009 bazzite_portal/ui/application.py:3098
 msgid "Could not save app preferences. Open Logs for details."
 msgstr ""
-"Non è stato possibile salvare le preferenze dell'applicazione. Apri i log "
-"per maggiori dettagli."
+"Non è stato possibile salvare le preferenze dell'applicazione. Apri i "
+"registri per maggiori dettagli."
 
 #: bazzite_portal/ui/application.py:522 bazzite_portal/ui/application.py:857
 #: bazzite_portal/ui/application.py:1847 bazzite_portal/ui/application.py:1850
@@ -648,7 +647,7 @@ msgstr "Cerca uno strumento"
 
 #: bazzite_portal/ui/application.py:634 bazzite_portal/ui/maintenance.py:1588
 msgid "The request failed. Open Logs for details."
-msgstr "La richiesta non è riuscita. Apri i log per maggiori dettagli."
+msgstr "La richiesta non è riuscita. Apri i registri per maggiori dettagli."
 
 #: bazzite_portal/ui/application.py:747 bazzite_portal/ui/application.py:2487
 #, python-brace-format
@@ -665,27 +664,29 @@ msgstr "Esplora"
 
 #: bazzite_portal/ui/application.py:773
 msgid "Browse setup, fixes, and utilities from the system Portal."
-msgstr "Scopri strumenti e utilità per il tuo sistema."
+msgstr ""
+"Esplora strumenti di configurazione, soluzioni e utilità nel Portale di "
+"sistema."
 
 #: bazzite_portal/ui/application.py:774
 #, python-brace-format
 msgid "View deployments, package layers and {rpm_ostree} status."
 msgstr ""
-"Consulta le versioni del sistema, i pacchetti aggiunti tramite layering e lo "
-"stato di {rpm_ostree}."
+"Visualizza le versioni del sistema, i pacchetti aggiunti tramite layering e "
+"lo stato di {rpm_ostree}."
 
 #: bazzite_portal/ui/application.py:775
 msgid ""
 "Cancel a pending deployment, remove layered apps or recover your system."
 msgstr ""
-"Annulla un'operazione di sistema in sospeso, rimuovi le applicazioni "
-"aggiunte tramite layering o ripristina il sistema."
+"Annulla una modifica di sistema in attesa, rimuovi le applicazioni aggiunte "
+"tramite layering o ripristina il sistema."
 
 #: bazzite_portal/ui/application.py:776
 #, python-brace-format
 msgid "Report a problem, collect system logs, or reset {steam}."
 msgstr ""
-"Segnala un problema, raccogli i log di sistema oppure ripristina {steam}."
+"Segnala un problema, raccogli i registri di sistema o ripristina {steam}."
 
 #: bazzite_portal/ui/application.py:777
 #, python-brace-format
@@ -696,7 +697,7 @@ msgstr "Documentazione, sito web e collegamento alla comunità di {bazzite}."
 #, python-brace-format
 msgid "View {bazzite} release and project announcements."
 msgstr ""
-"Consulta gli annunci sulle versioni e le novità ufficiali di {bazzite}."
+"Visualizza gli annunci sulle versioni e le novità ufficiali di {bazzite}."
 
 #: bazzite_portal/ui/application.py:789 bazzite_portal/ui/application.py:2710
 msgid "The configuration file for this category is missing or invalid."
@@ -716,8 +717,8 @@ msgstr "Strumenti contrassegnati"
 #, python-brace-format
 msgid "Get help, collect diagnostic logs, or repair the {steam} client."
 msgstr ""
-"Richiedi assistenza, raccogli i log diagnostici oppure ripara il client "
-"{steam}."
+"Richiedi assistenza, raccogli i registri diagnostici oppure ripara il client "
+"di {steam}."
 
 #: bazzite_portal/ui/application.py:813
 msgid "Report a problem"
@@ -727,16 +728,17 @@ msgstr "Segnala un problema"
 #, python-brace-format
 msgid "Collect relevant logs and open a {bazzite} {github} issue."
 msgstr ""
-"Raccogli i log necessari e apri una segnalazione per {bazzite} su {github}."
+"Raccogli i registri necessari e apri una segnalazione per {bazzite} su "
+"{github}."
 
 #: bazzite_portal/ui/application.py:821
 msgid "Collect system logs"
-msgstr "Raccogli i log di sistema"
+msgstr "Raccogli i registri di sistema"
 
 #: bazzite_portal/ui/application.py:821
 msgid "Save logs and hardware details for troubleshooting on your Desktop."
 msgstr ""
-"Salva sul desktop i log di sistema e le informazioni hardware per la "
+"Salva sul Desktop i registri di sistema e le informazioni hardware per la "
 "risoluzione dei problemi."
 
 #: bazzite_portal/ui/application.py:828 bazzite_portal/ui/application.py:1003
@@ -757,26 +759,26 @@ msgstr "Chiudi"
 
 #: bazzite_portal/ui/application.py:929
 msgid "Collecting system logs"
-msgstr "Raccolta dei log di sistema in corso"
+msgstr "Raccolta dei registri di sistema in corso"
 
 #: bazzite_portal/ui/application.py:960
 msgid "Could not collect system logs. Open Logs for details."
 msgstr ""
-"Non è stato possibile raccogliere i log di sistema. Apri i log per maggiori "
-"dettagli."
+"Non è stato possibile raccogliere i registri di sistema. Apri i registri per "
+"maggiori dettagli."
 
 #: bazzite_portal/ui/application.py:963
 #, python-brace-format
 msgid "System logs collected and saved to {directory}."
-msgstr "I log di sistema sono stati raccolti e salvati in {directory}."
+msgstr "I registri di sistema sono stati raccolti e salvati in {directory}."
 
 #: bazzite_portal/ui/application.py:969
 msgid "System logs ready"
-msgstr "I log di sistema sono pronti"
+msgstr "Registri di sistema pronti"
 
 #: bazzite_portal/ui/application.py:972
 msgid "System logs are ready."
-msgstr "I log di sistema sono pronti."
+msgstr "I registri di sistema sono pronti."
 
 #: bazzite_portal/ui/application.py:976 bazzite_portal/ui/application.py:1123
 msgid "Warnings"
@@ -787,12 +789,12 @@ msgid ""
 "Some diagnostic information could not be collected. See the collected logs "
 "for details."
 msgstr ""
-"Non è stato possibile recuperare tutti i dati diagnostici. Consulta i log "
-"per maggiori dettagli."
+"Non è stato possibile recuperare tutti i dati diagnostici. Consulta i "
+"registri per maggiori dettagli."
 
 #: bazzite_portal/ui/application.py:984 bazzite_portal/ui/application.py:1132
 msgid "Open logs folder"
-msgstr "Apri la cartella dei log"
+msgstr "Apri la cartella dei registri"
 
 #: bazzite_portal/ui/application.py:998
 #, python-brace-format
@@ -805,7 +807,7 @@ msgid ""
 "{steam} will stop and sign you out. This only cleans the steam installation "
 "folder."
 msgstr ""
-"{steam} verrà chiuso e verrai disconnesso dal tuo account. Questa operazione "
+"{steam} verrà chiuso e il tuo account verrà disconnesso. Questa operazione "
 "pulisce solo la cartella di installazione di steam."
 
 #: bazzite_portal/ui/application.py:1001
@@ -832,8 +834,8 @@ msgstr "Ripristino di {steam} in corso"
 #, python-brace-format
 msgid "{steam} reset did not complete. Open Logs for details."
 msgstr ""
-"Il ripristino di {steam} non è stato completato. Apri i log per maggiori "
-"dettagli."
+"Il ripristino di {steam} non è stato completato. Apri i registri per "
+"maggiori dettagli."
 
 #: bazzite_portal/ui/application.py:1052
 #, python-brace-format
@@ -863,12 +865,12 @@ msgid ""
 "You can now open {steam}. Its client files need to download again, so the "
 "first launch may take a while."
 msgstr ""
-"Ora puoi avviare {steam}. I file del client dovranno essere scaricati di "
+"Ora puoi avviare {steam}. I file del client devono essere scaricati di "
 "nuovo, quindi il primo avvio potrebbe richiedere più tempo del solito."
 
 #: bazzite_portal/ui/application.py:1071
 msgid "Collecting logs"
-msgstr "Raccolta dei log in corso"
+msgstr "Raccolta dei registri in corso"
 
 #: bazzite_portal/ui/application.py:1083
 msgid "Working on this device…"
@@ -877,29 +879,29 @@ msgstr "Operazione in corso su questo dispositivo…"
 #: bazzite_portal/ui/application.py:1103
 msgid "Could not collect diagnostic logs. Open Logs for details."
 msgstr ""
-"Non è stato possibile raccogliere i log diagnostici. Apri i log per maggiori "
-"dettagli."
+"Non è stato possibile raccogliere i registri diagnostici. Apri i registri "
+"per maggiori dettagli."
 
 #: bazzite_portal/ui/application.py:1107
 #, python-brace-format
 msgid "Logs collected and saved to {directory}."
-msgstr "I log sono stati raccolti e salvati in {directory}."
+msgstr "I registri sono stati raccolti e salvati in {directory}."
 
 #: bazzite_portal/ui/application.py:1116
 msgid "Logs ready"
-msgstr "I log sono pronti"
+msgstr "Registri pronti"
 
 #: bazzite_portal/ui/application.py:1119
 msgid "Logs are ready."
-msgstr "I log sono pronti."
+msgstr "I registri sono pronti."
 
 #: bazzite_portal/ui/application.py:1125
 msgid ""
 "Attach only the logs relevant to your problem. Then fill in the remaining "
 "fields and describe the issue."
 msgstr ""
-"Allega solo i log pertinenti al problema riscontrato. Poi compila i campi "
-"rimanenti e descrivi il problema."
+"Allega solo i registri pertinenti al problema riscontrato. Poi compila i "
+"campi rimanenti e descrivi il problema."
 
 #: bazzite_portal/ui/application.py:1133
 #, python-brace-format
@@ -909,8 +911,8 @@ msgstr "Invia una segnalazione su {github}"
 #: bazzite_portal/ui/application.py:1137
 msgid "The issue form could not be prepared. Open Logs for details."
 msgstr ""
-"Non è stato possibile preparare il modulo per la segnalazione. Apri i log "
-"per maggiori dettagli."
+"Non è stato possibile preparare il modulo per la segnalazione. Apri i "
+"registri per maggiori dettagli."
 
 #: bazzite_portal/ui/application.py:1176 bazzite_portal/ui/application.py:1180
 #: bazzite_portal/ui/application.py:3607 bazzite_portal/ui/maintenance.py:1270
@@ -925,12 +927,12 @@ msgstr "Percorso: {path}"
 
 #: bazzite_portal/ui/application.py:1226
 msgid "Could not open logs folder"
-msgstr "Non è stato possibile aprire la cartella dei log"
+msgstr "Non è stato possibile aprire la cartella dei registri"
 
 #: bazzite_portal/ui/application.py:1238
 #, python-brace-format
 msgid "{action}. Open Logs for details."
-msgstr "{action}. Apri i log per maggiori dettagli."
+msgstr "{action}. Apri i registri per maggiori dettagli."
 
 #: bazzite_portal/ui/application.py:1267
 #, python-brace-format
@@ -1048,7 +1050,7 @@ msgstr "Strumento"
 
 #: bazzite_portal/ui/application.py:1835
 msgid "This command opens in your desktop terminal."
-msgstr "Questo comando viene eseguito nel terminale del desktop."
+msgstr "Questo comando viene eseguito nel terminale del Desktop."
 
 #: bazzite_portal/ui/application.py:1841
 msgid "Do you want to run this tool?"
@@ -1069,11 +1071,11 @@ msgstr "Note di rilascio"
 
 #: bazzite_portal/ui/application.py:2033
 msgid "No log output available yet."
-msgstr "Il log non è ancora disponibile."
+msgstr "Il registro non contiene ancora dati."
 
 #: bazzite_portal/ui/application.py:2036 bazzite_portal/ui/application.py:2477
 msgid "Update log"
-msgstr "Log dell'aggiornamento"
+msgstr "Registro dell'aggiornamento"
 
 #: bazzite_portal/ui/application.py:2054 bazzite_portal/ui/application.py:2513
 #, python-brace-format
@@ -1081,7 +1083,7 @@ msgid ""
 "An {rpm_ostree} transaction is active. Wait for it to finish before updating "
 "or restarting."
 msgstr ""
-"È in corso un'operazione di {rpm_ostree}. Attendi che termini prima di "
+"È in corso una transazione di {rpm_ostree}. Attendi che termini prima di "
 "aggiornare o riavviare il sistema."
 
 #: bazzite_portal/ui/application.py:2065 bazzite_portal/ui/application.py:2146
@@ -1133,7 +1135,7 @@ msgstr "In attesa dell'aggiornamento"
 #: bazzite_portal/ui/application.py:2140
 msgid "Update failed. Open the update log for details."
 msgstr ""
-"Aggiornamento non riuscito. Apri il log dell'aggiornamento per maggiori "
+"Aggiornamento non riuscito. Apri il registro dell'aggiornamento per maggiori "
 "dettagli."
 
 #: bazzite_portal/ui/application.py:2142 bazzite_portal/updates/model.py:454
@@ -1154,11 +1156,11 @@ msgstr "Controllo dello stato dell'aggiornamento…"
 
 #: bazzite_portal/ui/application.py:2174
 msgid "Logs unavailable"
-msgstr "I log non sono disponibili"
+msgstr "I registri non sono disponibili"
 
 #: bazzite_portal/ui/application.py:2176
 msgid "No module log output"
-msgstr "Nessun risultato nel log del modulo"
+msgstr "Il registro del modulo non contiene dati"
 
 #: bazzite_portal/ui/application.py:2246
 #, python-brace-format
@@ -1238,7 +1240,7 @@ msgid ""
 "A system change is pending, but {app_name} could not verify it. Restart is "
 "unavailable until its status can be checked."
 msgstr ""
-"Una modifica al sistema è in sospeso, ma {app_name} non è riuscita a "
+"Una modifica al sistema è in attesa, ma {app_name} non è riuscita a "
 "verificarla. Il riavvio non è disponibile finché non sarà possibile "
 "controllarne lo stato."
 
@@ -1246,8 +1248,8 @@ msgstr ""
 #, python-brace-format
 msgid "{bazzite} updates are unavailable. Open Logs for details."
 msgstr ""
-"Gli aggiornamenti di {bazzite} non sono disponibili. Apri i log per maggiori "
-"dettagli."
+"Gli aggiornamenti di {bazzite} non sono disponibili. Apri i registri per "
+"maggiori dettagli."
 
 #: bazzite_portal/ui/application.py:2526
 msgid "Updating…"
@@ -1260,8 +1262,8 @@ msgstr "Un'altra operazione è in corso"
 #: bazzite_portal/ui/application.py:2557
 msgid "The update request could not be sent. Open Logs for details."
 msgstr ""
-"Non è stato possibile inviare la richiesta di aggiornamento. Apri i log per "
-"maggiori dettagli."
+"Non è stato possibile inviare la richiesta di aggiornamento. Apri i registri "
+"per maggiori dettagli."
 
 #: bazzite_portal/ui/application.py:2560 bazzite_portal/ui/maintenance.py:313
 #: bazzite_portal/ui/maintenance.py:523 bazzite_portal/ui/maintenance.py:603
@@ -1269,7 +1271,8 @@ msgstr ""
 #: bazzite_portal/ui/maintenance.py:1713
 msgid "System status is unavailable. Open Logs for details."
 msgstr ""
-"Lo stato del sistema non è disponibile. Apri i log per maggiori dettagli."
+"Lo stato del sistema non è disponibile. Apri i registri per maggiori "
+"dettagli."
 
 #: bazzite_portal/ui/application.py:2584
 msgid "Read the rebase documentation"
@@ -1404,7 +1407,8 @@ msgstr "Aggiungi {app_name} a {steam}"
 #: bazzite_portal/ui/application.py:2928
 #, python-brace-format
 msgid "Open this app from your {steam} library, including Gaming Mode."
-msgstr "Apri questa app dalla libreria di {steam}, anche in modalità gioco."
+msgstr ""
+"Apri questa applicazione dalla libreria di {steam}, anche in Modalità Gioco."
 
 #: bazzite_portal/ui/application.py:2936
 msgid "Local app data"
@@ -1551,18 +1555,18 @@ msgstr "Rivedi la selezione"
 
 #: bazzite_portal/ui/application.py:3686
 msgid "Open a Portal tool"
-msgstr "Apri uno strumento del portale"
+msgstr "Apri uno strumento di Bazzite Portal"
 
 #: bazzite_portal/ui/decky.py:77
 msgid "Bazzite Portal in Gaming Mode"
-msgstr "Bazzite Portal in modalità gioco"
+msgstr "Bazzite Portal in Modalità Gioco"
 
 #: bazzite_portal/ui/decky.py:78
 msgid ""
 "Install the Bazzite Portal plugin for Decky Loader to manage updates and "
 "rollbacks directly from Gaming Mode."
 msgstr ""
-"Installare il plugin Bazzite Portal per Decky Loader per gestire gli "
+"Installa il plugin Bazzite Portal per Decky Loader per gestire gli "
 "aggiornamenti e il ripristino alle versioni precedenti direttamente dalla "
 "modalità gioco."
 
@@ -1587,7 +1591,7 @@ msgstr "Installa il plugin Decky di Bazzite Portal"
 
 #: bazzite_portal/ui/decky.py:92
 msgid "Use Bazzite Portal from Decky Loader in Gaming Mode."
-msgstr "Utilizza Bazzite Portal tramite Decky Loader in modalità gioco."
+msgstr "Utilizza Bazzite Portal tramite Decky Loader in Modalità Gioco."
 
 #: bazzite_portal/ui/decky.py:107
 msgid "Checking Decky plugin…"
