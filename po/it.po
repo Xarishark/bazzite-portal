@@ -7,7 +7,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/app/"
 "\n"
 "POT-Creation-Date: 2026-10-30 12:01+0100\n"
-"PO-Revision-Date: 2026-11-01 11:51+0000\n"
+"PO-Revision-Date: 2026-11-01 20:00+0000\n"
 "Last-Translator: dani3690 <dani3690@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/bazzite-portal/"
 "app/it/>\n"
@@ -1684,7 +1684,7 @@ msgstr "Scegli un'immagine"
 
 #: bazzite_portal/ui/image_wizard.py:269 bazzite_portal/ui/image_wizard.py:343
 msgid "Choose Channel"
-msgstr "Scegli un canale"
+msgstr "Scegli il canale"
 
 #: bazzite_portal/ui/image_wizard.py:270 bazzite_portal/ui/image_wizard.py:380
 #, python-brace-format
@@ -1758,13 +1758,13 @@ msgstr "Canale di rilascio"
 
 #: bazzite_portal/ui/maintenance.py:76
 msgid "Deployment overview"
-msgstr "Panoramica della distribuzione"
+msgstr "Panoramica delle versioni del sistema"
 
 #: bazzite_portal/ui/maintenance.py:76
 msgid "Read-only details for the running and next-restart deployments."
 msgstr ""
-"Informazioni in sola lettura sulla distribuzione attuale e su quella "
-"prevista al prossimo riavvio."
+"Informazioni in sola lettura sulla versione del sistema attualmente in uso e "
+"su quella selezionata per il prossimo riavvio."
 
 #: bazzite_portal/ui/maintenance.py:77
 msgid "Loading next-restart information…"
@@ -1806,7 +1806,7 @@ msgstr ""
 
 #: bazzite_portal/ui/maintenance.py:138
 msgid "Manage Deployments"
-msgstr "Gestione delle distribuzioni"
+msgstr "Gestisci le versioni del sistema"
 
 #: bazzite_portal/ui/maintenance.py:138
 msgid "Manage prepared updates and saved system versions."
@@ -1814,7 +1814,7 @@ msgstr "Gestire gli aggiornamenti pronti e le versioni del sistema salvate."
 
 #: bazzite_portal/ui/maintenance.py:139 bazzite_portal/ui/maintenance.py:687
 msgid "Checking pending deployment…"
-msgstr "Verifica della distribuzione in attesa…"
+msgstr "Verifica della modifica di sistema in attesa…"
 
 #: bazzite_portal/ui/maintenance.py:145 bazzite_portal/ui/maintenance.py:882
 #: bazzite_portal/ui/maintenance.py:974
@@ -1874,19 +1874,19 @@ msgstr ""
 
 #: bazzite_portal/ui/maintenance.py:190 bazzite_portal/ui/maintenance.py:1221
 msgid "Choose layered packages to remove"
-msgstr "Selezionare i pacchetti aggiunti tramite layering da eliminare"
+msgstr "Scegli i pacchetti aggiunti tramite layering da rimuovere"
 
 #: bazzite_portal/ui/maintenance.py:190 bazzite_portal/ui/maintenance.py:833
 msgid ""
 "Choose which layered packages to remove. A restart is needed to apply the "
 "change."
 msgstr ""
-"Scegliere quali pacchetti aggiunti tramite layering eliminare. Per applicare "
-"la modifica, è necessario riavviare il sistema."
+"Scegli quali pacchetti aggiunti tramite layering rimuovere. Per applicare la "
+"modifica, è necessario riavviare il sistema."
 
 #: bazzite_portal/ui/maintenance.py:196 bazzite_portal/ui/maintenance.py:1211
 msgid "Remove all layered apps"
-msgstr "Rimuovere tutte le applicazioni aggiunte tramite layering"
+msgstr "Rimuovi tutte le applicazioni aggiunte tramite layering"
 
 #: bazzite_portal/ui/maintenance.py:197 bazzite_portal/ui/maintenance.py:834
 #, python-brace-format
@@ -1901,7 +1901,8 @@ msgstr ""
 #: bazzite_portal/ui/maintenance.py:236
 msgid "The system did not report a recognizable deployment state."
 msgstr ""
-"Il sistema non ha restituito uno stato riconoscibile della distribuzione."
+"Il sistema non ha restituito uno stato riconoscibile della versione "
+"installata."
 
 #: bazzite_portal/ui/maintenance.py:253 bazzite_portal/ui/maintenance.py:272
 #, python-brace-format
@@ -1932,7 +1933,7 @@ msgstr "La destinazione del prossimo riavvio è sconosciuta."
 #: bazzite_portal/ui/maintenance.py:281
 #, python-brace-format
 msgid "Transaction: {transaction}"
-msgstr "Operazione: {transaction}"
+msgstr "Transazione: {transaction}"
 
 #: bazzite_portal/ui/maintenance.py:291 bazzite_portal/ui/maintenance.py:395
 msgid "Saved deployment"
@@ -1991,7 +1992,7 @@ msgstr ""
 #: bazzite_portal/ui/maintenance.py:701 bazzite_portal/ui/maintenance.py:829
 #: bazzite_portal/ui/maintenance.py:867 bazzite_portal/ui/maintenance.py:1473
 msgid "Open to view operation progress and logs."
-msgstr "Aprire per visualizzare l'avanzamento dell'operazione e i registri."
+msgstr "Apri per visualizzare l'avanzamento dell'operazione e i registri."
 
 #: bazzite_portal/ui/maintenance.py:330
 msgid "Cancelling rollback…"
@@ -2021,11 +2022,11 @@ msgstr ""
 #: bazzite_portal/ui/maintenance.py:344 bazzite_portal/ui/maintenance.py:588
 #: bazzite_portal/ui/maintenance.py:973
 msgid "Cancel rollback"
-msgstr "Annullare il ripristino alla versione precedente"
+msgstr "Annulla il ripristino alla versione precedente"
 
 #: bazzite_portal/ui/maintenance.py:345 bazzite_portal/ui/maintenance.py:350
 msgid "Roll back to previous deployment"
-msgstr "Ripristinare la versione precedente del sistema"
+msgstr "Ripristina la versione precedente del sistema"
 
 #: bazzite_portal/ui/maintenance.py:346
 msgid "Rollback already prepared"
@@ -2036,8 +2037,8 @@ msgid ""
 "Keep your current system for the next restart. The saved version remains "
 "available."
 msgstr ""
-"Mantenere il sistema attuale al prossimo riavvio. La versione salvata "
-"rimarrà disponibile."
+"Mantieni il sistema attuale al prossimo riavvio. La versione salvata rimarrà "
+"disponibile."
 
 #: bazzite_portal/ui/maintenance.py:355
 #, python-brace-format
@@ -2052,7 +2053,7 @@ msgid ""
 "Restore the previous system version on the next boot. Personal files are "
 "preserved."
 msgstr ""
-"Ripristinare la versione precedente del sistema al prossimo avvio. I file "
+"Ripristina la versione precedente del sistema al prossimo avvio. I file "
 "personali verranno conservati."
 
 #: bazzite_portal/ui/maintenance.py:359 bazzite_portal/ui/maintenance.py:528
@@ -2067,7 +2068,7 @@ msgstr "Visualizza il risultato dell'operazione"
 #: bazzite_portal/ui/maintenance.py:550
 msgid "Rollback failed. Open Logs for details."
 msgstr ""
-"Ripristino alla versione precedente non riuscito. Aprire i registri per "
+"Il ripristino alla versione precedente non è riuscito. Apri i registri per "
 "maggiori dettagli."
 
 #: bazzite_portal/ui/maintenance.py:586
@@ -2080,7 +2081,7 @@ msgid ""
 "Keep your current system for the next restart. The saved deployment, version "
 "{version}, will remain available."
 msgstr ""
-"Mantenere il sistema attuale al prossimo riavvio. La versione salvata "
+"Mantieni il sistema attuale al prossimo riavvio. La versione salvata "
 "{version} rimarrà disponibile."
 
 #: bazzite_portal/ui/maintenance.py:592
@@ -2094,9 +2095,9 @@ msgid ""
 "Select the saved deployment, version {version}, for your next boot. A "
 "restart is required to use it. Your personal files are preserved."
 msgstr ""
-"Selezionare la versione salvata {version} da utilizzare al prossimo avvio. "
-"Per applicare la modifica, è necessario riavviare il sistema. I file "
-"personali verranno conservati."
+"Seleziona la versione salvata {version} da utilizzare al prossimo avvio. Per "
+"applicare la modifica, è necessario riavviare il sistema. I file personali "
+"verranno conservati."
 
 #: bazzite_portal/ui/maintenance.py:594 bazzite_portal/ui/maintenance.py:973
 msgid "Rollback"
@@ -2118,7 +2119,7 @@ msgstr "In attesa di conferma dell'avvio della procedura di annullamento…"
 #: bazzite_portal/ui/maintenance.py:697
 msgid "Could not check the pending system change. Open Logs for details."
 msgstr ""
-"Non è stato possibile verificare le modifiche di sistema in attesa. Aprire i "
+"Non è stato possibile verificare le modifiche di sistema in attesa. Apri i "
 "registri per maggiori dettagli."
 
 #: bazzite_portal/ui/maintenance.py:610
@@ -2137,7 +2138,7 @@ msgstr ""
 
 #: bazzite_portal/ui/maintenance.py:615
 msgid "Refresh the deployment overview before cancelling."
-msgstr "Aggiornare il riepilogo delle versioni di sistema prima di annullare."
+msgstr "Aggiorna il riepilogo delle versioni di sistema prima di annullare."
 
 #: bazzite_portal/ui/maintenance.py:617
 msgid "No verified prepared deployment is eligible for cancellation."
@@ -2177,7 +2178,7 @@ msgstr "Non è stato possibile annullare la versione del sistema in attesa"
 msgid ""
 "The operation failed. Refresh system information to check the current state."
 msgstr ""
-"L'operazione non è riuscita. Aggiornare le informazioni di sistema per "
+"L'operazione non è riuscita. Aggiorna le informazioni di sistema per "
 "verificare lo stato attuale."
 
 #: bazzite_portal/ui/maintenance.py:649
@@ -2211,7 +2212,7 @@ msgstr ""
 #: bazzite_portal/ui/maintenance.py:687
 msgid "Refresh deployment information to check cancellation."
 msgstr ""
-"Aggiornare le informazioni sulla versione del sistema per verificare se è "
+"Aggiorna le informazioni sulla versione del sistema per verificare se è "
 "possibile annullarla."
 
 #: bazzite_portal/ui/maintenance.py:715 bazzite_portal/ui/maintenance.py:732
@@ -2243,7 +2244,7 @@ msgstr "Annulla la modifica in attesa"
 msgid ""
 "The pending deployment changed. Review the updated details and confirm again."
 msgstr ""
-"La versione del sistema in attesa è cambiata. Controllare i dettagli "
+"La versione del sistema in attesa è cambiata. Controlla i dettagli "
 "aggiornati e confermare di nuovo."
 
 #: bazzite_portal/ui/maintenance.py:773
@@ -2252,12 +2253,12 @@ msgstr "La richiesta di annullamento non è andata a buon fine."
 
 #: bazzite_portal/ui/maintenance.py:808
 msgid "Refresh system information before continuing."
-msgstr "Aggiornare le informazioni di sistema prima di continuare."
+msgstr "Aggiorna le informazioni di sistema prima di continuare."
 
 #: bazzite_portal/ui/maintenance.py:813
 msgid "Layer removal is unavailable. Open Logs for details."
 msgstr ""
-"La rimozione dei layer non è disponibile. Aprire i registri per maggiori "
+"La rimozione dei layer non è disponibile. Apri i registri per maggiori "
 "dettagli."
 
 #: bazzite_portal/ui/maintenance.py:815
@@ -2268,7 +2269,7 @@ msgstr "I dettagli dei pacchetti non sono disponibili."
 msgid "Could not check layered apps. Open Logs for details."
 msgstr ""
 "Non è stato possibile verificare le applicazioni aggiunte tramite layering. "
-"Aprire i registri per maggiori dettagli."
+"Apri i registri per maggiori dettagli."
 
 #: bazzite_portal/ui/maintenance.py:816
 msgid "No package layers are present."
@@ -2284,20 +2285,20 @@ msgstr ""
 msgid ""
 "System status is unavailable. Refresh system information before continuing."
 msgstr ""
-"Lo stato del sistema non è disponibile. Aggiornare le informazioni di "
-"sistema prima di procedere."
+"Lo stato del sistema non è disponibile. Aggiorna le informazioni di sistema "
+"prima di procedere."
 
 #: bazzite_portal/ui/maintenance.py:850 bazzite_portal/ui/maintenance.py:853
 #: bazzite_portal/ui/maintenance.py:869 bazzite_portal/ui/maintenance.py:872
 msgid "Could not check download-cache status. Open Logs for details."
 msgstr ""
-"Non è stato possibile verificare lo stato della cache dei download. Aprire i "
+"Non è stato possibile verificare lo stato della cache dei download. Apri i "
 "registri per maggiori dettagli."
 
 #: bazzite_portal/ui/maintenance.py:851
 msgid "Download-cache cleanup is unavailable. Open Logs for details."
 msgstr ""
-"Non è possibile pulire la cache dei download. Aprire i registri per maggiori "
+"Non è possibile pulire la cache dei download. Apri i registri per maggiori "
 "dettagli."
 
 #: bazzite_portal/ui/maintenance.py:853
@@ -2305,8 +2306,8 @@ msgid ""
 "Could not check download-cache status. Refresh system information and try "
 "again."
 msgstr ""
-"Non è stato possibile verificare lo stato della cache dei download. "
-"Aggiornare le informazioni di sistema e riprovare."
+"Non è stato possibile verificare lo stato della cache dei download. Aggiorna "
+"le informazioni di sistema e riprova."
 
 #: bazzite_portal/ui/maintenance.py:867
 msgid "Clearing download cache…"
@@ -2324,7 +2325,7 @@ msgstr ""
 
 #: bazzite_portal/ui/maintenance.py:871 bazzite_portal/ui/maintenance.py:876
 msgid "Retry clearing download cache"
-msgstr "Riprovare a svuotare la cache dei download"
+msgstr "Riprova a svuotare la cache dei download"
 
 #: bazzite_portal/ui/maintenance.py:871 bazzite_portal/ui/maintenance.py:875
 msgid "Could not clear download cache"
@@ -2333,7 +2334,7 @@ msgstr "Non è stato possibile svuotare la cache dei download"
 #: bazzite_portal/ui/maintenance.py:872
 msgid "Download-cache cleanup failed. Open the operation log for details."
 msgstr ""
-"La pulizia della cache dei download non è riuscita. Aprire il registro "
+"La pulizia della cache dei download non è riuscita. Apri il registro "
 "dell'operazione per maggiori dettagli."
 
 #: bazzite_portal/ui/maintenance.py:880
@@ -2353,20 +2354,20 @@ msgid ""
 msgstr ""
 "Questa operazione elimina i dati degli aggiornamenti salvati nella cache, "
 "che potrebbero dover essere scaricati nuovamente. Se è presente una modifica "
-"di sistema in attesa, annullarla prima tramite l'opzione \"Annullare la "
-"modifica del sistema in attesa\", poiché lo svuotamento della cache non la "
-"annulla automaticamente. Non è necessario riavviare il computer."
+"di sistema in attesa, annullarla prima tramite l'opzione Annulla la modifica "
+"del sistema in attesa, poiché lo svuotamento della cache non la annulla "
+"automaticamente. Non è necessario riavviare il computer."
 
 #: bazzite_portal/ui/maintenance.py:901
 msgid "Clear cache"
-msgstr "Svuotare la cache"
+msgstr "Svuota la cache"
 
 #: bazzite_portal/ui/maintenance.py:917
 msgid ""
 "The download cache changed. Review the updated details and confirm again."
 msgstr ""
-"La cache dei download è cambiata. Verificare lo stato attuale e confermare "
-"di nuovo."
+"La cache dei download è cambiata. Verifica lo stato attuale e conferma di "
+"nuovo."
 
 #: bazzite_portal/ui/maintenance.py:945
 msgid "The cache cleanup request failed."
@@ -2374,16 +2375,16 @@ msgstr "La richiesta di pulizia della cache non è andata a buon fine."
 
 #: bazzite_portal/ui/maintenance.py:975
 msgid "Rebase release channel"
-msgstr "Passare a un altro canale di rilascio"
+msgstr "Passa a un altro canale di rilascio"
 
 #: bazzite_portal/ui/maintenance.py:975
 #, python-brace-format
 msgid "Rebase {bazzite} image"
-msgstr "Cambiare la base di {bazzite}"
+msgstr "Cambia la base di {bazzite}"
 
 #: bazzite_portal/ui/maintenance.py:976
 msgid "Delete pinned deployment"
-msgstr "Eliminare la versione del sistema contrassegnata"
+msgstr "Elimina la versione del sistema contrassegnata"
 
 #: bazzite_portal/ui/maintenance.py:976
 msgid "System operation"
@@ -2412,8 +2413,7 @@ msgstr "Preparazione del cambio dell'immagine…"
 
 #: bazzite_portal/ui/maintenance.py:1127
 msgid "Preparing rollback cancellation…"
-msgstr ""
-"Preparazione all'annullamento del ripristino della versione precedente…"
+msgstr "Preparazione all'annullamento del ripristino della versione precedente…"
 
 #: bazzite_portal/ui/maintenance.py:1129
 msgid "Preparing rollback…"
@@ -2628,8 +2628,8 @@ msgstr "Cambio dell'immagine di sistema"
 #: bazzite_portal/ui/maintenance.py:1678
 msgid "Deployment information changed. Review it again."
 msgstr ""
-"Le informazioni sull'immagine di sistema sono cambiate. Consulta nuovamente "
-"i dettagli."
+"Le informazioni sull'immagine di sistema sono cambiate. Guarda di nuovo i "
+"dettagli."
 
 #: bazzite_portal/ui/maintenance.py:1711
 msgid "The application is closing."
@@ -2836,12 +2836,12 @@ msgstr "Installazione in corso"
 
 #: bazzite_portal/updates/model.py:198
 msgid "Downloading layers"
-msgstr "Scaricamento dei layer in corso"
+msgstr "Scaricando i layer"
 
 #: bazzite_portal/updates/model.py:202 bazzite_portal/updates/model.py:220
 #, python-brace-format
 msgid "Downloading layers · {current} of {total}"
-msgstr "Scaricando i layer in corso · {current} di {total}"
+msgstr "Scaricando i layer · {current} di {total}"
 
 #: bazzite_portal/updates/model.py:223
 msgid "Checking out system tree"
@@ -2873,7 +2873,7 @@ msgstr "Esecuzione di script post-installazione"
 
 #: bazzite_portal/updates/model.py:230
 msgid "Running post-transaction scripts"
-msgstr "Esecuzione di script post-transazione"
+msgstr "Esecuzione degli script di post-transazione"
 
 #: bazzite_portal/updates/model.py:231
 msgid "Writing package database"
@@ -3026,7 +3026,7 @@ msgstr ""
 #: bazzite_portal/updates/monitor.py:2103
 msgid "Package-layer removal is running. Wait for it to finish."
 msgstr ""
-"La rimozione dei pacchetti aggiunti tramite layering è in corso. Attendi il "
+"È in corso la rimozione dei pacchetti aggiunti tramite layering. Attendi il "
 "completamento dell'operazione."
 
 #: bazzite_portal/updates/monitor.py:1841
@@ -3086,8 +3086,8 @@ msgstr "L'elenco dei pacchetti richiesti è cambiato dopo la conferma."
 #: bazzite_portal/updates/monitor.py:1977
 msgid "A package-layer or pending-deployment operation is already running."
 msgstr ""
-"È già in corso un'operazione di rimozione dei pacchetti aggiunti tramite "
-"layering o di annullamento di una modifica di sistema in attesa."
+"È già in corso la rimozione di pacchetti aggiunti tramite layering o "
+"l'annullamento di una modifica di sistema in attesa."
 
 #: bazzite_portal/updates/monitor.py:1962
 msgid "Choose one or more requested packages to remove."
