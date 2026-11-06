@@ -12,6 +12,7 @@ MAX_LOG_LINES = 1500
 MAX_LOG_BYTES = 256 * 1024
 MAX_MODULE_STEPS = 64
 MAX_PACKAGE_ITEMS = 1024
+METERED_SKIP_REASON = N_("Updates skipped because the network connection is metered.")
 UUPD_MODULES = (
     ("system", N_("System"), N_("Operating system")),
     ("brew", "Brew", N_("CLI Apps")),
@@ -119,8 +120,10 @@ def interpret(lines):
         except (ValueError, RecursionError):
             data = None
         if isinstance(data, dict):
-            message = str(data.get("msg", ""))
-            module = data.get("module_name") or data.get("module")
+            message = data.get("output")
+            if not isinstance(message, str):
+                message = str(data.get("msg", ""))
+            module = data.get("module")
             if module:
                 stage = str(module)
             if message == "module_fail":
@@ -177,9 +180,9 @@ def live_module_detail(line, active, packages=None, progress=None):
         data = json.loads(line)
     except (TypeError, ValueError, RecursionError):
         return ""
-    if not isinstance(data, dict) or (data.get("module") not in (None, active)):
+    if not isinstance(data, dict) or data.get("module") != active:
         return ""
-    message = data.get("msg", "")
+    message = data.get("output", "")
     if not isinstance(message, str):
         return ""
     if active == "system" and data.get("module") == "system":
@@ -201,11 +204,10 @@ def live_module_detail(line, active, packages=None, progress=None):
                     and 0 <= done <= total and total > 0):
                 detail = C_("Downloading layers · {current} of {total}", current=done, total=total)
             return detail
-    # RunLog emits unscoped messages; the invocation reader and sequential
-    # active module supply their scope. Explicit other-module records are rejected.
+    # Command output is explicitly scoped by UUPD's module logger.
     message = re.sub(r"\x1b\[[0-9;]*[A-Za-z]", "", message).strip()
     if active == "system":
-        # rpm-ostree's DEBUG log is unscoped. Reserve the last part of the
+        # Reserve the last part of the rpm-ostree
         # ring for deployment assembly. These are stage estimates, not time
         # estimates: optional/cached stages can be skipped and never regress.
         chunk = re.fullmatch(
@@ -434,25 +436,18 @@ def update_event(line):
         return None
 
     msg = data.get("msg")
-    if msg == "Failed checking for updates":
-        return {
-            "kind": "check_failed",
-            "id": "system",
-            "error": _event_error(data.get("error")) or C_('{uupd} could not check for system updates.', uupd='UUPD'),
-        }
+    if msg == "Skipping updates, network is metered" and data.get("module") is None:
+        return {"kind": "skipped", "detail": METERED_SKIP_REASON}
     if msg in ("Error occurred starting external command", "Error occurred while waiting for external command"):
         module = data.get("module")
+        if not isinstance(module, str) or module not in {key for key, _, _ in UUPD_MODULES}:
+            return None
         return {
             "kind": "command_error",
             "id": module_id(module) if isinstance(module, str) else "",
             "error": _event_error(data.get("error")) or msg,
         }
-    if (msg in ("Executed update check", "Executed skopeo fallback check") and data.get("module") == "system"
-            and isinstance(data.get("update"), bool)):
-        return {"kind": "configured", "id": "system", "name": "System",
-                "enabled": data["update"],
-                "detail": N_("Operating system") if data["update"] else N_("No system update is available.")}
-    module_name = data.get("module_name")
+    module_name = data.get("module")
     configuration = data.get("module_configuration")
     if isinstance(configuration, dict) and isinstance(module_name, str) and module_name:
         enabled = configuration.get("Enabled")
@@ -465,7 +460,19 @@ def update_event(line):
                 "detail": str(configuration.get("Description") or "")[:512],
             }
 
-    if msg == "Updating":
+    # UUPD #192 adds explicit whole-module outcomes. A failed module can still
+    # have status="finished", so the integer exit code decides its result.
+    status = data.get("status")
+    exit_code = data.get("exit_code")
+    identity = data.get("module")
+    if (status == "finished" and type(exit_code) is int and isinstance(identity, str)
+            and identity in {key for key, _, _ in UUPD_MODULES}):
+        return {"kind": "module_completed", "id": identity,
+                "success": exit_code == 0,
+                "error": _event_error(data.get("output"), tail=True) if exit_code else ""}
+
+    if (msg == "Updating" and status in ("starting", "running")
+            and isinstance(module_name, str) and module_name in {key for key, _, _ in UUPD_MODULES}):
         title = data.get("title") or module_name
         if not isinstance(title, str) or not title:
             return None
@@ -484,7 +491,7 @@ def update_event(line):
                 module_fraction = float(step_progress) / 100.0
         return {
             "kind": "updating",
-            "id": module_id(title),
+            "id": module_id(module_name),
             "name": title[:256],
             "detail": str(description)[:512] if isinstance(description, str) else "",
             "progress_percent": float(overall) if overall is not None else None,
@@ -492,25 +499,13 @@ def update_event(line):
         }
 
     if msg == "module_fail":
-        failed = data.get("module") or module_name
+        failed = module_name
         identity = module_id(failed)
-        identity = {"cli-apps": "brew", "brew-update": "brew", "brew-upgrade": "brew",
-                    "system-apps": "flatpak", "system-update": "system",
-                    "rootful-distroboxes": "distrobox"}.get(identity, identity)
-        if identity.startswith("apps-for-user-"):
-            identity = "flatpak"
-        elif identity.startswith("distroboxes-for-user-"):
-            identity = "distrobox"
-        output = data.get("output")
-        output_error = ""
-        if isinstance(output, dict):
-            output_error = (_event_error(output.get("Stderr"))
-                            or _event_error(output.get("Stdout"), tail=True))
         return {
             "kind": "failed",
             "id": identity,
             "name": str(failed or N_("An update module failed"))[:256],
-            "error": _event_error(data.get("error")) or output_error,
+            "error": _event_error(data.get("output"), tail=True),
         }
     if msg in ("Updates Completed Successfully", "Updates finished with errors!"):
         return {"kind": "completed", "success": msg == "Updates Completed Successfully"}
@@ -576,7 +571,9 @@ def module_steps(plan, observed, result):
         row = remaining.pop(planned["id"], None)
         if row is None:
             row = dict(planned)
-            if result in ("success", "failed", "unknown") and row["status"] == "pending":
+            if result == "skipped" and row["status"] == "pending":
+                row.update(status="skipped", detail=METERED_SKIP_REASON, source="journal")
+            elif result in ("success", "failed", "unknown") and row["status"] == "pending":
                 row["status"] = "unknown"
                 row["detail"] = C_('{uupd} has not reported a result for this step.', uupd='UUPD')
         rows.append(row)

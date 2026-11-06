@@ -389,10 +389,10 @@ class Agent:
         if error and error != getattr(self, "_logged_monitor_error", ""):
             log.warning("Status monitoring: %s", error[:2048])
         self._logged_monitor_error = error
-        if snapshot.run and snapshot.result in {"success", "failed", "unknown"}:
+        if snapshot.run and snapshot.result in {"success", "failed", "skipped", "unknown"}:
             key = (snapshot.run, snapshot.result)
             if key != getattr(self, "_logged_update_result", None):
-                log.log(logging.INFO if snapshot.result == "success" else logging.WARNING,
+                log.log(logging.INFO if snapshot.result in {"success", "skipped"} else logging.WARNING,
                         "Update result: %s run=%s", snapshot.result, snapshot.run[:64])
             self._logged_update_result = key
         outcomes = getattr(self, "_logged_outcomes", {})
@@ -500,7 +500,7 @@ class Agent:
 
     def _acknowledge_update_run(self, viewed_run):
         snapshot = self.monitor.snapshot
-        if (snapshot.result not in {"success", "failed"} or snapshot.running or not snapshot.run
+        if (snapshot.result not in {"success", "failed", "skipped"} or snapshot.running or not snapshot.run
                 or viewed_run != snapshot.run):
             return
         if self._runtime_dismissed.get("result_viewed_run") == snapshot.run:

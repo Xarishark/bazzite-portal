@@ -650,7 +650,7 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
             self._refresh_pins()
         if (previous_page == N_("Updates") and name != N_("Updates")
                 and self.snapshot.run and not self.snapshot.running
-                and self.snapshot.result in {"success", "failed"}):
+                and self.snapshot.result in {"success", "failed", "skipped"}):
             self._dismissed_result_run = self.snapshot.run
             self._visible_result_run = None
             self._render_status()
@@ -2441,7 +2441,7 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         if (self.client is not None and self.get_mapped()
                 and self.stack.get_visible_child_name() == N_("Updates")
                 and state.operation == "update" and not state.running
-                and state.result in {"failed", "success"} and state.run):
+                and state.result in {"failed", "success", "skipped"} and state.run):
             if not self.is_active():
                 return
             if state.result_viewed_run == state.run or getattr(self, "_dismissed_result_run", None) == state.run:
@@ -2457,7 +2457,7 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         maintenance_busy = bool(active_operations - {"update"})
         historical_run = bool(state.run and not state.running
                               and state.run != getattr(self, "_observed_update_run", ""))
-        dismissed_result = (not state.running and state.result in {"success", "failed"}
+        dismissed_result = (not state.running and state.result in {"success", "failed", "skipped"}
                              and (state.run == getattr(self, "_dismissed_result_run", None)
                                   or (state.run and state.result_viewed_run == state.run
                                       and state.run != getattr(self, "_visible_result_run", None))))
@@ -2508,10 +2508,12 @@ class Window(Adw.ApplicationWindow, SystemManagementUI):
         self.home_status.set_subtitle(format_message(format_message(detail) if detail else _("Update your system and installed apps.")))
         errors = []
         transaction_active = self._deployment_transaction_active()
+        skipped_notice = state.operation == "update" and state.result == "skipped" and not dismissed_result
         self.update_transaction_notice.set_text(format_message(
             N_('Another system operation is running. Wait for it to finish.') if maintenance_busy
-            else C_('An {rpm_ostree} transaction is active. Wait for it to finish before updating or restarting.', rpm_ostree='RPM-OSTree')))
-        self.update_transaction_notice.set_visible((transaction_active or maintenance_busy) and not state.running)
+            else C_('An {rpm_ostree} transaction is active. Wait for it to finish before updating or restarting.', rpm_ostree='RPM-OSTree') if transaction_active
+            else state.stage if skipped_notice else ""))
+        self.update_transaction_notice.set_visible((transaction_active or maintenance_busy or skipped_notice) and not state.running)
         if status_error and state.result != "failed":
             errors.append(status_error)
         if state.deployment and not state.deployment_known:
