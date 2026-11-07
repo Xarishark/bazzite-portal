@@ -7,36 +7,38 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/app/"
 "\n"
 "POT-Creation-Date: 2026-10-30 12:01+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-11-07 20:36+0000\n"
+"Last-Translator: Andrii Butsvin <andreysey@users.noreply.hosted.weblate.org>"
+"\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/bazzite-portal/"
+"app/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Weblate 2026.11.dev0\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 2026.11.2.dev0\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: bazzite_portal/artwork/appearance.py:15
 msgid "Native"
-msgstr ""
+msgstr "Системна"
 
 #: bazzite_portal/artwork/appearance.py:16
 msgid "Spinning"
-msgstr ""
+msgstr "Обертання"
 
 #: bazzite_portal/artwork/appearance.py:17
 msgid "Bouncing"
-msgstr ""
+msgstr "Підстрибування"
 
 #: bazzite_portal/artwork/appearance.py:18
 msgid "Spinning Mono"
-msgstr ""
+msgstr "Обертання (моно)"
 
 #: bazzite_portal/artwork/appearance.py:19
 msgid "Bouncing Mono"
-msgstr ""
+msgstr "Підстрибування (моно)"
 
 #: bazzite_portal/core/errors.py:65
 #, python-brace-format
@@ -44,50 +46,63 @@ msgid ""
 "Not enough free space. Free up space and try again. System updates need at "
 "least {minimum_free_space} free space on the installation drive."
 msgstr ""
+"Недостатньо вільного місця. Звільніть місце і спробуйте ще раз. Для "
+"оновлення системи на диску, де її встановлено, потрібно щонайменше "
+"{minimum_free_space} вільного місця."
 
 #: bazzite_portal/core/errors.py:68
 msgid ""
 "The download's signature could not be verified. Try again later. If the "
 "problem continues, open Logs for details."
 msgstr ""
+"Не вдалося перевірити підпис завантаженого файлу. Спробуйте пізніше. Якщо "
+"проблема не зникає, відкрийте журнали, щоб дізнатися подробиці."
 
 #: bazzite_portal/core/errors.py:70
 msgid ""
 "A downloaded file failed checksum verification. Try again later and check "
 "the operation log if the problem continues."
 msgstr ""
+"Завантажений файл не пройшов перевірку контрольної суми. Спробуйте пізніше, "
+"а якщо проблема не зникає, перегляньте журнал операції."
 
 #: bazzite_portal/core/errors.py:72
 msgid ""
 "A package conflict is blocking this system change. Review your layered apps "
 "in System Management, then try again."
 msgstr ""
+"Конфлікт пакунків блокує цю зміну системи. Перегляньте накладені програми в "
+"розділі «Керування системою» і спробуйте ще раз."
 
 #: bazzite_portal/core/errors.py:74
 msgid "The download server is busy. Wait a little and try again."
-msgstr ""
+msgstr "Сервер завантаження перевантажений. Зачекайте трохи і спробуйте ще раз."
 
 #: bazzite_portal/core/errors.py:76
 msgid ""
 "Could not connect to the download server. Check your connection and try "
 "again."
 msgstr ""
+"Не вдалося з'єднатися із сервером завантаження. Перевірте з'єднання і "
+"спробуйте ще раз."
 
 #: bazzite_portal/core/errors.py:78
 msgid ""
 "Could not download software repository information. Try again later. If this "
 "continues, check your repository settings or open Logs."
 msgstr ""
+"Не вдалося завантажити дані сховища програм. Спробуйте пізніше. Якщо "
+"проблема не зникає, перевірте налаштування сховищ або відкрийте журнали."
 
 #: bazzite_portal/core/errors.py:121 bazzite_portal/ui/application.py:2230
 #: bazzite_portal/ui/application.py:2233 bazzite_portal/ui/application.py:2506
 #: bazzite_portal/ui/application.py:2512 bazzite_portal/updates/monitor.py:1848
 msgid "Another system operation is running. Wait for it to finish."
-msgstr ""
+msgstr "Виконується інша системна операція. Дочекайтеся її завершення."
 
 #: bazzite_portal/core/errors.py:123
 msgid "Authorization was not granted. Try again or cancel."
-msgstr ""
+msgstr "Дозвіл не надано. Спробуйте ще раз або скасуйте."
 
 #: bazzite_portal/core/errors.py:127 bazzite_portal/ui/application.py:2502
 #: bazzite_portal/ui/maintenance.py:230 bazzite_portal/ui/maintenance.py:1093
@@ -96,130 +111,139 @@ msgstr ""
 #: bazzite_portal/ui/maintenance.py:1385 bazzite_portal/ui/maintenance.py:1414
 #: bazzite_portal/ui/maintenance.py:1422 bazzite_portal/ui/maintenance.py:1648
 msgid "Details are unavailable. Open Logs for more information."
-msgstr ""
+msgstr "Подробиці недоступні. Відкрийте журнали, щоб дізнатися більше."
 
 #: bazzite_portal/core/i18n.py:104 bazzite_portal/updates/model.py:306
 #: bazzite_portal/updates/model.py:322 bazzite_portal/updates/model.py:358
 #: bazzite_portal/updates/model.py:402
 #, python-brace-format
 msgid "{current} of {total}"
-msgstr ""
+msgstr "{current} з {total}"
 
 #: bazzite_portal/input/prompts.py:119
 msgid "D-pad"
-msgstr ""
+msgstr "Хрестовина"
 
 #: bazzite_portal/integration/community.py:13
 #, python-brace-format
 msgid "{bazzite} website"
-msgstr ""
+msgstr "Сайт {bazzite}"
 
 #: bazzite_portal/integration/community.py:13
 #, python-brace-format
 msgid "The {bazzite} project website"
-msgstr ""
+msgstr "Офіційний сайт проєкту {bazzite}"
 
 #: bazzite_portal/integration/community.py:14
 msgid "Documentations"
-msgstr ""
+msgstr "Документація"
 
 #: bazzite_portal/integration/community.py:14
 #, python-brace-format
 msgid "{bazzite} documentation"
-msgstr ""
+msgstr "Документація {bazzite}"
 
 #: bazzite_portal/integration/community.py:15
 #, python-brace-format
 msgid "{bazzite} community and support"
-msgstr ""
+msgstr "Спільнота та підтримка {bazzite}"
 
 #: bazzite_portal/integration/community.py:16
 #, python-brace-format
 msgid "{bazzite} source repository"
-msgstr ""
+msgstr "Репозиторій вихідного коду {bazzite}"
 
 #: bazzite_portal/integration/community.py:17
 #, python-brace-format
 msgid "The {bazzite} subreddit"
-msgstr ""
+msgstr "Сабреддит {bazzite}"
 
 #: bazzite_portal/integration/community.py:18
 msgid "Forums"
-msgstr ""
+msgstr "Форуми"
 
 #: bazzite_portal/integration/community.py:18
 #, python-brace-format
 msgid "{universal_blue} community forums"
-msgstr ""
+msgstr "Форуми спільноти {universal_blue}"
 
 #: bazzite_portal/integration/decky.py:39
 msgid "Plugin installation must run as your normal desktop user."
 msgstr ""
+"Плагін потрібно встановлювати від імені звичайного користувача робочого "
+"столу."
 
 #: bazzite_portal/integration/decky.py:40
 msgid "This Portal installation does not include the Decky plugin."
-msgstr ""
+msgstr "Ця інсталяція Portal не містить плагіна Decky."
 
 #: bazzite_portal/integration/decky.py:41
 msgid ""
 "The bundled Decky plugin could not be verified. Reinstall Bazzite Portal and "
 "try again."
 msgstr ""
+"Не вдалося перевірити вбудований плагін Decky. Перевстановіть Bazzite Portal "
+"і спробуйте ще раз."
 
 #: bazzite_portal/integration/decky.py:42
 msgid "Decky Loader is not installed."
-msgstr ""
+msgstr "Decky Loader не встановлено."
 
 #: bazzite_portal/integration/decky.py:43
 msgid "Decky Loader is not running. Start it and try again."
-msgstr ""
+msgstr "Decky Loader не запущено. Запустіть його і спробуйте ще раз."
 
 #: bazzite_portal/integration/decky.py:44
 msgid "Open Steam in Gaming Mode or Big Picture, then try again."
-msgstr ""
+msgstr "Відкрийте Steam в ігровому режимі або Big Picture і спробуйте ще раз."
 
 #: bazzite_portal/integration/decky.py:45
 msgid "The installed Decky plugin version could not be verified."
-msgstr ""
+msgstr "Не вдалося перевірити версію встановленого плагіна Decky."
 
 #: bazzite_portal/integration/decky.py:46
 msgid "The installed Decky plugin is up to date."
-msgstr ""
+msgstr "Встановлений плагін Decky має найновішу версію."
 
 #: bazzite_portal/integration/decky.py:47
 msgid "The bundled plugin or installed version changed. Review it again."
-msgstr ""
+msgstr "Вбудований плагін або встановлена версія змінилися. Перегляньте ще раз."
 
 #: bazzite_portal/integration/decky.py:48
 msgid ""
 "Confirm the installation in Decky Loader. No change is made if you cancel."
 msgstr ""
+"Підтвердьте встановлення в Decky Loader. Якщо скасуєте, нічого не зміниться."
 
 #: bazzite_portal/integration/decky.py:49
 msgid ""
 "Could not request plugin installation. Open Steam in Gaming Mode or Big "
 "Picture and try again."
 msgstr ""
+"Не вдалося надіслати запит на встановлення плагіна. Відкрийте Steam в "
+"ігровому режимі або Big Picture і спробуйте ще раз."
 
 #: bazzite_portal/maintenance/cache_clear.py:68
 #, python-brace-format
 msgid "An {rpm_ostree} transaction is active or status is unavailable."
-msgstr ""
+msgstr "Виконується транзакція {rpm_ostree} або стан недоступний."
 
 #: bazzite_portal/maintenance/cache_clear.py:75
 #: bazzite_portal/maintenance/cache_clear.py:78
 msgid "Cancel the pending deployment before clearing the download cache."
-msgstr ""
+msgstr "Перш ніж очищати кеш завантажень, скасуйте очікуване розгортання."
 
 #: bazzite_portal/maintenance/cache_clear.py:76
 msgid ""
 "Resolve the selected next-boot deployment before clearing the download cache."
 msgstr ""
+"Перш ніж очищати кеш завантажень, розберіться з розгортанням, вибраним для "
+"наступного запуску."
 
 #: bazzite_portal/maintenance/cancel_pending.py:41
 #, python-brace-format
 msgid "{bootc} deployments cannot be canceled by this workflow."
-msgstr ""
+msgstr "Розгортання {bootc} не можна скасувати цим способом."
 
 #: bazzite_portal/maintenance/cancel_pending.py:51
 #: bazzite_portal/maintenance/channel_switch.py:52
@@ -228,44 +252,51 @@ msgstr ""
 #: bazzite_portal/maintenance/reset_layers.py:49
 #, python-brace-format
 msgid "An {rpm_ostree} transaction is active."
-msgstr ""
+msgstr "Виконується транзакція {rpm_ostree}."
 
 #: bazzite_portal/maintenance/cancel_pending.py:64
 msgid "There is no pending deployment."
-msgstr ""
+msgstr "Немає очікуваного розгортання."
 
 #: bazzite_portal/maintenance/cancel_pending.py:66
 msgid "The next boot is a scheduled rollback or other non-staged deployment."
 msgstr ""
+"Наступний запуск — це запланований відкат або інше непідготовлене "
+"розгортання."
 
 #: bazzite_portal/maintenance/cancel_pending.py:68
 msgid "The pending deployment is pinned or its pin state is unknown."
-msgstr ""
+msgstr "Очікуване розгортання закріплене, або його стан закріплення невідомий."
 
 #: bazzite_portal/maintenance/channel_switch.py:63
 #, python-brace-format
 msgid ""
 "Only official {bazzite} {tracks} track and release references are supported."
-msgstr ""
+msgstr "Підтримуються лише офіційні гілки {tracks} та випуски {bazzite}."
 
 #: bazzite_portal/maintenance/channel_switch.py:91
 msgid "Resolve the pending deployment before changing update channels."
 msgstr ""
+"Перш ніж змінювати канал оновлень, розберіться з очікуваним розгортанням."
 
 #: bazzite_portal/maintenance/channel_switch.py:159
 msgid ""
 "You’re already using this image and channel. Use Update to get the latest "
 "version."
 msgstr ""
+"Ви вже використовуєте цей образ і канал. Щоб отримати найновішу версію, "
+"скористайтеся кнопкою «Оновити»."
 
 #: bazzite_portal/maintenance/delete_deployments.py:64
 msgid "Resolve the next-boot deployment before deleting saved deployments."
 msgstr ""
+"Перш ніж видаляти збережені розгортання, розберіться з розгортанням для "
+"наступного запуску."
 
 #: bazzite_portal/maintenance/delete_deployments.py:94
 #: bazzite_portal/ui/maintenance.py:1463
 msgid "No saved, pinned deployments can be deleted."
-msgstr ""
+msgstr "Немає збережених закріплених розгортань, які можна видалити."
 
 #: bazzite_portal/maintenance/delete_deployments.py:100
 #: bazzite_portal/maintenance/deployments.py:12
@@ -279,130 +310,137 @@ msgstr ""
 #: bazzite_portal/ui/system_info.py:66 bazzite_portal/ui/system_info.py:69
 #: bazzite_portal/ui/system_info.py:78
 msgid "Unknown"
-msgstr ""
+msgstr "Невідомо"
 
 #: bazzite_portal/maintenance/image_switch.py:111
 msgid "Resolve the pending deployment before changing images."
-msgstr ""
+msgstr "Перш ніж змінювати образ, розберіться з очікуваним розгортанням."
 
 #: bazzite_portal/maintenance/image_switch.py:118
 #, python-brace-format
 msgid "Only supported official {bazzite} image references can be changed."
-msgstr ""
+msgstr "Змінювати можна лише підтримувані офіційні образи {bazzite}."
 
 #: bazzite_portal/maintenance/image_switch.py:166
 #, python-brace-format
 msgid "No official {bazzite} images are available."
-msgstr ""
+msgstr "Немає доступних офіційних образів {bazzite}."
 
 #: bazzite_portal/maintenance/image_switch.py:187
 #, python-brace-format
 msgid "No {track} versions are available for {image}."
-msgstr ""
+msgstr "Для {image} немає доступних версій {track}."
 
 #: bazzite_portal/maintenance/image_switch.py:207
 #, python-brace-format
 msgid "Unsupported {bazzite} image variant."
-msgstr ""
+msgstr "Непідтримуваний варіант образу {bazzite}."
 
 #: bazzite_portal/maintenance/image_switch.py:209
 #, python-brace-format
 msgid "Unsupported {bazzite} image version."
-msgstr ""
+msgstr "Непідтримувана версія образу {bazzite}."
 
 #: bazzite_portal/maintenance/image_switch.py:222
 msgid ""
 "This image and version are already running. Use Update to check for a newer "
 "version."
 msgstr ""
+"Цей образ і версія вже запущені. Щоб перевірити наявність новішої версії, "
+"скористайтеся кнопкою «Оновити»."
 
 #: bazzite_portal/maintenance/logs.py:147
 msgid "Some operation output was unavailable or omitted."
-msgstr ""
+msgstr "Частина виводу операції була недоступна або пропущена."
 
 #: bazzite_portal/maintenance/reset_layers.py:47
 #: bazzite_portal/ui/maintenance.py:817
 msgid "A different deployment is selected for next boot."
-msgstr ""
+msgstr "Для наступного запуску вибрано інше розгортання."
 
 #: bazzite_portal/maintenance/reset_layers.py:86
 #: bazzite_portal/ui/maintenance.py:816
 msgid "No requested package layers are present."
-msgstr ""
+msgstr "Запитаних накладених пакунків немає."
 
 #: bazzite_portal/services/agent.py:424
 #, python-brace-format
 msgid "{bazzite} update failed"
-msgstr ""
+msgstr "Не вдалося оновити {bazzite}"
 
 #: bazzite_portal/services/agent.py:424
 #, python-brace-format
 msgid "{bazzite} rollback failed"
-msgstr ""
+msgstr "Не вдалося виконати відкат {bazzite}"
 
 #: bazzite_portal/services/agent.py:424
 msgid "Open Updates to inspect the operation log."
-msgstr ""
+msgstr "Відкрийте «Оновлення», щоб переглянути журнал операції."
 
 #: bazzite_portal/services/agent.py:474 bazzite_portal/ui/application.py:580
 #: bazzite_portal/ui/application.py:763 bazzite_portal/ui/application.py:3685
 msgid "Open Updates"
-msgstr ""
+msgstr "Відкрити «Оновлення»"
 
 #: bazzite_portal/services/agent.py:520
 msgid "A Decky plugin installation request is already running."
-msgstr ""
+msgstr "Запит на встановлення плагіна Decky уже виконується."
 
 #: bazzite_portal/services/agent.py:533 bazzite_portal/ui/decky.py:155
 msgid "Could not manage the Decky plugin. Open Logs for details."
 msgstr ""
+"Не вдалося керувати плагіном Decky. Відкрийте журнали, щоб дізнатися "
+"подробиці."
 
 #: bazzite_portal/services/agent.py:573 bazzite_portal/services/agent.py:646
 msgid "Another operation request is pending."
-msgstr ""
+msgstr "Уже очікує інший запит на операцію."
 
 #: bazzite_portal/services/agent.py:682
 msgid "Operation request failed."
-msgstr ""
+msgstr "Не вдалося виконати запит на операцію."
 
 #: bazzite_portal/services/agent.py:770 bazzite_portal/ui/application.py:2521
 msgid "Could not read update status. Open Logs for details."
 msgstr ""
+"Не вдалося отримати стан оновлення. Відкрийте журнали, щоб дізнатися "
+"подробиці."
 
 #: bazzite_portal/services/tray.py:288 bazzite_portal/updates/model.py:360
 msgid "Updating"
-msgstr ""
+msgstr "Триває оновлення"
 
 #: bazzite_portal/services/tray.py:288
 #, python-brace-format
 msgid "Updates are running. Open {app_name} for progress."
-msgstr ""
+msgstr "Триває оновлення. Відкрийте {app_name}, щоб стежити за ходом."
 
 #: bazzite_portal/services/tray.py:289
 msgid "Restart pending"
-msgstr ""
+msgstr "Потрібен перезапуск"
 
 #: bazzite_portal/services/tray.py:289
 #, python-brace-format
 msgid "{bazzite} will boot into the new version on your next restart."
-msgstr ""
+msgstr "Під час наступного перезапуску {bazzite} завантажить нову версію."
 
 #: bazzite_portal/services/tray.py:290
 msgid "Update failed"
-msgstr ""
+msgstr "Не вдалося оновити"
 
 #: bazzite_portal/services/tray.py:290
 #, python-brace-format
 msgid "An update failed. Open {app_name} for details."
 msgstr ""
+"Не вдалося виконати оновлення. Відкрийте {app_name}, щоб дізнатися подробиці."
 
 #: bazzite_portal/services/tray.py:308
 msgid "Open"
-msgstr ""
+msgstr "Відкрити"
 
 #: bazzite_portal/services/tray.py:308
 msgid "Dismiss"
-msgstr ""
+msgstr "Приховати"
 
 #: bazzite_portal/ui/application.py:43 bazzite_portal/ui/application.py:342
 #: bazzite_portal/ui/application.py:427 bazzite_portal/ui/application.py:428
@@ -416,7 +454,7 @@ msgstr ""
 #: bazzite_portal/ui/application.py:3557 bazzite_portal/ui/application.py:3597
 #: bazzite_portal/ui/application.py:3622
 msgid "Home"
-msgstr ""
+msgstr "Головна"
 
 #: bazzite_portal/ui/application.py:43 bazzite_portal/ui/application.py:45
 #: bazzite_portal/ui/application.py:425 bazzite_portal/ui/application.py:434
@@ -431,7 +469,7 @@ msgstr ""
 #: bazzite_portal/ui/application.py:3541 bazzite_portal/ui/application.py:3550
 #: bazzite_portal/ui/application.py:3561 bazzite_portal/ui/application.py:3577
 msgid "Tools"
-msgstr ""
+msgstr "Інструменти"
 
 #: bazzite_portal/ui/application.py:43 bazzite_portal/ui/application.py:45
 #: bazzite_portal/ui/application.py:651 bazzite_portal/ui/application.py:661
@@ -445,7 +483,7 @@ msgstr ""
 #: bazzite_portal/ui/application.py:3728
 #: packaging/io.github.Xarishark.bazzite_portal.desktop:16
 msgid "Updates"
-msgstr ""
+msgstr "Оновлення"
 
 #: bazzite_portal/ui/application.py:43 bazzite_portal/ui/application.py:686
 #: bazzite_portal/ui/application.py:694 bazzite_portal/ui/application.py:695
@@ -456,7 +494,7 @@ msgstr ""
 #: bazzite_portal/ui/maintenance.py:777 bazzite_portal/ui/maintenance.py:793
 #: bazzite_portal/ui/maintenance.py:801 bazzite_portal/updates/model.py:16
 msgid "System"
-msgstr ""
+msgstr "Система"
 
 #: bazzite_portal/ui/application.py:43 bazzite_portal/ui/application.py:47
 #: bazzite_portal/ui/application.py:776 bazzite_portal/ui/application.py:806
@@ -465,66 +503,66 @@ msgstr ""
 #: bazzite_portal/ui/application.py:919 bazzite_portal/ui/application.py:994
 #: bazzite_portal/ui/application.py:1012
 msgid "Troubleshooting"
-msgstr ""
+msgstr "Усунення проблем"
 
 #: bazzite_portal/ui/application.py:43 bazzite_portal/ui/application.py:47
 #: bazzite_portal/ui/application.py:777 bazzite_portal/ui/application.py:2631
 #: bazzite_portal/ui/application.py:2664
 msgid "Community"
-msgstr ""
+msgstr "Спільнота"
 
 #: bazzite_portal/ui/application.py:43 bazzite_portal/ui/application.py:48
 #: bazzite_portal/ui/application.py:778 bazzite_portal/ui/application.py:2667
 #: bazzite_portal/ui/application.py:2682
 msgid "Announcements"
-msgstr ""
+msgstr "Оголошення"
 
 #: bazzite_portal/ui/application.py:46 bazzite_portal/ui/application.py:695
 #: bazzite_portal/ui/application.py:774 bazzite_portal/ui/maintenance.py:63
 #: bazzite_portal/ui/maintenance.py:66
 msgid "System information"
-msgstr ""
+msgstr "Відомості про систему"
 
 #: bazzite_portal/ui/application.py:46 bazzite_portal/ui/application.py:695
 #: bazzite_portal/ui/application.py:775 bazzite_portal/ui/maintenance.py:64
 #: bazzite_portal/ui/maintenance.py:67
 msgid "System Management"
-msgstr ""
+msgstr "Керування системою"
 
 #: bazzite_portal/ui/application.py:48 bazzite_portal/ui/application.py:736
 #: bazzite_portal/ui/application.py:739 bazzite_portal/ui/application.py:740
 msgid "Options"
-msgstr ""
+msgstr "Налаштування"
 
 #: bazzite_portal/ui/application.py:213
 msgid "Installed"
-msgstr ""
+msgstr "Встановлено"
 
 #: bazzite_portal/ui/application.py:213
 msgid "Enabled"
-msgstr ""
+msgstr "Увімкнено"
 
 #: bazzite_portal/ui/application.py:213
 msgid "Not installed"
-msgstr ""
+msgstr "Не встановлено"
 
 #: bazzite_portal/ui/application.py:214
 msgid "Disabled"
-msgstr ""
+msgstr "Вимкнено"
 
 #: bazzite_portal/ui/application.py:214
 msgid "Removed"
-msgstr ""
+msgstr "Видалено"
 
 #: bazzite_portal/ui/application.py:246 bazzite_portal/ui/application.py:248
 #: bazzite_portal/ui/application.py:250 bazzite_portal/ui/maintenance.py:23
 #: bazzite_portal/ui/maintenance.py:217
 msgid "Unavailable"
-msgstr ""
+msgstr "Недоступно"
 
 #: bazzite_portal/ui/application.py:263
 msgid "None recorded"
-msgstr ""
+msgstr "Немає записів"
 
 #: bazzite_portal/ui/application.py:312 bazzite_portal/ui/application.py:316
 #: bazzite_portal/ui/application.py:317 bazzite_portal/ui/application.py:1176
@@ -534,191 +572,203 @@ msgstr ""
 #: bazzite_portal/ui/image_wizard.py:169 bazzite_portal/ui/image_wizard.py:173
 #: bazzite_portal/ui/maintenance.py:1085 bazzite_portal/ui/maintenance.py:1270
 msgid "Back"
-msgstr ""
+msgstr "Назад"
 
 #: bazzite_portal/ui/application.py:365
 msgid ""
 "Controller input is unavailable. Reconnect your controller and try again."
-msgstr ""
+msgstr "Контролер недоступний. Під'єднайте контролер знову і спробуйте ще раз."
 
 #: bazzite_portal/ui/application.py:371 bazzite_portal/ui/application.py:1428
 #: bazzite_portal/ui/application.py:3009 bazzite_portal/ui/application.py:3098
 msgid "Could not save app preferences. Open Logs for details."
 msgstr ""
+"Не вдалося зберегти параметри програми. Відкрийте журнали, щоб дізнатися "
+"подробиці."
 
 #: bazzite_portal/ui/application.py:522 bazzite_portal/ui/application.py:857
 #: bazzite_portal/ui/application.py:1847 bazzite_portal/ui/application.py:1850
 #: bazzite_portal/ui/application.py:1861 bazzite_portal/ui/application.py:1870
 #: bazzite_portal/ui/application.py:2625
 msgid "Yes"
-msgstr ""
+msgstr "Так"
 
 #: bazzite_portal/ui/application.py:522 bazzite_portal/ui/application.py:856
 #: bazzite_portal/ui/application.py:1847 bazzite_portal/ui/application.py:1850
 #: bazzite_portal/ui/application.py:1861 bazzite_portal/ui/application.py:2625
 msgid "No"
-msgstr ""
+msgstr "Ні"
 
 #: bazzite_portal/ui/application.py:551 bazzite_portal/ui/application.py:1176
 #: bazzite_portal/ui/application.py:1901 bazzite_portal/ui/application.py:3589
 #: bazzite_portal/ui/application.py:3609 bazzite_portal/ui/image_wizard.py:253
 #: bazzite_portal/ui/maintenance.py:1249
 msgid "Select"
-msgstr ""
+msgstr "Вибрати"
 
 #: bazzite_portal/ui/application.py:566 bazzite_portal/ui/application.py:2004
 msgid "Show changelog"
-msgstr ""
+msgstr "Показати перелік змін"
 
 #: bazzite_portal/ui/application.py:579 bazzite_portal/ui/application.py:741
 msgid "Open Options"
-msgstr ""
+msgstr "Відкрити налаштування"
 
 #: bazzite_portal/ui/application.py:581 bazzite_portal/ui/application.py:582
 #: bazzite_portal/ui/maintenance.py:34 bazzite_portal/ui/maintenance.py:38
 msgid "Refresh system information"
-msgstr ""
+msgstr "Оновити відомості про систему"
 
 #: bazzite_portal/ui/application.py:583 bazzite_portal/ui/application.py:1451
 #: bazzite_portal/ui/application.py:1531
 msgid "Search for a tool"
-msgstr ""
+msgstr "Шукати інструмент"
 
 #: bazzite_portal/ui/application.py:634 bazzite_portal/ui/maintenance.py:1588
 msgid "The request failed. Open Logs for details."
-msgstr ""
+msgstr "Не вдалося виконати запит. Відкрийте журнали, щоб дізнатися подробиці."
 
 #: bazzite_portal/ui/application.py:747 bazzite_portal/ui/application.py:2487
 #, python-brace-format
 msgid "Update {bazzite} and Apps"
-msgstr ""
+msgstr "Оновити {bazzite} і програми"
 
 #: bazzite_portal/ui/application.py:747 bazzite_portal/ui/application.py:2508
 msgid "Update your system and installed apps."
-msgstr ""
+msgstr "Оновіть систему і встановлені програми."
 
 #: bazzite_portal/ui/application.py:770
 msgid "Explore"
-msgstr ""
+msgstr "Переглянути"
 
 #: bazzite_portal/ui/application.py:773
 msgid "Browse setup, fixes, and utilities from the system Portal."
-msgstr ""
+msgstr "Налаштування, виправлення та корисні утиліти із системного Portal."
 
 #: bazzite_portal/ui/application.py:774
 #, python-brace-format
 msgid "View deployments, package layers and {rpm_ostree} status."
-msgstr ""
+msgstr "Перегляд розгортань, накладених пакунків і стану {rpm_ostree}."
 
 #: bazzite_portal/ui/application.py:775
 msgid ""
 "Cancel a pending deployment, remove layered apps or recover your system."
 msgstr ""
+"Скасування очікуваного розгортання, видалення накладених програм або "
+"відновлення системи."
 
 #: bazzite_portal/ui/application.py:776
 #, python-brace-format
 msgid "Report a problem, collect system logs, or reset {steam}."
 msgstr ""
+"Повідомлення про проблему, збирання системних журналів або скидання {steam}."
 
 #: bazzite_portal/ui/application.py:777
 #, python-brace-format
 msgid "{bazzite} documentation, website, and community links."
-msgstr ""
+msgstr "Документація {bazzite}, сайт і посилання на спільноту."
 
 #: bazzite_portal/ui/application.py:778 bazzite_portal/ui/application.py:2709
 #, python-brace-format
 msgid "View {bazzite} release and project announcements."
-msgstr ""
+msgstr "Перегляд оголошень про випуски та проєкт {bazzite}."
 
 #: bazzite_portal/ui/application.py:789 bazzite_portal/ui/application.py:2710
 msgid "The configuration file for this category is missing or invalid."
-msgstr ""
+msgstr "Файл конфігурації для цієї категорії відсутній або некоректний."
 
 #: bazzite_portal/ui/application.py:793 bazzite_portal/ui/maintenance.py:71
 msgid "Loading…"
-msgstr ""
+msgstr "Завантаження…"
 
 #: bazzite_portal/ui/application.py:798
 msgid "Pinned tools"
-msgstr ""
+msgstr "Закріплені інструменти"
 
 #: bazzite_portal/ui/application.py:806
 #, python-brace-format
 msgid "Get help, collect diagnostic logs, or repair the {steam} client."
 msgstr ""
+"Отримайте допомогу, зберіть журнали діагностики або відновіть клієнт {steam}."
 
 #: bazzite_portal/ui/application.py:813
 msgid "Report a problem"
-msgstr ""
+msgstr "Повідомити про проблему"
 
 #: bazzite_portal/ui/application.py:813
 #, python-brace-format
 msgid "Collect relevant logs and open a {bazzite} {github} issue."
 msgstr ""
+"Зібрати потрібні журнали і створити звіт про проблему {bazzite} на {github}."
 
 #: bazzite_portal/ui/application.py:821
 msgid "Collect system logs"
-msgstr ""
+msgstr "Зібрати системні журнали"
 
 #: bazzite_portal/ui/application.py:821
 msgid "Save logs and hardware details for troubleshooting on your Desktop."
 msgstr ""
+"Зберегти журнали та відомості про обладнання для діагностики на робочий стіл."
 
 #: bazzite_portal/ui/application.py:828 bazzite_portal/ui/application.py:1003
 #, python-brace-format
 msgid "Reset {steam}"
-msgstr ""
+msgstr "Скинути {steam}"
 
 #: bazzite_portal/ui/application.py:828
 #, python-brace-format
 msgid "Reset the {steam} client without removing your games."
-msgstr ""
+msgstr "Скинути клієнт {steam}, не видаляючи ігор."
 
 #: bazzite_portal/ui/application.py:870 bazzite_portal/ui/application.py:983
 #: bazzite_portal/ui/application.py:1065 bazzite_portal/ui/application.py:1088
 #: bazzite_portal/ui/application.py:1131
 msgid "Close"
-msgstr ""
+msgstr "Закрити"
 
 #: bazzite_portal/ui/application.py:929
 msgid "Collecting system logs"
-msgstr ""
+msgstr "Збирання системних журналів"
 
 #: bazzite_portal/ui/application.py:960
 msgid "Could not collect system logs. Open Logs for details."
 msgstr ""
+"Не вдалося зібрати системні журнали. Відкрийте журнали, щоб дізнатися "
+"подробиці."
 
 #: bazzite_portal/ui/application.py:963
 #, python-brace-format
 msgid "System logs collected and saved to {directory}."
-msgstr ""
+msgstr "Системні журнали зібрано і збережено в {directory}."
 
 #: bazzite_portal/ui/application.py:969
 msgid "System logs ready"
-msgstr ""
+msgstr "Системні журнали готові"
 
 #: bazzite_portal/ui/application.py:972
 msgid "System logs are ready."
-msgstr ""
+msgstr "Системні журнали готові."
 
 #: bazzite_portal/ui/application.py:976 bazzite_portal/ui/application.py:1123
 msgid "Warnings"
-msgstr ""
+msgstr "Попередження"
 
 #: bazzite_portal/ui/application.py:977 bazzite_portal/ui/application.py:1124
 msgid ""
 "Some diagnostic information could not be collected. See the collected logs "
 "for details."
 msgstr ""
+"Частину діагностичних відомостей не вдалося зібрати. Подробиці дивіться в "
+"зібраних журналах."
 
 #: bazzite_portal/ui/application.py:984 bazzite_portal/ui/application.py:1132
 msgid "Open logs folder"
-msgstr ""
+msgstr "Відкрити теку журналів"
 
 #: bazzite_portal/ui/application.py:998
 #, python-brace-format
 msgid "Reset {steam} Installation?"
-msgstr ""
+msgstr "Скинути встановлення {steam}?"
 
 #: bazzite_portal/ui/application.py:1000
 #, python-brace-format
@@ -726,6 +776,8 @@ msgid ""
 "{steam} will stop and sign you out. This only cleans the steam installation "
 "folder."
 msgstr ""
+"{steam} буде закрито, і ви вийдете з облікового запису. Буде очищено лише "
+"теку встановлення Steam."
 
 #: bazzite_portal/ui/application.py:1001
 #, python-brace-format
@@ -733,42 +785,45 @@ msgid ""
 "Your games, Saves, Configuration, Music and {proton} files will stay "
 "untouched."
 msgstr ""
+"Ваші ігри, збереження, налаштування, музика і файли {proton} залишаться "
+"недоторканими."
 
 #: bazzite_portal/ui/application.py:1002 bazzite_portal/ui/application.py:2570
 #: bazzite_portal/ui/image_wizard.py:177 bazzite_portal/ui/maintenance.py:1526
 #: bazzite_portal/ui/maintenance.py:1545
 msgid "Cancel"
-msgstr ""
+msgstr "Скасувати"
 
 #: bazzite_portal/ui/application.py:1019
 #, python-brace-format
 msgid "Resetting {steam}"
-msgstr ""
+msgstr "Скидання {steam}"
 
 #: bazzite_portal/ui/application.py:1048
 #, python-brace-format
 msgid "{steam} reset did not complete. Open Logs for details."
 msgstr ""
+"Скидання {steam} не завершилося. Відкрийте журнали, щоб дізнатися подробиці."
 
 #: bazzite_portal/ui/application.py:1052
 #, python-brace-format
 msgid "Some {steam} data has already been removed."
-msgstr ""
+msgstr "Частину даних {steam} уже видалено."
 
 #: bazzite_portal/ui/application.py:1055
 #, python-brace-format
 msgid "{steam} reset finished after its progress window was closed."
-msgstr ""
+msgstr "Скидання {steam} завершилося після закриття вікна з ходом виконання."
 
 #: bazzite_portal/ui/application.py:1061
 #, python-brace-format
 msgid "{steam} reset complete"
-msgstr ""
+msgstr "Скидання {steam} завершено"
 
 #: bazzite_portal/ui/application.py:1063
 #, python-brace-format
 msgid "{steam} reset is complete."
-msgstr ""
+msgstr "Скидання {steam} завершено."
 
 #: bazzite_portal/ui/application.py:1064
 #, python-brace-format
@@ -776,206 +831,216 @@ msgid ""
 "You can now open {steam}. Its client files need to download again, so the "
 "first launch may take a while."
 msgstr ""
+"Тепер можна відкрити {steam}. Його файли клієнта потрібно завантажити знову, "
+"тому перший запуск може тривати довше."
 
 #: bazzite_portal/ui/application.py:1071
 msgid "Collecting logs"
-msgstr ""
+msgstr "Збирання журналів"
 
 #: bazzite_portal/ui/application.py:1083
 msgid "Working on this device…"
-msgstr ""
+msgstr "Виконується на цьому пристрої…"
 
 #: bazzite_portal/ui/application.py:1103
 msgid "Could not collect diagnostic logs. Open Logs for details."
 msgstr ""
+"Не вдалося зібрати журнали діагностики. Відкрийте журнали, щоб дізнатися "
+"подробиці."
 
 #: bazzite_portal/ui/application.py:1107
 #, python-brace-format
 msgid "Logs collected and saved to {directory}."
-msgstr ""
+msgstr "Журнали зібрано і збережено в {directory}."
 
 #: bazzite_portal/ui/application.py:1116
 msgid "Logs ready"
-msgstr ""
+msgstr "Журнали готові"
 
 #: bazzite_portal/ui/application.py:1119
 msgid "Logs are ready."
-msgstr ""
+msgstr "Журнали готові."
 
 #: bazzite_portal/ui/application.py:1125
 msgid ""
 "Attach only the logs relevant to your problem. Then fill in the remaining "
 "fields and describe the issue."
 msgstr ""
+"Додайте лише журнали, що стосуються вашої проблеми. Потім заповніть решту "
+"полів і опишіть проблему."
 
 #: bazzite_portal/ui/application.py:1133
 #, python-brace-format
 msgid "Open {github} issue"
-msgstr ""
+msgstr "Створити звіт на {github}"
 
 #: bazzite_portal/ui/application.py:1137
 msgid "The issue form could not be prepared. Open Logs for details."
 msgstr ""
+"Не вдалося підготувати форму звіту. Відкрийте журнали, щоб дізнатися "
+"подробиці."
 
 #: bazzite_portal/ui/application.py:1176 bazzite_portal/ui/application.py:1180
 #: bazzite_portal/ui/application.py:3607 bazzite_portal/ui/maintenance.py:1270
 #: bazzite_portal/ui/widgets.py:101 bazzite_portal/ui/widgets.py:140
 msgid "D-pad Move"
-msgstr ""
+msgstr "Хрестовина: переміщення"
 
 #: bazzite_portal/ui/application.py:1214
 #, python-brace-format
 msgid "Location: {path}"
-msgstr ""
+msgstr "Розташування: {path}"
 
 #: bazzite_portal/ui/application.py:1226
 msgid "Could not open logs folder"
-msgstr ""
+msgstr "Не вдалося відкрити теку журналів"
 
 #: bazzite_portal/ui/application.py:1238
 #, python-brace-format
 msgid "{action}. Open Logs for details."
-msgstr ""
+msgstr "{action}. Відкрийте журнали, щоб дізнатися подробиці."
 
 #: bazzite_portal/ui/application.py:1267
 #, python-brace-format
 msgid "The {github} issue form could not be prepared."
-msgstr ""
+msgstr "Не вдалося підготувати форму звіту на {github}."
 
 #: bazzite_portal/ui/application.py:1274 bazzite_portal/ui/application.py:2586
 #: bazzite_portal/ui/application.py:2816 bazzite_portal/ui/application.py:3252
 msgid "Could not open link"
-msgstr ""
+msgstr "Не вдалося відкрити посилання"
 
 #: bazzite_portal/ui/application.py:1383 bazzite_portal/ui/application.py:1546
 msgid "Action"
-msgstr ""
+msgstr "Дія"
 
 #: bazzite_portal/ui/application.py:1383
 msgid "Unavailable tool"
-msgstr ""
+msgstr "Недоступний інструмент"
 
 #: bazzite_portal/ui/application.py:1384
 msgid "Unavailable or ambiguous · select to unpin"
-msgstr ""
+msgstr "Недоступний або неоднозначний · виберіть, щоб відкріпити"
 
 #: bazzite_portal/ui/application.py:1405
 msgid "Unpin unavailable tool?"
-msgstr ""
+msgstr "Відкріпити недоступний інструмент?"
 
 #: bazzite_portal/ui/application.py:1406
 msgid ""
 "This pin no longer resolves to one unambiguous Portal action. Removing the "
 "pin does not run any script."
 msgstr ""
+"Це закріплення більше не вказує на одну конкретну дію Portal. Відкріплення "
+"не запускає жодного скрипту."
 
 #: bazzite_portal/ui/application.py:1407 bazzite_portal/ui/application.py:1683
 #: bazzite_portal/ui/application.py:1684 bazzite_portal/ui/application.py:3581
 #: bazzite_portal/ui/application.py:3592
 msgid "Unpin"
-msgstr ""
+msgstr "Відкріпити"
 
 #: bazzite_portal/ui/application.py:1446
 msgid "Search"
-msgstr ""
+msgstr "Пошук"
 
 #: bazzite_portal/ui/application.py:1449 bazzite_portal/ui/application.py:1450
 #: bazzite_portal/ui/application.py:1464 bazzite_portal/ui/application.py:1466
 msgid "Search tools"
-msgstr ""
+msgstr "Шукати інструменти"
 
 #: bazzite_portal/ui/application.py:1503 bazzite_portal/ui/application.py:1504
 msgid "Back to Tools"
-msgstr ""
+msgstr "Назад до інструментів"
 
 #: bazzite_portal/ui/application.py:1503 bazzite_portal/ui/application.py:1504
 msgid "Back to Home"
-msgstr ""
+msgstr "Назад на головну"
 
 #: bazzite_portal/ui/application.py:1536
 msgid "No matching tools"
-msgstr ""
+msgstr "Немає відповідних інструментів"
 
 #: bazzite_portal/ui/application.py:1536
 msgid "Try another search."
-msgstr ""
+msgstr "Спробуйте інший запит."
 
 #: bazzite_portal/ui/application.py:1578 bazzite_portal/ui/application.py:1880
 msgid "Checking current status…"
-msgstr ""
+msgstr "Перевірка поточного стану…"
 
 #: bazzite_portal/ui/application.py:1579
 msgid "Checking status"
-msgstr ""
+msgstr "Перевірка стану"
 
 #: bazzite_portal/ui/application.py:1622 bazzite_portal/ui/application.py:1792
 msgid "Current status is unknown."
-msgstr ""
+msgstr "Поточний стан невідомий."
 
 #: bazzite_portal/ui/application.py:1622 bazzite_portal/ui/application.py:1793
 #, python-brace-format
 msgid "Current status: {status}"
-msgstr ""
+msgstr "Поточний стан: {status}"
 
 #: bazzite_portal/ui/application.py:1623
 #, python-brace-format
 msgid "Status {status}"
-msgstr ""
+msgstr "Стан: {status}"
 
 #: bazzite_portal/ui/application.py:1647
 msgid "This tool has a missing or ambiguous ID"
-msgstr ""
+msgstr "Ідентифікатор цього інструмента відсутній або неоднозначний"
 
 #: bazzite_portal/ui/application.py:1648
 msgid "Pin unavailable: missing or ambiguous ID"
-msgstr ""
+msgstr "Закріплення недоступне: ідентифікатор відсутній або неоднозначний"
 
 #: bazzite_portal/ui/application.py:1683 bazzite_portal/ui/application.py:1684
 #: bazzite_portal/ui/application.py:3581 bazzite_portal/ui/application.py:3592
 msgid "Pin"
-msgstr ""
+msgstr "Закріпити"
 
 #: bazzite_portal/ui/application.py:1758
 msgid "No command is configured for this tool."
-msgstr ""
+msgstr "Для цього інструмента не налаштовано команди."
 
 #: bazzite_portal/ui/application.py:1804
 #, python-brace-format
 msgid "Run {value1}?"
-msgstr ""
+msgstr "Запустити «{value1}»?"
 
 #: bazzite_portal/ui/application.py:1804 bazzite_portal/ui/application.py:1833
 msgid "Tool"
-msgstr ""
+msgstr "Інструмент"
 
 #: bazzite_portal/ui/application.py:1835
 msgid "This command opens in your desktop terminal."
-msgstr ""
+msgstr "Ця команда відкриється в терміналі робочого столу."
 
 #: bazzite_portal/ui/application.py:1841
 msgid "Do you want to run this tool?"
-msgstr ""
+msgstr "Запустити цей інструмент?"
 
 #: bazzite_portal/ui/application.py:1888 bazzite_portal/ui/application.py:1889
 msgid "Run"
-msgstr ""
+msgstr "Запустити"
 
 #: bazzite_portal/ui/application.py:1996 bazzite_portal/ui/application.py:1998
 #: bazzite_portal/ui/application.py:2532
 msgid "Update"
-msgstr ""
+msgstr "Оновити"
 
 #: bazzite_portal/ui/application.py:2006
 msgid "Changelog"
-msgstr ""
+msgstr "Перелік змін"
 
 #: bazzite_portal/ui/application.py:2033
 msgid "No log output available yet."
-msgstr ""
+msgstr "Виводу журналу ще немає."
 
 #: bazzite_portal/ui/application.py:2036 bazzite_portal/ui/application.py:2477
 msgid "Update log"
-msgstr ""
+msgstr "Журнал оновлення"
 
 #: bazzite_portal/ui/application.py:2054 bazzite_portal/ui/application.py:2513
 #, python-brace-format
@@ -983,85 +1048,88 @@ msgid ""
 "An {rpm_ostree} transaction is active. Wait for it to finish before updating "
 "or restarting."
 msgstr ""
+"Виконується транзакція {rpm_ostree}. Дочекайтеся її завершення, перш ніж "
+"оновлювати або перезапускати систему."
 
 #: bazzite_portal/ui/application.py:2065 bazzite_portal/ui/application.py:2146
 msgid "Finished · awaiting update result"
-msgstr ""
+msgstr "Завершено · очікування результату оновлення"
 
 #: bazzite_portal/ui/application.py:2070
 msgid "Completed"
-msgstr ""
+msgstr "Завершено"
 
 #: bazzite_portal/ui/application.py:2075 bazzite_portal/ui/maintenance.py:22
 msgid "Failed"
-msgstr ""
+msgstr "Помилка"
 
 #: bazzite_portal/ui/application.py:2080
 msgid "Waiting to start"
-msgstr ""
+msgstr "Очікує запуску"
 
 #: bazzite_portal/ui/application.py:2085 bazzite_portal/ui/application.py:2137
 msgid "Skipped"
-msgstr ""
+msgstr "Пропущено"
 
 #: bazzite_portal/ui/application.py:2094
 #, no-python-format, python-brace-format
 msgid "{percent}% complete"
-msgstr ""
+msgstr "Виконано {percent}%"
 
 #: bazzite_portal/ui/application.py:2108
 msgid "In progress"
-msgstr ""
+msgstr "Виконується"
 
 #: bazzite_portal/ui/application.py:2112 bazzite_portal/ui/application.py:2137
 msgid "Status unavailable"
-msgstr ""
+msgstr "Стан недоступний"
 
 #: bazzite_portal/ui/application.py:2132 bazzite_portal/ui/application.py:2498
 msgid "Update step"
-msgstr ""
+msgstr "Крок оновлення"
 
 #: bazzite_portal/ui/application.py:2135
 #, python-brace-format
 msgid "{bazzite} System"
-msgstr ""
+msgstr "Система {bazzite}"
 
 #: bazzite_portal/ui/application.py:2137
 msgid "Waiting to update"
-msgstr ""
+msgstr "Очікує оновлення"
 
 #: bazzite_portal/ui/application.py:2140
 msgid "Update failed. Open the update log for details."
 msgstr ""
+"Не вдалося оновити. Відкрийте журнал оновлення, щоб дізнатися подробиці."
 
 #: bazzite_portal/ui/application.py:2142 bazzite_portal/updates/model.py:454
 msgid "No system update is available."
-msgstr ""
+msgstr "Оновлень системи немає."
 
 #: bazzite_portal/ui/application.py:2148
 msgid "Updated"
-msgstr ""
+msgstr "Оновлено"
 
 #: bazzite_portal/ui/application.py:2150
 msgid "New version ready on next restart"
-msgstr ""
+msgstr "Нова версія запуститься після перезапуску"
 
 #: bazzite_portal/ui/application.py:2152 bazzite_portal/updates/monitor.py:1474
 msgid "Reading update progress…"
-msgstr ""
+msgstr "Отримання ходу оновлення…"
 
 #: bazzite_portal/ui/application.py:2174
 msgid "Logs unavailable"
-msgstr ""
+msgstr "Журнали недоступні"
 
 #: bazzite_portal/ui/application.py:2176
 msgid "No module log output"
-msgstr ""
+msgstr "Модуль нічого не записав у журнал"
 
 #: bazzite_portal/ui/application.py:2246
 #, python-brace-format
 msgid "Restart {bazzite}?"
-msgstr ""
+msgstr "Перезапустити {bazzite}?"
 
 #: bazzite_portal/ui/application.py:2246
 #, python-brace-format
@@ -1069,22 +1137,24 @@ msgid ""
 "All update steps have finished. Restart now to start the prepared {bazzite} "
 "version. Save your work before continuing."
 msgstr ""
+"Усі кроки оновлення завершено. Перезапустіть систему зараз, щоб запустити "
+"підготовлену версію {bazzite}. Перш ніж продовжити, збережіть свою роботу."
 
 #: bazzite_portal/ui/application.py:2246 bazzite_portal/ui/application.py:2530
 msgid "Restart"
-msgstr ""
+msgstr "Перезапустити"
 
 #: bazzite_portal/ui/application.py:2303
 msgid "This release has no written notes."
-msgstr ""
+msgstr "Для цього випуску немає опису змін."
 
 #: bazzite_portal/ui/application.py:2307
 msgid "Could not load the changelog. Try again later."
-msgstr ""
+msgstr "Не вдалося завантажити перелік змін. Спробуйте пізніше."
 
 #: bazzite_portal/ui/application.py:2307
 msgid "No matching release notes were found."
-msgstr ""
+msgstr "Відповідних приміток до випуску не знайдено."
 
 #: bazzite_portal/ui/application.py:2312 bazzite_portal/ui/application.py:2321
 #: bazzite_portal/ui/maintenance.py:77 bazzite_portal/ui/maintenance.py:233
@@ -1092,41 +1162,41 @@ msgstr ""
 #: bazzite_portal/ui/maintenance.py:282 bazzite_portal/ui/maintenance.py:293
 #: bazzite_portal/ui/maintenance.py:343
 msgid "Next restart"
-msgstr ""
+msgstr "Після перезапуску"
 
 #: bazzite_portal/ui/application.py:2313
 msgid "Running now"
-msgstr ""
+msgstr "Запущено зараз"
 
 #: bazzite_portal/ui/application.py:2321
 msgid "Pending update"
-msgstr ""
+msgstr "Очікуване оновлення"
 
 #: bazzite_portal/ui/application.py:2321
 msgid "Installed version"
-msgstr ""
+msgstr "Встановлена версія"
 
 #: bazzite_portal/ui/application.py:2326
 msgid "No verified release version and channel are available."
-msgstr ""
+msgstr "Немає перевіреної версії випуску та каналу."
 
 #: bazzite_portal/ui/application.py:2479 bazzite_portal/ui/application.py:2483
 #: bazzite_portal/ui/maintenance.py:330
 msgid "Rolling back…"
-msgstr ""
+msgstr "Відкат…"
 
 #: bazzite_portal/ui/application.py:2479
 #, python-brace-format
 msgid "{bazzite} is updating…"
-msgstr ""
+msgstr "{bazzite} оновлюється…"
 
 #: bazzite_portal/ui/application.py:2481
 msgid "Rebasing…"
-msgstr ""
+msgstr "Перебазування…"
 
 #: bazzite_portal/ui/application.py:2485
 msgid "System operation in progress…"
-msgstr ""
+msgstr "Виконується системна операція…"
 
 #: bazzite_portal/ui/application.py:2518
 #, python-brace-format
@@ -1134,99 +1204,106 @@ msgid ""
 "A system change is pending, but {app_name} could not verify it. Restart is "
 "unavailable until its status can be checked."
 msgstr ""
+"Зміна системи очікує, але {app_name} не вдалося її перевірити. Перезапуск "
+"буде недоступний, доки не вдасться перевірити її стан."
 
 #: bazzite_portal/ui/application.py:2520
 #, python-brace-format
 msgid "{bazzite} updates are unavailable. Open Logs for details."
 msgstr ""
+"Оновлення {bazzite} недоступні. Відкрийте журнали, щоб дізнатися подробиці."
 
 #: bazzite_portal/ui/application.py:2526
 msgid "Updating…"
-msgstr ""
+msgstr "Оновлення…"
 
 #: bazzite_portal/ui/application.py:2528
 msgid "Busy"
-msgstr ""
+msgstr "Зайнято"
 
 #: bazzite_portal/ui/application.py:2557
 msgid "The update request could not be sent. Open Logs for details."
 msgstr ""
+"Не вдалося надіслати запит на оновлення. Відкрийте журнали, щоб дізнатися "
+"подробиці."
 
 #: bazzite_portal/ui/application.py:2560 bazzite_portal/ui/maintenance.py:313
 #: bazzite_portal/ui/maintenance.py:523 bazzite_portal/ui/maintenance.py:603
 #: bazzite_portal/ui/maintenance.py:1452 bazzite_portal/ui/maintenance.py:1599
 #: bazzite_portal/ui/maintenance.py:1713
 msgid "System status is unavailable. Open Logs for details."
-msgstr ""
+msgstr "Стан системи недоступний. Відкрийте журнали, щоб дізнатися подробиці."
 
 #: bazzite_portal/ui/application.py:2584
 msgid "Read the rebase documentation"
-msgstr ""
+msgstr "Прочитати документацію про перебазування"
 
 #: bazzite_portal/ui/application.py:2631
 #, python-brace-format
 msgid "Visit {bazzite} documentation, community spaces, and source code."
-msgstr ""
+msgstr "Документація {bazzite}, місця спілкування спільноти та вихідний код."
 
 #: bazzite_portal/ui/application.py:2632
 msgid "Resources"
-msgstr ""
+msgstr "Ресурси"
 
 #: bazzite_portal/ui/application.py:2667
 #, python-brace-format
 msgid "{bazzite} release and project announcements."
-msgstr ""
+msgstr "Оголошення про випуски та проєкт {bazzite}."
 
 #: bazzite_portal/ui/application.py:2669 bazzite_portal/ui/application.py:2716
 msgid "No announcements available"
-msgstr ""
+msgstr "Оголошень немає"
 
 #: bazzite_portal/ui/application.py:2807
 #, python-brace-format
 msgid "This community link is not a valid {https} address."
-msgstr ""
+msgstr "Це посилання спільноти не є коректною адресою {https}."
 
 #: bazzite_portal/ui/application.py:2821
 msgid "Preferences"
-msgstr ""
+msgstr "Параметри"
 
 #: bazzite_portal/ui/application.py:2825
 msgid "Open app at login"
-msgstr ""
+msgstr "Відкривати програму під час входу"
 
 #: bazzite_portal/ui/application.py:2825
 msgid "Open the window at login. Background monitoring starts independently."
 msgstr ""
+"Відкривати вікно під час входу в систему. Фоновий моніторинг запускається "
+"незалежно від цього."
 
 #: bazzite_portal/ui/application.py:2826
 msgid "Hide notification area icon"
-msgstr ""
+msgstr "Сховати значок в області сповіщень"
 
 #: bazzite_portal/ui/application.py:2826
 msgid "Hide the update icon in the notification area."
-msgstr ""
+msgstr "Сховати значок оновлень в області сповіщень."
 
 #: bazzite_portal/ui/application.py:2827
 msgid "Show console during update"
-msgstr ""
+msgstr "Показувати консоль під час оновлення"
 
 #: bazzite_portal/ui/application.py:2827
 msgid "Show the console on the Updates screen. Intended for advanced users."
-msgstr ""
+msgstr "Показувати консоль на екрані «Оновлення». Для досвідчених користувачів."
 
 #: bazzite_portal/ui/application.py:2828
 #, python-brace-format
 msgid "Show disabled {uupd} steps"
-msgstr ""
+msgstr "Показувати вимкнені кроки {uupd}"
 
 #: bazzite_portal/ui/application.py:2828
 #, python-brace-format
 msgid "Display steps disabled in {uupd}. This does not enable them."
-msgstr ""
+msgstr "Показувати кроки, вимкнені в {uupd}. Це не вмикає їх."
 
 #: bazzite_portal/ui/application.py:2829
 msgid "Show unsupported rebase targets"
-msgstr ""
+msgstr "Показувати непідтримувані цілі перебазування"
 
 #: bazzite_portal/ui/application.py:2830
 #, python-brace-format
@@ -1234,127 +1311,140 @@ msgid ""
 "Include other desktops and the {track} channel. Intended for advanced "
 "testing; these targets may cause problems."
 msgstr ""
+"Додати інші робочі середовища і канал {track}. Призначено для досвідченого "
+"тестування: ці цілі можуть спричинити проблеми."
 
 #: bazzite_portal/ui/application.py:2832
 msgid "Don’t ask before running tools"
-msgstr ""
+msgstr "Не питати перед запуском інструментів"
 
 #: bazzite_portal/ui/application.py:2832
 msgid "Skip confirmation for tools that run without an options dialog."
 msgstr ""
+"Не просити підтвердження для інструментів, які запускаються без вікна "
+"параметрів."
 
 #: bazzite_portal/ui/application.py:2833
 msgid "Always show controller prompts"
-msgstr ""
+msgstr "Завжди показувати підказки контролера"
 
 #: bazzite_portal/ui/application.py:2833
 msgid "Keep button prompts visible when no controller is connected."
-msgstr ""
+msgstr "Показувати підказки кнопок, навіть коли контролер не під'єднано."
 
 #: bazzite_portal/ui/application.py:2849 bazzite_portal/ui/application.py:3034
 #: bazzite_portal/ui/application.py:3082
 msgid "Automatic"
-msgstr ""
+msgstr "Автоматично"
 
 #: bazzite_portal/ui/application.py:2850 bazzite_portal/ui/application.py:2857
 msgid "Controller prompt style"
-msgstr ""
+msgstr "Стиль підказок контролера"
 
 #: bazzite_portal/ui/application.py:2850
 msgid ""
 "Choose how controller buttons are drawn; controls keep the same actions."
-msgstr ""
+msgstr "Виберіть, як показувати кнопки контролера; дії кнопок не змінюються."
 
 #: bazzite_portal/ui/application.py:2891
 msgid "Notification icon theme"
-msgstr ""
+msgstr "Тема значка сповіщень"
 
 #: bazzite_portal/ui/application.py:2927
 #, python-brace-format
 msgid "Add {app_name} to {steam}"
-msgstr ""
+msgstr "Додати {app_name} до {steam}"
 
 #: bazzite_portal/ui/application.py:2928
 #, python-brace-format
 msgid "Open this app from your {steam} library, including Gaming Mode."
 msgstr ""
+"Відкривайте цю програму з бібліотеки {steam}, зокрема в ігровому режимі."
 
 #: bazzite_portal/ui/application.py:2936
 msgid "Local app data"
-msgstr ""
+msgstr "Локальні дані програми"
 
 #: bazzite_portal/ui/application.py:2937
 msgid "Open app logs"
-msgstr ""
+msgstr "Відкрити журнали програми"
 
 #: bazzite_portal/ui/application.py:2937
 msgid "Open the folder containing this app’s private logs."
-msgstr ""
+msgstr "Відкрити теку з власними журналами цієї програми."
 
 #: bazzite_portal/ui/application.py:2943
 msgid "Clear local app data"
-msgstr ""
+msgstr "Очистити локальні дані програми"
 
 #: bazzite_portal/ui/application.py:2943
 msgid ""
 "Remove pins, preferences, and dismissed reminders. Running jobs are "
 "unaffected."
 msgstr ""
+"Видалити закріплення, параметри і приховані нагадування. Операції, що "
+"виконуються, це не зачепить."
 
 #: bazzite_portal/ui/application.py:2946
 msgid "Clear local app data?"
-msgstr ""
+msgstr "Очистити локальні дані програми?"
 
 #: bazzite_portal/ui/application.py:2946
 msgid ""
 "Your pins, preferences, and dismissed reminders will be removed. System "
 "updates and their logs will not be changed."
 msgstr ""
+"Ваші закріплення, параметри і приховані нагадування буде видалено. Оновлення "
+"системи та їхні журнали не зміняться."
 
 #: bazzite_portal/ui/application.py:2946
 msgid "Clear data"
-msgstr ""
+msgstr "Очистити дані"
 
 #: bazzite_portal/ui/application.py:2949
 msgid "About"
-msgstr ""
+msgstr "Про програму"
 
 #: bazzite_portal/ui/application.py:2950
 #, python-brace-format
 msgid "About {app_name}"
-msgstr ""
+msgstr "Про {app_name}"
 
 #: bazzite_portal/ui/application.py:2956 bazzite_portal/ui/application.py:3091
 msgid "Could not save or load app preferences. Open Logs for details."
 msgstr ""
+"Не вдалося зберегти або завантажити параметри програми. Відкрийте журнали, "
+"щоб дізнатися подробиці."
 
 #: bazzite_portal/ui/application.py:2973
 #, python-brace-format
 msgid "{app_name} is already in your {steam} library."
-msgstr ""
+msgstr "{app_name} вже є у вашій бібліотеці {steam}."
 
 #: bazzite_portal/ui/application.py:2975
 #, python-brace-format
 msgid "Added to {steam}."
-msgstr ""
+msgstr "Додано до {steam}."
 
 #: bazzite_portal/ui/application.py:2976
 #, python-brace-format
 msgid "Add to {steam} requested."
-msgstr ""
+msgstr "Запит на додавання до {steam} надіслано."
 
 #: bazzite_portal/ui/application.py:2979
 #, python-brace-format
 msgid "Could not add {app_name} to {steam}. Open Logs for details."
 msgstr ""
+"Не вдалося додати {app_name} до {steam}. Відкрийте журнали, щоб дізнатися "
+"подробиці."
 
 #: bazzite_portal/ui/application.py:2998
 msgid "Could not open the app logs folder."
-msgstr ""
+msgstr "Не вдалося відкрити теку журналів програми."
 
 #: bazzite_portal/ui/application.py:3021
 msgid "Unsupported rebase targets"
-msgstr ""
+msgstr "Непідтримувані цілі перебазування"
 
 #: bazzite_portal/ui/application.py:3022
 #, python-brace-format
@@ -1364,104 +1454,112 @@ msgid ""
 "right not to provide support in these situations. Please read our "
 "documentation for further information."
 msgstr ""
+"Перебазування на непідтримувані цілі, зокрема інші робочі середовища і канал "
+"{track}, може зламати і зламає вашу систему. Команда {bazzite} залишає за "
+"собою право не надавати підтримку в таких випадках. Щоб дізнатися більше, "
+"прочитайте нашу документацію."
 
 #: bazzite_portal/ui/application.py:3024
 msgid "OK"
-msgstr ""
+msgstr "Гаразд"
 
 #: bazzite_portal/ui/application.py:3092
 msgid "Local app data cleared."
-msgstr ""
+msgstr "Локальні дані програми очищено."
 
 #: bazzite_portal/ui/application.py:3105
 #, python-brace-format
 msgid "Manage {bazzite} updates, tools, and system settings."
-msgstr ""
+msgstr "Керуйте оновленнями, інструментами і налаштуваннями системи {bazzite}."
 
 #: bazzite_portal/ui/application.py:3106
 msgid "translator-credits"
-msgstr ""
+msgstr "Andrii Butsvin"
 
 #: bazzite_portal/ui/application.py:3261
 msgid "The requested action is missing or ambiguous."
-msgstr ""
+msgstr "Запитана дія відсутня або неоднозначна."
 
 #: bazzite_portal/ui/application.py:3570 bazzite_portal/ui/widgets.py:94
 #: bazzite_portal/ui/widgets.py:102
 msgid "Move"
-msgstr ""
+msgstr "Переміщення"
 
 #: bazzite_portal/ui/application.py:3575 bazzite_portal/ui/application.py:3587
 #: bazzite_portal/ui/maintenance.py:1085 bazzite_portal/ui/widgets.py:94
 #: bazzite_portal/ui/widgets.py:102
 msgid "Scroll"
-msgstr ""
+msgstr "Прокручування"
 
 #: bazzite_portal/ui/application.py:3595 bazzite_portal/ui/application.py:3599
 #: bazzite_portal/ui/widgets.py:101
 msgid "D-pad Scroll"
-msgstr ""
+msgstr "Хрестовина: прокручування"
 
 #: bazzite_portal/ui/application.py:3610
 msgid "Review selected"
-msgstr ""
+msgstr "Переглянути вибране"
 
 #: bazzite_portal/ui/application.py:3686
 msgid "Open a Portal tool"
-msgstr ""
+msgstr "Відкрити інструмент Portal"
 
 #: bazzite_portal/ui/decky.py:77
 msgid "Bazzite Portal in Gaming Mode"
-msgstr ""
+msgstr "Bazzite Portal в ігровому режимі"
 
 #: bazzite_portal/ui/decky.py:78
 msgid ""
 "Install the Bazzite Portal plugin for Decky Loader to manage updates and "
 "rollbacks directly from Gaming Mode."
 msgstr ""
+"Встановіть плагін Bazzite Portal для Decky Loader, щоб керувати оновленнями "
+"і відкатами прямо з ігрового режиму."
 
 #: bazzite_portal/ui/decky.py:79
 msgid "Install Plugin"
-msgstr ""
+msgstr "Встановити плагін"
 
 #: bazzite_portal/ui/decky.py:79
 msgid "Not Now"
-msgstr ""
+msgstr "Не зараз"
 
 #: bazzite_portal/ui/decky.py:80
 msgid "You can install the Bazzite Portal plugin at any time from Settings."
-msgstr ""
+msgstr "Плагін Bazzite Portal можна будь-коли встановити в налаштуваннях."
 
 #: bazzite_portal/ui/decky.py:91 bazzite_portal/ui/decky.py:120
 #: bazzite_portal/ui/decky.py:125
 msgid "Install Bazzite Portal Decky plugin"
-msgstr ""
+msgstr "Встановити плагін Bazzite Portal для Decky"
 
 #: bazzite_portal/ui/decky.py:92
 msgid "Use Bazzite Portal from Decky Loader in Gaming Mode."
-msgstr ""
+msgstr "Користуйтеся Bazzite Portal з Decky Loader в ігровому режимі."
 
 #: bazzite_portal/ui/decky.py:107
 msgid "Checking Decky plugin…"
-msgstr ""
+msgstr "Перевірка плагіна Decky…"
 
 #: bazzite_portal/ui/decky.py:107
 msgid "Waiting for Decky Loader…"
-msgstr ""
+msgstr "Очікування Decky Loader…"
 
 #: bazzite_portal/ui/decky.py:109
 msgid "Confirm in Decky Loader"
-msgstr ""
+msgstr "Підтвердьте в Decky Loader"
 
 #: bazzite_portal/ui/decky.py:109
 msgid ""
 "Confirm the installation in Decky Loader, then return to Settings to refresh "
 "its status."
 msgstr ""
+"Підтвердьте встановлення в Decky Loader, а потім поверніться в налаштування, "
+"щоб оновити його стан."
 
 #: bazzite_portal/ui/decky.py:112
 msgid "Update Bazzite Portal Decky plugin"
-msgstr ""
+msgstr "Оновити плагін Bazzite Portal для Decky"
 
 #: bazzite_portal/ui/decky.py:113
 #, python-brace-format
@@ -1469,10 +1567,12 @@ msgid ""
 "Update the installed plugin from {installed} to {bundled}. Decky Loader "
 "preserves its settings."
 msgstr ""
+"Оновити встановлений плагін з версії {installed} до {bundled}. Decky Loader "
+"збереже його налаштування."
 
 #: bazzite_portal/ui/decky.py:116
 msgid "Downgrade Bazzite Portal Decky plugin"
-msgstr ""
+msgstr "Понизити версію плагіна Bazzite Portal для Decky"
 
 #: bazzite_portal/ui/decky.py:117
 #, python-brace-format
@@ -1480,237 +1580,252 @@ msgid ""
 "Downgrade the installed plugin from {installed} to the bundled version "
 "{bundled}. Decky Loader preserves its settings."
 msgstr ""
+"Понизити версію встановленого плагіна з {installed} до вбудованої {bundled}. "
+"Decky Loader збереже його налаштування."
 
 #: bazzite_portal/ui/decky.py:120
 msgid ""
 "Decky Loader will ask you to confirm installation of the bundled plugin."
 msgstr ""
+"Decky Loader попросить вас підтвердити встановлення вбудованого плагіна."
 
 #: bazzite_portal/ui/decky.py:122
 msgid "Bazzite Portal Decky plugin installed"
-msgstr ""
+msgstr "Плагін Bazzite Portal для Decky встановлено"
 
 #: bazzite_portal/ui/decky.py:123
 #, python-brace-format
 msgid "Installed version: {version}"
-msgstr ""
+msgstr "Встановлена версія: {version}"
 
 #: bazzite_portal/ui/decky.py:126
 msgid "Decky plugin installation is unavailable."
-msgstr ""
+msgstr "Встановлення плагіна Decky недоступне."
 
 #: bazzite_portal/ui/image_wizard.py:40
 msgid ""
 "Experimental builds for development and testing; may be incomplete or broken"
 msgstr ""
+"Експериментальні збірки для розробки і тестування; можуть бути неповними або "
+"несправними"
 
 #: bazzite_portal/ui/image_wizard.py:41
 msgid "Recommended releases for everyday use"
-msgstr ""
+msgstr "Рекомендовані випуски для щоденного використання"
 
 #: bazzite_portal/ui/image_wizard.py:42
 msgid "Preview upcoming changes; may be less stable"
-msgstr ""
+msgstr "Попередній перегляд майбутніх змін; можуть бути менш стабільними"
 
 #: bazzite_portal/ui/image_wizard.py:63
 #, python-brace-format
 msgid "Patch {number}"
-msgstr ""
+msgstr "Виправлення {number}"
 
 #: bazzite_portal/ui/image_wizard.py:127 bazzite_portal/ui/image_wizard.py:269
 #: bazzite_portal/ui/image_wizard.py:320
 msgid "Choose an Image"
-msgstr ""
+msgstr "Виберіть образ"
 
 #: bazzite_portal/ui/image_wizard.py:269 bazzite_portal/ui/image_wizard.py:343
 msgid "Choose Channel"
-msgstr ""
+msgstr "Виберіть канал"
 
 #: bazzite_portal/ui/image_wizard.py:270 bazzite_portal/ui/image_wizard.py:380
 #, python-brace-format
 msgid "Choose a {track} Version"
-msgstr ""
+msgstr "Виберіть версію {track}"
 
 #: bazzite_portal/ui/image_wizard.py:314
 msgid "Loading available images…"
-msgstr ""
+msgstr "Завантаження доступних образів…"
 
 #: bazzite_portal/ui/image_wizard.py:314 bazzite_portal/ui/image_wizard.py:359
 msgid "Please wait."
-msgstr ""
+msgstr "Зачекайте."
 
 #: bazzite_portal/ui/image_wizard.py:318
 #, python-brace-format
 msgid "Could not load available {bazzite} images. Try again."
-msgstr ""
+msgstr "Не вдалося завантажити доступні образи {bazzite}. Спробуйте ще раз."
 
 #: bazzite_portal/ui/image_wizard.py:322
 msgid "No images are available."
-msgstr ""
+msgstr "Немає доступних образів."
 
 #: bazzite_portal/ui/image_wizard.py:359
 msgid "Loading versions…"
-msgstr ""
+msgstr "Завантаження версій…"
 
 #: bazzite_portal/ui/image_wizard.py:378
 #, python-brace-format
 msgid "Could not load {bazzite} versions. Try again."
-msgstr ""
+msgstr "Не вдалося завантажити версії {bazzite}. Спробуйте ще раз."
 
 #: bazzite_portal/ui/image_wizard.py:382 bazzite_portal/ui/maintenance.py:1654
 #, python-brace-format
 msgid "Latest {track}"
-msgstr ""
+msgstr "Найновіша версія {track}"
 
 #: bazzite_portal/ui/image_wizard.py:385
 msgid "No dated releases are available."
-msgstr ""
+msgstr "Немає випусків з датою."
 
 #: bazzite_portal/ui/maintenance.py:22
 msgid "Running"
-msgstr ""
+msgstr "Виконується"
 
 #: bazzite_portal/ui/maintenance.py:22
 msgid "Succeeded"
-msgstr ""
+msgstr "Успішно"
 
 #: bazzite_portal/ui/maintenance.py:36 bazzite_portal/ui/maintenance.py:1445
 msgid "Refresh"
-msgstr ""
+msgstr "Оновити дані"
 
 #: bazzite_portal/ui/maintenance.py:68
 #, python-brace-format
 msgid "{bazzite} Image Version"
-msgstr ""
+msgstr "Версія образу {bazzite}"
 
 #: bazzite_portal/ui/maintenance.py:68
 msgid "The image and update track used by your running system."
-msgstr ""
+msgstr "Образ і гілка оновлень, які використовує ваша запущена система."
 
 #: bazzite_portal/ui/maintenance.py:70
 msgid "Image"
-msgstr ""
+msgstr "Образ"
 
 #: bazzite_portal/ui/maintenance.py:70 bazzite_portal/ui/maintenance.py:168
 msgid "Release channel"
-msgstr ""
+msgstr "Канал випусків"
 
 #: bazzite_portal/ui/maintenance.py:76
 msgid "Deployment overview"
-msgstr ""
+msgstr "Огляд розгортань"
 
 #: bazzite_portal/ui/maintenance.py:76
 msgid "Read-only details for the running and next-restart deployments."
 msgstr ""
+"Відомості (лише для читання) про запущене розгортання і розгортання для "
+"наступного перезапуску."
 
 #: bazzite_portal/ui/maintenance.py:77
 msgid "Loading next-restart information…"
-msgstr ""
+msgstr "Завантаження відомостей про наступний перезапуск…"
 
 #: bazzite_portal/ui/maintenance.py:85
 msgid "System customizations"
-msgstr ""
+msgstr "Модифікації системи"
 
 #: bazzite_portal/ui/maintenance.py:85
 msgid "Packages layered onto the system you are running now."
-msgstr ""
+msgstr "Пакунки, накладені на систему, яка зараз запущена."
 
 #: bazzite_portal/ui/maintenance.py:89
 msgid "Customization details not loaded"
-msgstr ""
+msgstr "Подробиці модифікацій не завантажено"
 
 #: bazzite_portal/ui/maintenance.py:126
 msgid "Recovery"
-msgstr ""
+msgstr "Відновлення"
 
 #: bazzite_portal/ui/maintenance.py:126
 msgid ""
 "Rollback selects the previous system deployment for your next boot. Personal "
 "files are preserved."
 msgstr ""
+"Відкат вибирає попереднє розгортання системи для наступного запуску. "
+"Особисті файли зберігаються."
 
 #: bazzite_portal/ui/maintenance.py:129 bazzite_portal/ui/maintenance.py:348
 msgid "Checking previous deployment…"
-msgstr ""
+msgstr "Перевірка попереднього розгортання…"
 
 #: bazzite_portal/ui/maintenance.py:130
 msgid "Refresh system information to check rollback availability."
-msgstr ""
+msgstr "Оновіть відомості про систему, щоб перевірити, чи доступний відкат."
 
 #: bazzite_portal/ui/maintenance.py:138
 msgid "Manage Deployments"
-msgstr ""
+msgstr "Керування розгортаннями"
 
 #: bazzite_portal/ui/maintenance.py:138
 msgid "Manage prepared updates and saved system versions."
-msgstr ""
+msgstr "Керування підготовленими оновленнями і збереженими версіями системи."
 
 #: bazzite_portal/ui/maintenance.py:139 bazzite_portal/ui/maintenance.py:687
 msgid "Checking pending deployment…"
-msgstr ""
+msgstr "Перевірка очікуваного розгортання…"
 
 #: bazzite_portal/ui/maintenance.py:145 bazzite_portal/ui/maintenance.py:882
 #: bazzite_portal/ui/maintenance.py:974
 msgid "Clear download cache"
-msgstr ""
+msgstr "Очистити кеш завантажень"
 
 #: bazzite_portal/ui/maintenance.py:146 bazzite_portal/ui/maintenance.py:882
 msgid "Remove cached update data. Future updates may download it again."
 msgstr ""
+"Видалити кешовані дані оновлень. Під час наступних оновлень їх, можливо, "
+"доведеться завантажити знову."
 
 #: bazzite_portal/ui/maintenance.py:155 bazzite_portal/ui/maintenance.py:1482
 #: bazzite_portal/ui/maintenance.py:1496
 msgid "Delete pinned deployments"
-msgstr ""
+msgstr "Видалити закріплені розгортання"
 
 #: bazzite_portal/ui/maintenance.py:156 bazzite_portal/ui/maintenance.py:1483
 msgid "Choose a saved, pinned system version to delete."
-msgstr ""
+msgstr "Виберіть збережену закріплену версію системи для видалення."
 
 #: bazzite_portal/ui/maintenance.py:169
 #, python-brace-format
 msgid ""
 "Follow the latest {stable} or {testing} release of your {bazzite} image."
 msgstr ""
+"Отримувати найновіші випуски {stable} або {testing} для вашого образу "
+"{bazzite}."
 
 #: bazzite_portal/ui/maintenance.py:172
 msgid "Checking release channel…"
-msgstr ""
+msgstr "Перевірка каналу випусків…"
 
 #: bazzite_portal/ui/maintenance.py:172
 msgid "Refresh system information to check availability."
-msgstr ""
+msgstr "Оновіть відомості про систему, щоб перевірити доступність."
 
 #: bazzite_portal/ui/maintenance.py:180
 msgid "Rebase to specific image"
-msgstr ""
+msgstr "Перебазуватися на певний образ"
 
 #: bazzite_portal/ui/maintenance.py:180 bazzite_portal/ui/maintenance.py:1621
 #, python-brace-format
 msgid "Choose a {bazzite} image, release channel and version."
-msgstr ""
+msgstr "Виберіть образ {bazzite}, канал випусків і версію."
 
 #: bazzite_portal/ui/maintenance.py:189 bazzite_portal/ui/maintenance.py:974
 msgid "Remove layered apps"
-msgstr ""
+msgstr "Видалити накладені програми"
 
 #: bazzite_portal/ui/maintenance.py:189
 msgid "Remove system layers while keeping your personal files and other apps."
-msgstr ""
+msgstr "Видалити системні шари, зберігши особисті файли та інші програми."
 
 #: bazzite_portal/ui/maintenance.py:190 bazzite_portal/ui/maintenance.py:1221
 msgid "Choose layered packages to remove"
-msgstr ""
+msgstr "Виберіть накладені пакунки для видалення"
 
 #: bazzite_portal/ui/maintenance.py:190 bazzite_portal/ui/maintenance.py:833
 msgid ""
 "Choose which layered packages to remove. A restart is needed to apply the "
 "change."
 msgstr ""
+"Виберіть, які накладені пакунки видалити. Щоб застосувати зміну, потрібен "
+"перезапуск."
 
 #: bazzite_portal/ui/maintenance.py:196 bazzite_portal/ui/maintenance.py:1211
 msgid "Remove all layered apps"
-msgstr ""
+msgstr "Видалити всі накладені програми"
 
 #: bazzite_portal/ui/maintenance.py:197 bazzite_portal/ui/maintenance.py:834
 #, python-brace-format
@@ -1718,79 +1833,90 @@ msgid ""
 "Remove all system layers. Your files, {bazzite} app store apps, {homebrew} "
 "apps and {appimages} stay."
 msgstr ""
+"Видалити всі системні шари. Ваші файли, програми з магазину {bazzite}, "
+"програми {homebrew} і {appimages} залишаться."
 
 #: bazzite_portal/ui/maintenance.py:236
 msgid "The system did not report a recognizable deployment state."
-msgstr ""
+msgstr "Система не повідомила зрозумілого стану розгортання."
 
 #: bazzite_portal/ui/maintenance.py:253 bazzite_portal/ui/maintenance.py:272
 #, python-brace-format
 msgid "Version {version}"
-msgstr ""
+msgstr "Версія {version}"
 
 #: bazzite_portal/ui/maintenance.py:256
 msgid "Pinned"
-msgstr ""
+msgstr "Закріплено"
 
 #: bazzite_portal/ui/maintenance.py:258
 msgid "Prepared"
-msgstr ""
+msgstr "Підготовлено"
 
 #: bazzite_portal/ui/maintenance.py:270 bazzite_portal/ui/maintenance.py:676
 msgid "Your current system will start again. No system change is pending."
-msgstr ""
+msgstr "Ваша поточна система запуститься знову. Змін системи не очікується."
 
 #: bazzite_portal/ui/maintenance.py:273
 msgid "Next restart version is unavailable."
-msgstr ""
+msgstr "Версія для наступного перезапуску недоступна."
 
 #: bazzite_portal/ui/maintenance.py:275
 msgid "Next restart target is unknown."
-msgstr ""
+msgstr "Ціль наступного перезапуску невідома."
 
 #: bazzite_portal/ui/maintenance.py:281
 #, python-brace-format
 msgid "Transaction: {transaction}"
-msgstr ""
+msgstr "Транзакція: {transaction}"
 
 #: bazzite_portal/ui/maintenance.py:291 bazzite_portal/ui/maintenance.py:395
 msgid "Saved deployment"
-msgstr ""
+msgstr "Збережене розгортання"
 
 #: bazzite_portal/ui/maintenance.py:295
 msgid ""
 "Checking previous deployment… Refresh system information to check rollback "
 "availability."
 msgstr ""
+"Перевірка попереднього розгортання… Оновіть відомості про систему, щоб "
+"перевірити, чи доступний відкат."
 
 #: bazzite_portal/ui/maintenance.py:297
 msgid ""
 "Previous deployment availability is unknown. Refresh system information."
 msgstr ""
+"Невідомо, чи доступне попереднє розгортання. Оновіть відомості про систему."
 
 #: bazzite_portal/ui/maintenance.py:305
 msgid "A rollback is already prepared for the next restart."
-msgstr ""
+msgstr "Відкат уже підготовлено для наступного перезапуску."
 
 #: bazzite_portal/ui/maintenance.py:306 bazzite_portal/ui/maintenance.py:347
 #: bazzite_portal/ui/maintenance.py:356
 msgid "No previous deployment is available."
-msgstr ""
+msgstr "Попереднє розгортання недоступне."
 
 #: bazzite_portal/ui/maintenance.py:309 bazzite_portal/ui/maintenance.py:620
 #: bazzite_portal/ui/maintenance.py:623 bazzite_portal/ui/maintenance.py:626
 #: bazzite_portal/ui/maintenance.py:857 bazzite_portal/ui/maintenance.py:1735
 msgid "Could not verify this action. Refresh system information and try again."
 msgstr ""
+"Не вдалося перевірити цю дію. Оновіть відомості про систему і спробуйте ще "
+"раз."
 
 #: bazzite_portal/ui/maintenance.py:311
 msgid ""
 "A prepared deployment is waiting for restart. Cancel it before rolling back."
 msgstr ""
+"Підготовлене розгортання чекає на перезапуск. Скасуйте його, перш ніж "
+"виконувати відкат."
 
 #: bazzite_portal/ui/maintenance.py:324
 msgid "Could not check rollback status. Open Logs for details."
 msgstr ""
+"Не вдалося перевірити стан відкату. Відкрийте журнали, щоб дізнатися "
+"подробиці."
 
 #: bazzite_portal/ui/maintenance.py:324 bazzite_portal/ui/maintenance.py:338
 #: bazzite_portal/ui/maintenance.py:638 bazzite_portal/ui/maintenance.py:640
@@ -1798,79 +1924,85 @@ msgstr ""
 #: bazzite_portal/ui/maintenance.py:701 bazzite_portal/ui/maintenance.py:829
 #: bazzite_portal/ui/maintenance.py:867 bazzite_portal/ui/maintenance.py:1473
 msgid "Open to view operation progress and logs."
-msgstr ""
+msgstr "Відкрийте, щоб переглянути хід операції та журнали."
 
 #: bazzite_portal/ui/maintenance.py:330
 msgid "Cancelling rollback…"
-msgstr ""
+msgstr "Скасування відкату…"
 
 #: bazzite_portal/ui/maintenance.py:332
 msgid "Rollback cancelled"
-msgstr ""
+msgstr "Відкат скасовано"
 
 #: bazzite_portal/ui/maintenance.py:332
 msgid "Rollback succeeded"
-msgstr ""
+msgstr "Відкат виконано"
 
 #: bazzite_portal/ui/maintenance.py:334
 msgid "Rollback cancellation failed"
-msgstr ""
+msgstr "Не вдалося скасувати відкат"
 
 #: bazzite_portal/ui/maintenance.py:334 bazzite_portal/updates/monitor.py:386
 msgid "Rollback failed"
-msgstr ""
+msgstr "Не вдалося виконати відкат"
 
 #: bazzite_portal/ui/maintenance.py:336
 msgid "Rollback status unknown"
-msgstr ""
+msgstr "Стан відкату невідомий"
 
 #: bazzite_portal/ui/maintenance.py:344 bazzite_portal/ui/maintenance.py:588
 #: bazzite_portal/ui/maintenance.py:973
 msgid "Cancel rollback"
-msgstr ""
+msgstr "Скасувати відкат"
 
 #: bazzite_portal/ui/maintenance.py:345 bazzite_portal/ui/maintenance.py:350
 msgid "Roll back to previous deployment"
-msgstr ""
+msgstr "Відкотитися до попереднього розгортання"
 
 #: bazzite_portal/ui/maintenance.py:346
 msgid "Rollback already prepared"
-msgstr ""
+msgstr "Відкат уже підготовлено"
 
 #: bazzite_portal/ui/maintenance.py:353
 msgid ""
 "Keep your current system for the next restart. The saved version remains "
 "available."
 msgstr ""
+"Залишити поточну систему для наступного перезапуску. Збережена версія "
+"залишиться доступною."
 
 #: bazzite_portal/ui/maintenance.py:355
 #, python-brace-format
 msgid ""
 "Version {version} · Takes effect after restart. Personal files are preserved."
 msgstr ""
+"Версія {version} · Набуде чинності після перезапуску. Особисті файли "
+"зберігаються."
 
 #: bazzite_portal/ui/maintenance.py:357
 msgid ""
 "Restore the previous system version on the next boot. Personal files are "
 "preserved."
 msgstr ""
+"Відновити попередню версію системи під час наступного запуску. Особисті "
+"файли зберігаються."
 
 #: bazzite_portal/ui/maintenance.py:359 bazzite_portal/ui/maintenance.py:528
 #: bazzite_portal/ui/maintenance.py:566 bazzite_portal/ui/maintenance.py:580
 msgid "Rollback is unavailable."
-msgstr ""
+msgstr "Відкат недоступний."
 
 #: bazzite_portal/ui/maintenance.py:453
 msgid "View operation result"
-msgstr ""
+msgstr "Переглянути результат операції"
 
 #: bazzite_portal/ui/maintenance.py:550
 msgid "Rollback failed. Open Logs for details."
-msgstr ""
+msgstr "Не вдалося виконати відкат. Відкрийте журнали, щоб дізнатися подробиці."
 
 #: bazzite_portal/ui/maintenance.py:586
 msgid "Cancel rollback?"
-msgstr ""
+msgstr "Скасувати відкат?"
 
 #: bazzite_portal/ui/maintenance.py:587
 #, python-brace-format
@@ -1878,11 +2010,13 @@ msgid ""
 "Keep your current system for the next restart. The saved deployment, version "
 "{version}, will remain available."
 msgstr ""
+"Залишити поточну систему для наступного перезапуску. Збережене розгортання, "
+"версія {version}, залишиться доступним."
 
 #: bazzite_portal/ui/maintenance.py:592
 #, python-brace-format
 msgid "Roll back {bazzite}?"
-msgstr ""
+msgstr "Відкотити {bazzite}?"
 
 #: bazzite_portal/ui/maintenance.py:593
 #, python-brace-format
@@ -1890,19 +2024,21 @@ msgid ""
 "Select the saved deployment, version {version}, for your next boot. A "
 "restart is required to use it. Your personal files are preserved."
 msgstr ""
+"Вибрати збережене розгортання, версію {version}, для наступного запуску. Щоб "
+"ним скористатися, потрібен перезапуск. Ваші особисті файли зберігаються."
 
 #: bazzite_portal/ui/maintenance.py:594 bazzite_portal/ui/maintenance.py:973
 msgid "Rollback"
-msgstr ""
+msgstr "Відкат"
 
 #: bazzite_portal/ui/maintenance.py:601 bazzite_portal/ui/maintenance.py:806
 #: bazzite_portal/ui/maintenance.py:845
 msgid "Checking system status…"
-msgstr ""
+msgstr "Перевірка стану системи…"
 
 #: bazzite_portal/ui/maintenance.py:605
 msgid "Waiting for confirmation that cancellation has started…"
-msgstr ""
+msgstr "Очікування підтвердження, що скасування розпочалося…"
 
 #: bazzite_portal/ui/maintenance.py:610 bazzite_portal/ui/maintenance.py:612
 #: bazzite_portal/ui/maintenance.py:617 bazzite_portal/ui/maintenance.py:640
@@ -1911,87 +2047,98 @@ msgstr ""
 #: bazzite_portal/ui/maintenance.py:697
 msgid "Could not check the pending system change. Open Logs for details."
 msgstr ""
+"Не вдалося перевірити очікувану зміну системи. Відкрийте журнали, щоб "
+"дізнатися подробиці."
 
 #: bazzite_portal/ui/maintenance.py:610
 msgid ""
 "Cancellation status is unknown. Refresh update status before continuing."
 msgstr ""
+"Стан скасування невідомий. Перш ніж продовжити, перевірте стан оновлень ще "
+"раз."
 
 #: bazzite_portal/ui/maintenance.py:613
 msgid ""
 "Cancelling the pending system change is unavailable. Open Logs for details."
 msgstr ""
+"Скасування очікуваної зміни системи недоступне. Відкрийте журнали, щоб "
+"дізнатися подробиці."
 
 #: bazzite_portal/ui/maintenance.py:615
 msgid "Refresh the deployment overview before cancelling."
-msgstr ""
+msgstr "Перш ніж скасовувати, оновіть огляд розгортань."
 
 #: bazzite_portal/ui/maintenance.py:617
 msgid "No verified prepared deployment is eligible for cancellation."
-msgstr ""
+msgstr "Немає перевіреного підготовленого розгортання, яке можна скасувати."
 
 #: bazzite_portal/ui/maintenance.py:638 bazzite_portal/ui/maintenance.py:640
 msgid "Cancelling pending deployment…"
-msgstr ""
+msgstr "Скасування очікуваного розгортання…"
 
 #: bazzite_portal/ui/maintenance.py:643 bazzite_portal/ui/maintenance.py:659
 msgid "Prepared deployment can be cancelled"
-msgstr ""
+msgstr "Підготовлене розгортання можна скасувати"
 
 #: bazzite_portal/ui/maintenance.py:643 bazzite_portal/ui/maintenance.py:660
 msgid "Only the verified prepared next-restart deployment will be removed."
 msgstr ""
+"Буде видалено лише перевірене підготовлене розгортання для наступного "
+"перезапуску."
 
 #: bazzite_portal/ui/maintenance.py:645
 msgid "Pending deployment cancelled"
-msgstr ""
+msgstr "Очікуване розгортання скасовано"
 
 #: bazzite_portal/ui/maintenance.py:645
 msgid "The running and saved deployments were left unchanged."
-msgstr ""
+msgstr "Запущене і збережені розгортання залишилися без змін."
 
 #: bazzite_portal/ui/maintenance.py:647
 msgid "Deployment cancellation failed"
-msgstr ""
+msgstr "Не вдалося скасувати розгортання"
 
 #: bazzite_portal/ui/maintenance.py:647 bazzite_portal/ui/maintenance.py:1761
 msgid ""
 "The operation failed. Refresh system information to check the current state."
 msgstr ""
+"Не вдалося виконати операцію. Оновіть відомості про систему, щоб перевірити "
+"поточний стан."
 
 #: bazzite_portal/ui/maintenance.py:649
 msgid "Cancellation request sent"
-msgstr ""
+msgstr "Запит на скасування надіслано"
 
 #: bazzite_portal/ui/maintenance.py:653
 msgid "Cancellation status unknown"
-msgstr ""
+msgstr "Стан скасування невідомий"
 
 #: bazzite_portal/ui/maintenance.py:655 bazzite_portal/ui/maintenance.py:657
 msgid "Cancellation unavailable"
-msgstr ""
+msgstr "Скасування недоступне"
 
 #: bazzite_portal/ui/maintenance.py:675 bazzite_portal/ui/maintenance.py:689
 #: bazzite_portal/ui/maintenance.py:696
 msgid "No pending deployment to cancel"
-msgstr ""
+msgstr "Немає очікуваного розгортання для скасування"
 
 #: bazzite_portal/ui/maintenance.py:678 bazzite_portal/ui/maintenance.py:691
 #: bazzite_portal/ui/maintenance.py:973
 msgid "Cancel pending deployment"
-msgstr ""
+msgstr "Скасувати очікуване розгортання"
 
 #: bazzite_portal/ui/maintenance.py:679 bazzite_portal/ui/maintenance.py:691
 msgid "Cancel only the verified prepared deployment before it is activated."
-msgstr ""
+msgstr "Скасувати лише перевірене підготовлене розгортання до його активації."
 
 #: bazzite_portal/ui/maintenance.py:687
 msgid "Refresh deployment information to check cancellation."
 msgstr ""
+"Оновіть відомості про розгортання, щоб перевірити можливість скасування."
 
 #: bazzite_portal/ui/maintenance.py:715 bazzite_portal/ui/maintenance.py:732
 msgid "Deployment cancellation is unavailable."
-msgstr ""
+msgstr "Скасування розгортання недоступне."
 
 #: bazzite_portal/ui/maintenance.py:721
 #, python-brace-format
@@ -2001,99 +2148,118 @@ msgid ""
 "saved deployment, and personal files remain unchanged. This will not restart "
 "the computer."
 msgstr ""
+"Скасувати підготовлене розгортання {bazzite} {version} ({image})? Буде "
+"видалено лише розгортання, підготовлене для наступного перезапуску. Запущене "
+"розгортання, збережене розгортання та особисті файли залишаться без змін. "
+"Комп'ютер не буде перезапущено."
 
 #: bazzite_portal/ui/maintenance.py:724
 msgid "Cancel pending deployment?"
-msgstr ""
+msgstr "Скасувати очікуване розгортання?"
 
 #: bazzite_portal/ui/maintenance.py:724
 msgid "Cancel deployment"
-msgstr ""
+msgstr "Скасувати розгортання"
 
 #: bazzite_portal/ui/maintenance.py:736
 msgid ""
 "The pending deployment changed. Review the updated details and confirm again."
 msgstr ""
+"Очікуване розгортання змінилося. Перегляньте оновлені відомості і "
+"підтвердьте ще раз."
 
 #: bazzite_portal/ui/maintenance.py:773
 msgid "The cancellation request failed."
-msgstr ""
+msgstr "Не вдалося виконати запит на скасування."
 
 #: bazzite_portal/ui/maintenance.py:808
 msgid "Refresh system information before continuing."
-msgstr ""
+msgstr "Перш ніж продовжити, оновіть відомості про систему."
 
 #: bazzite_portal/ui/maintenance.py:813
 msgid "Layer removal is unavailable. Open Logs for details."
-msgstr ""
+msgstr "Видалення шарів недоступне. Відкрийте журнали, щоб дізнатися подробиці."
 
 #: bazzite_portal/ui/maintenance.py:815
 msgid "Package details are unavailable."
-msgstr ""
+msgstr "Відомості про пакунки недоступні."
 
 #: bazzite_portal/ui/maintenance.py:815
 msgid "Could not check layered apps. Open Logs for details."
 msgstr ""
+"Не вдалося перевірити накладені програми. Відкрийте журнали, щоб дізнатися "
+"подробиці."
 
 #: bazzite_portal/ui/maintenance.py:816
 msgid "No package layers are present."
-msgstr ""
+msgstr "Накладених пакунків немає."
 
 #: bazzite_portal/ui/maintenance.py:818
 msgid "Apply or cancel the pending system change before removing layered apps."
 msgstr ""
+"Перш ніж видаляти накладені програми, застосуйте або скасуйте очікувану "
+"зміну системи."
 
 #: bazzite_portal/ui/maintenance.py:843
 msgid ""
 "System status is unavailable. Refresh system information before continuing."
 msgstr ""
+"Стан системи недоступний. Перш ніж продовжити, оновіть відомості про систему."
 
 #: bazzite_portal/ui/maintenance.py:850 bazzite_portal/ui/maintenance.py:853
 #: bazzite_portal/ui/maintenance.py:869 bazzite_portal/ui/maintenance.py:872
 msgid "Could not check download-cache status. Open Logs for details."
 msgstr ""
+"Не вдалося перевірити стан кешу завантажень. Відкрийте журнали, щоб "
+"дізнатися подробиці."
 
 #: bazzite_portal/ui/maintenance.py:851
 msgid "Download-cache cleanup is unavailable. Open Logs for details."
 msgstr ""
+"Очищення кешу завантажень недоступне. Відкрийте журнали, щоб дізнатися "
+"подробиці."
 
 #: bazzite_portal/ui/maintenance.py:853
 msgid ""
 "Could not check download-cache status. Refresh system information and try "
 "again."
 msgstr ""
+"Не вдалося перевірити стан кешу завантажень. Оновіть відомості про систему і "
+"спробуйте ще раз."
 
 #: bazzite_portal/ui/maintenance.py:867
 msgid "Clearing download cache…"
-msgstr ""
+msgstr "Очищення кешу завантажень…"
 
 #: bazzite_portal/ui/maintenance.py:869
 msgid "Download cache cleared"
-msgstr ""
+msgstr "Кеш завантажень очищено"
 
 #: bazzite_portal/ui/maintenance.py:869
 msgid "The cached data was removed. It can be downloaded again when needed."
-msgstr ""
+msgstr "Кешовані дані видалено. За потреби їх можна буде завантажити знову."
 
 #: bazzite_portal/ui/maintenance.py:871 bazzite_portal/ui/maintenance.py:876
 msgid "Retry clearing download cache"
-msgstr ""
+msgstr "Повторити очищення кешу завантажень"
 
 #: bazzite_portal/ui/maintenance.py:871 bazzite_portal/ui/maintenance.py:875
 msgid "Could not clear download cache"
-msgstr ""
+msgstr "Не вдалося очистити кеш завантажень"
 
 #: bazzite_portal/ui/maintenance.py:872
 msgid "Download-cache cleanup failed. Open the operation log for details."
 msgstr ""
+"Не вдалося очистити кеш завантажень. Відкрийте журнал операції, щоб "
+"дізнатися подробиці."
 
 #: bazzite_portal/ui/maintenance.py:880
 msgid "Download-cache clearing unavailable"
-msgstr ""
+msgstr "Очищення кешу завантажень недоступне"
 
 #: bazzite_portal/ui/maintenance.py:899
 msgid "Clear download cache?"
-msgstr ""
+msgstr "Очистити кеш завантажень?"
 
 #: bazzite_portal/ui/maintenance.py:900
 msgid ""
@@ -2102,85 +2268,91 @@ msgid ""
 "deployment; clearing the cache will not cancel it for you. No restart is "
 "needed."
 msgstr ""
+"Буде видалено кешовані дані оновлень, які згодом, можливо, доведеться "
+"завантажити знову. Якщо очікує розгортання, спершу скасуйте його кнопкою «"
+"Скасувати очікуване розгортання»: очищення кешу не скасує його автоматично. "
+"Перезапуск не потрібен."
 
 #: bazzite_portal/ui/maintenance.py:901
 msgid "Clear cache"
-msgstr ""
+msgstr "Очистити кеш"
 
 #: bazzite_portal/ui/maintenance.py:917
 msgid ""
 "The download cache changed. Review the updated details and confirm again."
 msgstr ""
+"Кеш завантажень змінився. Перегляньте оновлені відомості і підтвердьте ще "
+"раз."
 
 #: bazzite_portal/ui/maintenance.py:945
 msgid "The cache cleanup request failed."
-msgstr ""
+msgstr "Не вдалося виконати запит на очищення кешу."
 
 #: bazzite_portal/ui/maintenance.py:975
 msgid "Rebase release channel"
-msgstr ""
+msgstr "Перебазування каналу випусків"
 
 #: bazzite_portal/ui/maintenance.py:975
 #, python-brace-format
 msgid "Rebase {bazzite} image"
-msgstr ""
+msgstr "Перебазування образу {bazzite}"
 
 #: bazzite_portal/ui/maintenance.py:976
 msgid "Delete pinned deployment"
-msgstr ""
+msgstr "Видалення закріпленого розгортання"
 
 #: bazzite_portal/ui/maintenance.py:976
 msgid "System operation"
-msgstr ""
+msgstr "Системна операція"
 
 #: bazzite_portal/ui/maintenance.py:1103
 #, python-brace-format
 msgid "Failed · {error}"
-msgstr ""
+msgstr "Помилка · {error}"
 
 #: bazzite_portal/ui/maintenance.py:1123
 msgid "Preparing cache cleanup…"
-msgstr ""
+msgstr "Підготовка до очищення кешу…"
 
 #: bazzite_portal/ui/maintenance.py:1124
 msgid "Preparing deployment cancellation…"
-msgstr ""
+msgstr "Підготовка до скасування розгортання…"
 
 #: bazzite_portal/ui/maintenance.py:1125
 msgid "Preparing release channel rebase…"
-msgstr ""
+msgstr "Підготовка до перебазування каналу випусків…"
 
 #: bazzite_portal/ui/maintenance.py:1126
 msgid "Preparing image rebase…"
-msgstr ""
+msgstr "Підготовка до перебазування образу…"
 
 #: bazzite_portal/ui/maintenance.py:1127
 msgid "Preparing rollback cancellation…"
-msgstr ""
+msgstr "Підготовка до скасування відкату…"
 
 #: bazzite_portal/ui/maintenance.py:1129
 msgid "Preparing rollback…"
-msgstr ""
+msgstr "Підготовка до відкату…"
 
 #: bazzite_portal/ui/maintenance.py:1130
 msgid "Preparing layer removal…"
-msgstr ""
+msgstr "Підготовка до видалення шарів…"
 
 #: bazzite_portal/ui/maintenance.py:1131
 msgid "Preparing deployment deletion…"
-msgstr ""
+msgstr "Підготовка до видалення розгортання…"
 
 #: bazzite_portal/ui/maintenance.py:1132
 msgid "Preparing operation…"
-msgstr ""
+msgstr "Підготовка операції…"
 
 #: bazzite_portal/ui/maintenance.py:1151
 msgid "A newer operation is available. Reopen this action to view it."
-msgstr ""
+msgstr "Доступна новіша операція. Відкрийте цю дію знову, щоб її переглянути."
 
 #: bazzite_portal/ui/maintenance.py:1208
 msgid "Remove all layered apps?"
-msgstr ""
+msgstr "Видалити всі накладені програми?"
 
 #: bazzite_portal/ui/maintenance.py:1209
 #, python-brace-format
@@ -2189,65 +2361,74 @@ msgid ""
 "app store ({flatpak} apps), {homebrew} apps, {appimages}, or your personal "
 "files. Restart manually when you are ready to apply the change."
 msgstr ""
+"Усі накладені програми буде видалено із системи. Програми з магазину "
+"{bazzite} (програми {flatpak}), програми {homebrew}, {appimages} і ваші "
+"особисті файли не видаляються. Коли будете готові застосувати зміну, "
+"перезапустіть систему вручну."
 
 #: bazzite_portal/ui/maintenance.py:1218 bazzite_portal/ui/maintenance.py:1307
 #: bazzite_portal/ui/maintenance.py:1314 bazzite_portal/ui/maintenance.py:1348
 msgid "The package list changed. Review it again before confirming."
 msgstr ""
+"Список пакунків змінився. Перегляньте його ще раз, перш ніж підтвердити."
 
 #: bazzite_portal/ui/maintenance.py:1232
 #, python-brace-format
 msgid ""
 "Select the packages to remove. Apps included with {bazzite} stay installed."
 msgstr ""
+"Виберіть пакунки для видалення. Програми, що входять до {bazzite}, "
+"залишаться встановленими."
 
 #: bazzite_portal/ui/maintenance.py:1287 bazzite_portal/ui/maintenance.py:1288
 msgid "Remove"
-msgstr ""
+msgstr "Видалити"
 
 #: bazzite_portal/ui/maintenance.py:1291
 msgid "Review the selected packages before removal"
-msgstr ""
+msgstr "Перегляньте вибрані пакунки перед видаленням"
 
 #: bazzite_portal/ui/maintenance.py:1302
 msgid "Select at least one layered app to remove."
-msgstr ""
+msgstr "Виберіть принаймні одну накладену програму для видалення."
 
 #: bazzite_portal/ui/maintenance.py:1318
 msgid "Remove selected layered packages?"
-msgstr ""
+msgstr "Видалити вибрані накладені пакунки?"
 
 #: bazzite_portal/ui/maintenance.py:1319
 msgid "The following packages will be removed:\n"
-msgstr ""
+msgstr "Буде видалено такі пакунки:\n"
 
 #: bazzite_portal/ui/maintenance.py:1320
 msgid "Remove selected packages"
-msgstr ""
+msgstr "Видалити вибрані пакунки"
 
 #: bazzite_portal/ui/maintenance.py:1324
 msgid "Remove · controller button"
-msgstr ""
+msgstr "Видалити · кнопка контролера"
 
 #: bazzite_portal/ui/maintenance.py:1422
 msgid "Layered package information is unavailable."
-msgstr ""
+msgstr "Відомості про накладені пакунки недоступні."
 
 #: bazzite_portal/ui/maintenance.py:1423
 msgid "Layered packages"
-msgstr ""
+msgstr "Накладені пакунки"
 
 #: bazzite_portal/ui/maintenance.py:1442
 msgid "Could not refresh system information. Open Logs for details."
 msgstr ""
+"Не вдалося оновити відомості про систему. Відкрийте журнали, щоб дізнатися "
+"подробиці."
 
 #: bazzite_portal/ui/maintenance.py:1454
 msgid "Refresh system information before deleting deployments."
-msgstr ""
+msgstr "Перш ніж видаляти розгортання, оновіть відомості про систему."
 
 #: bazzite_portal/ui/maintenance.py:1456
 msgid "A deployment is being deleted."
-msgstr ""
+msgstr "Триває видалення розгортання."
 
 #: bazzite_portal/ui/maintenance.py:1458 bazzite_portal/ui/maintenance.py:1463
 #: bazzite_portal/ui/maintenance.py:1475 bazzite_portal/ui/maintenance.py:1477
@@ -2255,59 +2436,68 @@ msgstr ""
 #, python-brace-format
 msgid "Could not check saved {bazzite} versions. Open Logs for details."
 msgstr ""
+"Не вдалося перевірити збережені версії {bazzite}. Відкрийте журнали, щоб "
+"дізнатися подробиці."
 
 #: bazzite_portal/ui/maintenance.py:1458
 msgid "Deployment deletion status could not be verified."
-msgstr ""
+msgstr "Не вдалося перевірити стан видалення розгортання."
 
 #: bazzite_portal/ui/maintenance.py:1472
 msgid "Deleting pinned deployment…"
-msgstr ""
+msgstr "Видалення закріпленого розгортання…"
 
 #: bazzite_portal/ui/maintenance.py:1475 bazzite_portal/updates/monitor.py:2094
 msgid "Pinned deployment deleted"
-msgstr ""
+msgstr "Закріплене розгортання видалено"
 
 #: bazzite_portal/ui/maintenance.py:1477
 msgid "Deployment deletion failed"
-msgstr ""
+msgstr "Не вдалося видалити розгортання"
 
 #: bazzite_portal/ui/maintenance.py:1479
 msgid "Deployment deletion status unknown"
-msgstr ""
+msgstr "Стан видалення розгортання невідомий"
 
 #: bazzite_portal/ui/maintenance.py:1504
 msgid ""
 "Choose a pinned system version to delete. Your running system and next "
 "restart are protected. Personal files stay."
 msgstr ""
+"Виберіть закріплену версію системи для видалення. Запущена система і версія "
+"для наступного перезапуску захищені. Особисті файли залишаться."
 
 #: bazzite_portal/ui/maintenance.py:1527 bazzite_portal/ui/maintenance.py:1545
 msgid "Delete"
-msgstr ""
+msgstr "Видалити"
 
 #: bazzite_portal/ui/maintenance.py:1540 bazzite_portal/ui/maintenance.py:1570
 msgid "The deployment list changed. Review it again."
-msgstr ""
+msgstr "Список розгортань змінився. Перегляньте його ще раз."
 
 #: bazzite_portal/ui/maintenance.py:1606
 msgid "Apply or cancel the pending deployment before changing images."
 msgstr ""
+"Перш ніж змінювати образ, застосуйте або скасуйте очікуване розгортання."
 
 #: bazzite_portal/ui/maintenance.py:1609 bazzite_portal/ui/maintenance.py:1611
 #: bazzite_portal/ui/maintenance.py:1678
 #, python-brace-format
 msgid "Could not check {bazzite} images. Open Logs for details."
 msgstr ""
+"Не вдалося перевірити образи {bazzite}. Відкрийте журнали, щоб дізнатися "
+"подробиці."
 
 #: bazzite_portal/ui/maintenance.py:1609
 #, python-brace-format
 msgid "Changing {bazzite} images is unavailable. Open Logs for details."
 msgstr ""
+"Зміна образу {bazzite} недоступна. Відкрийте журнали, щоб дізнатися "
+"подробиці."
 
 #: bazzite_portal/ui/maintenance.py:1611
 msgid "Image-rebase status could not be verified."
-msgstr ""
+msgstr "Не вдалося перевірити стан перебазування образу."
 
 #: bazzite_portal/ui/maintenance.py:1655
 #, python-brace-format
@@ -2316,122 +2506,132 @@ msgid ""
 "Administrator authorization is required. Your computer will not restart "
 "automatically."
 msgstr ""
+"Підготувати {image}, {version}, до наступного перезапуску? Ваші особисті "
+"файли залишаться. Потрібен дозвіл адміністратора. Комп'ютер не "
+"перезапуститься автоматично."
 
 #: bazzite_portal/ui/maintenance.py:1656
 #, python-brace-format
 msgid "Rebase {bazzite} image?"
-msgstr ""
+msgstr "Перебазувати образ {bazzite}?"
 
 #: bazzite_portal/ui/maintenance.py:1659 bazzite_portal/ui/maintenance.py:1675
 msgid ""
 "Enable unsupported rebase targets in Settings to choose this image or "
 "channel."
 msgstr ""
+"Щоб вибрати цей образ або канал, увімкніть непідтримувані цілі перебазування "
+"в налаштуваннях."
 
 #: bazzite_portal/ui/maintenance.py:1661 bazzite_portal/ui/maintenance.py:1819
 msgid "Rebase"
-msgstr ""
+msgstr "Перебазувати"
 
 #: bazzite_portal/ui/maintenance.py:1678
 msgid "Deployment information changed. Review it again."
-msgstr ""
+msgstr "Відомості про розгортання змінилися. Перегляньте їх ще раз."
 
 #: bazzite_portal/ui/maintenance.py:1711
 msgid "The application is closing."
-msgstr ""
+msgstr "Програма закривається."
 
 #: bazzite_portal/ui/maintenance.py:1715
 msgid "Refresh system information before rebasing release channels."
-msgstr ""
+msgstr "Перш ніж перебазовувати канал випусків, оновіть відомості про систему."
 
 #: bazzite_portal/ui/maintenance.py:1717
 msgid "Release channel status is unavailable."
-msgstr ""
+msgstr "Стан каналу випусків недоступний."
 
 #: bazzite_portal/ui/maintenance.py:1719
 msgid "A release channel rebase request is already in progress."
-msgstr ""
+msgstr "Запит на перебазування каналу випусків уже виконується."
 
 #: bazzite_portal/ui/maintenance.py:1721 bazzite_portal/updates/monitor.py:2034
 msgid "A release channel rebase is already running."
-msgstr ""
+msgstr "Перебазування каналу випусків уже виконується."
 
 #: bazzite_portal/ui/maintenance.py:1723 bazzite_portal/ui/maintenance.py:1728
 #: bazzite_portal/ui/maintenance.py:1750 bazzite_portal/ui/maintenance.py:1760
 msgid "Could not check the release channel. Open Logs for details."
 msgstr ""
+"Не вдалося перевірити канал випусків. Відкрийте журнали, щоб дізнатися "
+"подробиці."
 
 #: bazzite_portal/ui/maintenance.py:1723
 msgid "Release channel status could not be verified. Refresh to check again."
 msgstr ""
+"Не вдалося перевірити стан каналу випусків. Оновіть дані, щоб перевірити ще "
+"раз."
 
 #: bazzite_portal/ui/maintenance.py:1728 bazzite_portal/ui/maintenance.py:1766
 msgid "Release channel rebasing is unavailable."
-msgstr ""
+msgstr "Перебазування каналу випусків недоступне."
 
 #: bazzite_portal/ui/maintenance.py:1730
 msgid "The current release channel is not verified."
-msgstr ""
+msgstr "Поточний канал випусків не перевірено."
 
 #: bazzite_portal/ui/maintenance.py:1732
 msgid "The target release channel is not verified."
-msgstr ""
+msgstr "Цільовий канал випусків не перевірено."
 
 #: bazzite_portal/ui/maintenance.py:1749
 #, python-brace-format
 msgid "Rebasing to {bazzite} {track}…"
-msgstr ""
+msgstr "Перебазування на {bazzite} {track}…"
 
 #: bazzite_portal/ui/maintenance.py:1750
 msgid "The image is being prepared. You can keep using the computer."
-msgstr ""
+msgstr "Образ готується. Можете й далі користуватися комп'ютером."
 
 #: bazzite_portal/ui/maintenance.py:1752
 msgid "Rebasing release channel…"
-msgstr ""
+msgstr "Перебазування каналу випусків…"
 
 #: bazzite_portal/ui/maintenance.py:1756
 #, python-brace-format
 msgid "{bazzite} {track} is ready"
-msgstr ""
+msgstr "{bazzite} {track} готовий"
 
 #: bazzite_portal/ui/maintenance.py:1757
 msgid "Restart manually to start the new release channel."
-msgstr ""
+msgstr "Перезапустіть систему вручну, щоб перейти на новий канал випусків."
 
 #: bazzite_portal/ui/maintenance.py:1759
 msgid "Release channel rebase failed"
-msgstr ""
+msgstr "Не вдалося перебазувати канал випусків"
 
 #: bazzite_portal/ui/maintenance.py:1764 bazzite_portal/ui/maintenance.py:1773
 #, python-brace-format
 msgid "Rebase to {bazzite} {track}"
-msgstr ""
+msgstr "Перебазуватися на {bazzite} {track}"
 
 #: bazzite_portal/ui/maintenance.py:1771
 #, python-brace-format
 msgid "Return to the latest {track} release"
-msgstr ""
+msgstr "Повернутися до найновішого випуску {track}"
 
 #: bazzite_portal/ui/maintenance.py:1774
 msgid "Download newer changes to try after restarting."
-msgstr ""
+msgstr "Завантажити новіші зміни, щоб спробувати їх після перезапуску."
 
 #: bazzite_portal/ui/maintenance.py:1776
 #, python-brace-format
 msgid "Return to the {track} release after restarting."
-msgstr ""
+msgstr "Повернутися до випуску {track} після перезапуску."
 
 #: bazzite_portal/ui/maintenance.py:1811
 #, python-brace-format
 msgid "Return this installation to the latest {target_name} release? "
-msgstr ""
+msgstr "Повернути цю інсталяцію до найновішого випуску {target_name}? "
 
 #: bazzite_portal/ui/maintenance.py:1813
 #, python-brace-format
 msgid ""
 "Rebase this {bazzite} installation from {current_track} to {target_name}? "
 msgstr ""
+"Перебазувати цю інсталяцію {bazzite} з {current_track} на {target_name}? "
 
 #: bazzite_portal/ui/maintenance.py:1816
 #, python-brace-format
@@ -2440,241 +2640,249 @@ msgid ""
 "selected channel. Administrator authorization is required. Your computer "
 "will not restart automatically; restart manually after the rebase completes."
 msgstr ""
+"Запущено образ {version} ({image}). Буде завантажено і підготовлено вибраний "
+"канал. Потрібен дозвіл адміністратора. Комп'ютер не перезапуститься "
+"автоматично; перезапустіть його вручну після завершення перебазування."
 
 #: bazzite_portal/ui/maintenance.py:1818
 #, python-brace-format
 msgid "Return to the latest {target_name} release?"
-msgstr ""
+msgstr "Повернутися до найновішого випуску {target_name}?"
 
 #: bazzite_portal/ui/maintenance.py:1818
 #, python-brace-format
 msgid "Rebase to {target_name}?"
-msgstr ""
+msgstr "Перебазуватися на {target_name}?"
 
 #: bazzite_portal/ui/maintenance.py:1827
 msgid "The release channel status changed. Refresh and confirm again."
-msgstr ""
+msgstr "Стан каналу випусків змінився. Оновіть дані і підтвердьте ще раз."
 
 #: bazzite_portal/ui/maintenance.py:1854
 msgid "The release channel request failed."
-msgstr ""
+msgstr "Не вдалося виконати запит щодо каналу випусків."
 
 #: bazzite_portal/ui/system_info.py:45
 #, python-brace-format
 msgid "Pinned {bazzite} version"
-msgstr ""
+msgstr "Закріплена версія {bazzite}"
 
 #: bazzite_portal/ui/system_info.py:50
 #, python-brace-format
 msgid "Pinned version · {tag}"
-msgstr ""
+msgstr "Закріплена версія · {tag}"
 
 #: bazzite_portal/ui/system_info.py:71
 #, python-brace-format
 msgid "Unknown · exceeds display limit ({count} packages)"
-msgstr ""
+msgstr "Невідомо · перевищено ліміт показу (пакунків: {count})"
 
 #: bazzite_portal/ui/system_info.py:73
 msgid "No packages layered"
-msgstr ""
+msgstr "Накладених пакунків немає"
 
 #: bazzite_portal/ui/system_info.py:81
 msgid "Unknown · package list exceeds display limit"
-msgstr ""
+msgstr "Невідомо · список пакунків перевищує ліміт показу"
 
 #: bazzite_portal/ui/widgets.py:109
 #, python-brace-format
 msgid "{title} · controller button"
-msgstr ""
+msgstr "{title} · кнопка контролера"
 
 #: bazzite_portal/updates/model.py:16 bazzite_portal/updates/model.py:454
 msgid "Operating system"
-msgstr ""
+msgstr "Операційна система"
 
 #: bazzite_portal/updates/model.py:17
 msgid "CLI Apps"
-msgstr ""
+msgstr "Консольні програми"
 
 #: bazzite_portal/updates/model.py:18
 msgid "System Apps"
-msgstr ""
+msgstr "Системні програми"
 
 #: bazzite_portal/updates/model.py:19
 #, python-brace-format
 msgid "Rootful {distrobox} containers"
-msgstr ""
+msgstr "Контейнери {distrobox} з правами root"
 
 #: bazzite_portal/updates/model.py:127 bazzite_portal/updates/model.py:512
 msgid "An update module failed"
-msgstr ""
+msgstr "Помилка модуля оновлення"
 
 #: bazzite_portal/updates/model.py:193 bazzite_portal/updates/model.py:307
 #: bazzite_portal/updates/model.py:323
 msgid "Downloading"
-msgstr ""
+msgstr "Завантаження"
 
 #: bazzite_portal/updates/model.py:193
 msgid "Importing"
-msgstr ""
+msgstr "Імпорт"
 
 #: bazzite_portal/updates/model.py:193
 msgid "Deploying"
-msgstr ""
+msgstr "Розгортання"
 
 #: bazzite_portal/updates/model.py:198
 msgid "Downloading layers"
-msgstr ""
+msgstr "Завантаження шарів"
 
 #: bazzite_portal/updates/model.py:202 bazzite_portal/updates/model.py:220
 #, python-brace-format
 msgid "Downloading layers · {current} of {total}"
-msgstr ""
+msgstr "Завантаження шарів · {current} з {total}"
 
 #: bazzite_portal/updates/model.py:223
 msgid "Checking out system tree"
-msgstr ""
+msgstr "Підготовка дерева системи"
 
 #: bazzite_portal/updates/model.py:224
 msgid "Importing package metadata"
-msgstr ""
+msgstr "Імпорт метаданих пакунків"
 
 #: bazzite_portal/updates/model.py:225
 msgid "Resolving dependencies"
-msgstr ""
+msgstr "Розв'язання залежностей"
 
 #: bazzite_portal/updates/model.py:226
 msgid "Checking out packages"
-msgstr ""
+msgstr "Підготовка пакунків"
 
 #: bazzite_portal/updates/model.py:227
 msgid "Running system user setup"
-msgstr ""
+msgstr "Налаштування системних користувачів"
 
 #: bazzite_portal/updates/model.py:228
 msgid "Running pre-install scripts"
-msgstr ""
+msgstr "Виконання скриптів перед встановленням"
 
 #: bazzite_portal/updates/model.py:229
 msgid "Running post-install scripts"
-msgstr ""
+msgstr "Виконання скриптів після встановлення"
 
 #: bazzite_portal/updates/model.py:230
 msgid "Running post-transaction scripts"
-msgstr ""
+msgstr "Виконання скриптів після транзакції"
 
 #: bazzite_portal/updates/model.py:231
 msgid "Writing package database"
-msgstr ""
+msgstr "Запис бази даних пакунків"
 
 #: bazzite_portal/updates/model.py:232
 msgid "Finalizing system deployment"
-msgstr ""
+msgstr "Завершення розгортання системи"
 
 #: bazzite_portal/updates/model.py:233
 msgid "Generating boot image"
-msgstr ""
+msgstr "Створення образу завантаження"
 
 #: bazzite_portal/updates/model.py:234
 msgid "Preparing deployment for restart"
-msgstr ""
+msgstr "Підготовка розгортання до перезапуску"
 
 #: bazzite_portal/updates/model.py:235
 msgid "Migrating package cache"
-msgstr ""
+msgstr "Перенесення кешу пакунків"
 
 #: bazzite_portal/updates/model.py:245
 msgid "Downloading system changes"
-msgstr ""
+msgstr "Завантаження змін системи"
 
 #: bazzite_portal/updates/model.py:246
 msgid "Downloading system metadata"
-msgstr ""
+msgstr "Завантаження метаданих системи"
 
 #: bazzite_portal/updates/model.py:247
 msgid "Downloading system objects"
-msgstr ""
+msgstr "Завантаження об'єктів системи"
 
 #: bazzite_portal/updates/model.py:248
 msgid "Writing system objects"
-msgstr ""
+msgstr "Запис об'єктів системи"
 
 #: bazzite_portal/updates/model.py:249
 msgid "Scanning system metadata"
-msgstr ""
+msgstr "Сканування метаданих системи"
 
 #: bazzite_portal/updates/model.py:277
 #, python-brace-format
 msgid "Updating {homebrew} dependencies"
-msgstr ""
+msgstr "Оновлення залежностей {homebrew}"
 
 #: bazzite_portal/updates/model.py:330
 #, python-brace-format
 msgid "Upgrading {package}"
-msgstr ""
+msgstr "Оновлення {package}"
 
 #: bazzite_portal/updates/model.py:362
 #, python-brace-format
 msgid "Updating {homebrew}"
-msgstr ""
+msgstr "Оновлення {homebrew}"
 
 #: bazzite_portal/updates/model.py:441
 #, python-brace-format
 msgid "{uupd} could not check for system updates."
-msgstr ""
+msgstr "{uupd} не вдалося перевірити наявність оновлень системи."
 
 #: bazzite_portal/updates/model.py:477
 msgid "Preparing system update"
-msgstr ""
+msgstr "Підготовка оновлення системи"
 
 #: bazzite_portal/updates/model.py:555
 #, python-brace-format
 msgid "Disabled in {uupd} configuration."
-msgstr ""
+msgstr "Вимкнено в конфігурації {uupd}."
 
 #: bazzite_portal/updates/model.py:558
 #, python-brace-format
 msgid "Enabled by {uupd} configuration; runtime eligibility is not checked."
 msgstr ""
+"Увімкнено в конфігурації {uupd}; чи можна запустити крок зараз, не "
+"перевіряється."
 
 #: bazzite_portal/updates/model.py:581
 #, python-brace-format
 msgid "{uupd} has not reported a result for this step."
-msgstr ""
+msgstr "{uupd} ще не повідомив результат цього кроку."
 
 #: bazzite_portal/updates/monitor.py:720
 msgid "Deployment operation failed."
-msgstr ""
+msgstr "Не вдалося виконати операцію з розгортанням."
 
 #: bazzite_portal/updates/monitor.py:847 bazzite_portal/updates/monitor.py:2025
 msgid "Saved-deployment deletion is running. Wait for it to finish."
-msgstr ""
+msgstr "Триває видалення збереженого розгортання. Дочекайтеся його завершення."
 
 #: bazzite_portal/updates/monitor.py:849 bazzite_portal/updates/monitor.py:2027
 #, python-brace-format
 msgid "{bazzite} is changing images. Wait for it to finish."
-msgstr ""
+msgstr "{bazzite} змінює образ. Дочекайтеся завершення."
 
 #: bazzite_portal/updates/monitor.py:1107
 msgid ""
 "Previous request could not be confirmed. No operation is currently running. "
 "Try again."
 msgstr ""
+"Не вдалося підтвердити попередній запит. Зараз жодна операція не "
+"виконується. Спробуйте ще раз."
 
 #: bazzite_portal/updates/monitor.py:1358
 msgid "Another system operation is running or its state could not be verified."
-msgstr ""
+msgstr "Виконується інша системна операція, або її стан не вдалося перевірити."
 
 #: bazzite_portal/updates/monitor.py:1433
 msgid "Management status could not be refreshed."
-msgstr ""
+msgstr "Не вдалося оновити стан керування."
 
 #: bazzite_portal/updates/monitor.py:1601
 msgid "Could not check for system updates; attempting the update."
 msgstr ""
+"Не вдалося перевірити наявність оновлень системи; все одно пробуємо оновити."
 
 #: bazzite_portal/updates/monitor.py:1670
 msgid "This update module reported a failure."
-msgstr ""
+msgstr "Цей модуль оновлення повідомив про помилку."
 
 #: bazzite_portal/updates/monitor.py:1835
 #: bazzite_portal/updates/monitor.py:1915
@@ -2684,33 +2892,33 @@ msgstr ""
 #: bazzite_portal/updates/monitor.py:2099
 #, python-brace-format
 msgid "{bazzite} is changing update channels. Wait for it to finish."
-msgstr ""
+msgstr "{bazzite} змінює канал оновлень. Дочекайтеся завершення."
 
 #: bazzite_portal/updates/monitor.py:1837
 #: bazzite_portal/updates/monitor.py:2101
 msgid "Pending-deployment cancellation is running. Wait for it to finish."
-msgstr ""
+msgstr "Триває скасування очікуваного розгортання. Дочекайтеся його завершення."
 
 #: bazzite_portal/updates/monitor.py:1839
 #: bazzite_portal/updates/monitor.py:2103
 msgid "Package-layer removal is running. Wait for it to finish."
-msgstr ""
+msgstr "Триває видалення накладених пакунків. Дочекайтеся його завершення."
 
 #: bazzite_portal/updates/monitor.py:1841
 #: bazzite_portal/updates/monitor.py:2111
 msgid "Download-cache cleanup is running. Wait for it to finish."
-msgstr ""
+msgstr "Триває очищення кешу завантажень. Дочекайтеся його завершення."
 
 #: bazzite_portal/updates/monitor.py:1843
 #: bazzite_portal/updates/monitor.py:2113
 msgid ""
 "Another deployment-management operation is running. Wait for it to finish."
-msgstr ""
+msgstr "Виконується інша операція з розгортаннями. Дочекайтеся її завершення."
 
 #: bazzite_portal/updates/monitor.py:1872
 #, python-brace-format
 msgid "An {rpm_ostree} transaction is active. Wait for it to finish."
-msgstr ""
+msgstr "Виконується транзакція {rpm_ostree}. Дочекайтеся її завершення."
 
 #: bazzite_portal/updates/monitor.py:1897
 #: bazzite_portal/updates/monitor.py:2001
@@ -2718,81 +2926,84 @@ msgstr ""
 #: bazzite_portal/updates/monitor.py:2070
 #: bazzite_portal/updates/monitor.py:2089
 msgid "Another maintenance operation is running."
-msgstr ""
+msgstr "Виконується інша операція обслуговування."
 
 #: bazzite_portal/updates/monitor.py:1913
 msgid "The pending deployment changed after confirmation."
-msgstr ""
+msgstr "Очікуване розгортання змінилося після підтвердження."
 
 #: bazzite_portal/updates/monitor.py:1917
 msgid "Pending-deployment cancellation is already running."
-msgstr ""
+msgstr "Скасування очікуваного розгортання вже виконується."
 
 #: bazzite_portal/updates/monitor.py:1919
 msgid "Package-layer removal is already running."
-msgstr ""
+msgstr "Видалення накладених пакунків уже виконується."
 
 #: bazzite_portal/updates/monitor.py:1921
 #: bazzite_portal/updates/monitor.py:1951
 #: bazzite_portal/updates/monitor.py:1979
 msgid "Download-cache cleanup is already running."
-msgstr ""
+msgstr "Очищення кешу завантажень уже виконується."
 
 #: bazzite_portal/updates/monitor.py:1945
 #: bazzite_portal/updates/monitor.py:1971
 msgid "The requested package list changed after confirmation."
-msgstr ""
+msgstr "Запитаний список пакунків змінився після підтвердження."
 
 #: bazzite_portal/updates/monitor.py:1949
 #: bazzite_portal/updates/monitor.py:1977
 msgid "A package-layer or pending-deployment operation is already running."
 msgstr ""
+"Операція з накладеними пакунками або очікуваним розгортанням уже виконується."
 
 #: bazzite_portal/updates/monitor.py:1962
 msgid "Choose one or more requested packages to remove."
-msgstr ""
+msgstr "Виберіть один або кілька запитаних пакунків для видалення."
 
 #: bazzite_portal/updates/monitor.py:1997
 msgid ""
 "The deployments or imported image references changed after confirmation."
 msgstr ""
+"Розгортання або імпортовані посилання на образи змінилися після "
+"підтвердження."
 
 #: bazzite_portal/updates/monitor.py:2036
 #: bazzite_portal/updates/monitor.py:2066
 msgid "The running deployment changed after confirmation."
-msgstr ""
+msgstr "Запущене розгортання змінилося після підтвердження."
 
 #: bazzite_portal/updates/monitor.py:2053
 msgid "An image rebase is already running."
-msgstr ""
+msgstr "Перебазування образу вже виконується."
 
 #: bazzite_portal/updates/monitor.py:2068
 msgid "Another deployment operation is already running."
-msgstr ""
+msgstr "Інша операція з розгортанням уже виконується."
 
 #: bazzite_portal/updates/monitor.py:2084
 msgid "Deployment deletion is already running or could not be verified."
-msgstr ""
+msgstr "Видалення розгортання вже виконується, або його не вдалося перевірити."
 
 #: bazzite_portal/updates/monitor.py:2086
 msgid "The deployment list changed after confirmation."
-msgstr ""
+msgstr "Список розгортань змінився після підтвердження."
 
 #: bazzite_portal/updates/monitor.py:2109
 msgid "There is no pending deployment to restart into."
-msgstr ""
+msgstr "Немає очікуваного розгортання, у яке можна перезапуститися."
 
 #: bazzite_portal/updates/release_notes.py:93
 msgid "Version or release channel is unknown."
-msgstr ""
+msgstr "Версія або канал випусків невідомі."
 
 #: bazzite_portal/updates/release_notes.py:112
 msgid "No release notes match this version and channel."
-msgstr ""
+msgstr "Немає приміток до випуску для цієї версії і каналу."
 
 #: packaging/bazzite-portal-agent.desktop:2
 msgid "Update Monitor"
-msgstr ""
+msgstr "Монітор оновлень"
 
 #: packaging/io.github.Xarishark.bazzite_portal.desktop:2
 msgid "Bazzite Portal"
@@ -2801,24 +3012,28 @@ msgstr ""
 #: packaging/io.github.Xarishark.bazzite_portal.desktop:3
 #: packaging/io.github.Xarishark.bazzite_portal.metainfo.xml:5
 msgid "Manage {bazzite} tools and system updates"
-msgstr ""
+msgstr "Керування інструментами і оновленнями системи {bazzite}"
 
 #: packaging/io.github.Xarishark.bazzite_portal.desktop:9
 msgid "setup;configuration;updates;"
-msgstr ""
+msgstr "налаштування;конфігурація;оновлення;setup;configuration;updates;"
 
 #: packaging/io.github.Xarishark.bazzite_portal.metainfo.xml:6
 msgid "{bazzite} contributors"
-msgstr ""
+msgstr "Учасники проєкту {bazzite}"
 
 #: packaging/io.github.Xarishark.bazzite_portal.metainfo.xml:9
 msgid ""
 "A desktop utility for {bazzite} setup tools, pinned actions, system updates, "
 "rollback, and system information."
 msgstr ""
+"Програма для робочого столу з інструментами налаштування {bazzite}, "
+"закріпленими діями, оновленнями системи, відкатом і відомостями про систему."
 
 #: packaging/io.github.Xarishark.bazzite_portal.metainfo.xml:9
 msgid ""
 "Reconnect to automatic or manually started {uupd} updates and see when a new "
 "system deployment is ready for restart."
 msgstr ""
+"Підключається до автоматичних або запущених вручну оновлень {uupd} і "
+"показує, коли нове розгортання системи готове до перезапуску."
