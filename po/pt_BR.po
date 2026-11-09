@@ -4,10 +4,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Bazzite Portal / App\n"
-"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/"
-"app/\n"
+"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/app/"
+"\n"
 "POT-Creation-Date: 2026-10-30 12:01+0100\n"
-"PO-Revision-Date: 2026-10-25 15:57+0000\n"
+"PO-Revision-Date: 2026-11-09 15:51+0000\n"
 "Last-Translator: Crono <epochvoyager@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "bazzite-portal/app/pt_BR/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Weblate 2026.11.dev0\n"
+"X-Generator: Weblate 2026.11.2.dev0\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 
 #: bazzite_portal/artwork/appearance.py:15
@@ -53,7 +53,7 @@ msgid ""
 "The download's signature could not be verified. Try again later. If the "
 "problem continues, open Logs for details."
 msgstr ""
-"A assinatura do download não pôde ser autenticada. Tente novamente mais "
+"Não foi possível autenticar a assinatura do download. Tente novamente mais "
 "tarde. Se o problema persistir, verifique seus registros do sistema."
 
 #: bazzite_portal/core/errors.py:70
@@ -173,56 +173,58 @@ msgstr "Fóruns da comunidade {universal_blue}"
 
 #: bazzite_portal/integration/decky.py:39
 msgid "Plugin installation must run as your normal desktop user."
-msgstr ""
+msgstr "A instalação de plugin deve rodar por meio do seu usuário padrão."
 
 #: bazzite_portal/integration/decky.py:40
 msgid "This Portal installation does not include the Decky plugin."
-msgstr ""
+msgstr "Essa instalação do Portal não inclui o plugin Decky."
 
 #: bazzite_portal/integration/decky.py:41
 msgid ""
 "The bundled Decky plugin could not be verified. Reinstall Bazzite Portal and "
 "try again."
 msgstr ""
+"Não foi possível verificar o plugin Decky incluso. Reinstale o Bazzite "
+"Portal e tente novamente."
 
 #: bazzite_portal/integration/decky.py:42
 msgid "Decky Loader is not installed."
-msgstr ""
+msgstr "O Decky Loader não está instalado."
 
 #: bazzite_portal/integration/decky.py:43
-#, fuzzy
-#| msgid "The download server is busy. Wait a little and try again."
 msgid "Decky Loader is not running. Start it and try again."
-msgstr ""
-"O servidor de download está ocupado. Aguarde alguns momentos e tente "
-"novamente."
+msgstr "O Decky Loader não está rodando no momento. Inicie-o e tente novamente."
 
 #: bazzite_portal/integration/decky.py:44
 msgid "Open Steam in Gaming Mode or Big Picture, then try again."
-msgstr ""
+msgstr "Abra o Steam no Game Mode ou Big Picture, e então tente novamente."
 
 #: bazzite_portal/integration/decky.py:45
 msgid "The installed Decky plugin version could not be verified."
-msgstr ""
+msgstr "Não foi possível verificar a versão do plugin Decky instalado."
 
 #: bazzite_portal/integration/decky.py:46
 msgid "The installed Decky plugin is up to date."
-msgstr ""
+msgstr "A versão do plugin Decky instalado está atualizada."
 
 #: bazzite_portal/integration/decky.py:47
 msgid "The bundled plugin or installed version changed. Review it again."
-msgstr ""
+msgstr "O plugin incluso ou a versão instalada mudou. Verifique-o novamente."
 
 #: bazzite_portal/integration/decky.py:48
 msgid ""
 "Confirm the installation in Decky Loader. No change is made if you cancel."
 msgstr ""
+"Confirme a instalação no Decky Loader. Nenhuma alteração será realizada se "
+"cancelar."
 
 #: bazzite_portal/integration/decky.py:49
 msgid ""
 "Could not request plugin installation. Open Steam in Gaming Mode or Big "
 "Picture and try again."
 msgstr ""
+"Não foi possível pedir a instalação do plugin. Abra o Steam no Game Mode ou "
+"Big Picture e tente novamente."
 
 #: bazzite_portal/maintenance/cache_clear.py:68
 #, python-brace-format
@@ -395,15 +397,13 @@ msgstr "Ir para Atualizações"
 
 #: bazzite_portal/services/agent.py:520
 msgid "A Decky plugin installation request is already running."
-msgstr ""
+msgstr "Um pedido de instalação de plugin Decky já está em andamento."
 
 #: bazzite_portal/services/agent.py:533 bazzite_portal/ui/decky.py:155
-#, fuzzy
-#| msgid "Could not collect system logs. Open Logs for details."
 msgid "Could not manage the Decky plugin. Open Logs for details."
 msgstr ""
-"Não foi possível obter seus registros do sistema. Para mais detalhes, "
-"visualize-os manualmente."
+"Não foi possível gerenciar o plugin Decky. Para mais detalhes, verifique "
+"seus registros do sistema."
 
 #: bazzite_portal/services/agent.py:573 bazzite_portal/services/agent.py:646
 msgid "Another operation request is pending."
@@ -822,26 +822,30 @@ msgstr "Redefinindo o {steam}"
 #, python-brace-format
 msgid "{steam} reset did not complete. Open Logs for details."
 msgstr ""
+"A redefinição do {steam} não foi concluída. Para mais detalhes, verifique "
+"seus registros do sistema."
 
 #: bazzite_portal/ui/application.py:1052
 #, python-brace-format
 msgid "Some {steam} data has already been removed."
-msgstr ""
+msgstr "Alguns dados do cliente {steam} já foram removidos."
 
 #: bazzite_portal/ui/application.py:1055
 #, python-brace-format
 msgid "{steam} reset finished after its progress window was closed."
 msgstr ""
+"A redefinição do {steam} foi concluída depois da janela de progresso ser "
+"fechada."
 
 #: bazzite_portal/ui/application.py:1061
 #, python-brace-format
 msgid "{steam} reset complete"
-msgstr ""
+msgstr "Redefinição do {steam} concluída"
 
 #: bazzite_portal/ui/application.py:1063
 #, python-brace-format
 msgid "{steam} reset is complete."
-msgstr ""
+msgstr "A redefinição do {steam} foi concluída."
 
 #: bazzite_portal/ui/application.py:1064
 #, python-brace-format
@@ -849,52 +853,60 @@ msgid ""
 "You can now open {steam}. Its client files need to download again, so the "
 "first launch may take a while."
 msgstr ""
+"Você já pode abrir o {steam}. Os arquivos do cliente terão de ser baixados "
+"novamente, então poderá demorar um pouco."
 
 #: bazzite_portal/ui/application.py:1071
 msgid "Collecting logs"
-msgstr ""
+msgstr "Reunindo registros"
 
 #: bazzite_portal/ui/application.py:1083
 msgid "Working on this device…"
-msgstr ""
+msgstr "Trabalhando neste dispositivo…"
 
 #: bazzite_portal/ui/application.py:1103
 msgid "Could not collect diagnostic logs. Open Logs for details."
 msgstr ""
+"Não foi possível reunir registros de diagnóstico. Para mais detalhes, "
+"verifique seus registros do sistema."
 
 #: bazzite_portal/ui/application.py:1107
 #, python-brace-format
 msgid "Logs collected and saved to {directory}."
-msgstr ""
+msgstr "Registros reunidos e salvos em {directory}."
 
 #: bazzite_portal/ui/application.py:1116
 msgid "Logs ready"
-msgstr ""
+msgstr "Registros prontos"
 
 #: bazzite_portal/ui/application.py:1119
 msgid "Logs are ready."
-msgstr ""
+msgstr "Os registros estão prontos."
 
 #: bazzite_portal/ui/application.py:1125
 msgid ""
 "Attach only the logs relevant to your problem. Then fill in the remaining "
 "fields and describe the issue."
 msgstr ""
+"Anexe apenas registros relevantes à falha. Então, preencha os campos "
+"restantes e descreva seu problema."
 
 #: bazzite_portal/ui/application.py:1133
 #, python-brace-format
 msgid "Open {github} issue"
-msgstr ""
+msgstr "Abrir issue no {github}"
 
 #: bazzite_portal/ui/application.py:1137
 msgid "The issue form could not be prepared. Open Logs for details."
 msgstr ""
+"Não foi possível preparar o formulário de issue. Para mais detalhes, "
+"verifique seus registros do sistema."
 
 #: bazzite_portal/ui/application.py:1176 bazzite_portal/ui/application.py:1180
 #: bazzite_portal/ui/application.py:3607 bazzite_portal/ui/maintenance.py:1270
 #: bazzite_portal/ui/widgets.py:101 bazzite_portal/ui/widgets.py:140
 msgid "D-pad Move"
-msgstr ""
+msgstr "Mover com Direcional Digital"
 
 #: bazzite_portal/ui/application.py:1214
 #, python-brace-format
@@ -903,38 +915,38 @@ msgstr "Local: {path}"
 
 #: bazzite_portal/ui/application.py:1226
 msgid "Could not open logs folder"
-msgstr ""
+msgstr "Não foi possível abrir a localização dos registros"
 
 #: bazzite_portal/ui/application.py:1238
 #, python-brace-format
 msgid "{action}. Open Logs for details."
-msgstr ""
+msgstr "{action}. Para mais detalhes, verifique os registros do sistema."
 
 #: bazzite_portal/ui/application.py:1267
 #, python-brace-format
 msgid "The {github} issue form could not be prepared."
-msgstr ""
+msgstr "Não foi possível preparar o formulário de issue do {github}."
 
 #: bazzite_portal/ui/application.py:1274 bazzite_portal/ui/application.py:2586
 #: bazzite_portal/ui/application.py:2816 bazzite_portal/ui/application.py:3252
 msgid "Could not open link"
-msgstr ""
+msgstr "Não foi possível abrir o link"
 
 #: bazzite_portal/ui/application.py:1383 bazzite_portal/ui/application.py:1546
 msgid "Action"
-msgstr ""
+msgstr "Ação"
 
 #: bazzite_portal/ui/application.py:1383
 msgid "Unavailable tool"
-msgstr ""
+msgstr "Ferramenta indisponível"
 
 #: bazzite_portal/ui/application.py:1384
 msgid "Unavailable or ambiguous · select to unpin"
-msgstr ""
+msgstr "Indisponível ou indeterminada · selecione para desafixar"
 
 #: bazzite_portal/ui/application.py:1405
 msgid "Unpin unavailable tool?"
-msgstr ""
+msgstr "Desafixar ferramenta indisponível?"
 
 #: bazzite_portal/ui/application.py:1406
 msgid ""
