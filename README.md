@@ -31,7 +31,6 @@ Weblate automatically generates the POT template and manages translations:
 | `bazzite-portal` | Home |
 | `bazzite-portal --updates` | Updates, including when Portal is already open |
 | `bazzite-portal --action-id TOOL_ID` | The tool matching an `id` in `tools.yml` |
-| `LANGUAGE=en bazzite-portal` | Replace `en` with the corresponding language code (Can be checked on Weblate's url, e.g. `zh_Hant`, `de`, `el`, `it`, `pt_BR`) to test out translations other than the system language |
 
 ## YAML configuration
 
@@ -59,6 +58,10 @@ Third-party license texts: [LICENSES](LICENSES/).
 ## Translations
 
 Tool and announcement content, operation logs and command output are not translated.
+
+To preview a translation without changing the system language, run
+`LANGUAGE=de bazzite-portal`, replacing `de` with a language code from
+[po/](po/) or the Weblate URL (for example `pt_BR` or `zh_Hant`).
 
 ## Development
 
