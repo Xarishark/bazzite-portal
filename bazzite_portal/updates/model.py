@@ -120,15 +120,19 @@ def interpret(lines):
         except (ValueError, RecursionError):
             data = None
         if isinstance(data, dict):
-            message = data.get("output")
-            if not isinstance(message, str):
-                message = str(data.get("msg", ""))
+            text = data.get("output")
+            message = text if isinstance(text, str) else str(data.get("msg", ""))
             module = data.get("module")
             if module:
                 stage = str(module)
-            if message == "module_fail":
+            # module_fail carries the module's stdout in "output"; match the event name.
+            if data.get("msg") == "module_fail":
                 failures.append(str(module or N_("An update module failed")))
-            output.append(message if message else line)
+            # Drop blank command output instead of showing the raw JSON record.
+            if message:
+                output.append(message)
+            elif not isinstance(text, str):
+                output.append(line)
         else:
             output.append(line)
     output = output[-MAX_LOG_LINES:]
