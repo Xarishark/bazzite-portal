@@ -59,6 +59,10 @@ Third-party license texts: [LICENSES](LICENSES/).
 
 Tool and announcement content, operation logs and command output are not translated.
 
+To preview a translation without changing the system language, run
+`LANGUAGE=de bazzite-portal`, replacing `de` with a language code from
+[po/](po/) or the Weblate URL (for example `pt_BR` or `zh_Hant`).
+
 ## Development
 
 Bump the desktop app version in pyproject.toml under [project].version. Bump the
