@@ -22,6 +22,7 @@ Requires:       gobject-introspection
 Requires:       gtk4 >= 4.10
 Requires:       libadwaita >= 1.4
 Requires:       SDL3 >= 3.2
+Requires:       uupd >= 1.5.2
 
 %description
 A GTK desktop application for Bazzite Portal tools, pinned actions, system

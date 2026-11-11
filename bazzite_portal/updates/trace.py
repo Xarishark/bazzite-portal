@@ -110,6 +110,8 @@ def record(run, line, event, active, modules):
         result = "running"
         if event_copy.get("kind") == "completed":
             result = "success" if event_copy.get("success") is True else "failed"
+        elif event_copy.get("kind") == "skipped":
+            result = "skipped"
         entry = {
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "run": _bounded(run, 128),
