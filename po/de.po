@@ -4,18 +4,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Bazzite Portal / App\n"
-"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/"
-"app/\n"
+"Report-Msgid-Bugs-To: https://hosted.weblate.org/projects/bazzite-portal/app/"
+"\n"
 "POT-Creation-Date: 2026-11-11 11:31+0100\n"
-"PO-Revision-Date: 2026-11-07 20:36+0000\n"
-"Last-Translator: Samuel Meenzen <samuel@meenzen.net>\n"
+"PO-Revision-Date: 2026-11-14 18:51+0000\n"
+"Last-Translator: dani <numero1024@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/bazzite-portal/"
 "app/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Weblate 2026.11.2.dev0\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: bazzite_portal/artwork/appearance.py:15
@@ -44,8 +44,8 @@ msgid ""
 "Not enough free space. Free up space and try again. System updates need at "
 "least {minimum_free_space} free space on the installation drive."
 msgstr ""
-"Nicht genügend freier Speicherplatz. Speicherplatz freigeben und erneut "
-"versuchen. Für Systemupdates sind mindestens {minimum_free_space} freier "
+"Nicht genügend freier Speicherplatz. Gib Speicherplatz frei und versuche es "
+"erneut. Für Systemupdates sind mindestens {minimum_free_space} freier "
 "Speicherplatz auf dem Installationslaufwerk erforderlich."
 
 #: bazzite_portal/core/errors.py:68
@@ -53,34 +53,47 @@ msgid ""
 "The download's signature could not be verified. Try again later. If the "
 "problem continues, open Logs for details."
 msgstr ""
+"Die Signatur des Downloads konnte nicht verifiziert werden. Versuche es "
+"später erneut. Falls das Problem weiter besteht, öffne die Protokolle für "
+"Details."
 
 #: bazzite_portal/core/errors.py:70
 msgid ""
 "A downloaded file failed checksum verification. Try again later and check "
 "the operation log if the problem continues."
 msgstr ""
+"Die Prüfsumme einer heruntergeladenen Datei stimmt nicht überein. Versuche "
+"es später erneut und überprüfe die Vorgangsprotokolle, falls das Problem "
+"weiterhin besteht."
 
 #: bazzite_portal/core/errors.py:72
 msgid ""
 "A package conflict is blocking this system change. Review your layered apps "
 "in System Management, then try again."
 msgstr ""
+"Ein Paketkonflikt verhindert diese Systemänderung. Untersuche deine "
+"überlagerten Apps in Systemverwaltung und versuche es dann erneut."
 
 #: bazzite_portal/core/errors.py:74
 msgid "The download server is busy. Wait a little and try again."
-msgstr ""
+msgstr "Der Downloadserver ist überlastet. Warte kurz und versuche es erneut."
 
 #: bazzite_portal/core/errors.py:76
 msgid ""
 "Could not connect to the download server. Check your connection and try "
 "again."
 msgstr ""
+"Downloadserver konnte nicht erreicht werden. Überprüfe deine Verbindung und "
+"versuche es erneut."
 
 #: bazzite_portal/core/errors.py:78
 msgid ""
 "Could not download software repository information. Try again later. If this "
 "continues, check your repository settings or open Logs."
 msgstr ""
+"Software-Repository-Informationen konnten nicht heruntergeladen werden. "
+"Versuche es später erneut. Falls das Problem weiterhin besteht, überprüfe "
+"deine Repository-Einstellungen oder öffne die Protokolle."
 
 #: bazzite_portal/core/errors.py:121 bazzite_portal/ui/application.py:2230
 #: bazzite_portal/ui/application.py:2233 bazzite_portal/ui/application.py:2506
@@ -110,7 +123,7 @@ msgstr ""
 #: bazzite_portal/updates/model.py:408
 #, python-brace-format
 msgid "{current} of {total}"
-msgstr ""
+msgstr "{current} von {total}"
 
 #: bazzite_portal/input/prompts.py:119
 msgid "D-pad"
@@ -162,51 +175,62 @@ msgstr "{universal_blue} Communityforen"
 #: bazzite_portal/integration/decky.py:39
 msgid "Plugin installation must run as your normal desktop user."
 msgstr ""
+"Plugin-Installation muss als dein normaler Desktop-Benutzer ausgeführt "
+"werden."
 
 #: bazzite_portal/integration/decky.py:40
 msgid "This Portal installation does not include the Decky plugin."
-msgstr ""
+msgstr "Diese Portal-Installation beinhaltet nicht das Decky-Plugin."
 
 #: bazzite_portal/integration/decky.py:41
 msgid ""
 "The bundled Decky plugin could not be verified. Reinstall Bazzite Portal and "
 "try again."
 msgstr ""
+"Das enthaltene Decky-Plugin konnte nicht verifiziert werden. Installiere "
+"Bazzite Portal erneut und versuche es erneut."
 
 #: bazzite_portal/integration/decky.py:42
 msgid "Decky Loader is not installed."
-msgstr ""
+msgstr "Decky Loader ist nicht installiert."
 
 #: bazzite_portal/integration/decky.py:43
 msgid "Decky Loader is not running. Start it and try again."
-msgstr ""
+msgstr "Decky Loader läuft nicht. Starte es und versuche es erneut."
 
 #: bazzite_portal/integration/decky.py:44
 msgid "Open Steam in Gaming Mode or Big Picture, then try again."
-msgstr ""
+msgstr "Öffne Steam im Spielmodus oder Big Picture, dann versuche es erneut."
 
 #: bazzite_portal/integration/decky.py:45
 msgid "The installed Decky plugin version could not be verified."
 msgstr ""
+"Die Version des installierten Decky-Plugins konnte nicht verifiziert werden."
 
 #: bazzite_portal/integration/decky.py:46
 msgid "The installed Decky plugin is up to date."
-msgstr ""
+msgstr "Das installierte Decky-Plugin ist auf dem neuesten Stand."
 
 #: bazzite_portal/integration/decky.py:47
 msgid "The bundled plugin or installed version changed. Review it again."
 msgstr ""
+"Das enthaltene Plugin oder die installierte Version wurde geändert. "
+"Untersuche es erneut."
 
 #: bazzite_portal/integration/decky.py:48
 msgid ""
 "Confirm the installation in Decky Loader. No change is made if you cancel."
 msgstr ""
+"Bestätige die Installation in Decky Loader. Keine Änderung wird vorgenommen, "
+"wenn der Vorgang abgebrochen wird."
 
 #: bazzite_portal/integration/decky.py:49
 msgid ""
 "Could not request plugin installation. Open Steam in Gaming Mode or Big "
 "Picture and try again."
 msgstr ""
+"Plugin-Installation konnte nicht nachgefragt werden. Öffne Steam im "
+"Spielmodus oder Big Picture und versuche es erneut."
 
 #: bazzite_portal/maintenance/cache_clear.py:68
 #, python-brace-format
@@ -218,21 +242,21 @@ msgstr ""
 #: bazzite_portal/maintenance/cache_clear.py:78
 msgid "Cancel the pending deployment before clearing the download cache."
 msgstr ""
-"Storniere das ausstehende Deployment bevor der Download-Cache bereinigt wird."
+"Storniere die ausstehende Bereitstellung bevor der Download-Zwischenspeicher "
+"gelöscht wird."
 
 #: bazzite_portal/maintenance/cache_clear.py:76
-#, fuzzy
 msgid ""
 "Resolve the selected next-boot deployment before clearing the download cache."
 msgstr ""
-"Löse das für den nächsten Neustart ausgewählte Deployment auf bevor der "
-"Download-Cache bereinigt wird."
+"Löse die für den nächsten Neustart ausgewählte Bereitstellung auf bevor der "
+"Download-Zwischenspeicher gelöscht wird."
 
 #: bazzite_portal/maintenance/cancel_pending.py:41
 #, python-brace-format
 msgid "{bootc} deployments cannot be canceled by this workflow."
 msgstr ""
-"{bootc}-Deployments können nicht durch diesen Arbeitsschritt storniert "
+"{bootc}-Bereitstellungen können nicht durch diesen Arbeitsschritt storniert "
 "werden."
 
 #: bazzite_portal/maintenance/cancel_pending.py:51
@@ -246,18 +270,19 @@ msgstr "Eine {rpm_ostree}-Transaktion ist aktiv."
 
 #: bazzite_portal/maintenance/cancel_pending.py:64
 msgid "There is no pending deployment."
-msgstr "Es gibt kein ausstehendes Deployment."
+msgstr "Es gibt keine ausstehende Bereitstellung."
 
 #: bazzite_portal/maintenance/cancel_pending.py:66
 msgid "The next boot is a scheduled rollback or other non-staged deployment."
 msgstr ""
-"Der nächste Neustart ist ein geplanter Rollback oder ein anderes nicht "
-"ausstehendes Deployment."
+"Der nächste Neustart ist ein geplantes Zurückrollen oder eine andere nicht "
+"ausstehende Bereitstellung."
 
 #: bazzite_portal/maintenance/cancel_pending.py:68
 msgid "The pending deployment is pinned or its pin state is unknown."
 msgstr ""
-"Das ausstehende Deployment ist angepinnt oder der Pin-Status ist unbekannt."
+"Die ausstehende Bereitstellung ist angepinnt oder der Pin-Status ist "
+"unbekannt."
 
 #: bazzite_portal/maintenance/channel_switch.py:63
 #, python-brace-format
@@ -270,7 +295,7 @@ msgstr ""
 #: bazzite_portal/maintenance/channel_switch.py:91
 msgid "Resolve the pending deployment before changing update channels."
 msgstr ""
-"Löse das ausstehende Deployment auf bevor der Aktualisierungskanal "
+"Löse die ausstehende Bereitstellung auf bevor der Aktualisierungskanal "
 "gewechselt wird."
 
 #: bazzite_portal/maintenance/channel_switch.py:159
@@ -278,20 +303,20 @@ msgid ""
 "You’re already using this image and channel. Use Update to get the latest "
 "version."
 msgstr ""
-"Dieses Image und dieser Kanal werden bereits verwendet. Verwende Update, um "
-"die neueste Version zu erhalten."
+"Dieses Abbild und dieser Kanal werden bereits verwendet. Verwende "
+"Aktualisieren, um die neueste Version zu erhalten."
 
 #: bazzite_portal/maintenance/delete_deployments.py:64
-#, fuzzy
 msgid "Resolve the next-boot deployment before deleting saved deployments."
 msgstr ""
-"Löse das für den nächsten Neustart ausgewählte Deployment auf bevor die "
-"gespeicherten Deployments gelöscht werden."
+"Löse die für den nächsten Neustart ausgewählte Bereitstellung auf bevor die "
+"gespeicherten Bereitstellungen gelöscht werden."
 
 #: bazzite_portal/maintenance/delete_deployments.py:94
 #: bazzite_portal/ui/maintenance.py:1463
 msgid "No saved, pinned deployments can be deleted."
-msgstr "Keine gespeicherten, angepinnten Deployments können gelöscht werden."
+msgstr ""
+"Keine gespeicherten, angepinnten Bereitstellungen können gelöscht werden."
 
 #: bazzite_portal/maintenance/delete_deployments.py:100
 #: bazzite_portal/maintenance/deployments.py:12
@@ -309,18 +334,19 @@ msgstr "Unbekannt"
 
 #: bazzite_portal/maintenance/image_switch.py:111
 msgid "Resolve the pending deployment before changing images."
-msgstr "Löse das ausstehende Deployment auf bevor das Image gewechselt wird."
+msgstr ""
+"Löse die ausstehende Bereitstellung auf bevor das Abbild gewechselt wird."
 
 #: bazzite_portal/maintenance/image_switch.py:118
 #, python-brace-format
 msgid "Only supported official {bazzite} image references can be changed."
 msgstr ""
-"Nur offiziell unterstützte {bazzite}-Imageverweise können geändert werden."
+"Nur offiziell unterstützte {bazzite}-Abbildverweise können geändert werden."
 
 #: bazzite_portal/maintenance/image_switch.py:166
 #, python-brace-format
 msgid "No official {bazzite} images are available."
-msgstr "Keine offiziellen {bazzite}-Images sind verfügbar."
+msgstr "Keine offiziellen {bazzite}-Abbilder sind verfügbar."
 
 #: bazzite_portal/maintenance/image_switch.py:187
 #, python-brace-format
@@ -330,20 +356,20 @@ msgstr "Keine {track}-Versionen sind für {image} verfügbar."
 #: bazzite_portal/maintenance/image_switch.py:207
 #, python-brace-format
 msgid "Unsupported {bazzite} image variant."
-msgstr "Keine unterstützte {bazzite}-Imagevariante."
+msgstr "Keine unterstützte {bazzite}-Abbildvariante."
 
 #: bazzite_portal/maintenance/image_switch.py:209
 #, python-brace-format
 msgid "Unsupported {bazzite} image version."
-msgstr "Keine unterstützte {bazzite}-Imageversion."
+msgstr "Keine unterstützte {bazzite}-Abbildversion."
 
 #: bazzite_portal/maintenance/image_switch.py:222
 msgid ""
 "This image and version are already running. Use Update to check for a newer "
 "version."
 msgstr ""
-"Dieses Image und diese Version werden bereits verwendet. Verwende Update, um "
-"die neueste Version zu erhalten."
+"Dieses Abbild und diese Version werden bereits verwendet. Verwende "
+"Aktualisieren, um die neueste Version zu erhalten."
 
 #: bazzite_portal/maintenance/logs.py:147
 msgid "Some operation output was unavailable or omitted."
@@ -352,12 +378,12 @@ msgstr "Eine Operationsausgabe war nicht verfügbar oder wurde ausgelassen."
 #: bazzite_portal/maintenance/reset_layers.py:47
 #: bazzite_portal/ui/maintenance.py:817
 msgid "A different deployment is selected for next boot."
-msgstr "Ein anderes Deployment ist für den nächsten Neustart ausgewählt."
+msgstr "Eine andere Bereitstellung ist für den nächsten Neustart ausgewählt."
 
 #: bazzite_portal/maintenance/reset_layers.py:86
 #: bazzite_portal/ui/maintenance.py:816
 msgid "No requested package layers are present."
-msgstr "Keine angeforderten Paket-Layer sind vorhanden."
+msgstr "Keine überlagerten Pakete wurden angefordert."
 
 #: bazzite_portal/services/agent.py:424
 #, python-brace-format
@@ -367,28 +393,25 @@ msgstr "{bazzite}-Aktualisierung fehlgeschlagen"
 #: bazzite_portal/services/agent.py:424
 #, python-brace-format
 msgid "{bazzite} rollback failed"
-msgstr "{bazzite}-Rollback fehlgeschlagen"
+msgstr "{bazzite}-Zurückrollen fehlgeschlagen"
 
 #: bazzite_portal/services/agent.py:424
 msgid "Open Updates to inspect the operation log."
-msgstr "Öffne Updates um das Operationsprotokoll zu untersuchen."
+msgstr "Öffne Aktualisieren um das Operationsprotokoll zu untersuchen."
 
 #: bazzite_portal/services/agent.py:474 bazzite_portal/ui/application.py:580
 #: bazzite_portal/ui/application.py:763 bazzite_portal/ui/application.py:3687
 msgid "Open Updates"
-msgstr "Öffne Updates"
+msgstr "Öffne Aktualisieren"
 
 #: bazzite_portal/services/agent.py:520
 msgid "A Decky plugin installation request is already running."
-msgstr ""
+msgstr "Eine Decky-Plugin-Installationsanfrage läuft bereits."
 
 #: bazzite_portal/services/agent.py:533 bazzite_portal/ui/decky.py:155
-#, fuzzy
-#| msgid "Could not read update status. Open Logs for details."
 msgid "Could not manage the Decky plugin. Open Logs for details."
 msgstr ""
-"Aktualisierungsstatus konnte nicht gelesen werden. Öffne Protokolle für "
-"Details."
+"Decky-Plugin konnte nicht verwaltet werden. Öffne Protokolle für Details."
 
 #: bazzite_portal/services/agent.py:573 bazzite_portal/services/agent.py:646
 msgid "Another operation request is pending."
@@ -411,33 +434,33 @@ msgstr "Aktualisiere"
 #: bazzite_portal/services/tray.py:288
 #, python-brace-format
 msgid "Updates are running. Open {app_name} for progress."
-msgstr ""
+msgstr "Aktualisierungen laufen. Öffne {app_name} für den Fortschritt."
 
 #: bazzite_portal/services/tray.py:289
 msgid "Restart pending"
-msgstr ""
+msgstr "Neustart ausstehend"
 
 #: bazzite_portal/services/tray.py:289
 #, python-brace-format
 msgid "{bazzite} will boot into the new version on your next restart."
-msgstr ""
+msgstr "{bazzite} wird beim nächsten Neustart in die neue Version starten."
 
 #: bazzite_portal/services/tray.py:290
 msgid "Update failed"
-msgstr ""
+msgstr "Aktualisierung fehlgeschlagen"
 
 #: bazzite_portal/services/tray.py:290
 #, python-brace-format
 msgid "An update failed. Open {app_name} for details."
-msgstr ""
+msgstr "Eine Aktualisierung ist fehlgeschlagen. Öffne {app_name} für Details."
 
 #: bazzite_portal/services/tray.py:308
 msgid "Open"
-msgstr ""
+msgstr "Öffnen"
 
 #: bazzite_portal/services/tray.py:308
 msgid "Dismiss"
-msgstr ""
+msgstr "Abweisen"
 
 #: bazzite_portal/ui/application.py:43 bazzite_portal/ui/application.py:342
 #: bazzite_portal/ui/application.py:427 bazzite_portal/ui/application.py:428
@@ -451,7 +474,7 @@ msgstr ""
 #: bazzite_portal/ui/application.py:3559 bazzite_portal/ui/application.py:3599
 #: bazzite_portal/ui/application.py:3624
 msgid "Home"
-msgstr ""
+msgstr "Zuhause"
 
 #: bazzite_portal/ui/application.py:43 bazzite_portal/ui/application.py:45
 #: bazzite_portal/ui/application.py:425 bazzite_portal/ui/application.py:434
@@ -466,7 +489,7 @@ msgstr ""
 #: bazzite_portal/ui/application.py:3543 bazzite_portal/ui/application.py:3552
 #: bazzite_portal/ui/application.py:3563 bazzite_portal/ui/application.py:3579
 msgid "Tools"
-msgstr ""
+msgstr "Werkzeuge"
 
 #: bazzite_portal/ui/application.py:43 bazzite_portal/ui/application.py:45
 #: bazzite_portal/ui/application.py:651 bazzite_portal/ui/application.py:661
@@ -480,7 +503,7 @@ msgstr ""
 #: bazzite_portal/ui/application.py:3730
 #: packaging/io.github.Xarishark.bazzite_portal.desktop:16
 msgid "Updates"
-msgstr ""
+msgstr "Aktualisieren"
 
 #: bazzite_portal/ui/application.py:43 bazzite_portal/ui/application.py:686
 #: bazzite_portal/ui/application.py:694 bazzite_portal/ui/application.py:695
@@ -491,7 +514,7 @@ msgstr ""
 #: bazzite_portal/ui/maintenance.py:777 bazzite_portal/ui/maintenance.py:793
 #: bazzite_portal/ui/maintenance.py:801 bazzite_portal/updates/model.py:17
 msgid "System"
-msgstr ""
+msgstr "System"
 
 #: bazzite_portal/ui/application.py:43 bazzite_portal/ui/application.py:47
 #: bazzite_portal/ui/application.py:776 bazzite_portal/ui/application.py:806
@@ -500,66 +523,66 @@ msgstr ""
 #: bazzite_portal/ui/application.py:919 bazzite_portal/ui/application.py:994
 #: bazzite_portal/ui/application.py:1012
 msgid "Troubleshooting"
-msgstr ""
+msgstr "Fehlerbehebung"
 
 #: bazzite_portal/ui/application.py:43 bazzite_portal/ui/application.py:47
 #: bazzite_portal/ui/application.py:777 bazzite_portal/ui/application.py:2633
 #: bazzite_portal/ui/application.py:2666
 msgid "Community"
-msgstr ""
+msgstr "Die Community"
 
 #: bazzite_portal/ui/application.py:43 bazzite_portal/ui/application.py:48
 #: bazzite_portal/ui/application.py:778 bazzite_portal/ui/application.py:2669
 #: bazzite_portal/ui/application.py:2684
 msgid "Announcements"
-msgstr ""
+msgstr "Ankündigungen"
 
 #: bazzite_portal/ui/application.py:46 bazzite_portal/ui/application.py:695
 #: bazzite_portal/ui/application.py:774 bazzite_portal/ui/maintenance.py:63
 #: bazzite_portal/ui/maintenance.py:66
 msgid "System information"
-msgstr ""
+msgstr "Systeminformationen"
 
 #: bazzite_portal/ui/application.py:46 bazzite_portal/ui/application.py:695
 #: bazzite_portal/ui/application.py:775 bazzite_portal/ui/maintenance.py:64
 #: bazzite_portal/ui/maintenance.py:67
 msgid "System Management"
-msgstr ""
+msgstr "Systemverwaltung"
 
 #: bazzite_portal/ui/application.py:48 bazzite_portal/ui/application.py:736
 #: bazzite_portal/ui/application.py:739 bazzite_portal/ui/application.py:740
 msgid "Options"
-msgstr ""
+msgstr "Optionen"
 
 #: bazzite_portal/ui/application.py:213
 msgid "Installed"
-msgstr ""
+msgstr "Installiert"
 
 #: bazzite_portal/ui/application.py:213
 msgid "Enabled"
-msgstr ""
+msgstr "Aktiviert"
 
 #: bazzite_portal/ui/application.py:213
 msgid "Not installed"
-msgstr ""
+msgstr "Nicht installiert"
 
 #: bazzite_portal/ui/application.py:214
 msgid "Disabled"
-msgstr ""
+msgstr "Deaktiviert"
 
 #: bazzite_portal/ui/application.py:214
 msgid "Removed"
-msgstr ""
+msgstr "Entfernt"
 
 #: bazzite_portal/ui/application.py:246 bazzite_portal/ui/application.py:248
 #: bazzite_portal/ui/application.py:250 bazzite_portal/ui/maintenance.py:23
 #: bazzite_portal/ui/maintenance.py:217
 msgid "Unavailable"
-msgstr ""
+msgstr "Nicht verfügbar"
 
 #: bazzite_portal/ui/application.py:263
 msgid "None recorded"
-msgstr ""
+msgstr "Keine aufgezeichnet"
 
 #: bazzite_portal/ui/application.py:312 bazzite_portal/ui/application.py:316
 #: bazzite_portal/ui/application.py:317 bazzite_portal/ui/application.py:1176
@@ -569,191 +592,209 @@ msgstr ""
 #: bazzite_portal/ui/image_wizard.py:169 bazzite_portal/ui/image_wizard.py:173
 #: bazzite_portal/ui/maintenance.py:1085 bazzite_portal/ui/maintenance.py:1270
 msgid "Back"
-msgstr ""
+msgstr "Zurück"
 
 #: bazzite_portal/ui/application.py:365
 msgid ""
 "Controller input is unavailable. Reconnect your controller and try again."
 msgstr ""
+"Controllereingabe ist nicht verfügbar. Verbinde deinen Controller erneut und "
+"versuche es erneut."
 
 #: bazzite_portal/ui/application.py:371 bazzite_portal/ui/application.py:1428
 #: bazzite_portal/ui/application.py:3011 bazzite_portal/ui/application.py:3100
 msgid "Could not save app preferences. Open Logs for details."
 msgstr ""
+"App-Einstellungen konnten nicht gespeichert werden. Öffne Protokolle für "
+"Details."
 
 #: bazzite_portal/ui/application.py:522 bazzite_portal/ui/application.py:857
 #: bazzite_portal/ui/application.py:1847 bazzite_portal/ui/application.py:1850
 #: bazzite_portal/ui/application.py:1861 bazzite_portal/ui/application.py:1870
 #: bazzite_portal/ui/application.py:2627
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: bazzite_portal/ui/application.py:522 bazzite_portal/ui/application.py:856
 #: bazzite_portal/ui/application.py:1847 bazzite_portal/ui/application.py:1850
 #: bazzite_portal/ui/application.py:1861 bazzite_portal/ui/application.py:2627
 msgid "No"
-msgstr ""
+msgstr "Nein"
 
 #: bazzite_portal/ui/application.py:551 bazzite_portal/ui/application.py:1176
 #: bazzite_portal/ui/application.py:1901 bazzite_portal/ui/application.py:3591
 #: bazzite_portal/ui/application.py:3611 bazzite_portal/ui/image_wizard.py:253
 #: bazzite_portal/ui/maintenance.py:1249
 msgid "Select"
-msgstr ""
+msgstr "Auswählen"
 
 #: bazzite_portal/ui/application.py:566 bazzite_portal/ui/application.py:2004
 msgid "Show changelog"
-msgstr ""
+msgstr "Änderungsprotokoll anzeigen"
 
 #: bazzite_portal/ui/application.py:579 bazzite_portal/ui/application.py:741
 msgid "Open Options"
-msgstr ""
+msgstr "Öffne Einstellungen"
 
 #: bazzite_portal/ui/application.py:581 bazzite_portal/ui/application.py:582
 #: bazzite_portal/ui/maintenance.py:34 bazzite_portal/ui/maintenance.py:38
 msgid "Refresh system information"
-msgstr ""
+msgstr "Lade Systeminformationen neu"
 
 #: bazzite_portal/ui/application.py:583 bazzite_portal/ui/application.py:1451
 #: bazzite_portal/ui/application.py:1531
 msgid "Search for a tool"
-msgstr ""
+msgstr "Suche ein Werkzeug"
 
 #: bazzite_portal/ui/application.py:634 bazzite_portal/ui/maintenance.py:1588
 msgid "The request failed. Open Logs for details."
-msgstr ""
+msgstr "Die Anfrage ist fehlgeschlagen. Öffne Protokolle für Details."
 
 #: bazzite_portal/ui/application.py:747 bazzite_portal/ui/application.py:2487
 #, python-brace-format
 msgid "Update {bazzite} and Apps"
-msgstr ""
+msgstr "Aktualisiere {bazzite} und Apps"
 
 #: bazzite_portal/ui/application.py:747 bazzite_portal/ui/application.py:2508
 msgid "Update your system and installed apps."
-msgstr ""
+msgstr "Aktualisiere dein System und installierte Apps."
 
 #: bazzite_portal/ui/application.py:770
 msgid "Explore"
-msgstr ""
+msgstr "Erkunde"
 
 #: bazzite_portal/ui/application.py:773
 msgid "Browse setup, fixes, and utilities from the system Portal."
 msgstr ""
+"Durchsuche Konfigurationen, Fehlerbehebungen und Werkzeuge des System-"
+"Portals."
 
 #: bazzite_portal/ui/application.py:774
 #, python-brace-format
 msgid "View deployments, package layers and {rpm_ostree} status."
 msgstr ""
+"Siehe Bereitstellungen (installierte Bazzite-Versionen), überlagerte Pakete "
+"und {rpm_ostree}-Status an."
 
 #: bazzite_portal/ui/application.py:775
 msgid ""
 "Cancel a pending deployment, remove layered apps or recover your system."
 msgstr ""
+"Storniere eine ausstehende Bereitstellung, entferne überlagerte Apps oder "
+"stelle dein System wieder her."
 
 #: bazzite_portal/ui/application.py:776
 #, python-brace-format
 msgid "Report a problem, collect system logs, or reset {steam}."
-msgstr ""
+msgstr "Melde ein Problem, sammle Systemprotokolle oder setze {steam} zurück."
 
 #: bazzite_portal/ui/application.py:777
 #, python-brace-format
 msgid "{bazzite} documentation, website, and community links."
-msgstr ""
+msgstr "{bazzite}-Dokumentationen, -Webseite und -Communitylinks."
 
 #: bazzite_portal/ui/application.py:778 bazzite_portal/ui/application.py:2711
 #, python-brace-format
 msgid "View {bazzite} release and project announcements."
-msgstr ""
+msgstr "Siehe {bazzite}-Veröffentlichungen und Projektankündigungen an."
 
 #: bazzite_portal/ui/application.py:789 bazzite_portal/ui/application.py:2712
 msgid "The configuration file for this category is missing or invalid."
-msgstr ""
+msgstr "Die Konfigurationsdatei dieser Kategorie fehlt oder ist ungültig."
 
 #: bazzite_portal/ui/application.py:793 bazzite_portal/ui/maintenance.py:71
 msgid "Loading…"
-msgstr ""
+msgstr "Lade…"
 
 #: bazzite_portal/ui/application.py:798
 msgid "Pinned tools"
-msgstr ""
+msgstr "Angepinnte Werkzeuge"
 
 #: bazzite_portal/ui/application.py:806
 #, python-brace-format
 msgid "Get help, collect diagnostic logs, or repair the {steam} client."
 msgstr ""
+"Erhalte Hilfe, sammle diagnostische Protokolle oder repariere den {steam}-"
+"Client."
 
 #: bazzite_portal/ui/application.py:813
 msgid "Report a problem"
-msgstr ""
+msgstr "Melde ein Problem"
 
 #: bazzite_portal/ui/application.py:813
 #, python-brace-format
 msgid "Collect relevant logs and open a {bazzite} {github} issue."
-msgstr ""
+msgstr "Sammle relevante Protokolle und öffne ein {bazzite}-{github}-Problem."
 
 #: bazzite_portal/ui/application.py:821
 msgid "Collect system logs"
-msgstr ""
+msgstr "Sammle Systemprotokolle"
 
 #: bazzite_portal/ui/application.py:821
 msgid "Save logs and hardware details for troubleshooting on your Desktop."
 msgstr ""
+"Speichere Protokolle und Hardwaredetails für die Fehlerbehebung auf deinem "
+"Schreibtisch."
 
 #: bazzite_portal/ui/application.py:828 bazzite_portal/ui/application.py:1003
 #, python-brace-format
 msgid "Reset {steam}"
-msgstr ""
+msgstr "{steam} zurücksetzen"
 
 #: bazzite_portal/ui/application.py:828
 #, python-brace-format
 msgid "Reset the {steam} client without removing your games."
-msgstr ""
+msgstr "Setzt den {steam}-Client zurück, ohne deine Spiele zu entfernen."
 
 #: bazzite_portal/ui/application.py:870 bazzite_portal/ui/application.py:983
 #: bazzite_portal/ui/application.py:1065 bazzite_portal/ui/application.py:1088
 #: bazzite_portal/ui/application.py:1131
 msgid "Close"
-msgstr ""
+msgstr "Schließen"
 
 #: bazzite_portal/ui/application.py:929
 msgid "Collecting system logs"
-msgstr ""
+msgstr "Sammle Systemprotokolle"
 
 #: bazzite_portal/ui/application.py:960
 msgid "Could not collect system logs. Open Logs for details."
 msgstr ""
+"Systemprotokolle konnten nicht gesammelt werden. Öffne Protokolle für "
+"Details."
 
 #: bazzite_portal/ui/application.py:963
 #, python-brace-format
 msgid "System logs collected and saved to {directory}."
-msgstr ""
+msgstr "Systemprotokolle gesammelt und in {directory} gespeichert."
 
 #: bazzite_portal/ui/application.py:969
 msgid "System logs ready"
-msgstr ""
+msgstr "Systemprotokolle bereit"
 
 #: bazzite_portal/ui/application.py:972
 msgid "System logs are ready."
-msgstr ""
+msgstr "Systemprotokolle sind bereit."
 
 #: bazzite_portal/ui/application.py:976 bazzite_portal/ui/application.py:1123
 msgid "Warnings"
-msgstr ""
+msgstr "Warnungen"
 
 #: bazzite_portal/ui/application.py:977 bazzite_portal/ui/application.py:1124
 msgid ""
 "Some diagnostic information could not be collected. See the collected logs "
 "for details."
 msgstr ""
+"Einige Diagnose-Informationen konnten nicht gesammelt werden. Siehe die "
+"gesammelten Protokolle an für Details."
 
 #: bazzite_portal/ui/application.py:984 bazzite_portal/ui/application.py:1132
 msgid "Open logs folder"
-msgstr ""
+msgstr "Öffne Protokollordner"
 
 #: bazzite_portal/ui/application.py:998
 #, python-brace-format
 msgid "Reset {steam} Installation?"
-msgstr ""
+msgstr "{steam}-Installation zurücksetzen?"
 
 #: bazzite_portal/ui/application.py:1000
 #, python-brace-format
@@ -761,6 +802,8 @@ msgid ""
 "{steam} will stop and sign you out. This only cleans the steam installation "
 "folder."
 msgstr ""
+"{steam} wird beendet und du wirst abgemeldet. Dies wird nur den Steam-"
+"Installationsordner bereinigen."
 
 #: bazzite_portal/ui/application.py:1001
 #, python-brace-format
@@ -768,42 +811,48 @@ msgid ""
 "Your games, Saves, Configuration, Music and {proton} files will stay "
 "untouched."
 msgstr ""
+"Deine Spiele, Spielstände, Konfigurationen, Musik und {proton}-Dateien "
+"bleiben unverändert."
 
 #: bazzite_portal/ui/application.py:1002 bazzite_portal/ui/application.py:2572
 #: bazzite_portal/ui/image_wizard.py:177 bazzite_portal/ui/maintenance.py:1526
 #: bazzite_portal/ui/maintenance.py:1545
 msgid "Cancel"
-msgstr ""
+msgstr "Abbrechen"
 
 #: bazzite_portal/ui/application.py:1019
 #, python-brace-format
 msgid "Resetting {steam}"
-msgstr ""
+msgstr "Setze {steam} zurück"
 
 #: bazzite_portal/ui/application.py:1048
 #, python-brace-format
 msgid "{steam} reset did not complete. Open Logs for details."
 msgstr ""
+"{steam}-Zurücksetzung wurde nicht abgeschlossen. Öffne Protokolle für "
+"Details."
 
 #: bazzite_portal/ui/application.py:1052
 #, python-brace-format
 msgid "Some {steam} data has already been removed."
-msgstr ""
+msgstr "Einige {steam}-Dateien wurden bereits entfernt."
 
 #: bazzite_portal/ui/application.py:1055
 #, python-brace-format
 msgid "{steam} reset finished after its progress window was closed."
 msgstr ""
+"{steam}-Zurücksetzung wurde abgeschlossen, nachdem das Fortschrittsfenster "
+"geschlossen wurde."
 
 #: bazzite_portal/ui/application.py:1061
 #, python-brace-format
 msgid "{steam} reset complete"
-msgstr ""
+msgstr "{steam}-Zurücksetzung abgeschlossen"
 
 #: bazzite_portal/ui/application.py:1063
 #, python-brace-format
 msgid "{steam} reset is complete."
-msgstr ""
+msgstr "{steam} wurde erfolgreich zurückgesetzt."
 
 #: bazzite_portal/ui/application.py:1064
 #, python-brace-format
@@ -811,206 +860,216 @@ msgid ""
 "You can now open {steam}. Its client files need to download again, so the "
 "first launch may take a while."
 msgstr ""
+"Du kannst jetzt {steam} öffnen. Die Client-Dateien müssen erneut "
+"heruntergeladen werden, daher kann der erste Start eine Weile dauern."
 
 #: bazzite_portal/ui/application.py:1071
 msgid "Collecting logs"
-msgstr ""
+msgstr "Sammle Protokolle"
 
 #: bazzite_portal/ui/application.py:1083
 msgid "Working on this device…"
-msgstr ""
+msgstr "Arbeite an diesem Gerät…"
 
 #: bazzite_portal/ui/application.py:1103
 msgid "Could not collect diagnostic logs. Open Logs for details."
 msgstr ""
+"Diagnose-Protokolle konnten nicht gesammelt werden. Öffne Protokolle für "
+"Details."
 
 #: bazzite_portal/ui/application.py:1107
 #, python-brace-format
 msgid "Logs collected and saved to {directory}."
-msgstr ""
+msgstr "Protokolle gesammelt und in {directory} gespeichert."
 
 #: bazzite_portal/ui/application.py:1116
 msgid "Logs ready"
-msgstr ""
+msgstr "Protokolle bereit"
 
 #: bazzite_portal/ui/application.py:1119
 msgid "Logs are ready."
-msgstr ""
+msgstr "Die Protokolle sind bereit."
 
 #: bazzite_portal/ui/application.py:1125
 msgid ""
 "Attach only the logs relevant to your problem. Then fill in the remaining "
 "fields and describe the issue."
 msgstr ""
+"Hänge nur die für dein Problem relevanten Protokolle an. Fülle danach die "
+"übrigen Felder aus und beschreibe das Problem."
 
 #: bazzite_portal/ui/application.py:1133
 #, python-brace-format
 msgid "Open {github} issue"
-msgstr ""
+msgstr "Öffne {github}-Problem"
 
 #: bazzite_portal/ui/application.py:1137
 msgid "The issue form could not be prepared. Open Logs for details."
 msgstr ""
+"Das Problem-Formular konnte nicht vorbereitet werden. Öffne Protokolle für "
+"Details."
 
 #: bazzite_portal/ui/application.py:1176 bazzite_portal/ui/application.py:1180
 #: bazzite_portal/ui/application.py:3609 bazzite_portal/ui/maintenance.py:1270
 #: bazzite_portal/ui/widgets.py:101 bazzite_portal/ui/widgets.py:140
 msgid "D-pad Move"
-msgstr ""
+msgstr "Steuerkreuz bewegen"
 
 #: bazzite_portal/ui/application.py:1214
 #, python-brace-format
 msgid "Location: {path}"
-msgstr ""
+msgstr "Ort: {path}"
 
 #: bazzite_portal/ui/application.py:1226
 msgid "Could not open logs folder"
-msgstr ""
+msgstr "Protokoll-Ordner konnte nicht geöffnet werden"
 
 #: bazzite_portal/ui/application.py:1238
 #, python-brace-format
 msgid "{action}. Open Logs for details."
-msgstr ""
+msgstr "{action}. Öffne Protokolle für Details."
 
 #: bazzite_portal/ui/application.py:1267
 #, python-brace-format
 msgid "The {github} issue form could not be prepared."
-msgstr ""
+msgstr "Das {github}-Problemformular konnte nicht vorbereitet werden."
 
 #: bazzite_portal/ui/application.py:1274 bazzite_portal/ui/application.py:2588
 #: bazzite_portal/ui/application.py:2818 bazzite_portal/ui/application.py:3254
 msgid "Could not open link"
-msgstr ""
+msgstr "Link konnte nicht geöffnet werden"
 
 #: bazzite_portal/ui/application.py:1383 bazzite_portal/ui/application.py:1546
 msgid "Action"
-msgstr ""
+msgstr "Aktion"
 
 #: bazzite_portal/ui/application.py:1383
 msgid "Unavailable tool"
-msgstr ""
+msgstr "Nicht verfügbares Werkzeug"
 
 #: bazzite_portal/ui/application.py:1384
 msgid "Unavailable or ambiguous · select to unpin"
-msgstr ""
+msgstr "Nicht verfügbar oder mehrdeutig · wähle aus zum Lösen"
 
 #: bazzite_portal/ui/application.py:1405
 msgid "Unpin unavailable tool?"
-msgstr ""
+msgstr "Nicht verfügbares Werkzeug lösen?"
 
 #: bazzite_portal/ui/application.py:1406
 msgid ""
 "This pin no longer resolves to one unambiguous Portal action. Removing the "
 "pin does not run any script."
 msgstr ""
+"Dieser Pin führt nicht mehr zu einer eindeutigen Portal-Aktion. Das Lösen "
+"des Pins führt kein Skript aus."
 
 #: bazzite_portal/ui/application.py:1407 bazzite_portal/ui/application.py:1683
 #: bazzite_portal/ui/application.py:1684 bazzite_portal/ui/application.py:3583
 #: bazzite_portal/ui/application.py:3594
 msgid "Unpin"
-msgstr ""
+msgstr "Lösen"
 
 #: bazzite_portal/ui/application.py:1446
 msgid "Search"
-msgstr ""
+msgstr "Suchen"
 
 #: bazzite_portal/ui/application.py:1449 bazzite_portal/ui/application.py:1450
 #: bazzite_portal/ui/application.py:1464 bazzite_portal/ui/application.py:1466
 msgid "Search tools"
-msgstr ""
+msgstr "Werkzeuge durchsuchen"
 
 #: bazzite_portal/ui/application.py:1503 bazzite_portal/ui/application.py:1504
 msgid "Back to Tools"
-msgstr ""
+msgstr "Zurück zu Werkzeuge"
 
 #: bazzite_portal/ui/application.py:1503 bazzite_portal/ui/application.py:1504
 msgid "Back to Home"
-msgstr ""
+msgstr "Zurück zu Zuhause"
 
 #: bazzite_portal/ui/application.py:1536
 msgid "No matching tools"
-msgstr ""
+msgstr "Keine passenden Werkzeuge"
 
 #: bazzite_portal/ui/application.py:1536
 msgid "Try another search."
-msgstr ""
+msgstr "Versuche eine andere Suche."
 
 #: bazzite_portal/ui/application.py:1578 bazzite_portal/ui/application.py:1880
 msgid "Checking current status…"
-msgstr ""
+msgstr "Untersuche aktuellen Status…"
 
 #: bazzite_portal/ui/application.py:1579
 msgid "Checking status"
-msgstr ""
+msgstr "Untersuche Status"
 
 #: bazzite_portal/ui/application.py:1622 bazzite_portal/ui/application.py:1792
 msgid "Current status is unknown."
-msgstr ""
+msgstr "Der aktuelle Status ist unbekannt."
 
 #: bazzite_portal/ui/application.py:1622 bazzite_portal/ui/application.py:1793
 #, python-brace-format
 msgid "Current status: {status}"
-msgstr ""
+msgstr "Aktueller Status: {status}"
 
 #: bazzite_portal/ui/application.py:1623
 #, python-brace-format
 msgid "Status {status}"
-msgstr ""
+msgstr "Status {status}"
 
 #: bazzite_portal/ui/application.py:1647
 msgid "This tool has a missing or ambiguous ID"
-msgstr ""
+msgstr "Dieses Werkzeug hat eine fehlende oder mehrdeutige ID"
 
 #: bazzite_portal/ui/application.py:1648
 msgid "Pin unavailable: missing or ambiguous ID"
-msgstr ""
+msgstr "Pin nicht verfügbar: fehlende oder mehrdeutige ID"
 
 #: bazzite_portal/ui/application.py:1683 bazzite_portal/ui/application.py:1684
 #: bazzite_portal/ui/application.py:3583 bazzite_portal/ui/application.py:3594
 msgid "Pin"
-msgstr ""
+msgstr "Anpinnen"
 
 #: bazzite_portal/ui/application.py:1758
 msgid "No command is configured for this tool."
-msgstr ""
+msgstr "Für dieses Werkzeug ist kein Befehl konfiguriert."
 
 #: bazzite_portal/ui/application.py:1804
 #, python-brace-format
 msgid "Run {value1}?"
-msgstr ""
+msgstr "{value1} ausführen?"
 
 #: bazzite_portal/ui/application.py:1804 bazzite_portal/ui/application.py:1833
 msgid "Tool"
-msgstr ""
+msgstr "Werkzeug"
 
 #: bazzite_portal/ui/application.py:1835
 msgid "This command opens in your desktop terminal."
-msgstr ""
+msgstr "Dieser Befehl öffnet sich in deinem Desktop-Terminal."
 
 #: bazzite_portal/ui/application.py:1841
 msgid "Do you want to run this tool?"
-msgstr ""
+msgstr "Möchtest du dieses Werkzeug ausführen?"
 
 #: bazzite_portal/ui/application.py:1888 bazzite_portal/ui/application.py:1889
 msgid "Run"
-msgstr ""
+msgstr "Ausführen"
 
 #: bazzite_portal/ui/application.py:1996 bazzite_portal/ui/application.py:1998
 #: bazzite_portal/ui/application.py:2534
 msgid "Update"
-msgstr ""
+msgstr "Aktualisierung"
 
 #: bazzite_portal/ui/application.py:2006
 msgid "Changelog"
-msgstr ""
+msgstr "Änderungsprotokoll"
 
 #: bazzite_portal/ui/application.py:2033
 msgid "No log output available yet."
-msgstr ""
+msgstr "Protokollausgabe noch nicht verfügbar."
 
 #: bazzite_portal/ui/application.py:2036 bazzite_portal/ui/application.py:2477
 msgid "Update log"
-msgstr ""
+msgstr "Aktualisierungsprotokoll"
 
 #: bazzite_portal/ui/application.py:2054 bazzite_portal/ui/application.py:2514
 #, python-brace-format
@@ -1018,85 +1077,89 @@ msgid ""
 "An {rpm_ostree} transaction is active. Wait for it to finish before updating "
 "or restarting."
 msgstr ""
+"Eine {rpm_ostree}-Transaktion läuft. Warte bis sie abgeschlossen ist, bevor "
+"du aktualisierst oder neu startest."
 
 #: bazzite_portal/ui/application.py:2065 bazzite_portal/ui/application.py:2146
 msgid "Finished · awaiting update result"
-msgstr ""
+msgstr "Abgeschlossen · Aktualisierungsergebnis wird abgewartet"
 
 #: bazzite_portal/ui/application.py:2070
 msgid "Completed"
-msgstr ""
+msgstr "Abgeschlossen"
 
 #: bazzite_portal/ui/application.py:2075 bazzite_portal/ui/maintenance.py:22
 msgid "Failed"
-msgstr ""
+msgstr "Fehlgeschlagen"
 
 #: bazzite_portal/ui/application.py:2080
 msgid "Waiting to start"
-msgstr ""
+msgstr "Warte auf Start"
 
 #: bazzite_portal/ui/application.py:2085 bazzite_portal/ui/application.py:2137
 msgid "Skipped"
-msgstr ""
+msgstr "Übersprungen"
 
 #: bazzite_portal/ui/application.py:2094
 #, no-python-format, python-brace-format
 msgid "{percent}% complete"
-msgstr ""
+msgstr "{percent}% abgeschlossen"
 
 #: bazzite_portal/ui/application.py:2108
 msgid "In progress"
-msgstr ""
+msgstr "Im Gange"
 
 #: bazzite_portal/ui/application.py:2112 bazzite_portal/ui/application.py:2137
 msgid "Status unavailable"
-msgstr ""
+msgstr "Status nicht verfügbar"
 
 #: bazzite_portal/ui/application.py:2132 bazzite_portal/ui/application.py:2498
 msgid "Update step"
-msgstr ""
+msgstr "Aktualisierungsschritt"
 
 #: bazzite_portal/ui/application.py:2135
 #, python-brace-format
 msgid "{bazzite} System"
-msgstr ""
+msgstr "{bazzite}-System"
 
 #: bazzite_portal/ui/application.py:2137
 msgid "Waiting to update"
-msgstr ""
+msgstr "Warte auf Aktualisierung"
 
 #: bazzite_portal/ui/application.py:2140
 msgid "Update failed. Open the update log for details."
 msgstr ""
+"Aktualisierung fehlgeschlagen. Öffne das Aktualisierungsprotokoll für "
+"Details."
 
 #: bazzite_portal/ui/application.py:2142
 msgid "No system update is available."
-msgstr ""
+msgstr "Keine Systemaktualisierung ist verfügbar."
 
 #: bazzite_portal/ui/application.py:2148
 msgid "Updated"
-msgstr ""
+msgstr "Aktualisiert"
 
 #: bazzite_portal/ui/application.py:2150
 msgid "New version ready on next restart"
-msgstr ""
+msgstr "Neue Version ist beim nächsten Neustart bereit"
 
 #: bazzite_portal/ui/application.py:2152 bazzite_portal/updates/monitor.py:1475
 msgid "Reading update progress…"
-msgstr ""
+msgstr "Lese Aktualisierungsfortschritt…"
 
 #: bazzite_portal/ui/application.py:2174
 msgid "Logs unavailable"
-msgstr ""
+msgstr "Protokolle nicht verfügbar"
 
 #: bazzite_portal/ui/application.py:2176
 msgid "No module log output"
-msgstr ""
+msgstr "Keine Modul-Protokollausgabe"
 
 #: bazzite_portal/ui/application.py:2246
 #, python-brace-format
 msgid "Restart {bazzite}?"
-msgstr ""
+msgstr "{bazzite} neu starten?"
 
 #: bazzite_portal/ui/application.py:2246
 #, python-brace-format
@@ -1104,22 +1167,25 @@ msgid ""
 "All update steps have finished. Restart now to start the prepared {bazzite} "
 "version. Save your work before continuing."
 msgstr ""
+"Alle Aktualisierungsschritte wurden abgeschlossen. Speichere deine Arbeit "
+"und starte jetzt neu, um die vorbereitete {bazzite}-Version zu starten."
 
 #: bazzite_portal/ui/application.py:2246 bazzite_portal/ui/application.py:2532
 msgid "Restart"
-msgstr ""
+msgstr "Neustart"
 
 #: bazzite_portal/ui/application.py:2303
 msgid "This release has no written notes."
-msgstr ""
+msgstr "Diese Veröffentlichung hat keine geschriebenen Notizen."
 
 #: bazzite_portal/ui/application.py:2307
 msgid "Could not load the changelog. Try again later."
 msgstr ""
+"Änderungsprotokoll konnte nicht geladen werden. Versuche es später erneut."
 
 #: bazzite_portal/ui/application.py:2307
 msgid "No matching release notes were found."
-msgstr ""
+msgstr "Es wurden keine passenden Versionshinweise gefunden."
 
 #: bazzite_portal/ui/application.py:2312 bazzite_portal/ui/application.py:2321
 #: bazzite_portal/ui/maintenance.py:77 bazzite_portal/ui/maintenance.py:233
@@ -1127,41 +1193,41 @@ msgstr ""
 #: bazzite_portal/ui/maintenance.py:282 bazzite_portal/ui/maintenance.py:293
 #: bazzite_portal/ui/maintenance.py:343
 msgid "Next restart"
-msgstr ""
+msgstr "Nächster Neustart"
 
 #: bazzite_portal/ui/application.py:2313
 msgid "Running now"
-msgstr ""
+msgstr "In Arbeit"
 
 #: bazzite_portal/ui/application.py:2321
 msgid "Pending update"
-msgstr ""
+msgstr "Ausstehende Aktualisierung"
 
 #: bazzite_portal/ui/application.py:2321
 msgid "Installed version"
-msgstr ""
+msgstr "Installierte Version"
 
 #: bazzite_portal/ui/application.py:2326
 msgid "No verified release version and channel are available."
-msgstr ""
+msgstr "Keine verifizierten Veröffentlichungen und Kanäle sind verfügbar."
 
 #: bazzite_portal/ui/application.py:2479 bazzite_portal/ui/application.py:2483
 #: bazzite_portal/ui/maintenance.py:330
 msgid "Rolling back…"
-msgstr ""
+msgstr "Rolle zur letzten Bereitstellung zurück…"
 
 #: bazzite_portal/ui/application.py:2479
 #, python-brace-format
 msgid "{bazzite} is updating…"
-msgstr ""
+msgstr "{bazzite} wird aktualisiert…"
 
 #: bazzite_portal/ui/application.py:2481
 msgid "Rebasing…"
-msgstr ""
+msgstr "Systemabbild wechselt…"
 
 #: bazzite_portal/ui/application.py:2485
 msgid "System operation in progress…"
-msgstr ""
+msgstr "Systemoperation im Gange…"
 
 #: bazzite_portal/ui/application.py:2520
 #, python-brace-format
@@ -1169,99 +1235,109 @@ msgid ""
 "A system change is pending, but {app_name} could not verify it. Restart is "
 "unavailable until its status can be checked."
 msgstr ""
+"Eine Systemänderung steht aus, aber {app_name} konnte dies nicht nachweisen. "
+"Neustart ist nicht verfügbar, bis der Status überprüft werden kann."
 
 #: bazzite_portal/ui/application.py:2522
 #, python-brace-format
 msgid "{bazzite} updates are unavailable. Open Logs for details."
 msgstr ""
+"{bazzite}-Aktualisierungen sind nicht verfügbar. Öffne Protokolle für "
+"Details."
 
 #: bazzite_portal/ui/application.py:2528
 msgid "Updating…"
-msgstr ""
+msgstr "Aktualisiere…"
 
 #: bazzite_portal/ui/application.py:2530
 msgid "Busy"
-msgstr ""
+msgstr "Beschäftigt"
 
 #: bazzite_portal/ui/application.py:2559
 msgid "The update request could not be sent. Open Logs for details."
 msgstr ""
+"Die Aktualisierungsanfrage konnte nicht gesendet werden. Öffne Protokolle "
+"für Details."
 
 #: bazzite_portal/ui/application.py:2562 bazzite_portal/ui/maintenance.py:313
 #: bazzite_portal/ui/maintenance.py:523 bazzite_portal/ui/maintenance.py:603
 #: bazzite_portal/ui/maintenance.py:1452 bazzite_portal/ui/maintenance.py:1599
 #: bazzite_portal/ui/maintenance.py:1713
 msgid "System status is unavailable. Open Logs for details."
-msgstr ""
+msgstr "Systemstatus ist nicht verfügbar. Öffne Protokolle für Details."
 
 #: bazzite_portal/ui/application.py:2586
 msgid "Read the rebase documentation"
-msgstr ""
+msgstr "Lies die Abbildwechsel-Dokumentationen"
 
 #: bazzite_portal/ui/application.py:2633
 #, python-brace-format
 msgid "Visit {bazzite} documentation, community spaces, and source code."
-msgstr ""
+msgstr "Besuche {bazzite}-Dokumentationen, -Community-Orte und -Quellcode."
 
 #: bazzite_portal/ui/application.py:2634
 msgid "Resources"
-msgstr ""
+msgstr "Ressourcen"
 
 #: bazzite_portal/ui/application.py:2669
 #, python-brace-format
 msgid "{bazzite} release and project announcements."
-msgstr ""
+msgstr "{bazzite}-Veröffentlichungen und Projektankündigungen."
 
 #: bazzite_portal/ui/application.py:2671 bazzite_portal/ui/application.py:2718
 msgid "No announcements available"
-msgstr ""
+msgstr "Keine Ankündigungen verfügbar"
 
 #: bazzite_portal/ui/application.py:2809
 #, python-brace-format
 msgid "This community link is not a valid {https} address."
-msgstr ""
+msgstr "Dieser Community-Link ist keine gültige {https}-Adresse."
 
 #: bazzite_portal/ui/application.py:2823
 msgid "Preferences"
-msgstr ""
+msgstr "Einstellungen"
 
 #: bazzite_portal/ui/application.py:2827
 msgid "Open app at login"
-msgstr ""
+msgstr "Öffne App bei Anmeldung"
 
 #: bazzite_portal/ui/application.py:2827
 msgid "Open the window at login. Background monitoring starts independently."
 msgstr ""
+"Öffne dieses Fenster bei der Anmeldung. Hintergrundüberprüfungen starten "
+"unabhängig hiervon."
 
 #: bazzite_portal/ui/application.py:2828
 msgid "Hide notification area icon"
-msgstr ""
+msgstr "Verstecke Nachrichtenbereich-Symbol"
 
 #: bazzite_portal/ui/application.py:2828
 msgid "Hide the update icon in the notification area."
-msgstr ""
+msgstr "Verstecke das Aktualisierungssymbol im Nachrichtenbereich."
 
 #: bazzite_portal/ui/application.py:2829
 msgid "Show console during update"
-msgstr ""
+msgstr "Zeige Konsole während der Aktualisierung"
 
 #: bazzite_portal/ui/application.py:2829
 msgid "Show the console on the Updates screen. Intended for advanced users."
 msgstr ""
+"Zeige die Konsole im Aktualisieren-Fenster. Für fortgeschrittene Benutzer "
+"vorgesehen."
 
 #: bazzite_portal/ui/application.py:2830
 #, python-brace-format
 msgid "Show disabled {uupd} steps"
-msgstr ""
+msgstr "Zeige deaktivierte {uupd}-Schritte"
 
 #: bazzite_portal/ui/application.py:2830
 #, python-brace-format
 msgid "Display steps disabled in {uupd}. This does not enable them."
-msgstr ""
+msgstr "Zeigt die deaktivierten Schritte von {uupd}. Dies aktiviert sie nicht."
 
 #: bazzite_portal/ui/application.py:2831
 msgid "Show unsupported rebase targets"
-msgstr ""
+msgstr "Zeige nicht unterstützte Abbildwechsel-Ziele"
 
 #: bazzite_portal/ui/application.py:2832
 #, python-brace-format
@@ -1269,127 +1345,141 @@ msgid ""
 "Include other desktops and the {track} channel. Intended for advanced "
 "testing; these targets may cause problems."
 msgstr ""
+"Schließe andere Desktops und den {track}-Kanal ein. Für fortgeschrittenes "
+"Testen vorgesehen; diese Ziele können Probleme verursachen."
 
 #: bazzite_portal/ui/application.py:2834
 msgid "Don’t ask before running tools"
-msgstr ""
+msgstr "Nicht vor der Werkzeug-Ausführung fragen"
 
 #: bazzite_portal/ui/application.py:2834
 msgid "Skip confirmation for tools that run without an options dialog."
 msgstr ""
+"Überspringe die Bestätigung für Werkzeuge, die ohne einen Optionsdialog "
+"ausgeführt werden."
 
 #: bazzite_portal/ui/application.py:2835
 msgid "Always show controller prompts"
-msgstr ""
+msgstr "Immer Controller-Symbole anzeigen"
 
 #: bazzite_portal/ui/application.py:2835
 msgid "Keep button prompts visible when no controller is connected."
-msgstr ""
+msgstr "Controller-Symbole sichtbar lassen, wenn kein Controller verbunden ist."
 
 #: bazzite_portal/ui/application.py:2851 bazzite_portal/ui/application.py:3036
 #: bazzite_portal/ui/application.py:3084
 msgid "Automatic"
-msgstr ""
+msgstr "Automatisch"
 
 #: bazzite_portal/ui/application.py:2852 bazzite_portal/ui/application.py:2859
 msgid "Controller prompt style"
-msgstr ""
+msgstr "Controller-Symbolstil"
 
 #: bazzite_portal/ui/application.py:2852
 msgid ""
 "Choose how controller buttons are drawn; controls keep the same actions."
 msgstr ""
+"Wähle aus, wie Controller-Tasten angezeigt werden; Tasten behalten dieselben "
+"Aktionen."
 
 #: bazzite_portal/ui/application.py:2893
 msgid "Notification icon theme"
-msgstr ""
+msgstr "Benachrichtigungs-Symboldesign"
 
 #: bazzite_portal/ui/application.py:2929
 #, python-brace-format
 msgid "Add {app_name} to {steam}"
-msgstr ""
+msgstr "Füge {app_name} zu {steam} hinzu"
 
 #: bazzite_portal/ui/application.py:2930
 #, python-brace-format
 msgid "Open this app from your {steam} library, including Gaming Mode."
-msgstr ""
+msgstr "Öffne diese App von deiner {steam}-Bibliothek, inklusive Spielmodus."
 
 #: bazzite_portal/ui/application.py:2938
 msgid "Local app data"
-msgstr ""
+msgstr "Lokale App-Daten"
 
 #: bazzite_portal/ui/application.py:2939
 msgid "Open app logs"
-msgstr ""
+msgstr "Öffne App-Protokolle"
 
 #: bazzite_portal/ui/application.py:2939
 msgid "Open the folder containing this app’s private logs."
-msgstr ""
+msgstr "Öffne den Ordner mit den eigenen Protokollen dieser App."
 
 #: bazzite_portal/ui/application.py:2945
 msgid "Clear local app data"
-msgstr ""
+msgstr "Lokale App-Daten löschen"
 
 #: bazzite_portal/ui/application.py:2945
 msgid ""
 "Remove pins, preferences, and dismissed reminders. Running jobs are "
 "unaffected."
 msgstr ""
+"Entferne Pins, Einstellungen und abgewiesene Erinnerungen. Laufende Aktionen "
+"bleiben unberührt."
 
 #: bazzite_portal/ui/application.py:2948
 msgid "Clear local app data?"
-msgstr ""
+msgstr "Lokale App-Daten löschen?"
 
 #: bazzite_portal/ui/application.py:2948
 msgid ""
 "Your pins, preferences, and dismissed reminders will be removed. System "
 "updates and their logs will not be changed."
 msgstr ""
+"Deine Pins, Einstellungen und abgewiesene Erinnerungen werden entfernt. "
+"Systemaktualisierungen und deren Protokolle werden nicht verändert."
 
 #: bazzite_portal/ui/application.py:2948
 msgid "Clear data"
-msgstr ""
+msgstr "Daten löschen"
 
 #: bazzite_portal/ui/application.py:2951
 msgid "About"
-msgstr ""
+msgstr "Über"
 
 #: bazzite_portal/ui/application.py:2952
 #, python-brace-format
 msgid "About {app_name}"
-msgstr ""
+msgstr "Über {app_name}"
 
 #: bazzite_portal/ui/application.py:2958 bazzite_portal/ui/application.py:3093
 msgid "Could not save or load app preferences. Open Logs for details."
 msgstr ""
+"App-Einstellungen konnten nicht gespeichert oder geladen werden. Öffne "
+"Protokolle für Details."
 
 #: bazzite_portal/ui/application.py:2975
 #, python-brace-format
 msgid "{app_name} is already in your {steam} library."
-msgstr ""
+msgstr "{app_name} ist bereits in deiner {steam}-Bibliothek."
 
 #: bazzite_portal/ui/application.py:2977
 #, python-brace-format
 msgid "Added to {steam}."
-msgstr ""
+msgstr "Zu {steam} hinzugefügt."
 
 #: bazzite_portal/ui/application.py:2978
 #, python-brace-format
 msgid "Add to {steam} requested."
-msgstr ""
+msgstr "Zu {steam} hinzufügen wurde angefragt."
 
 #: bazzite_portal/ui/application.py:2981
 #, python-brace-format
 msgid "Could not add {app_name} to {steam}. Open Logs for details."
 msgstr ""
+"{app_name} konnte nicht zu {steam} hinzugefügt werden. Öffne Protokolle für "
+"Details."
 
 #: bazzite_portal/ui/application.py:3000
 msgid "Could not open the app logs folder."
-msgstr ""
+msgstr "App-Protokollordner konnte nicht geöffnet werden."
 
 #: bazzite_portal/ui/application.py:3023
 msgid "Unsupported rebase targets"
-msgstr ""
+msgstr "Nicht unterstützte Abbildwechsel-Ziele"
 
 #: bazzite_portal/ui/application.py:3024
 #, python-brace-format
@@ -1399,104 +1489,114 @@ msgid ""
 "right not to provide support in these situations. Please read our "
 "documentation for further information."
 msgstr ""
+"Abbildwechsel zu nicht unterstützten Zielen, inklusive anderen Desktops und "
+"dem {track}-Kanal, kann und wird dein System beschädigen. Das {bazzite}-Team "
+"behält sich das Recht vor, keine Hilfe in diesen Situationen zu leisten. "
+"Bitte lies unsere Dokumentationen für weitere Informationen."
 
 #: bazzite_portal/ui/application.py:3026
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: bazzite_portal/ui/application.py:3094
 msgid "Local app data cleared."
-msgstr ""
+msgstr "Lokale App-Daten gelöscht."
 
 #: bazzite_portal/ui/application.py:3107
 #, python-brace-format
 msgid "Manage {bazzite} updates, tools, and system settings."
-msgstr ""
+msgstr "Verwalte {bazzite}-Aktualisierungen, Werkzeuge und Systemeinstellungen."
 
 #: bazzite_portal/ui/application.py:3108
 msgid "translator-credits"
-msgstr ""
+msgstr "Übersetzer-Danksagungen"
 
 #: bazzite_portal/ui/application.py:3263
 msgid "The requested action is missing or ambiguous."
-msgstr ""
+msgstr "Die angefragte Aktion fehlt oder ist mehrdeutig."
 
 #: bazzite_portal/ui/application.py:3572 bazzite_portal/ui/widgets.py:94
 #: bazzite_portal/ui/widgets.py:102
 msgid "Move"
-msgstr ""
+msgstr "Bewegen"
 
 #: bazzite_portal/ui/application.py:3577 bazzite_portal/ui/application.py:3589
 #: bazzite_portal/ui/maintenance.py:1085 bazzite_portal/ui/widgets.py:94
 #: bazzite_portal/ui/widgets.py:102
 msgid "Scroll"
-msgstr ""
+msgstr "Scrollen"
 
 #: bazzite_portal/ui/application.py:3597 bazzite_portal/ui/application.py:3601
 #: bazzite_portal/ui/widgets.py:101
 msgid "D-pad Scroll"
-msgstr ""
+msgstr "Steuerkreuz scrollen"
 
 #: bazzite_portal/ui/application.py:3612
 msgid "Review selected"
-msgstr ""
+msgstr "Ausgewähltes überprüfen"
 
 #: bazzite_portal/ui/application.py:3688
 msgid "Open a Portal tool"
-msgstr ""
+msgstr "Öffne ein Portal-Werkzeug"
 
 #: bazzite_portal/ui/decky.py:77
 msgid "Bazzite Portal in Gaming Mode"
-msgstr ""
+msgstr "Bazzite Portal im Spielmodus"
 
 #: bazzite_portal/ui/decky.py:78
 msgid ""
 "Install the Bazzite Portal plugin for Decky Loader to manage updates and "
 "rollbacks directly from Gaming Mode."
 msgstr ""
+"Installiere das Bazzite Portal Plugin für Decky Loader, um Aktualisierungen "
+"und Zurückrollen direkt im Spielmodus zu verwalten."
 
 #: bazzite_portal/ui/decky.py:79
 msgid "Install Plugin"
-msgstr ""
+msgstr "Plugin installieren"
 
 #: bazzite_portal/ui/decky.py:79
 msgid "Not Now"
-msgstr ""
+msgstr "Nicht jetzt"
 
 #: bazzite_portal/ui/decky.py:80
 msgid "You can install the Bazzite Portal plugin at any time from Settings."
 msgstr ""
+"Du kannst das Bazzite Portal Plugin jederzeit in den Einstellungen "
+"installieren."
 
 #: bazzite_portal/ui/decky.py:91 bazzite_portal/ui/decky.py:120
 #: bazzite_portal/ui/decky.py:125
 msgid "Install Bazzite Portal Decky plugin"
-msgstr ""
+msgstr "Installiere Bazzite Portal Decky Plugin"
 
 #: bazzite_portal/ui/decky.py:92
 msgid "Use Bazzite Portal from Decky Loader in Gaming Mode."
-msgstr ""
+msgstr "Benutze Bazzite Portal vom Decky Loader im Spielmodus."
 
 #: bazzite_portal/ui/decky.py:107
 msgid "Checking Decky plugin…"
-msgstr ""
+msgstr "Überprüfe Decky Plugin…"
 
 #: bazzite_portal/ui/decky.py:107
 msgid "Waiting for Decky Loader…"
-msgstr ""
+msgstr "Warte auf Decky Loader…"
 
 #: bazzite_portal/ui/decky.py:109
 msgid "Confirm in Decky Loader"
-msgstr ""
+msgstr "Bestätige im Decky Loader"
 
 #: bazzite_portal/ui/decky.py:109
 msgid ""
 "Confirm the installation in Decky Loader, then return to Settings to refresh "
 "its status."
 msgstr ""
+"Bestätige die Installation im Decky Loader, kehre dann zu den Einstellungen "
+"zurück, um den Status zu aktualisieren."
 
 #: bazzite_portal/ui/decky.py:112
 msgid "Update Bazzite Portal Decky plugin"
-msgstr ""
+msgstr "Aktualisiere Bazzite Portal Decky Plugin"
 
 #: bazzite_portal/ui/decky.py:113
 #, python-brace-format
@@ -1504,10 +1604,12 @@ msgid ""
 "Update the installed plugin from {installed} to {bundled}. Decky Loader "
 "preserves its settings."
 msgstr ""
+"Aktualisiere das installierte Plugin von {installed} zu {bundled}. Decky "
+"Loader behält die Einstellungen bei."
 
 #: bazzite_portal/ui/decky.py:116
 msgid "Downgrade Bazzite Portal Decky plugin"
-msgstr ""
+msgstr "Stufe Bazzite Portal Decky Plugin herab"
 
 #: bazzite_portal/ui/decky.py:117
 #, python-brace-format
@@ -1515,237 +1617,261 @@ msgid ""
 "Downgrade the installed plugin from {installed} to the bundled version "
 "{bundled}. Decky Loader preserves its settings."
 msgstr ""
+"Stufe das installierte Plugin von {installed} zur enthaltenen Version "
+"{bundled} herab. Decky Loader behält die Einstellungen bei."
 
 #: bazzite_portal/ui/decky.py:120
 msgid ""
 "Decky Loader will ask you to confirm installation of the bundled plugin."
 msgstr ""
+"Decky Loader wird nach Bestätigung fragen, das enthaltene Plugin zu "
+"installieren."
 
 #: bazzite_portal/ui/decky.py:122
 msgid "Bazzite Portal Decky plugin installed"
-msgstr ""
+msgstr "Bazzite Portal Decky Plugin installiert"
 
 #: bazzite_portal/ui/decky.py:123
 #, python-brace-format
 msgid "Installed version: {version}"
-msgstr ""
+msgstr "Installierte Version: {version}"
 
 #: bazzite_portal/ui/decky.py:126
 msgid "Decky plugin installation is unavailable."
-msgstr ""
+msgstr "Decky Plugin-Installation ist nicht verfügbar."
 
 #: bazzite_portal/ui/image_wizard.py:40
 msgid ""
 "Experimental builds for development and testing; may be incomplete or broken"
 msgstr ""
+"Experimentelle Versionen zum Entwickeln und Testen; können unvollständig "
+"oder nicht funktionstüchtig sein"
 
 #: bazzite_portal/ui/image_wizard.py:41
 msgid "Recommended releases for everyday use"
-msgstr ""
+msgstr "Empfohlene Veröffentlichungen für den täglichen Gebrauch"
 
 #: bazzite_portal/ui/image_wizard.py:42
 msgid "Preview upcoming changes; may be less stable"
-msgstr ""
+msgstr "Vorschau für kommende Änderungen; kann weniger stabil sein"
 
 #: bazzite_portal/ui/image_wizard.py:63
 #, python-brace-format
 msgid "Patch {number}"
-msgstr ""
+msgstr "Version {number}"
 
 #: bazzite_portal/ui/image_wizard.py:127 bazzite_portal/ui/image_wizard.py:269
 #: bazzite_portal/ui/image_wizard.py:320
 msgid "Choose an Image"
-msgstr ""
+msgstr "Wähle ein Abbild"
 
 #: bazzite_portal/ui/image_wizard.py:269 bazzite_portal/ui/image_wizard.py:343
 msgid "Choose Channel"
-msgstr ""
+msgstr "Wähle einen Kanal"
 
 #: bazzite_portal/ui/image_wizard.py:270 bazzite_portal/ui/image_wizard.py:380
 #, python-brace-format
 msgid "Choose a {track} Version"
-msgstr ""
+msgstr "Wähle eine {track}-Version"
 
 #: bazzite_portal/ui/image_wizard.py:314
 msgid "Loading available images…"
-msgstr ""
+msgstr "Lade verfügbare Abbilder…"
 
 #: bazzite_portal/ui/image_wizard.py:314 bazzite_portal/ui/image_wizard.py:359
 msgid "Please wait."
-msgstr ""
+msgstr "Bitte warten."
 
 #: bazzite_portal/ui/image_wizard.py:318
 #, python-brace-format
 msgid "Could not load available {bazzite} images. Try again."
 msgstr ""
+"Verfügbare {bazzite}-Abbilder konnten nicht geladen werden. Versuche es "
+"erneut."
 
 #: bazzite_portal/ui/image_wizard.py:322
 msgid "No images are available."
-msgstr ""
+msgstr "Keine Abbilder sind verfügbar."
 
 #: bazzite_portal/ui/image_wizard.py:359
 msgid "Loading versions…"
-msgstr ""
+msgstr "Lade Versionen…"
 
 #: bazzite_portal/ui/image_wizard.py:378
 #, python-brace-format
 msgid "Could not load {bazzite} versions. Try again."
-msgstr ""
+msgstr "{bazzite}-Versionen konnten nicht geladen werden. Versuche es erneut."
 
 #: bazzite_portal/ui/image_wizard.py:382 bazzite_portal/ui/maintenance.py:1654
 #, python-brace-format
 msgid "Latest {track}"
-msgstr ""
+msgstr "Neuestes {track}"
 
 #: bazzite_portal/ui/image_wizard.py:385
 msgid "No dated releases are available."
-msgstr ""
+msgstr "Keine datierten Veröffentlichungen verfügbar."
 
 #: bazzite_portal/ui/maintenance.py:22
 msgid "Running"
-msgstr ""
+msgstr "Wird ausgeführt"
 
 #: bazzite_portal/ui/maintenance.py:22
 msgid "Succeeded"
-msgstr ""
+msgstr "Erfolgreich"
 
 #: bazzite_portal/ui/maintenance.py:36 bazzite_portal/ui/maintenance.py:1445
 msgid "Refresh"
-msgstr ""
+msgstr "Neu laden"
 
 #: bazzite_portal/ui/maintenance.py:68
 #, python-brace-format
 msgid "{bazzite} Image Version"
-msgstr ""
+msgstr "{bazzite}-Abbildversion"
 
 #: bazzite_portal/ui/maintenance.py:68
 msgid "The image and update track used by your running system."
-msgstr ""
+msgstr "Das Systemabbild und der Aktualisierungskanal deines laufenden Systems."
 
 #: bazzite_portal/ui/maintenance.py:70
 msgid "Image"
-msgstr ""
+msgstr "Systemabbild"
 
 #: bazzite_portal/ui/maintenance.py:70 bazzite_portal/ui/maintenance.py:168
 msgid "Release channel"
-msgstr ""
+msgstr "Veröffentlichungskanal"
 
 #: bazzite_portal/ui/maintenance.py:76
 msgid "Deployment overview"
-msgstr ""
+msgstr "Bereitstellungsübersicht (installierte Bazzite-Versionen)"
 
 #: bazzite_portal/ui/maintenance.py:76
 msgid "Read-only details for the running and next-restart deployments."
 msgstr ""
+"Schreibgeschützte Details der laufenden und für den nächsten Neustart "
+"vorbereiteten Bereitstellung des Systems."
 
 #: bazzite_portal/ui/maintenance.py:77
 msgid "Loading next-restart information…"
-msgstr ""
+msgstr "Lade Informationen für den nächsten Neustart…"
 
 #: bazzite_portal/ui/maintenance.py:85
 msgid "System customizations"
-msgstr ""
+msgstr "Systemanpassungen"
 
 #: bazzite_portal/ui/maintenance.py:85
 msgid "Packages layered onto the system you are running now."
-msgstr ""
+msgstr "Überlagerte Pakete des laufenden Systems."
 
 #: bazzite_portal/ui/maintenance.py:89
 msgid "Customization details not loaded"
-msgstr ""
+msgstr "Anpassungsdetails nicht geladen"
 
 #: bazzite_portal/ui/maintenance.py:126
 msgid "Recovery"
-msgstr ""
+msgstr "Wiederherstellung"
 
 #: bazzite_portal/ui/maintenance.py:126
 msgid ""
 "Rollback selects the previous system deployment for your next boot. Personal "
 "files are preserved."
 msgstr ""
+"Zurückrollen wählt die vorherige Bereitstellung für den nächsten Neustart "
+"aus. Persönliche Dateien bleiben erhalten."
 
 #: bazzite_portal/ui/maintenance.py:129 bazzite_portal/ui/maintenance.py:348
 msgid "Checking previous deployment…"
-msgstr ""
+msgstr "Überprüfe vorherige Bereitstellung…"
 
 #: bazzite_portal/ui/maintenance.py:130
 msgid "Refresh system information to check rollback availability."
 msgstr ""
+"Lade Systeminformationen neu, um Verfügbarkeit von Zurückrollen zu "
+"überprüfen."
 
 #: bazzite_portal/ui/maintenance.py:138
 msgid "Manage Deployments"
-msgstr ""
+msgstr "Verwalte Bereitstellungen des Systems"
 
 #: bazzite_portal/ui/maintenance.py:138
 msgid "Manage prepared updates and saved system versions."
 msgstr ""
+"Verwalte vorbereitete Aktualisierungen und gespeicherte Systemversionen."
 
 #: bazzite_portal/ui/maintenance.py:139 bazzite_portal/ui/maintenance.py:687
 msgid "Checking pending deployment…"
-msgstr ""
+msgstr "Überprüfe ausstehende Bereitstellung…"
 
 #: bazzite_portal/ui/maintenance.py:145 bazzite_portal/ui/maintenance.py:882
 #: bazzite_portal/ui/maintenance.py:974
 msgid "Clear download cache"
-msgstr ""
+msgstr "Lösche Download-Zwischenspeicher"
 
 #: bazzite_portal/ui/maintenance.py:146 bazzite_portal/ui/maintenance.py:882
 msgid "Remove cached update data. Future updates may download it again."
 msgstr ""
+"Entferne zwischengespeicherte Aktualisierungsdaten. Zukünftige "
+"Aktualisierungen könnte es erneut herunterladen."
 
 #: bazzite_portal/ui/maintenance.py:155 bazzite_portal/ui/maintenance.py:1482
 #: bazzite_portal/ui/maintenance.py:1496
 msgid "Delete pinned deployments"
-msgstr ""
+msgstr "Lösche angepinnte Bereitstellungen"
 
 #: bazzite_portal/ui/maintenance.py:156 bazzite_portal/ui/maintenance.py:1483
 msgid "Choose a saved, pinned system version to delete."
 msgstr ""
+"Wähle eine gespeicherte, angepinnte Systemversion, die gelöscht werden soll."
 
 #: bazzite_portal/ui/maintenance.py:169
 #, python-brace-format
 msgid ""
 "Follow the latest {stable} or {testing} release of your {bazzite} image."
 msgstr ""
+"Folge der neuesten {stable}- oder {testing}-Veröffentlichung deines "
+"{bazzite}-Abbilds."
 
 #: bazzite_portal/ui/maintenance.py:172
 msgid "Checking release channel…"
-msgstr ""
+msgstr "Überprüfe Veröffentlichungskanal…"
 
 #: bazzite_portal/ui/maintenance.py:172
 msgid "Refresh system information to check availability."
-msgstr ""
+msgstr "Lade Systeminformationen neu, um die Verfügbarkeit zu überprüfen."
 
 #: bazzite_portal/ui/maintenance.py:180
 msgid "Rebase to specific image"
-msgstr ""
+msgstr "Wechsel zu einem spezifischen Systemabbild"
 
 #: bazzite_portal/ui/maintenance.py:180 bazzite_portal/ui/maintenance.py:1621
 #, python-brace-format
 msgid "Choose a {bazzite} image, release channel and version."
-msgstr ""
+msgstr "Wähle ein {bazzite}-Abbild, -Veröffentlichungskanal und -Version."
 
 #: bazzite_portal/ui/maintenance.py:189 bazzite_portal/ui/maintenance.py:974
 msgid "Remove layered apps"
-msgstr ""
+msgstr "Entferne überlagerte Apps"
 
 #: bazzite_portal/ui/maintenance.py:189
 msgid "Remove system layers while keeping your personal files and other apps."
 msgstr ""
+"Entferne System-Überlagerungen (layers), während persönliche Dateien und "
+"andere Apps beibehalten werden."
 
 #: bazzite_portal/ui/maintenance.py:190 bazzite_portal/ui/maintenance.py:1221
 msgid "Choose layered packages to remove"
-msgstr ""
+msgstr "Wähle überlagerte Pakete zum Entfernen"
 
 #: bazzite_portal/ui/maintenance.py:190 bazzite_portal/ui/maintenance.py:833
 msgid ""
 "Choose which layered packages to remove. A restart is needed to apply the "
 "change."
 msgstr ""
+"Wähle, welche überlagerten (layered) Pakete entfernt werden sollen. Ein "
+"Neustart ist notwendig, um Änderungen zu übernehmen."
 
 #: bazzite_portal/ui/maintenance.py:196 bazzite_portal/ui/maintenance.py:1211
 msgid "Remove all layered apps"
-msgstr ""
+msgstr "Entferne alle überlagerten (layered) Apps"
 
 #: bazzite_portal/ui/maintenance.py:197 bazzite_portal/ui/maintenance.py:834
 #, python-brace-format
@@ -1753,79 +1879,92 @@ msgid ""
 "Remove all system layers. Your files, {bazzite} app store apps, {homebrew} "
 "apps and {appimages} stay."
 msgstr ""
+"Entferne alle Systemüberlagerungen (layers). Deine Dateien, {bazzite}-"
+"Appstore-Apps, {homebrew}-Apps und {appimages} bleiben erhalten."
 
 #: bazzite_portal/ui/maintenance.py:236
 msgid "The system did not report a recognizable deployment state."
-msgstr ""
+msgstr "Das System hat keinen erkennbaren Bereitstellungsstatus berichtet."
 
 #: bazzite_portal/ui/maintenance.py:253 bazzite_portal/ui/maintenance.py:272
 #, python-brace-format
 msgid "Version {version}"
-msgstr ""
+msgstr "Version {version}"
 
 #: bazzite_portal/ui/maintenance.py:256
 msgid "Pinned"
-msgstr ""
+msgstr "Angepinnt"
 
 #: bazzite_portal/ui/maintenance.py:258
 msgid "Prepared"
-msgstr ""
+msgstr "Vorbereitet"
 
 #: bazzite_portal/ui/maintenance.py:270 bazzite_portal/ui/maintenance.py:676
 msgid "Your current system will start again. No system change is pending."
 msgstr ""
+"Dein aktuelles System wird neu starten. Keine Systemänderung ist ausstehend."
 
 #: bazzite_portal/ui/maintenance.py:273
 msgid "Next restart version is unavailable."
-msgstr ""
+msgstr "Die Version nach dem nächsten Neustart ist nicht verfügbar."
 
 #: bazzite_portal/ui/maintenance.py:275
 msgid "Next restart target is unknown."
-msgstr ""
+msgstr "Das Ziel des nächsten Neustarts ist unbekannt."
 
 #: bazzite_portal/ui/maintenance.py:281
 #, python-brace-format
 msgid "Transaction: {transaction}"
-msgstr ""
+msgstr "Transaktion: {transaction}"
 
 #: bazzite_portal/ui/maintenance.py:291 bazzite_portal/ui/maintenance.py:395
 msgid "Saved deployment"
-msgstr ""
+msgstr "Gespeicherte Bereitstellung"
 
 #: bazzite_portal/ui/maintenance.py:295
 msgid ""
 "Checking previous deployment… Refresh system information to check rollback "
 "availability."
 msgstr ""
+"Überprüfe vorherige Bereitstellung… Lade Systeminformationen neu, um "
+"Zurückroll-Verfügbarkeit zu überprüfen."
 
 #: bazzite_portal/ui/maintenance.py:297
 msgid ""
 "Previous deployment availability is unknown. Refresh system information."
 msgstr ""
+"Die Verfügbarkeit der vorherigen Bereitstellung ist unbekannt. Lade "
+"Systeminformationen neu."
 
 #: bazzite_portal/ui/maintenance.py:305
 msgid "A rollback is already prepared for the next restart."
-msgstr ""
+msgstr "Ein Zurückrollen ist bereits für den nächsten Neustart vorbereitet."
 
 #: bazzite_portal/ui/maintenance.py:306 bazzite_portal/ui/maintenance.py:347
 #: bazzite_portal/ui/maintenance.py:356
 msgid "No previous deployment is available."
-msgstr ""
+msgstr "Keine vorherige Bereitstellung ist verfügbar."
 
 #: bazzite_portal/ui/maintenance.py:309 bazzite_portal/ui/maintenance.py:620
 #: bazzite_portal/ui/maintenance.py:623 bazzite_portal/ui/maintenance.py:626
 #: bazzite_portal/ui/maintenance.py:857 bazzite_portal/ui/maintenance.py:1735
 msgid "Could not verify this action. Refresh system information and try again."
 msgstr ""
+"Diese Aktion konnte nicht verifiziert werden. Lade Systeminformationen neu "
+"und versuche es erneut."
 
 #: bazzite_portal/ui/maintenance.py:311
 msgid ""
 "A prepared deployment is waiting for restart. Cancel it before rolling back."
 msgstr ""
+"Eine vorbereitete Bereitstellung wartet auf einen Neustart. Storniere sie "
+"vor dem Zurückrollen."
 
 #: bazzite_portal/ui/maintenance.py:324
 msgid "Could not check rollback status. Open Logs for details."
 msgstr ""
+"Zurückroll-Status konnte nicht überprüft werden. Öffne Protokolle für "
+"Details."
 
 #: bazzite_portal/ui/maintenance.py:324 bazzite_portal/ui/maintenance.py:338
 #: bazzite_portal/ui/maintenance.py:638 bazzite_portal/ui/maintenance.py:640
@@ -1833,79 +1972,85 @@ msgstr ""
 #: bazzite_portal/ui/maintenance.py:701 bazzite_portal/ui/maintenance.py:829
 #: bazzite_portal/ui/maintenance.py:867 bazzite_portal/ui/maintenance.py:1473
 msgid "Open to view operation progress and logs."
-msgstr ""
+msgstr "Öffne, um Vorgangsfortschritt und Protokolle anzusehen."
 
 #: bazzite_portal/ui/maintenance.py:330
 msgid "Cancelling rollback…"
-msgstr ""
+msgstr "Storniere Zurückrollen…"
 
 #: bazzite_portal/ui/maintenance.py:332
 msgid "Rollback cancelled"
-msgstr ""
+msgstr "Zurückrollen storniert"
 
 #: bazzite_portal/ui/maintenance.py:332
 msgid "Rollback succeeded"
-msgstr ""
+msgstr "Zurückrollen erfolgreich"
 
 #: bazzite_portal/ui/maintenance.py:334
 msgid "Rollback cancellation failed"
-msgstr ""
+msgstr "Zurückrollen-Stornierung fehlgeschlagen"
 
 #: bazzite_portal/ui/maintenance.py:334 bazzite_portal/updates/monitor.py:387
 msgid "Rollback failed"
-msgstr ""
+msgstr "Zurückrollen fehlgeschlagen"
 
 #: bazzite_portal/ui/maintenance.py:336
 msgid "Rollback status unknown"
-msgstr ""
+msgstr "Zurückrollen-Status unbekannt"
 
 #: bazzite_portal/ui/maintenance.py:344 bazzite_portal/ui/maintenance.py:588
 #: bazzite_portal/ui/maintenance.py:973
 msgid "Cancel rollback"
-msgstr ""
+msgstr "Zurückrollen stornieren"
 
 #: bazzite_portal/ui/maintenance.py:345 bazzite_portal/ui/maintenance.py:350
 msgid "Roll back to previous deployment"
-msgstr ""
+msgstr "Zur vorherigen Bereitstellung zurückrollen"
 
 #: bazzite_portal/ui/maintenance.py:346
 msgid "Rollback already prepared"
-msgstr ""
+msgstr "Zurückrollen bereits vorbereitet"
 
 #: bazzite_portal/ui/maintenance.py:353
 msgid ""
 "Keep your current system for the next restart. The saved version remains "
 "available."
 msgstr ""
+"Behalte dein aktuelles System für den nächsten Neustart. Die gespeicherte "
+"Version bleibt verfügbar."
 
 #: bazzite_portal/ui/maintenance.py:355
 #, python-brace-format
 msgid ""
 "Version {version} · Takes effect after restart. Personal files are preserved."
 msgstr ""
+"Version {version} · Wird beim nächsten Neustart angewendet. Persönliche "
+"Dateien bleiben erhalten."
 
 #: bazzite_portal/ui/maintenance.py:357
 msgid ""
 "Restore the previous system version on the next boot. Personal files are "
 "preserved."
 msgstr ""
+"Stelle die vorherige Systemversion beim nächsten Neustart wieder her. "
+"Persönliche Dateien bleiben erhalten."
 
 #: bazzite_portal/ui/maintenance.py:359 bazzite_portal/ui/maintenance.py:528
 #: bazzite_portal/ui/maintenance.py:566 bazzite_portal/ui/maintenance.py:580
 msgid "Rollback is unavailable."
-msgstr ""
+msgstr "Zurückrollen ist nicht verfügbar."
 
 #: bazzite_portal/ui/maintenance.py:453
 msgid "View operation result"
-msgstr ""
+msgstr "Vorgangsergebnis ansehen"
 
 #: bazzite_portal/ui/maintenance.py:550
 msgid "Rollback failed. Open Logs for details."
-msgstr ""
+msgstr "Zurückrollen fehlgeschlagen. Öffne Protokolle für Details."
 
 #: bazzite_portal/ui/maintenance.py:586
 msgid "Cancel rollback?"
-msgstr ""
+msgstr "Zurückrollen stornieren?"
 
 #: bazzite_portal/ui/maintenance.py:587
 #, python-brace-format
@@ -1913,11 +2058,13 @@ msgid ""
 "Keep your current system for the next restart. The saved deployment, version "
 "{version}, will remain available."
 msgstr ""
+"Behalte dein aktuelles System für den nächsten Neustart. Die gespeicherte "
+"Bereitstellung, Version {version}, bleibt verfügbar."
 
 #: bazzite_portal/ui/maintenance.py:592
 #, python-brace-format
 msgid "Roll back {bazzite}?"
-msgstr ""
+msgstr "{bazzite} zurückrollen?"
 
 #: bazzite_portal/ui/maintenance.py:593
 #, python-brace-format
@@ -1925,19 +2072,22 @@ msgid ""
 "Select the saved deployment, version {version}, for your next boot. A "
 "restart is required to use it. Your personal files are preserved."
 msgstr ""
+"Wähle die gespeicherte Bereitstellung, Version {version}, für den nächsten "
+"Neustart. Ein Neustart ist notwendig. Deine persönlichen Dateien bleiben "
+"erhalten."
 
 #: bazzite_portal/ui/maintenance.py:594 bazzite_portal/ui/maintenance.py:973
 msgid "Rollback"
-msgstr ""
+msgstr "Zurückrollen"
 
 #: bazzite_portal/ui/maintenance.py:601 bazzite_portal/ui/maintenance.py:806
 #: bazzite_portal/ui/maintenance.py:845
 msgid "Checking system status…"
-msgstr ""
+msgstr "Überprüfe Systemstatus…"
 
 #: bazzite_portal/ui/maintenance.py:605
 msgid "Waiting for confirmation that cancellation has started…"
-msgstr ""
+msgstr "Warte auf Bestätigung, dass Stornierung gestartet ist…"
 
 #: bazzite_portal/ui/maintenance.py:610 bazzite_portal/ui/maintenance.py:612
 #: bazzite_portal/ui/maintenance.py:617 bazzite_portal/ui/maintenance.py:640
@@ -1946,87 +2096,99 @@ msgstr ""
 #: bazzite_portal/ui/maintenance.py:697
 msgid "Could not check the pending system change. Open Logs for details."
 msgstr ""
+"Ausstehende Systemänderung konnte nicht überprüft werden. Öffne Protokolle "
+"für Details."
 
 #: bazzite_portal/ui/maintenance.py:610
 msgid ""
 "Cancellation status is unknown. Refresh update status before continuing."
 msgstr ""
+"Stornierungsstatus ist unbekannt. Lade Aktualisierungsstatus neu bevor du "
+"fortfährst."
 
 #: bazzite_portal/ui/maintenance.py:613
 msgid ""
 "Cancelling the pending system change is unavailable. Open Logs for details."
 msgstr ""
+"Stornierung der ausstehenden Systemänderung ist nicht verfügbar. Öffne "
+"Protokolle für Details."
 
 #: bazzite_portal/ui/maintenance.py:615
 msgid "Refresh the deployment overview before cancelling."
-msgstr ""
+msgstr "Lade die Bereitstellungsübersicht neu bevor du stornierst."
 
 #: bazzite_portal/ui/maintenance.py:617
 msgid "No verified prepared deployment is eligible for cancellation."
-msgstr ""
+msgstr "Keine verifizierte Bereitstellung ist wählbar für die Stornierung."
 
 #: bazzite_portal/ui/maintenance.py:638 bazzite_portal/ui/maintenance.py:640
 msgid "Cancelling pending deployment…"
-msgstr ""
+msgstr "Ausstehende Bereitstellung wird storniert…"
 
 #: bazzite_portal/ui/maintenance.py:643 bazzite_portal/ui/maintenance.py:659
 msgid "Prepared deployment can be cancelled"
-msgstr ""
+msgstr "Ausstehende Bereitstellung kann storniert werden"
 
 #: bazzite_portal/ui/maintenance.py:643 bazzite_portal/ui/maintenance.py:660
 msgid "Only the verified prepared next-restart deployment will be removed."
 msgstr ""
+"Nur die für den nächsten Neustart ausstehende Bereitstellung wird entfernt."
 
 #: bazzite_portal/ui/maintenance.py:645
 msgid "Pending deployment cancelled"
-msgstr ""
+msgstr "Ausstehende Bereitstellung storniert"
 
 #: bazzite_portal/ui/maintenance.py:645
 msgid "The running and saved deployments were left unchanged."
-msgstr ""
+msgstr "Die laufende und gespeicherten Bereitstellungen wurden nicht geändert."
 
 #: bazzite_portal/ui/maintenance.py:647
 msgid "Deployment cancellation failed"
-msgstr ""
+msgstr "Bereitstellungsstornierung fehlgeschlagen"
 
 #: bazzite_portal/ui/maintenance.py:647 bazzite_portal/ui/maintenance.py:1761
 msgid ""
 "The operation failed. Refresh system information to check the current state."
 msgstr ""
+"Der Vorgang ist fehlgeschlagen. Lade Systeminformationen neu, um den "
+"aktuellen Status zu überprüfen."
 
 #: bazzite_portal/ui/maintenance.py:649
 msgid "Cancellation request sent"
-msgstr ""
+msgstr "Stornierungsanfrage gesendet"
 
 #: bazzite_portal/ui/maintenance.py:653
 msgid "Cancellation status unknown"
-msgstr ""
+msgstr "Stornierungsstatus unbekannt"
 
 #: bazzite_portal/ui/maintenance.py:655 bazzite_portal/ui/maintenance.py:657
 msgid "Cancellation unavailable"
-msgstr ""
+msgstr "Stornierung nicht verfügbar"
 
 #: bazzite_portal/ui/maintenance.py:675 bazzite_portal/ui/maintenance.py:689
 #: bazzite_portal/ui/maintenance.py:696
 msgid "No pending deployment to cancel"
-msgstr ""
+msgstr "Keine ausstehenden Bereitstellungen zu stornieren"
 
 #: bazzite_portal/ui/maintenance.py:678 bazzite_portal/ui/maintenance.py:691
 #: bazzite_portal/ui/maintenance.py:973
 msgid "Cancel pending deployment"
-msgstr ""
+msgstr "Ausstehende Bereitstellung stornieren"
 
 #: bazzite_portal/ui/maintenance.py:679 bazzite_portal/ui/maintenance.py:691
 msgid "Cancel only the verified prepared deployment before it is activated."
 msgstr ""
+"Storniere nur die verifizierte ausstehende Bereitstellung bevor sie "
+"aktiviert wird."
 
 #: bazzite_portal/ui/maintenance.py:687
 msgid "Refresh deployment information to check cancellation."
 msgstr ""
+"Lade Bereitstellungsinformationen neu, um die Stornierung zu überprüfen."
 
 #: bazzite_portal/ui/maintenance.py:715 bazzite_portal/ui/maintenance.py:732
 msgid "Deployment cancellation is unavailable."
-msgstr ""
+msgstr "Bereitstellungsstornierung ist nicht verfügbar."
 
 #: bazzite_portal/ui/maintenance.py:721
 #, python-brace-format
@@ -2036,23 +2198,29 @@ msgid ""
 "saved deployment, and personal files remain unchanged. This will not restart "
 "the computer."
 msgstr ""
+"Ausstehende {bazzite}-Bereitstellung {version} {image} stornieren? Dies "
+"entfernt nur die für den nächsten Neustart ausstehende Bereitstellung. Die "
+"laufende und gespeicherten Bereitstellungen sowie persönliche Dateien "
+"bleiben unverändert. Der Computer wird nicht neu gestartet."
 
 #: bazzite_portal/ui/maintenance.py:724
 msgid "Cancel pending deployment?"
-msgstr ""
+msgstr "Ausstehende Bereitstellung stornieren?"
 
 #: bazzite_portal/ui/maintenance.py:724
 msgid "Cancel deployment"
-msgstr ""
+msgstr "Bereitstellung stornieren"
 
 #: bazzite_portal/ui/maintenance.py:736
 msgid ""
 "The pending deployment changed. Review the updated details and confirm again."
 msgstr ""
+"Die ausstehende Bereitstellung wurde geändert. Überprüfe die aktualisierten "
+"Details und bestätige erneut."
 
 #: bazzite_portal/ui/maintenance.py:773
 msgid "The cancellation request failed."
-msgstr ""
+msgstr "Die Stornierungsanfrage ist fehlgeschlagen."
 
 #: bazzite_portal/ui/maintenance.py:808
 msgid "Refresh system information before continuing."
